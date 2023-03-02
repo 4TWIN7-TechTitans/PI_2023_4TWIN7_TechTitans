@@ -6,6 +6,8 @@ var logger = require("morgan");
 const http = require("http");
 var indexRouter = require("./routes/index");
 const mongoose = require("mongoose");
+const userRouter = require("./routes/user");
+
 
 require("dotenv").config();
 require("./models/user");
@@ -19,6 +21,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use("/user", userRouter); 
 
 app.use("/", indexRouter);
 
@@ -38,11 +42,10 @@ server.listen(process.env.PORT, () => {
   console.log(`app is running on port ${process.env.PORT}`);
 });
 
-mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/Assurini', { useNewUrlParser: true })
   .then(() => {
-    console.log("Connected to database " + process.env.MONGO_URI);
+    console.log('Connected to database');
   })
   .catch((err) => {
-    console.log(err.message);
+    console.log('Error connecting to database', err);
   });
