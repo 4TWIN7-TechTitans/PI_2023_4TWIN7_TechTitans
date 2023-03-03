@@ -6,7 +6,7 @@ var logger = require("morgan");
 const http = require("http");
 var indexRouter = require("./routes/index");
 const mongoose = require("mongoose");
-const userRouter = require("./routes/user");
+const userRoutes = require("./routes/userRoutes");
 
 
 require("dotenv").config();
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use("/user", userRouter); 
+app.use(userRoutes); 
 
 app.use("/", indexRouter);
 
