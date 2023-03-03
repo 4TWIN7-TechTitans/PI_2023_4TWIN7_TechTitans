@@ -14,21 +14,21 @@ require("./models/user");
 
 
 var app = express();
-
 mongoose.set("strictQuery", true);
 
+//middleware
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 app.use(userRoutes); 
-
 app.use("/", indexRouter);
-
 app.use(function (req, res, next) {
   next(createError(404));
 });
+
+
+//port connections
 
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;
@@ -42,6 +42,7 @@ server.listen(process.env.PORT, () => {
   console.log(`app is running on port ${process.env.PORT}`);
 });
 
+//database connection
 mongoose.connect('mongodb://localhost/Assurini', { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to database');
