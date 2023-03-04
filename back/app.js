@@ -43,7 +43,7 @@ server.listen(process.env.PORT, () => {
 });
 
 //database connection
-mongoose.connect('mongodb://localhost/Assurini', { useNewUrlParser: true })
+mongoose.connect('mongodb://127.0.0.1/Assurini', { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to database');
   })
