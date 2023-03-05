@@ -87,3 +87,11 @@ module.exports.login_post = async (req, res) => {
 
 }
 
+  module.exports.logout_get = (req, res) => {    
+ /*   res.cookie('jwt', '', { maxAge: 1 });
+    res.redirect('/');
+    res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); */
+    res.clearCookie('jwt');
+    res.status(200).json({ message: "User logged out successfully." });
+  }
+ 
