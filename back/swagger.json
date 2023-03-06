@@ -60,7 +60,7 @@
                   "type": "string",
                   "example": "23587962"
                 },
-                "adress": {
+                "address": {
                   "type": "string",
                   "example": "Elmourouj"
                 }

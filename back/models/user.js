@@ -49,20 +49,21 @@ const userSchema = new mongoose.Schema({
       },
       message: "Invalid date format",
     },
-    min: [moment().subtract(120, 'years'), "You must be at least 120 years old"],
+    min: [moment().subtract(120, 'years'), "You must be at most 120 years old"],
     max: [moment().subtract(18, 'years'), "You must be at least 18 years old"],
   },
   phone_number: {
     type: Number,
     required: true,
-    match: [/^(\+216)?[2|5|7|9][0-9]{7}$/,"Phone number should start with +216 followed by 8 digits starting with 2, 5, 9 or 7",
+    match: [/^(\+216)?[0-9]{8}$/,"Phone number should start with +216 followed by 8 digits",
     ],
   },
-  adress: {
+  address: {
     type: String,
     required: true,
     match: [/^[a-zA-Z0-9\s,'-]*$/, "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens"],
   },
+
 });
 
 // fire a function after doc saved to db
@@ -90,8 +91,6 @@ userSchema.statics.login = async function(email, password) {
   }
   throw Error('incorrect email');
 };
-
-
 
 const User = mongoose.model("User", userSchema);
 

@@ -81,7 +81,7 @@ module.exports.signup_post = async (req, res) => {
         "role": "Admin",
         "date_of_birth": "1999/06/25",
         "phone_number": "23587962",
-        "adress": "Elmourouj"
+        "address": "Elmourouj"
       }
     }
   } */
@@ -95,7 +95,7 @@ module.exports.signup_post = async (req, res) => {
     role,
     date_of_birth,
     phone_number,
-    adress,
+    address,
   } = req.body;
   try {
     const user = await userModel.create({
@@ -107,22 +107,22 @@ module.exports.signup_post = async (req, res) => {
       role,
       date_of_birth,
       phone_number,
-      adress,
+      address,
     });
 
     // send verification email
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "your-email@gmail.com",
-        pass: "your-email-password",
-      },
+        user: 'mariem.nacib@esprit.tn',
+        pass: 'NACIBmariem_1'
+      }
     });
 
     const verificationToken = createToken(user._id);
 
     const mailOptions = {
-      from: "your-email@gmail.com",
+      from: 'mariem.nacib@esprit.tn',
       to: email,
       subject: "Verify your email",
       html: `
