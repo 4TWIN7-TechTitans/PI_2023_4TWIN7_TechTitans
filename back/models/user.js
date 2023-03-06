@@ -27,6 +27,29 @@ const userSchema = new mongoose.Schema({
     maxlength: [50, "First name should not exceed 50 characters"],
     match: [/^[A-Za-z]+$/, "First name should only contain letters"],
   },
+  gender: {
+    type: String,
+    required: true,
+    enum:["Male","Female"],
+  },
+  role: {
+    type: String,
+    required: true,
+    maxlength: [50, "Role should not exceed 50 characters"],
+    match: [/^[A-Za-z]+$/, "role should only contain letters"],
+    enum:["Admin","Expert","Agence","Client"],
+  },
+  date_naissance: {
+    type: Date,
+    required: true,
+    validate: {
+      validator: function (value) {
+        const now = new Date();
+        return value < now;
+      },
+      message: "Date of birth should be before today",
+    },
+  },
 });
 
 // fire a function after doc saved to db
