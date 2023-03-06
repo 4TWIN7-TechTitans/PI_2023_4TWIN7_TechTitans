@@ -7,10 +7,8 @@ const http = require("http");
 var indexRouter = require("./routes/index");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
-
-
-
 require("dotenv").config();
+
 require("./models/user");
 var app = express();
 mongoose.set("strictQuery", true);
@@ -20,6 +18,20 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//Swagger API
+const swaggerAutogen = require('swagger-autogen')();
+const outputFile = './swagger.json'
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require('./swagger.json');
+const endpointsFiles = ['./routes/index.js' , './routes/userRoutes.js']
+const doc = {
+  host: "127.0.0.1:5000"
+}
+swaggerAutogen(outputFile, endpointsFiles ,doc)
+
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(userRoutes); 
 app.use("/", indexRouter);
 app.use(function (req, res, next) {
@@ -42,7 +54,7 @@ server.listen(process.env.PORT, () => {
 });
 
 //database connection
-mongoose.connect('mongodb://127.0.0.1/Assurini', { useNewUrlParser: true })
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
   .then(() => {
     console.log('Connected to database');
   })

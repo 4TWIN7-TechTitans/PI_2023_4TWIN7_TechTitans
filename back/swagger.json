@@ -1,0 +1,113 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "127.0.0.1:5000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/signup": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "xx@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "xxxxxxxxxxx"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "first_name": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "gender": {
+                  "type": "string",
+                  "example": "Male"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "Admin"
+                },
+                "date_of_birth": {
+                  "type": "string",
+                  "example": "1999/06/25"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "23587962"
+                },
+                "adress": {
+                  "type": "string",
+                  "example": "Elmourouj"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
