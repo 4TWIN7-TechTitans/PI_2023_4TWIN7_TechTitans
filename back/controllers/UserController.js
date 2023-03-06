@@ -5,10 +5,9 @@ const jwt = require('jsonwebtoken');
 
 
 
-// handle errors
 const handleErrors = (err) => {
   console.log(err.message, err.code);
-  let errors = { email: '', password: '' , gender : '' ,  role : '' , date_of_birth: ' ', phone_number: '' , adress: ''};
+  let errors = { email: '', password: '', gender: '', role: '', date_of_birth: '', phone_number: '', address: '' };
 
   // incorrect email
   if (err.message === 'incorrect email') {
@@ -22,17 +21,33 @@ const handleErrors = (err) => {
 
   // duplicate email error
   if (err.code === 11000) {
-    errors.email = 'that email is already registered';
+    errors.email = 'That email is already registered';
     return errors;
   }
 
   // validation errors
   if (err.message.includes('user validation failed')) {
-    // console.log(err);
     Object.values(err.errors).forEach(({ properties }) => {
-      // console.log(val);
-      // console.log(properties);
-      errors[properties.path] = properties.message;
+      switch (properties.path) {
+        case 'gender':
+          errors.gender = 'Please select a gender';
+          break;
+        case 'role':
+          errors.role = 'Please select a role';
+          break;
+        case 'date_of_birth':
+          errors.date_of_birth = 'Please enter a valid date of birth';
+          break;
+        case 'phone_number':
+          errors.phone_number = 'Please enter a valid phone number';
+          break;
+        case 'address':
+          errors.address = 'Please enter a valid address';
+          break;
+        default:
+          errors[properties.path] = properties.message;
+          break;
+      }
     });
   }
 
