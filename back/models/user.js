@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     match: [/^[A-Za-z]+$/, "role should only contain letters"],
     enum:["Admin","Expert","Agence","Client"],
   },
-  date_naissance: {
+  date_of_birth: {
     type: Date,
     required: true,
     validate: {
@@ -49,6 +49,17 @@ const userSchema = new mongoose.Schema({
       },
       message: "Date of birth should be before today",
     },
+  },
+  phone_number: {
+    type: Number,
+    required: true,
+    match: [/^(\+216)?[2|5|7|9][0-9]{7}$/,"Phone number should start with +216 followed by 8 digits starting with 2, 5, 9 or 7",
+    ],
+  },
+  adress: {
+    type: String,
+    required: true,
+    match: [/^[a-zA-Z0-9\s,'-]*$/, "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens"],
   },
 });
 
