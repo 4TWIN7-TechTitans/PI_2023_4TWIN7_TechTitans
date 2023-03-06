@@ -9,10 +9,9 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
 
 
+
 require("dotenv").config();
 require("./models/user");
-
-
 var app = express();
 mongoose.set("strictQuery", true);
 

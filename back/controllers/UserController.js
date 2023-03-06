@@ -2,10 +2,13 @@ const userModel = require("../models/user");
 const jwt = require('jsonwebtoken');
 
 
+
+
+
 // handle errors
 const handleErrors = (err) => {
   console.log(err.message, err.code);
-  let errors = { email: '', password: '' };
+  let errors = { email: '', password: '' , gender : '' ,  role : '' , date_of_birth: ' ', phone_number: '' , adress: ''};
 
   // incorrect email
   if (err.message === 'incorrect email') {
@@ -49,13 +52,18 @@ const createToken = (id) => {
 
 //Controllers Actiions 
 module.exports.signup_post = async (req, res) => {
-  const { email, password, last_name, first_name } = req.body;
+  const { email, password, last_name, first_name , gender , role , date_of_birth , phone_number , adress } = req.body;
   try {
     const user = await userModel.create({
       email,
       password,
       last_name,
       first_name,
+      gender,
+      role,
+      date_of_birth,
+      phone_number,
+      adress
     });
     const token = createToken(user._id);
     console.log(user);
