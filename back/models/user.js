@@ -44,11 +44,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function (value) {
-        const now = new Date();
-        return value < now;
+        return moment(value).isValid();
       },
-      message: "Date of birth should be before today",
+      message: "Invalid date format",
     },
+    min: [moment().subtract(120, 'years'), "You must be at least 120 years old"],
+    max: [moment().subtract(18, 'years'), "You must be at least 18 years old"],
   },
   phone_number: {
     type: Number,
