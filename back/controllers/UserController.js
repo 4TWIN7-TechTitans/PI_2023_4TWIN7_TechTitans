@@ -1,5 +1,6 @@
 const userModel = require("../models/user");
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 
 
@@ -65,7 +66,8 @@ const createToken = (id) => {
 };
 
 
-//Controllers Actiions 
+//Controllers Actions 
+
 module.exports.signup_post = async (req, res) => {
   const { email, password, last_name, first_name , gender , role , date_of_birth , phone_number , adress } = req.body;
   try {
@@ -80,9 +82,37 @@ module.exports.signup_post = async (req, res) => {
       phone_number,
       adress
     });
-    const token = createToken(user._id);
-    console.log(user);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+
+    // send verification email
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'your-email@gmail.com',
+        pass: 'your-email-password'
+      }
+    });
+
+    const verificationToken = createToken(user._id);
+
+    const mailOptions = {
+      from: 'your-email@gmail.com',
+      to: email,
+      subject: 'Verify your email',
+      html: `
+        <h2>Welcome to Assurini!</h2>
+        <p>Please click on the link below to verify your email address:</p>
+        <a href="${process.env.BASE_URL}/verify-email/${verificationToken}">Verify Email</a>
+      `
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+
     res.status(201).json({ user_created: user._id, message: "User Created, Success" , status : "success" } );
   } 
   catch (err) {
