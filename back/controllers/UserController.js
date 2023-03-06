@@ -128,7 +128,7 @@ module.exports.signup_post = async (req, res) => {
       html: `
         <h2>Welcome to Assurini!</h2>
         <p>Please click on the link below to verify your email address:</p>
-        <a href="${process.env.BASE_URL}/verify-email/${verificationToken}">Verify Email</a>
+        <a href="http://localhost:5000/confirmation/${verificationToken}">Verify Email</a>
       `,
     };
 
@@ -138,6 +138,7 @@ module.exports.signup_post = async (req, res) => {
       } else {
         console.log("Email sent: " + info.response);
       }
+      
     });
 
     res.status(201).json({
