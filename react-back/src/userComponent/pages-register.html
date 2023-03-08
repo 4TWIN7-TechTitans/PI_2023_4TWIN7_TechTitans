@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Pages / Register - NiceAdmin Bootstrap Template</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="../../public/assets/img/favicon.png" rel="icon">
+  <link href="../../public/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../../public/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../public/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../../public/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../../public/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="../../public/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="../../public/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="../../public/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../../public/assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.5.0
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="d-flex justify-content-center py-4">
+                <a href="index.html" class="logo d-flex align-items-center w-auto">
+                  <img src="../../public/assets/img/logo.png" alt="">
+                  <span class="d-none d-lg-block">Assurini</span>
+                </a>
+              </div><!-- End Logo -->
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <div class="pt-4 pb-2">
+                      <h5 class="card-title text-center pb-0 fs-4">Create new account</h5>
+                      <p class="text-center small">signup</p>
+                    </div>
+                    <form class="row g-3" method="POST" action="127.0.0.1:5000/signup">
+
+                      <label class="form-label" for="email">Email</label>
+                      <input class="form-control" type="text" name="email" required />
+                      <div class="email error"></div>
+                      <label class="form-label" for="password">Password</label>
+                      <input  class="form-control" type="password" name="password" required />
+                      <div class="password error"></div>
+                      <label class="form-label" for="last_name">Last Name</label>
+                      <input class="form-control" type="text" name="last_name"  required />
+                      <div class="last_name error"></div>
+                      <label class="form-label" for="first_name">First Name</label>
+                      <input class="form-control" type="text" name="first_name" required />
+                      <div class="dropdown-menu" class="first_name error"></div>
+                      <label class="form-label" for="gender">Gender</label>
+                      <select  name="gender">
+                        <option  value="" disabled selected>Choose Gender</option>
+                        <option  value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                      <div class="dropdown-menu" class="gender error"></div>
+                      <label class="form-label" for="role">Role</label>
+                      <select name="role">
+                        <option value="" disabled selected>Choose Role</option>
+                        <option value="Admin" >Admin</option>
+                        <option value="Expert" >Expert</option>
+                        <option value="Agence" >Agence</option>
+                        <option value="Client" >Client</option>
+                      </select>
+                      <div class="role error"></div>
+              
+                      <label class="form-label" for="date_of_birth">Date of Birth</label>
+                      <input class="form-control" type="date" name="date_of_birth"  required />
+                      <div class="date_of_birth error"></div>
+                      <label class="form-label" for="phone_number">Phone Number</label>
+                      <input class="form-control" type="text" name="phone_number"  required />
+                      <div class="phone_number error"></div>
+                      <label class="form-label" for="address">Address</label>
+                      <input class="form-control" type="text" name="address"  required />
+                      <div class="address error"></div>
+                      <button class="btn btn-primary w-100" onclick="">Sign up</button>
+
+                      <div class="col-12">
+                        <p class="small mb-0">already have account <a href="pages-login.html">Login</a></p>
+                      </div>
+                    </form>
+                    <div id="notification"></div>
+                <script>
+                    const form = document.querySelector('form');
+                    form.addEventListener('submit', async (e) => {
+                      e.preventDefault();
+                      // get values
+                      const email = form.email.value;
+                      const password = form.password.value;
+                      const last_name = form.last_name.value;
+                      const first_name = form.first_name.value;
+                      const gender = form.gender.value;
+                      const role = form.role.value;
+                      const date_of_birth = form.date_of_birth.value;
+                      const phone_number = form.phone_number.value;
+                      const address = form.address.value;
+                    try {
+                      const res = await fetch('http://127.0.0.1:5000/signup', { 
+                        method: 'POST', 
+                        body: JSON.stringify({ email, password, last_name , first_name , gender, role, date_of_birth, phone_number, address}),
+                        headers: {'Content-Type': 'application/json'}
+                      });
+                      // handle response
+                      console.log(res);
+                    }
+                    catch (err) {
+                      console.log(err);
+                    }
+                  });
+                </script>
+               
+          </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../../public/assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="../../public/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../public/assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="../../public/assets/vendor/echarts/echarts.min.js"></script>
+  <script src="../../public/assets/vendor/quill/quill.min.js"></script>
+  <script src="../../public/assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="../../public/assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="../../public/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../../public/assets/js/main.js"></script>
+
+</body>
+
+</html>
