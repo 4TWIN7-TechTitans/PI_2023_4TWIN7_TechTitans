@@ -6,42 +6,52 @@ function Signup() {
     const [showNotification, setShowNotification] = useState(false);
     const [showVerifyEmail, setShowVerifyEmail] = useState(false);
   
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const email = form.email.value;
-      const password = form.password.value;
-      const last_name = form.last_name.value;
-      const first_name = form.first_name.value;
-      const gender = form.gender.value;
-      const role = form.role.value;
-      const date_of_birth = form.date_of_birth.value;
-      const phone_number = form.phone_number.value;
-      const address = form.address.value;
-      try {
-        const res = await fetch('http://127.0.0.1:5000/signup', {
-          method: 'POST',
-          body: JSON.stringify({
-            email,
-            password,
-            last_name,
-            first_name,
-            gender,
-            role,
-            date_of_birth,
-            phone_number,
-            address,
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        });
-        // handle response
-        console.log(res);
-        setShowNotification(true);
-        setShowVerifyEmail(true);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+   const handleSubmit = async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const email = form.email.value;
+  const password = form.password.value;
+  const last_name = form.last_name.value;
+  const first_name = form.first_name.value;
+  const gender = form.gender.value;
+  const role = form.role.value;
+  const date_of_birth = form.date_of_birth.value;
+  const phone_number = form.phone_number.value;
+  const address = form.address.value;
+  try {
+    // Check if email is already in use
+    //const checkEmailRes = await email.checkEmail
+    //fetch(`http://127.0.0.1:5000/?email=${email}`);
+    const { emailExists } = await email;
+    if (emailExists) {
+      setShowNotification(true);
+      return;
+    }
+
+    // Register user
+    const registerRes = await fetch('http://127.0.0.1:5000/signup', {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password,
+        last_name,
+        first_name,
+        gender,
+        role,
+        date_of_birth,
+        phone_number,
+        address,
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    // handle response
+    console.log(registerRes);
+    setShowNotification(true);
+    setShowVerifyEmail(true);
+  } catch (err) {
+    console.log(err);
+  }
+};
     return(
         <div>
             <Header/>
