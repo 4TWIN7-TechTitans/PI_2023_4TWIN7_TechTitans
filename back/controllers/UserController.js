@@ -193,21 +193,31 @@ module.exports.verify_email_get = async (req, res) => {
 };
   ///password
 
-module.exports.login_post = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await userModel.login(email, password);
-    const token = createToken(user._id);
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(200).json({ user: user._id, status: "success" });
-  } catch (err) {
-    const errors = handleErrors(err);
-    res
-      .status(200)
-      .json({ errors, message: "User Login Failed", status: "error" });
-  }
-};
+  module.exports.login_post = async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        throw Error("incorrect email");
+      }
+  
+      // Check if email is verified
+      if (!user.verified) {
+        throw Error("email not verified");
+      }
+  
+      const auth = await userModel.login(email, password);
+      const token = createToken(user._id);
+      res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+      res.status(200).json({ user: user._id });
+    } catch (err) {
+      const errors = handleErrors(err);
+      console.log({ errors });
+      res.status(400).json({ errors, status: "error" });
+    }
+  };
+  
 module.exports.logout_get = (req, res) => {
   /*   res.cookie('jwt', '', { maxAge: 1 });
     res.redirect('/');
