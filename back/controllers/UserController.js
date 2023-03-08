@@ -167,11 +167,9 @@ module.exports.verify_email_get = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({
-        message: "Invalid or expired token",
-        status: "error",
-      });
+      return res.status(400).send('Invalid verification token');
     }
+  
 
     // update user document to mark email as verified
     user.verified = true;
