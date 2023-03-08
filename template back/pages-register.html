@@ -59,54 +59,79 @@
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Crrer un compte</h5>
-                    <p class="text-center small">Enter your personal details to create account</p>
-                  </div>
-
-                  <form class="row g-3 needs-validation" novalidate>
-                    <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required>
-                      <div class="invalid-feedback">Please, enter your name!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourEmail" class="form-label">Your Email</label>
-                      <input type="email" name="email" class="form-control" id="yourEmail" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                      </div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
-                    </div>
-                    <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
-                    </div>
-                  </form>
-
-                </div>
+                    <form method="POST" action="127.0.0.1:5000/signup">
+                      <h2>Sign up</h2>
+                      <label for="email">Email</label>
+                      <input type="text" name="email" required />
+                      <div class="email error"></div>
+                      <label for="password">Password</label>
+                      <input type="password" name="password" required />
+                      <div class="password error"></div>
+                      <label for="last_name">Last Name</label>
+                      <input type="text" name="last_name"  required />
+                      <div class="last_name error"></div>
+                      <label for="first_name">First Name</label>
+                      <input type="text" name="first_name" required />
+                      <div class="first_name error"></div>
+                      <label for="gender">Gender</label>
+                      <select name="gender">
+                        <option value="" disabled selected>Choose Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                      <div class="gender error"></div>
+                      <label for="role">Role</label>
+                      <select name="role">
+                        <option value="" disabled selected>Choose Role</option>
+                        <option value="Admin" >Admin</option>
+                        <option value="Expert" >Expert</option>
+                        <option value="Agence" >Agence</option>
+                        <option value="Client" >Client</option>
+                      </select>
+                      <div class="role error"></div>
+              
+                      <label for="date_of_birth">Date of Birth</label>
+                      <input type="date" name="date_of_birth"  required />
+                      <div class="date_of_birth error"></div>
+                      <label for="phone_number">Phone Number</label>
+                      <input type="text" name="phone_number"  required />
+                      <div class="phone_number error"></div>
+                      <label for="address">Address</label>
+                      <input type="text" name="address"  required />
+                      <div class="address error"></div>
+                      <button>Sign up</button>
+                    </form>
+                    <div id="notification"></div>
+                <script>
+                    const form = document.querySelector('form');
+                    form.addEventListener('submit', async (e) => {
+                      e.preventDefault();
+                      // get values
+                      const email = form.email.value;
+                      const password = form.password.value;
+                      const last_name = form.last_name.value;
+                      const first_name = form.first_name.value;
+                      const gender = form.gender.value;
+                      const role = form.role.value;
+                      const date_of_birth = form.date_of_birth.value;
+                      const phone_number = form.phone_number.value;
+                      const address = form.address.value;
+                    try {
+                      const res = await fetch('http://127.0.0.1:5000/signup', { 
+                        method: 'POST', 
+                        body: JSON.stringify({ email, password, last_name , first_name , gender, role, date_of_birth, phone_number, address}),
+                        headers: {'Content-Type': 'application/json'}
+                      });
+                      // handle response
+                      console.log(res);
+                    }
+                    catch (err) {
+                      console.log(err);
+                    }
+                  });
+                </script>
+               
+          </div>
               </div>
 
             </div>
