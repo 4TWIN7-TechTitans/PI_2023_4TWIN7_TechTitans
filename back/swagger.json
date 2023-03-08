@@ -46,15 +46,15 @@
                 },
                 "gender": {
                   "type": "string",
-                  "example": "Male"
+                  "example": "Male/Female"
                 },
                 "role": {
                   "type": "string",
-                  "example": "Admin"
+                  "example": "Admin/Expert/Agence/Client"
                 },
                 "date_of_birth": {
                   "type": "string",
-                  "example": "1999/06/25"
+                  "example": "Year/Month/Day"
                 },
                 "phone_number": {
                   "type": "string",
@@ -76,37 +76,49 @@
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "parameter_name",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "JohnDoe@gmail.com"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "**********"
                 }
               }
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": {}
       }
     },
     "/logout": {
       "get": {
         "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "JohnDoe@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "**********"
+                }
+              }
+            }
           }
-        }
+        ],
+        "responses": {}
       }
     },
     "/confirmation/{token}": {
