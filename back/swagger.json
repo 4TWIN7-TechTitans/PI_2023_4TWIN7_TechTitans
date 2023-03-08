@@ -30,11 +30,11 @@
               "properties": {
                 "email": {
                   "type": "string",
-                  "example": "xx@gmail.com"
+                  "example": "Your-Email@gmail.com"
                 },
                 "password": {
                   "type": "string",
-                  "example": "xxxxxxxxxxx"
+                  "example": "Please enter your Password"
                 },
                 "last_name": {
                   "type": "string",
@@ -50,15 +50,15 @@
                 },
                 "role": {
                   "type": "string",
-                  "example": "Admin"
+                  "example": "Admin/Expert/Agence/Client"
                 },
                 "date_of_birth": {
                   "type": "string",
-                  "example": "1999/06/25"
+                  "example": "Year/Month/DAy"
                 },
                 "phone_number": {
                   "type": "string",
-                  "example": "23587962"
+                  "example": "Please enter your phone number"
                 },
                 "address": {
                   "type": "string",
@@ -76,37 +76,49 @@
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "parameter_name",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Enter your email address"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Enter your password"
                 }
               }
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": {}
       }
     },
     "/logout": {
       "get": {
         "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "Enter your email address"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Enter your password"
+                }
+              }
+            }
           }
-        }
+        ],
+        "responses": {}
       }
     },
     "/verify-email/{token}": {
