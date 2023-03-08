@@ -73,14 +73,14 @@ module.exports.signup_post = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
       schema: {
-        "email": "xx@gmail.com",
-        "password": "xxxxxxxxxxx",
+        "email": "Your-Email@gmail.com",
+        "password": "Please enter your Password",
         "last_name": "John",
         "first_name": "Doe",
         "gender": "Male",
-        "role": "Admin",
-        "date_of_birth": "1999/06/25",
-        "phone_number": "23587962",
+        "role": "Admin/Expert/Agence/Client",
+        "date_of_birth": "Year/Month/DAy",
+        "phone_number": "Please enter your phone number",
         "address": "Elmourouj"
       }
     }
@@ -194,6 +194,15 @@ module.exports.verify_email_get = async (req, res) => {
   ///password
 
 module.exports.login_post = async (req, res) => {
+   /*  #swagger.parameters['parameter_name'] = {
+      in: 'body',
+      schema: {
+        "email": "Enter your email address",
+        "password": "Enter your password"
+      }
+    }
+  } */
+
   const { email, password } = req.body;
 
   try {
@@ -209,6 +218,14 @@ module.exports.login_post = async (req, res) => {
   }
 };
 module.exports.logout_get = (req, res) => {
+   /*  #swagger.parameters['parameter_name'] = {
+      in: 'body',
+      schema: {
+        "email": "Enter your email address",
+        "password": "Enter your password"
+      }
+    }
+  } */
   /*   res.cookie('jwt', '', { maxAge: 1 });
     res.redirect('/');
     res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); */
