@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Footer from './footer';
 import Header from './header';
 
 
@@ -53,9 +54,10 @@ function Signup() {
   }
 };
     return(
-        <div>
-            <Header/>
+<html>
+        <Header/>       
 <body>
+
         <main>
             <div className="container">
 
@@ -66,7 +68,7 @@ function Signup() {
 
                             <div className="d-flex justify-content-center py-4">
                                 <a href="index.html" className="logo d-flex align-items-center w-auto">
-
+                                <img src="assets/img/logo.png" alt=""/>
                                     <span className="d-none d-lg-block">Assurini</span>
                                 </a>
                             </div>
@@ -156,9 +158,10 @@ function Signup() {
 
       </div>
     </main>
+   
   </body>
-  <footer/>
-</div>
+  <Footer/>
+  </html>
     );
     }
 
