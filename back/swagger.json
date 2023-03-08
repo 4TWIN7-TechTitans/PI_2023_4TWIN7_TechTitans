@@ -76,18 +76,16 @@
         "description": "",
         "parameters": [
           {
-            "name": "parameter_name",
+            "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "type": "string",
-                  "example": "Enter your email address"
+                  "example": "any"
                 },
                 "password": {
-                  "type": "string",
-                  "example": "Enter your password"
+                  "example": "any"
                 }
               }
             }
