@@ -46,15 +46,15 @@
                 },
                 "gender": {
                   "type": "string",
-                  "example": "Male/Female"
+                  "example": "Male"
                 },
                 "role": {
                   "type": "string",
-                  "example": "Admin/Expert/Agence/Client"
+                  "example": "Admin"
                 },
                 "date_of_birth": {
                   "type": "string",
-                  "example": "Year/Month/Day"
+                  "example": "1999/06/25"
                 },
                 "phone_number": {
                   "type": "string",
@@ -76,52 +76,40 @@
         "description": "",
         "parameters": [
           {
-            "name": "parameter_name",
+            "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "type": "string",
-                  "example": "JohnDoe@gmail.com"
+                  "example": "any"
                 },
                 "password": {
-                  "type": "string",
-                  "example": "**********"
+                  "example": "any"
                 }
               }
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/logout": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "parameter_name",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string",
-                  "example": "JohnDoe@gmail.com"
-                },
-                "password": {
-                  "type": "string",
-                  "example": "**********"
-                }
-              }
-            }
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
-        ],
-        "responses": {}
+        }
       }
     },
-    "/confirmation/{token}": {
+    "/verify-email/{token}": {
       "get": {
         "description": "",
         "parameters": [
@@ -132,7 +120,14 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
       }
     }
   }

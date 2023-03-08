@@ -31,14 +31,14 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
     required: true,
-    enum:["Male","Female"],
+    enum: ["Male", "Female"],
   },
   role: {
     type: String,
     required: true,
     maxlength: [50, "Role should not exceed 50 characters"],
     match: [/^[A-Za-z]+$/, "role should only contain letters"],
-    enum:["Admin","Expert","Agence","Client"],
+    enum: ["Admin", "Expert", "Agence", "Client"],
   },
   date_of_birth: {
     type: Date,
@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema({
   phone_number: {
     type: Number,
     required: true,
-    match: [/^(\+216)?[0-9]{8}$/,"Phone number should start with +216 followed by 8 digits",
+    match: [/^(\+216)?[0-9]{8}$/, "Phone number should start with +216 followed by 8 digits",
     ],
   },
   address: {
@@ -63,7 +63,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     match: [/^[a-zA-Z0-9\s,'-]*$/, "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens"],
   },
-
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // fire a function after doc saved to db
@@ -76,11 +79,12 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
+
   next();
 });
 
 // static method to login user
-userSchema.statics.login = async function(email, password) {
+userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email });
   if (user) {
     const auth = await bcrypt.compare(password, user.password);

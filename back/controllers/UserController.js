@@ -77,9 +77,9 @@ module.exports.signup_post = async (req, res) => {
         "password": "xxxxxxxxxxx",
         "last_name": "John",
         "first_name": "Doe",
-        "gender": "Male/Female",
-        "role": "Admin/Expert/Agence/Client",
-        "date_of_birth": "Year/Month/Day",
+        "gender": "Male",
+        "role": "Admin",
+        "date_of_birth": "1999/06/25",
         "phone_number": "23587962",
         "address": "Elmourouj"
       }
@@ -110,17 +110,17 @@ module.exports.signup_post = async (req, res) => {
       address,
     });
 
-    // send verification email
+       // send verification email
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: 'mariem.nacib@esprit.tn',
-        pass: 'NACIBmariem_1'
-      }
+        user: "mariem.nacib@esprit.tn",
+        pass: "NACIBmariem_1",
+      },
     });
 
     const verificationToken = createToken(user._id);
-
+    user.verificationToken = verificationToken;
     const mailOptions = {
       from: 'mariem.nacib@esprit.tn',
       to: email,
@@ -128,9 +128,10 @@ module.exports.signup_post = async (req, res) => {
       html: `
         <h2>Welcome to Assurini!</h2>
         <p>Please click on the link below to verify your email address:</p>
-        <a href="http://localhost:5000/confirmation/${verificationToken}">Verify Email</a>
+        <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>  
       `,
     };
+    
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -138,7 +139,6 @@ module.exports.signup_post = async (req, res) => {
       } else {
         console.log("Email sent: " + info.response);
       }
-      
     });
 
     res.status(201).json({
@@ -153,15 +153,47 @@ module.exports.signup_post = async (req, res) => {
   }
 };
 
-module.exports.login_post = async (req, res) => {
-  /*  #swagger.parameters['parameter_name'] = {
-      in: 'body',
-      schema: {
-        "email": "JohnDoe@gmail.com",
-        "password": "**********"
-      }
+// Verify email
+module.exports.verify_email_get = async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const decodedToken = jwt.verify(token, "assurini secret");
+
+    // find user by id and verificationToken
+    const user = await userModel.findOne({
+      _id: decodedToken.id,
+      verificationToken: token,
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid or expired token",
+        status: "error",
+      });
     }
-  } */
+
+    // update user document to mark email as verified
+    user.verified = true;
+    user.verificationToken = null;
+    console.log(user);
+    await userModel.updateOne(user);
+
+    res.status(200).json({
+      message: "Email verified successfully",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: "Invalid or expired token",
+      status: "error",
+    });
+  }
+};
+  ///password
+
+module.exports.login_post = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -176,19 +208,10 @@ module.exports.login_post = async (req, res) => {
       .json({ errors, message: "User Login Failed", status: "error" });
   }
 };
-
 module.exports.logout_get = (req, res) => {
- /*  #swagger.parameters['parameter_name'] = {
-      in: 'body',
-      schema: {
-        "email": "JohnDoe@gmail.com",
-        "password": "**********",
-      }
-    }
-  } */
-    res.cookie('jwt', '', { maxAge: 1 });
+  /*   res.cookie('jwt', '', { maxAge: 1 });
     res.redirect('/');
-    res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); 
- /* res.clearCookie("jwt");
-  res.status(200).json({ message: "User logged out successfully." });*/
+    res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); */
+  res.clearCookie("jwt");
+  res.status(200).json({ message: "User logged out successfully." });
 };

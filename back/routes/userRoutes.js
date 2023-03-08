@@ -6,19 +6,18 @@ const userController = require('../controllers/userController');
 router.post('/signup', userController.signup_post);
 router.post('/login', userController.login_post);
 router.get('/logout', userController.logout_get);
+//router.post('/verify-email/:token', userController.verify_email_post);
+router.get("/verify-email/:token", userController.verify_email_get);
+/*
+//signup route
+router.post('/signup', userController.signup_post);
 
-const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf';
-router.get('/confirmation/:token', async (req, res) => {
-    try {
-      const { user: { id } } = jwt.verify(req.params.token, EMAIL_SECRET);
-      await models.User.update({ confirmed: true }, { where: { id } });
-      
-    } catch (e) {
-      return res.redirect("/login");
-    }
-    return res.redirect("error");
-  });
+//login route
+router.post('/login', userController.login_post);
 
+//logout route
+router.get('/logout', userController.logout_get);
 
-
+//email verification route
+router.get('/confirmation', userController.confirmation_get);*/
 module.exports = router;
