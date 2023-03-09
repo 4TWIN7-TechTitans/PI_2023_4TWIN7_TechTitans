@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Please enter a password"],
+    required: [false, "Please enter a password"],
     minlength: [6, "Minimum password length is 6 characters"],
   },
   last_name: {
@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    required: true,
+    required: false,
     maxlength: [50, "Role should not exceed 50 characters"],
     match: [/^[A-Za-z]+$/, "role should only contain letters"],
     enum: ["Admin", "Expert", "Agence", "Client"],
@@ -65,7 +65,23 @@ const userSchema = new mongoose.Schema({
   },
   verified: {
     type: Boolean,
-    default: false,
+    default: false
+  },
+  googleId:{
+    type: String,
+    required: false
+  },
+  image: {
+    type: String,
+    required: false
+  },
+  id: {
+    type:String,
+    required: false
+  },
+  token: {
+  type:String,
+  required: false
   },
 });
 
