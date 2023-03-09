@@ -5,7 +5,7 @@ require("dotenv").config();
 const client = require("twilio")(
   process.env.ACCOUNT_SID,
   process.env.AUTH_TOKEN
-); 
+);
 
 const handleErrors = (err) => {
   console.log(err.message, err.code);
@@ -58,7 +58,6 @@ const handleErrors = (err) => {
 
   return errors;
 };
-
 
 // create json web token
 const maxAge = 3 * 24 * 60 * 60;
@@ -211,7 +210,7 @@ module.exports.login2FA = async (req, res) => {
 
     const auth = await userModel.login2FA(email, code);
     const token = createToken(user._id);
- 
+
     if (auth) {
       user.two_factor_auth_code = "";
       console.log(user);
@@ -264,6 +263,114 @@ module.exports.login_post = async (req, res) => {
   }
 };
 
+module.exports.forgot_password_post = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      throw Error("User with that email address does not exist");
+    }
+
+    const resetToken = createToken(user._id);
+    user.resetToken = resetToken;
+    await user.save();
+
+    // send password reset email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_MARIEM,
+        pass: process.env.PASS_MAIL_MARIEM,
+      },
+    });
+
+    const mailOptions = {
+      from: "fadwa.berrich@esprit.tn",
+      to: email,
+      subject: "Reset your password",
+      html: `
+        <h2>Reset your password</h2>
+        <p>Please click on the link below to reset your password:</p>
+        <a href="http://localhost:5000/reset-password/${resetToken}">Reset Password</a>  
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+
+    res.status(200).json({
+      message: "Password reset email sent",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: "Could not send password reset email",
+      status: "error",
+    });
+  }
+};
+
+// Reset password form
+module.exports.reset_password_get = async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const user = await userModel.findOne({ resetToken: token });
+    if (!user) {
+      return res.status(400).send("Invalid password reset token");
+    }
+
+    res.render("reset_password", { token });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Invalid password reset token");
+  }
+};
+
+// Reset password
+module.exports.reset_password_post = async (req, res) => {
+  const { token, password } = req.body;
+
+  try {
+    const decodedToken = jwt.verify(token, "assurini secret");
+
+    // find user by id and resetToken
+    const user = await userModel.findOne({
+      _id: decodedToken.id,
+      resetToken: token,
+      resetTokenExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).send("Invalid reset token or token expired");
+    }
+
+    // update user password and resetToken
+    user.password = password;
+    user.resetToken = null;
+    user.resetTokenExpires = null;
+    await user.save();
+
+    res.status(200).json({
+      message: "Password reset successful",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: "Invalid or expired token",
+      status: "error",
+    });
+  }
+};
+
 module.exports.logout_get = (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
@@ -276,8 +383,8 @@ module.exports.logout_get = (req, res) => {
   /*   res.cookie('jwt', '', { maxAge: 1 });
     res.redirect('/');
     res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); */
-    res.cookie('jwt', '', { maxAge: 1 });
-    res.status(200).json({message: "User logged out successfully." });
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.status(200).json({ message: "User logged out successfully." });
 };
 
 sendSms = (user) => {
