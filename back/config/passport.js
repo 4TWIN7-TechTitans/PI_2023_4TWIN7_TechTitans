@@ -27,9 +27,11 @@ module.exports = function (passport) {
 
         if (user) {
           done(null, user);
+
         } else {
           user = await User1.create(newUser);
           done(null, user);
+        
         }
       }
     )
@@ -73,11 +75,11 @@ module.exports = function (passport) {
                 // set all of the facebook information in our user model
                 newUser.id    = profile.id; // set the users facebook id                  
                 newUser.token = token; // we will save the token that facebook provides to the user                    
-                newUser.name  = profile.name; // look at the passport user profile to see how names are returned
+                newUser.name  = profile.name.familyName; // look at the passport user profile to see how names are returned
                 newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
             
                 // save our user to the database
-                user = await User1.create(newUser);
+                user = await User2.create(newUser);
                 done(null, user);
             }
  
