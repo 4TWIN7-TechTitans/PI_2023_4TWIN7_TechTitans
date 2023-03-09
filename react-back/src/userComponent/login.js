@@ -84,6 +84,10 @@ return (
                       <button className="btn btn-primary" type="submit">
                         Login
                       </button>
+                      <a href="http://localhost:5000/auth/google" > <i class="fa fa-google fa-6" aria-hidden="true"></i></a>
+                          <a href="http://localhost:5000/auth/facebook"> <i class="fa fa-facebook-square fa-6" aria-hidden="true"></i></a>
+                         
+                         
                     </div>
                   </form>
                 </div>
