@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Footer from './footer';
 import Header from './header';
 
+function Error({ message }) {
+  return <div className="alert alert-danger mt-3" role="alert">{message}</div>;
+}
 
 function Signup() {
     const [showNotification, setShowNotification] = useState(false);
@@ -22,10 +25,11 @@ function Signup() {
   try {
     // Check if email is already in use
     //const checkEmailRes = await email.checkEmail
-    //fetch(`http://127.0.0.1:5000/?email=${email}`);
+    //fetch(http://127.0.0.1:5000/?email=${email});
     const { emailExists } = await email;
     if (emailExists) {
       setShowNotification(true);
+      setShowVerifyEmail(false);
       return;
     }
 
@@ -84,9 +88,13 @@ function Signup() {
                                         </div>
                                         <form className="row g-3" onSubmit={handleSubmit}>
 
-                                            <label className="form-label" for="email">Email</label>
-                                            <input className="form-control" type="text" name="email" required />
-                                            <div className="email error"></div>
+                                        <label className="form-label" htmlFor="email">Email</label>
+<input className="form-control" type="text" name="email" required />
+<div className="email error"></div>
+{showNotification && <Error message="Email already in use" />}
+{showVerifyEmail && (
+  <></>
+)}
                                             <label className="form-label" for="password">Password</label>
                                             <input className="form-control" type="password" name="password" required />
                                             <div className="password error"></div>
