@@ -79,12 +79,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// fire a function after doc saved to db
-/* userSchema.post("save", function (doc, next) {
-  console.log("new user was created & saved", doc);
-  next();
-});*/
-
 // fire a function before doc saved to db
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
@@ -106,7 +100,6 @@ userSchema.statics.login = async function (email, password) {
   throw Error("incorrect email");
 };
 
-// static method to login user
 userSchema.statics.login2FA = async function (email, twoFactorCode) {
   const user = await this.findOne({ email });
   if (!user) {

@@ -115,15 +115,15 @@ module.exports.signup_post = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "mariem.nacib@esprit.tn",
-        pass: "NACIBmariem_1",
+        user: process.env.EMAIL_MARIEM,
+        pass: process.env.PASS_MAIL_MARIEM,
       },
     });
 
     const verificationToken = createToken(user._id);
     user.verificationToken = verificationToken;
     const mailOptions = {
-      from: "mariem.nacib@esprit.tn",
+      from: process.env.EMAIL_MARIEM,
       to: email,
       subject: "Verify your email",
       html: `
@@ -158,7 +158,7 @@ module.exports.verify_email_get = async (req, res) => {
   const { token } = req.params;
 
   try {
-    const decodedToken = jwt.verify(token, "assurini secret");
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     // find user by id and verificationToken
     const user = await userModel.findOne({
