@@ -1,6 +1,12 @@
 const userModel = require("../models/user");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+require("dotenv").config();
+const client = require("twilio")(
+  process.env.ACCOUNT_SID,
+  process.env.AUTH_TOKEN
+); 
+
 const handleErrors = (err) => {
   console.log(err.message, err.code);
   let errors = {
@@ -57,7 +63,7 @@ const handleErrors = (err) => {
 // create json web token
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
-  return jwt.sign({ id }, "assurini secret", {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: maxAge,
   });
 };
@@ -105,7 +111,7 @@ module.exports.signup_post = async (req, res) => {
       address,
     });
 
-       // send verification email
+    // send verification email
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -117,7 +123,7 @@ module.exports.signup_post = async (req, res) => {
     const verificationToken = createToken(user._id);
     user.verificationToken = verificationToken;
     const mailOptions = {
-      from: 'mariem.nacib@esprit.tn',
+      from: "mariem.nacib@esprit.tn",
       to: email,
       subject: "Verify your email",
       html: `
@@ -126,7 +132,6 @@ module.exports.signup_post = async (req, res) => {
         <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>  
       `,
     };
-    
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -162,9 +167,8 @@ module.exports.verify_email_get = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).send('Invalid verification token');
+      return res.status(400).send("Invalid verification token");
     }
-  
 
     // update user document to mark email as verified
     user.verified = true;
@@ -184,35 +188,84 @@ module.exports.verify_email_get = async (req, res) => {
     });
   }
 };
-  ///password
 
-  module.exports.login_post = async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      const user = await userModel.findOne({ email });
-      if (!user) {
-        throw Error("incorrect email");
+module.exports.login2FA = async (req, res) => {
+  /*  #swagger.parameters['parameter_name'] = {
+      in: 'body',
+      schema: {
+        "email": "exp@gmail.com",
+        "code": "1245678"
       }
-  
-      // Check if email is verified
-      if (!user.verified) {
-        throw Error("email not verified");
-      }
-  
-      const auth = await userModel.login(email, password);
-      const token = createToken(user._id);
+    }
+  } */
+  const { email, code } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      throw Error("email incorrect");
+    }
+
+    if (user.two_factor_auth == "false") {
+      throw Error("2fa non activé");
+    }
+
+    const auth = await userModel.login2FA(email, code);
+    const token = createToken(user._id);
+ 
+    if (auth) {
+      user.two_factor_auth_code = "";
+      console.log(user);
+      await userModel.updateOne(user);
+      console.log(user);
+
       res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
       res.status(200).json({ user: user._id });
-    } catch (err) {
-      const errors = handleErrors(err);
-      console.log({ errors });
-      res.status(400).json({ errors, status: "error" });
+    } else {
+      throw Error("code non valide");
     }
-  };
-  
+  } catch (err) {
+    const errors = handleErrors(err);
+    console.log({ errors });
+    res.status(400).json({ errors, status: "error" });
+  }
+};
+
+///password
+
+module.exports.login_post = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      throw Error("incorrect email");
+    }
+
+    // Check if email is verified
+    if (!user.verified) {
+      throw Error("email not verified");
+    }
+
+    if (user.two_factor_auth === "sms") {
+      user.two_factor_auth_code = Math.floor(100000 + Math.random() * 900000);
+      await userModel.updateOne(user);
+      sendSms(user);
+      throw Error("check your sms to 2FA auth"); // redirect
+    }
+
+    const auth = await userModel.login(email, password);
+    const token = createToken(user._id);
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(200).json({ user: user._id });
+  } catch (err) {
+    const errors = handleErrors(err);
+    console.log({ errors });
+    res.status(400).json({ errors, status: "error" });
+  }
+};
+
 module.exports.logout_get = (req, res) => {
-   /*  #swagger.parameters['parameter_name'] = {
+  /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
       schema: {
         "email": "Enter your email address",
@@ -225,4 +278,15 @@ module.exports.logout_get = (req, res) => {
     res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); */
     res.cookie('jwt', '', { maxAge: 1 });
     res.status(200).json({message: "User logged out successfully." });
+};
+
+sendSms = (user) => {
+  client.messages
+    .create({
+      body: "Twillio sms Test : " + user.two_factor_auth_code,
+      from: process.env.TWILIO_SENDER,
+      to: process.env.TWILIO_RECEIVER,
+    })
+    .then((message) => console.log(message.sid, user))
+    .done();
 };
