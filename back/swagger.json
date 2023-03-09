@@ -151,6 +151,28 @@
       "get": {
         "description": "",
         "parameters": [],
+    "/2fa": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "exp@gmail.com"
+                },
+                "code": {
+                  "type": "string",
+                  "example": "1245678"
+                }
+              }
+            }
+          }
+        ],
         "responses": {}
       }
     }

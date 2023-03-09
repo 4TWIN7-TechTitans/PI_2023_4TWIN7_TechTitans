@@ -36,6 +36,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2",
     "twig": "^1.16.0",
+    "twilio": "^4.8.0",
     "validator": "^13.9.0"
   }
 }
