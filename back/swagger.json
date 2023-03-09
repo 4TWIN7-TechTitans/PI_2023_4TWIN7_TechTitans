@@ -147,10 +147,6 @@
         }
       }
     },
-    "/testgauth": {
-      "get": {
-        "description": "",
-        "parameters": [],
     "/2fa": {
       "post": {
         "description": "",
