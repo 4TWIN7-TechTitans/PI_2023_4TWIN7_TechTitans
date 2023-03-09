@@ -2,18 +2,20 @@
 import './App.css';
 import Signup from './userComponent/pages-register';
 import Login from './userComponent/login';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes ,  BrowserRouter as Router} from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      {/* <Routes>
+      <Router>
+      <Routes>
           <Route path='/signup' element={<Signup />}></Route>
           <Route path='/login' element={<Login/>}></Route>
       
-      </Routes> */}
-      <Signup/>
-      <Login/>
+      </Routes>
+      </Router>
+      {/* <Signup/>
+      <Login/> */}
     </div>
   );
 }
