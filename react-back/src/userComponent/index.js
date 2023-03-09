@@ -437,21 +437,21 @@ function Home() {
                     </li>
 
                     <li className="nav-item">
-                        <a className="nav-link collapsed" href="pages-register.html">
+                        <a className="nav-link collapsed" href="/signup">
                             <i className="bi bi-card-list"></i>
                             <span>Register</span>
                         </a>
                     </li>
 
                     <li className="nav-item">
-                        <a className="nav-link collapsed" href="pages-login.html">
+                        <a className="nav-link collapsed" href="/login">
                             <i className="bi bi-box-arrow-in-right"></i>
                             <span>Login</span>
                         </a>
                     </li>
 
                     <li className="nav-item">
-                        <a className="nav-link collapsed" href="pages-error-404.html">
+                        <a className="nav-link collapsed" href="*">
                             <i className="bi bi-dash-circle"></i>
                             <span>Error 404</span>
                         </a>
