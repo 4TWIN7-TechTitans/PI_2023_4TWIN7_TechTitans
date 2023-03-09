@@ -29,4 +29,15 @@ router.get("/logout", (req, res) => {
   });
 });
 
+router.get("/facebook", passport.authenticate("facebook",{ scope: ["email"] }));
+
+router.get(
+  "/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/users");
+  }
+);
+
 module.exports = router;

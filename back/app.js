@@ -11,6 +11,8 @@ const passport = require("passport");
 const session = require("express-session");
 const ensureGuest = require("./middleware/auth");
 
+const FacebookStrategy = require('passport-facebook').Strategy
+
 require("dotenv").config();
 
 
@@ -18,11 +20,10 @@ require("./config/passport")(passport);
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
-
+require("./models/User1");
 require("./models/user");
 var app = express();
 mongoose.set("strictQuery", true);
-
 //Sessions middleware
 app.use(
   session({

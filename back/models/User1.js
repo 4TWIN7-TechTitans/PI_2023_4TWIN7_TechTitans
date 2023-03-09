@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
-const User1Schema = new mongoose.Schema({
+const User1Schema = new mongoose.Schema(
+    {
+        
   googleId: {
     type: String,
     required: true,
@@ -22,6 +24,11 @@ const User1Schema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-  },
+  }
+ 
 });
+
+
+
+
 module.exports = mongoose.model("User1", User1Schema);

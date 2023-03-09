@@ -6,4 +6,8 @@ router.get("/", (req, res, next) => {
   res.render("user.twig", { title: req.user });
 });
 
+
+
+
+
 module.exports = router;
