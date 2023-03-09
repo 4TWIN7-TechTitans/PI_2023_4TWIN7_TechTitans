@@ -146,6 +146,13 @@
           }
         }
       }
+    },
+    "/testgauth": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
     }
   }
 }
