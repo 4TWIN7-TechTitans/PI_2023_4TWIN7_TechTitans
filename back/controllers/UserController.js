@@ -1,17 +1,12 @@
 const userModel = require("../models/user");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-
 const handleErrors = (err) => {
   console.log(err.message, err.code);
   let errors = {
     email: "",
     password: "",
-    gender: "",
     role: "",
-    date_of_birth: "",
-    phone_number: "",
-    address: "",
   };
 
   // incorrect email
@@ -41,23 +36,23 @@ const handleErrors = (err) => {
           errors.role = "Please select a role";
           break;
         case "date_of_birth":
-          errors.date_of_birth = "Please enter a valid date of birth";
+          // date_of_birth is not required, so skip validation error
           break;
         case "phone_number":
-          errors.phone_number = "Please enter a valid phone number";
+          // phone_number is not required, so skip validation error
           break;
         case "address":
-          errors.address = "Please enter a valid address";
+          // address is not required, so skip validation error
           break;
         default:
           errors[properties.path] = properties.message;
-          break;
       }
     });
   }
 
   return errors;
 };
+
 
 // create json web token
 const maxAge = 3 * 24 * 60 * 60;
@@ -228,6 +223,6 @@ module.exports.logout_get = (req, res) => {
   /*   res.cookie('jwt', '', { maxAge: 1 });
     res.redirect('/');
     res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); */
-  res.clearCookie("jwt");
-  res.status(200).json({ message: "User logged out successfully." });
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.status(200).json({message: "User logged out successfully." });
 };

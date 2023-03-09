@@ -17,11 +17,8 @@ function Signup() {
   const password = form.password.value;
   const last_name = form.last_name.value;
   const first_name = form.first_name.value;
-  const gender = form.gender.value;
   const role = form.role.value;
-  const date_of_birth = form.date_of_birth.value;
-  const phone_number = form.phone_number.value;
-  const address = form.address.value;
+
   try {
     // Check if email is already in use
     //const checkEmailRes = await email.checkEmail
@@ -41,11 +38,7 @@ function Signup() {
         password,
         last_name,
         first_name,
-        gender,
-        role,
-        date_of_birth,
-        phone_number,
-        address,
+        role
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -104,12 +97,7 @@ function Signup() {
                                             <label className="form-label" for="first_name">First Name</label>
                                             <input className="form-control" type="text" name="first_name" required />
                       <div className="first_name error"></div>
-                      <label className="form-label" for="gender">Gender</label>
-                      <select className="form-select" name="gender" required>
-                        <option value="">--Please select your gender--</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </select>
+                     
                       <div className="gender error"></div>
                       <label className="form-label" for="role">Role</label>
                       <select className="form-select" name="role" required>
@@ -120,15 +108,7 @@ function Signup() {
                         <option value="provider">Client</option>
                       </select>
                       <div className="role error"></div>
-                      <label className="form-label" for="date_of_birth">Date of Birth</label>
-                      <input className="form-control" type="date" name="date_of_birth" required />
-                      <div className="date_of_birth error"></div>
-                      <label className="form-label" for="phone_number">Phone Number</label>
-                      <input className="form-control" type="tel" name="phone_number" required />
-                      <div className="phone_number error"></div>
-                      <label className="form-label" for="address">Address</label>
-                      <input className="form-control" type="text" name="address" required />
-                      <div className="address error"></div>
+                     
                       <div className="d-grid gap-2 col-12 mt-4">
                         <button className="btn btn-primary" type="submit">Sign up</button>
                       </div>

@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    required: true,
+    required: false,
     enum: ["Male", "Female"],
   },
   role: {
@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
   },
   date_of_birth: {
     type: Date,
-    required: true,
+    required: false,
     validate: {
       validator: function (value) {
         return moment(value).isValid();
@@ -54,13 +54,13 @@ const userSchema = new mongoose.Schema({
   },
   phone_number: {
     type: Number,
-    required: true,
+    required: false,
     match: [/^(\+216)?[0-9]{8}$/, "Phone number should start with +216 followed by 8 digits",
     ],
   },
   address: {
     type: String,
-    required: true,
+    required: false,
     match: [/^[a-zA-Z0-9\s,'-]*$/, "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens"],
   },
   verified: {
