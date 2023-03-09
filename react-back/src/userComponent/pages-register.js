@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Footer from './footer';
 import Header from './header';
 
+function Error({ message }) {
+  return <div className="alert alert-danger mt-3" role="alert">{message}</div>;
+}
 
 function Signup() {
     const [showNotification, setShowNotification] = useState(false);
@@ -14,18 +17,16 @@ function Signup() {
   const password = form.password.value;
   const last_name = form.last_name.value;
   const first_name = form.first_name.value;
-  const gender = form.gender.value;
   const role = form.role.value;
-  const date_of_birth = form.date_of_birth.value;
-  const phone_number = form.phone_number.value;
-  const address = form.address.value;
+
   try {
     // Check if email is already in use
     //const checkEmailRes = await email.checkEmail
-    //fetch(`http://127.0.0.1:5000/?email=${email}`);
+    //fetch(http://127.0.0.1:5000/?email=${email});
     const { emailExists } = await email;
     if (emailExists) {
       setShowNotification(true);
+      setShowVerifyEmail(false);
       return;
     }
 
@@ -37,11 +38,7 @@ function Signup() {
         password,
         last_name,
         first_name,
-        gender,
-        role,
-        date_of_birth,
-        phone_number,
-        address,
+        role
       }),
       headers: { 'Content-Type': 'application/json' },
     });
@@ -84,9 +81,13 @@ function Signup() {
                                         </div>
                                         <form className="row g-3" onSubmit={handleSubmit}>
 
-                                            <label className="form-label" for="email">Email</label>
-                                            <input className="form-control" type="text" name="email" required />
-                                            <div className="email error"></div>
+                                        <label className="form-label" htmlFor="email">Email</label>
+<input className="form-control" type="text" name="email" required />
+<div className="email error"></div>
+{showNotification && <Error message="Email already in use" />}
+{showVerifyEmail && (
+  <></>
+)}
                                             <label className="form-label" for="password">Password</label>
                                             <input className="form-control" type="password" name="password" required />
                                             <div className="password error"></div>
@@ -96,12 +97,7 @@ function Signup() {
                                             <label className="form-label" for="first_name">First Name</label>
                                             <input className="form-control" type="text" name="first_name" required />
                       <div className="first_name error"></div>
-                      <label className="form-label" for="gender">Gender</label>
-                      <select className="form-select" name="gender" required>
-                        <option value="">--Please select your gender--</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </select>
+                     
                       <div className="gender error"></div>
                       <label className="form-label" for="role">Role</label>
                       <select className="form-select" name="role" required>
@@ -112,15 +108,7 @@ function Signup() {
                         <option value="provider">Client</option>
                       </select>
                       <div className="role error"></div>
-                      <label className="form-label" for="date_of_birth">Date of Birth</label>
-                      <input className="form-control" type="date" name="date_of_birth" required />
-                      <div className="date_of_birth error"></div>
-                      <label className="form-label" for="phone_number">Phone Number</label>
-                      <input className="form-control" type="tel" name="phone_number" required />
-                      <div className="phone_number error"></div>
-                      <label className="form-label" for="address">Address</label>
-                      <input className="form-control" type="text" name="address" required />
-                      <div className="address error"></div>
+                     
                       <div className="d-grid gap-2 col-12 mt-4">
                         <button className="btn btn-primary" type="submit">Sign up</button>
                       </div>
@@ -129,7 +117,7 @@ function Signup() {
 
                   <div className="text-center pt-4 pb-2">
                     <p className="text-dark mb-0">Already have an account?</p>
-                    <a href="login.html" className="register-link">Login here</a>
+                    <a href="/login" className="register-link">Login here</a>
                   </div>
                 </div>
 
