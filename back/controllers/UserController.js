@@ -397,3 +397,18 @@ sendSms = (user) => {
     .then((message) => console.log(message.sid, user))
     .done();
 };
+
+module.exports.checkEmail = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await userModel.findOne({ email });
+    if (user) {
+      res.send({ emailExists: true });
+    } else {
+      res.send({ emailExists: false });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
