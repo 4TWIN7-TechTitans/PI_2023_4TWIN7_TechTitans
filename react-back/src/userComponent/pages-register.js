@@ -1,156 +1,212 @@
-import React, { useState } from 'react';
-import Footer from './footer';
-import Header from './header';
+import React, { useState } from "react";
+import axios from 'axios';
+import Footer from "./footer";
+import Header from "./header";
+import {checkEmail} from "../services/api.js"
 
 function Error({ message }) {
-  return <div className="alert alert-danger mt-3" role="alert">{message}</div>;
+  return (
+    <div className="alert alert-danger mt-3" role="alert">
+      {message}
+    </div>
+  );
+}
+
+function validateInput(name, value, options) {
+  if (options.required && !value) {
+    return `${name} is required`;
+  }
+
+  if (options.minLength && value.length < options.minLength) {
+    return `${name} must be at least ${options.minLength} characters`;
+  }
+
+  if (options.maxLength && value.length > options.maxLength) {
+    return `${name} must be at most ${options.maxLength} characters`;
+  }
+
+  if (options.pattern && !options.pattern.test(value)) {
+    return `Invalid ${name}`;
+  }
+
+  return null;
 }
 
 function Signup() {
-    const [showNotification, setShowNotification] = useState(false);
-    const [showVerifyEmail, setShowVerifyEmail] = useState(false);
-  
-   const handleSubmit = async (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const email = form.email.value;
-  const password = form.password.value;
-  const last_name = form.last_name.value;
-  const first_name = form.first_name.value;
-  const role = form.role.value;
+  const [showNotification, setShowNotification] = useState(false);
+  const [showVerifyEmail, setShowVerifyEmail] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  try {
-    // Check if email is already in use
-    //const checkEmailRes = await email.checkEmail
-    //fetch(http://127.0.0.1:5000/?email=${email});
-    const { emailExists } = await email;
-    if (emailExists) {
-      setShowNotification(true);
-      setShowVerifyEmail(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    const last_name = form.last_name.value;
+    const first_name = form.first_name.value;
+    const role = form.role.value;
+
+    // validate inputsw
+    const emailError = validateInput("Email", email, {
+      required: true,
+      pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+    });
+    const passwordError = validateInput("Password", password, {
+      required: true,
+      minLength: 8,
+    });
+    const lastNameError = validateInput("Last Name", last_name, {
+      required: true,
+    });
+    const firstNameError = validateInput("First Name", first_name, {
+      required: true,
+    });
+    const roleError = validateInput("Role", role, { required: true });
+
+    // display errors
+    const errors = {
+      email: emailError,
+      password: passwordError,
+      last_name: lastNameError,
+      first_name: firstNameError,
+      role: roleError,
+    };
+    setErrors(errors);
+
+    // check if there are any errors
+    if (Object.values(errors).some((error) => error !== null)) {
       return;
     }
-
-    // Register user
-    const registerRes = await fetch('http://127.0.0.1:5000/signup', {
-      method: 'POST',
-      body: JSON.stringify({
+    try {
+      // Check if email is already in use
+      console.log(email);
+      const checkEmailRes = await checkEmail(email);
+      if (checkEmailRes) {
+        setShowNotification(true);
+        setShowVerifyEmail(false);
+        console.log("inside");
+        setErrors({ ...errors, email: "Email already in use" }); // Display error message
+        return;
+      }
+      console.log("out");
+      // Register user
+      const registerRes = await axios.post("http://127.0.0.1:5000/signup", {
         email,
         password,
         last_name,
         first_name,
-        role
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    // handle response
-    console.log(registerRes);
-    setShowNotification(true);
-    setShowVerifyEmail(true);
-  } catch (err) {
-    console.log(err);
-  }
-};
-    return(
-<html>
-        <Header/>       
-<body>
+        role,
+      }, {
+        headers: { "Content-Type": "application/json" },
+      });
 
-        <main>
-            <div className="container">
-
-                <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-
-                    <div className="row justify-content-center">
-                        <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
-                            <div className="d-flex justify-content-center py-4">
-                                <a href="index.html" className="logo d-flex align-items-center w-auto">
-                                <img src="assets/img/logo.png" alt=""/>
-                                    <span className="d-none d-lg-block">Assurini</span>
-                                </a>
-                            </div>
-
-                            <div className="card mb-3">
-
-                                <div className="card-body">
-
-                                    <div className="pt-4 pb-2">
-                                        <div className="pt-4 pb-2">
-                                            <h5 className="card-title text-center pb-0 fs-4">Create new account</h5>
-                                            <p className="text-center small">signup</p>
-                                        </div>
-                                        <form className="row g-3" onSubmit={handleSubmit}>
-
-                                        <label className="form-label" htmlFor="email">Email</label>
-<input className="form-control" type="text" name="email" required />
-<div className="email error"></div>
-{showNotification && <Error message="Email already in use" />}
-{showVerifyEmail && (
-  <></>
-)}
-                                            <label className="form-label" for="password">Password</label>
-                                            <input className="form-control" type="password" name="password" required />
-                                            <div className="password error"></div>
-                                            <label className="form-label" for="last_name">Last Name</label>
-                                            <input className="form-control" type="text" name="last_name" required />
-                                            <div className="last_name error"></div>
-                                            <label className="form-label" for="first_name">First Name</label>
-                                            <input className="form-control" type="text" name="first_name" required />
-                      <div className="first_name error"></div>
-                     
-                      <div className="gender error"></div>
-                      <label className="form-label" for="role">Role</label>
-                      <select className="form-select" name="role" required>
-                        <option value="">--Please select your role--</option>
-                        <option value="Admin">Admin</option>
-                        <option value="provider">Expert</option>
-                        <option value="customer">Agence</option>
-                        <option value="provider">Client</option>
-                      </select>
-                      <div className="role error"></div>
-                     
-                      <div className="d-grid gap-2 col-12 mt-4">
-                        <button className="btn btn-primary" type="submit">Sign up</button>
-                      </div>
-                    </form>
-                  </div>
-
-                  <div className="text-center pt-4 pb-2">
-                    <p className="text-dark mb-0">Already have an account?</p>
-                    <a href="/login" className="register-link">Login here</a>
-                  </div>
-                </div>
-
-              </div>
-
-              {showNotification && (
-                <div className="alert alert-success" role="alert">
-                  Sign up successful! Please verify your email.
-                </div>
-              )}
-
-              {showVerifyEmail && (
-                <div className="card">
-                  <div className="card-body">
-                    <h5 className="card-title">Verify your email</h5>
-                    <p className="card-text">
-                      A verification email has been sent to your email address. Please click the link in the email to verify your account.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-            </div>
-          </div>
-        </section>
-
-      </div>
-    </main>
-   
-  </body>
-  <Footer/>
-  </html>
-    );
+      // handle response
+      console.log(registerRes);
+      setShowNotification(true);
+      setShowVerifyEmail(true);
+    } catch (err) {
+      console.log(err);
     }
+  };
+ return (
+  <>
+    <Header />
+      <main>
+        <div className="container">
+          <section className="section register min-vh-100 d-flex justify-content-center align-items-center">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h1 className="card-title text-center mb-4">Signup</h1>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">
+                      Email address
+                    </label>
+                    <input
+                      type="email"
+                      className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                      id="email"
+                      name="email"
+                      aria-describedby="emailHelp"
+                      placeholder="Enter email"
+                    />
+                    {errors.email && <Error message={errors.email} />}
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className={`form-control ${errors.password ? "is-invalid" : ""}`}
+                      id="password"
+                      name="password"
+                      placeholder="Password"
+                    />
+                    {errors.password && <Error message={errors.password} />}
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="last_name" className="form-label">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      className={`form-control ${errors.last_name ? "is-invalid" : ""}`}
+                      id="last_name"
+                      name="last_name"
+                      placeholder="Enter your last name"
+                    />
+                    {errors.last_name && <Error message={errors.last_name} />}
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="first_name" className="form-label">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      className={`form-control ${errors.first_name ? "is-invalid" : ""}`}
+                      id="first_name"
+                      name="first_name"
+                      placeholder="Enter your first name"
+                    />
+                    {errors.first_name && <Error message={errors.first_name} />}
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="role" className="form-label">
+                      Role
+                    </label>
+                    <select
+                      className={`form-select ${errors.role ? "is-invalid" : ""}`}
+                      id="role"
+                      name="role"
+                    >
+                      <option value="">Select role</option>
+                      <option value="Admin">Admin</option>
+                      <option value="provider">Expert</option>
+                      <option value="customer">Agence</option>
+                    </select>
+                    {errors.role && <Error message={errors.role} />}
+                  </div>
+                  <button type="submit" className="btn btn-primary w-100 mt-3">
+                    Register
+                  </button>
+                </form>
+                {showNotification && (
+                  <div className="alert alert-success mt-3" role="alert">
+                    {showVerifyEmail
+                      ? "Signup successful! Please check your email to verify your account."
+                      : "An account with that email already exists."}
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+      <Footer />
+    </>
+);
+}
 
 export default Signup;
+
