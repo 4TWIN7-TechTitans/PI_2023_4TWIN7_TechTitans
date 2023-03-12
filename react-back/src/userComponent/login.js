@@ -106,7 +106,7 @@ function Login() {
                         </p>
                       </div>
 
-                      <form className="row g-3" onSubmit={handleSubmit}>
+                      <form className="row g-3" onSubmit={handleSubmit} noValidate>
                         <label className="form-label" htmlFor="email">
                           Email
                         </label>

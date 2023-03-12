@@ -123,7 +123,7 @@ function Signup() {
             <div className="card shadow-sm">
               <div className="card-body">
                 <h1 className="card-title text-center mb-4">Signup</h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                   <div className="mb-3">
                     <label class="form-label" for="email">
                       Email
