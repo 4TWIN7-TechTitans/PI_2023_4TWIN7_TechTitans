@@ -29,8 +29,9 @@ function Signup() {
       setShowError(true);
       setErrors({ ...errors, password2: "Passwords do not match" });
       return;
+    } else {
+      setShowError(false);
     }
-
     try {
       // Check if email is already in use
       console.log(email);
@@ -71,8 +72,8 @@ function Signup() {
   const validateEmail = (email) => {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
+  
   };
-
   const validatePassword = (password) => {
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
@@ -121,6 +122,7 @@ function Signup() {
 
     let errorMessage = "";
     if (!validatePassword(password)) {
+ if (password.length < 8) {
       errorMessage +=
         "&#10060; <span class='error-text'>Password must be at least 8 characters long.</span> ";
     } else {
@@ -148,8 +150,9 @@ function Signup() {
       errorMessage +=
         "&#9989; <span class='success-text'>Password contains a number.</span> ";
     }
-
+  }
     passwordError.innerHTML = errorMessage;
+
   };
 
   const handleFirstNameChange = (e) => {
@@ -196,42 +199,43 @@ function Signup() {
                       onChange={handleEmailChange}
                     />
                     <div class="email error"></div>
-                    <label className="form-label" for="password">
+                    <label className="form-label" for="password"> Password</label>
                       <input
                         type={showPassword ? "text" : "password"}
                         name="password"
+                        class="form-control"
                         placeholder="Enter your password"
                         required
                         onChange={handlePasswordChange}
                       />
-                      <button
+                      <i class="bi bi-eye-slash"
                         type="button"
-                        className="password-toggle"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? "Hide" : "Show"}
-                      </button>
-                    </label>
+                      </i>
+                      
+                    
                     <div class="password error"></div>
                     <div className="password error"></div>
-                    <div className="input-group">
-                      <label className="form-label" htmlFor="password2">
+                    
+                      <label className="form-label" for="password2">
                         Retype Password
                       </label>
                       <input
                          type={showPassword2 ? "text" : "password"}
                         id="password2"
+                        class="form-control"
+                        placeholder="Re-enter your password"
                         name="password2"
                         required
                       />
-                      <button
-                        type="button"
-                        className="password-toggle"
+                      <i class="bi bi-eye-slash"
                         onClick={() => setShowPassword2(!showPassword2)}
                       >
                         {showPassword2 ? "Hide" : "Show"}
-                      </button>
-                    </div>
+                      </i>
+                      <div className="password error"></div>
                     <label class="form-label" for="last_name">
                       Last Name
                     </label>

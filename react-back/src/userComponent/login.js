@@ -7,6 +7,7 @@ function Login() {
   const [showNotification, setShowNotification] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showVerifiedError, setShowVerifiedError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,12 +127,18 @@ function Login() {
                           Password
                         </label>
                         <input
+                        type={showPassword ? "text" : "password"}
                           className="form-control"
-                          type="password"
                           name="password"
                           required
                           onChange={handlePasswordChange}
                         />
+                        <i class="bi bi-eye-slash"
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? "Hide" : "Show"}
+                      </i>
                         <div className="password error"></div>
                         <div className="col-12">
                           <button
