@@ -45,3 +45,18 @@ export const loginUser = async (email, password) => {
     throw error;
   }
 };
+
+
+const checkEmailVerification = async (email) => {
+  try {
+    const res = await axios.get(`http://127.0.0.1:5000/email-verification/${email}`);
+    if (res.data.verified) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};

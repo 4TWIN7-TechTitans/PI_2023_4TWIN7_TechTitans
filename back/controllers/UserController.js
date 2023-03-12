@@ -20,6 +20,12 @@ const handleErrors = (err) => {
     errors.email = "That email is not registered";
   }
 
+
+  //mail not verified
+  if (err.message === "email not verified") {
+    errors.email = "email not verified";
+  }
+
   // incorrect password
   if (err.message === "incorrect password") {
     errors.password = "That password is incorrect";

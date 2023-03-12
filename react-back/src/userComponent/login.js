@@ -6,29 +6,45 @@ import Header from "./header";
 function Login() {
   const [showNotification, setShowNotification] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [showVerifiedError, setShowVerifiedError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    try {
-      const res = await axios.post("http://127.0.0.1:5000/login", {
+
+    await axios
+      .post("http://127.0.0.1:5000/login", {
         email,
         password,
-      });
-      // handle response
-      if (res.status === 200) {
-        setShowNotification(true);
-        // Redirect to another page
-        window.location.href = "/index.js";
-      } else {
+      })
+      .then(
+        (res) => {
+          setShowError(false);
+          setShowVerifiedError(false);
+          setShowNotification(true);
+          window.location.href = "/index.js";
+        },
+        (err) => {
+          console.log("err then");
+          console.log(err.response.data.errors.email);
+          if (err.response.data.errors.email === "email not verified") {
+            setShowVerifiedError(true);
+            setShowError(false);
+
+          } else {
+            setShowError(true);
+            setShowVerifiedError(false);
+
+          }
+        }
+      )
+      .catch((err) => {
+        console.log("catch");
+        console.log(err);
         setShowError(true);
-      }
-    } catch (err) {
-      console.log(err);
-      setShowError(true);
-    }
+      });
   };
 
   const validateEmail = (email) => {
@@ -131,11 +147,16 @@ function Login() {
                             Invalid email or password.
                           </div>
                         )}
+                        {showVerifiedError && (
+                          <div className="col-12 my-3 alert alert-danger">
+                            Email not verified.
+                          </div>
+                        )}
                       </form>
                     </div>
                   </div>
                   <div className="d-flex justify-content-center pt-4">
-                    <a href="/pages-regiter.js" className="text-primary">
+                    <a href="/signup" className="text-primary">
                       Create new account
                     </a>
                   </div>
