@@ -8,15 +8,27 @@ function Signup() {
   const [showNotification, setShowNotification] = useState(false);
   const [showVerifyEmail, setShowVerifyEmail] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showError, setShowError] = useState(false);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
+    const password2 = form.password2.value;
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
     const role = form.role.value;
+
+      // Verify that passwords match
+      if (password !== password2) {
+        setShowNotification(false);
+        setShowVerifyEmail(false);
+        setShowError(true);
+        setErrors({ ...errors, password2: "Passwords do not match" });
+        return;
+      }
 
     try {
       // Check if email is already in use
@@ -26,6 +38,7 @@ function Signup() {
         setShowNotification(true);
         setShowVerifyEmail(false);
         console.log("inside");
+        setShowError(false);
         setErrors({ ...errors, email: "Email already in use" }); // Display error message
         return;
       }
@@ -49,6 +62,7 @@ function Signup() {
       console.log(registerRes);
       setShowNotification(true);
       setShowVerifyEmail(true);
+      setShowError(true);
     } catch (err) {
       console.log(err);
     }
@@ -60,7 +74,14 @@ function Signup() {
   };
 
   const validatePassword = (password) => {
-    return password.length >= 8;
+    const lowercaseRegex = /[a-z]/;
+    const uppercaseRegex = /[A-Z]/;
+    const numberRegex = /[0-9]/;
+  
+    return password.length >= 8 &&
+           lowercaseRegex.test(password) &&
+           uppercaseRegex.test(password) &&
+           numberRegex.test(password);
   };
 
   const validateFirstName = (last_name) => {
@@ -76,23 +97,49 @@ function Signup() {
   const handleEmailChange = (e) => {
     const email = e.target.value;
     const emailError = document.querySelector(".email.error");
+  
+    let errorMessage = "";
     if (!validateEmail(email)) {
-      emailError.textContent = "Please enter a valid email address.";
+      errorMessage += "&#10060; <span class='error-text'>Please enter a valid email address.</span> ";
     } else {
-      emailError.textContent = "";
+      errorMessage += "&#9989; <span class='success-text'>Email address is valid.</span> ";
     }
+  
+    emailError.innerHTML = errorMessage;
   };
 
   const handlePasswordChange = (e) => {
     const password = e.target.value;
     const passwordError = document.querySelector(".password.error");
+    const lowercaseRegex = /[a-z]/;
+    const uppercaseRegex = /[A-Z]/;
+    const numberRegex = /[0-9]/;
+  
+    let errorMessage = "";
     if (!validatePassword(password)) {
-      passwordError.textContent =
-        "Password must be at least 8 characters long.";
+      errorMessage += "&#10060; <span class='error-text'>Password must be at least 8 characters long.</span> ";
     } else {
-      passwordError.textContent = "";
+      errorMessage += "&#9989; <span class='success-text'>Password is at least 8 characters long.</span> ";
     }
+    if (!lowercaseRegex.test(password)) {
+      errorMessage += "&#10060; <span class='error-text'>Password must contain a lowercase letter.</span> ";
+    } else {
+      errorMessage += "&#9989; <span class='success-text'>Password contains a lowercase letter.</span> ";
+    }
+    if (!uppercaseRegex.test(password)) {
+      errorMessage += "&#10060; <span class='error-text'>Password must contain a capital letter.</span> ";
+    } else {
+      errorMessage += "&#9989; <span class='success-text'>Password contains a capital letter.</span> ";
+    }
+    if (!numberRegex.test(password)) {
+      errorMessage += "&#10060; <span class='error-text'>Password must contain a number.</span> ";
+    } else {
+      errorMessage += "&#9989; <span class='success-text'>Password contains a number.</span> ";
+    }
+  
+    passwordError.innerHTML = errorMessage;
   };
+  
 
   const handleFirstNameChange = (e) => {
     const first_name = e.target.value;
@@ -147,6 +194,13 @@ function Signup() {
                       onChange={handlePasswordChange}
                     />
                     <div class="password error"></div>
+                    <div className="password error"></div>
+                    
+                    <div className="input-group">
+                    <label className="form-label" htmlFor="password2">Retype Password</label>
+                    <input type="password" id="password2" name="password2" required />
+                    </div>
+                    
                     <label class="form-label" for="last_name">
                       Last Name
                     </label>
@@ -193,7 +247,13 @@ function Signup() {
                       ? "Signup successful! Please check your email to verify your account."
                       : "An account with that email already exists."}
                   </div>
+                
                 )}
+                 {showError && (
+                          <div className="col-12 my-3 alert alert-danger">
+                            Invalid fields , Please Recheck !
+                          </div>
+                        )}
               </div>
             </div>
           </section>
