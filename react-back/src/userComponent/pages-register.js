@@ -1,36 +1,8 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import Footer from "./footer";
 import Header from "./header";
-import {checkEmail} from "../services/api.js"
-
-function Error({ message }) {
-  return (
-    <div className="alert alert-danger mt-3" role="alert">
-      {message}
-    </div>
-  );
-}
-
-function validateInput(name, value, options) {
-  if (options.required && !value) {
-    return `${name} is required`;
-  }
-
-  if (options.minLength && value.length < options.minLength) {
-    return `${name} must be at least ${options.minLength} characters`;
-  }
-
-  if (options.maxLength && value.length > options.maxLength) {
-    return `${name} must be at most ${options.maxLength} characters`;
-  }
-
-  if (options.pattern && !options.pattern.test(value)) {
-    return `Invalid ${name}`;
-  }
-
-  return null;
-}
+import { checkEmail } from "../services/api.js";
 
 function Signup() {
   const [showNotification, setShowNotification] = useState(false);
@@ -46,37 +18,6 @@ function Signup() {
     const first_name = form.first_name.value;
     const role = form.role.value;
 
-    // validate inputsw
-    const emailError = validateInput("Email", email, {
-      required: true,
-      pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-    });
-    const passwordError = validateInput("Password", password, {
-      required: true,
-      minLength: 8,
-    });
-    const lastNameError = validateInput("Last Name", last_name, {
-      required: true,
-    });
-    const firstNameError = validateInput("First Name", first_name, {
-      required: true,
-    });
-    const roleError = validateInput("Role", role, { required: true });
-
-    // display errors
-    const errors = {
-      email: emailError,
-      password: passwordError,
-      last_name: lastNameError,
-      first_name: firstNameError,
-      role: roleError,
-    };
-    setErrors(errors);
-
-    // check if there are any errors
-    if (Object.values(errors).some((error) => error !== null)) {
-      return;
-    }
     try {
       // Check if email is already in use
       console.log(email);
@@ -90,15 +31,19 @@ function Signup() {
       }
       console.log("out");
       // Register user
-      const registerRes = await axios.post("http://127.0.0.1:5000/signup", {
-        email,
-        password,
-        last_name,
-        first_name,
-        role,
-      }, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const registerRes = await axios.post(
+        "http://127.0.0.1:5000/signup",
+        {
+          email,
+          password,
+          last_name,
+          first_name,
+          role,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       // handle response
       console.log(registerRes);
@@ -107,10 +52,71 @@ function Signup() {
     } catch (err) {
       console.log(err);
     }
+  
   };
- return (
-  <>
-    <Header />
+  const validateEmail = (email) => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 8;
+  };
+
+  const validateFirstName = (last_name) => {
+    const first_nameRegex = /^[a-zA-Z]+$/;
+    return first_nameRegex.test(last_name);
+  };
+
+  const validateLastName = (last_name) => {
+    const last_nameRegex = /^[a-zA-Z]+$/;
+    return last_nameRegex.test(last_name);
+  };
+
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    const emailError = document.querySelector(".email.error");
+    if (!validateEmail(email)) {
+      emailError.textContent = "Please enter a valid email address.";
+    } else {
+      emailError.textContent = "";
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const password = e.target.value;
+    const passwordError = document.querySelector(".password.error");
+    if (!validatePassword(password)) {
+      passwordError.textContent =
+        "Password must be at least 8 characters long.";
+    } else {
+      passwordError.textContent = "";
+    }
+  };
+
+  const handleFirstNameChange = (e) => {
+    const first_name = e.target.value;
+    const first_nameError = document.querySelector(".first_name.error");
+    if (!validateFirstName(first_name)) {
+      first_nameError.textContent = "Please enter a valid first name (letters only).";
+    } else {
+      first_nameError.textContent = "";
+    }
+  };
+  
+    const handleLastNameChange = (e) => {
+      const last_name = e.target.value;
+      const last_nameError = document.querySelector(".last_name.error");
+      if (!validateLastName(last_name)) {
+        last_nameError.textContent = "Please enter a valid last name (letters only).";
+      } else {
+        last_nameError.textContent = "";
+      }
+    };
+  
+  return (
+    <>
+      <Header />
       <main>
         <div className="container">
           <section className="section register min-vh-100 d-flex justify-content-center align-items-center">
@@ -119,73 +125,63 @@ function Signup() {
                 <h1 className="card-title text-center mb-4">Signup</h1>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                      Email address
+                    <label class="form-label" for="email">
+                      Email
                     </label>
                     <input
-                      type="email"
-                      className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                      id="email"
+                      class="form-control"
+                      type="text"
                       name="email"
-                      aria-describedby="emailHelp"
-                      placeholder="Enter email"
+                      required
+                      onChange={handleEmailChange}
                     />
-                    {errors.email && <Error message={errors.email} />}
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
+                    <div class="email error"></div>
+                    <label class="form-label" for="password">
                       Password
                     </label>
                     <input
+                      class="form-control"
                       type="password"
-                      className={`form-control ${errors.password ? "is-invalid" : ""}`}
-                      id="password"
                       name="password"
-                      placeholder="Password"
+                      required
+                      onChange={handlePasswordChange}
                     />
-                    {errors.password && <Error message={errors.password} />}
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="last_name" className="form-label">
+                    <div class="password error"></div>
+                    <label class="form-label" for="last_name">
                       Last Name
                     </label>
                     <input
+                      class="form-control"
                       type="text"
-                      className={`form-control ${errors.last_name ? "is-invalid" : ""}`}
-                      id="last_name"
                       name="last_name"
-                      placeholder="Enter your last name"
-                    />
-                    {errors.last_name && <Error message={errors.last_name} />}
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="first_name" className="form-label">
+                      required
+                      onChange={handleLastNameChange}
+                    />  <div class="last_name error"></div>
+
+                    <label class="form-label" for="first_name">
                       First Name
                     </label>
                     <input
+                      class="form-control"
                       type="text"
-                      className={`form-control ${errors.first_name ? "is-invalid" : ""}`}
-                      id="first_name"
                       name="first_name"
-                      placeholder="Enter your first name"
+                      required
+                      onChange={handleFirstNameChange}
                     />
-                    {errors.first_name && <Error message={errors.first_name} />}
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="role" className="form-label">
-                      Role
-                    </label>
-                    <select
-                      className={`form-select ${errors.role ? "is-invalid" : ""}`}
-                      id="role"
-                      name="role"
-                    >
-                      <option value="">Select role</option>
-                      <option value="Admin">Admin</option>
-                      <option value="provider">Expert</option>
-                      <option value="customer">Agence</option>
-                    </select>
-                    {errors.role && <Error message={errors.role} />}
+                 <div class="first_name error"></div>
+
+                    <div className="mb-3">
+                      <label classe="role" className="form-label">
+                        Role
+                      </label>
+                      <select name="role">
+                        <option value="">Select role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Expert">Expert</option>
+                        <option value="Agence">Agence</option>
+                      </select>
+                    </div>
+                    <div class="role error"></div>
                   </div>
                   <button type="submit" className="btn btn-primary w-100 mt-3">
                     Register
@@ -205,8 +201,7 @@ function Signup() {
       </main>
       <Footer />
     </>
-);
+  );
 }
 
 export default Signup;
-
