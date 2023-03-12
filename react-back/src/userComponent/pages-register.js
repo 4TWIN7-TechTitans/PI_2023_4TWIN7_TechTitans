@@ -26,12 +26,10 @@ function Signup() {
     if (password !== password2) {
       setShowNotification(false);
       setShowVerifyEmail(false);
-      setShowError(true);
       setErrors({ ...errors, password2: "Passwords do not match" });
+      setShowError(true);
       return;
-    } else {
-      setShowError(false);
-    }
+    } 
     try {
       // Check if email is already in use
       console.log(email);
@@ -39,7 +37,6 @@ function Signup() {
       if (checkEmailRes) {
         setShowNotification(true);
         setShowVerifyEmail(false);
-        console.log("inside");
         setShowError(false);
         setErrors({ ...errors, email: "Email already in use" }); // Display error message
         return;
@@ -60,15 +57,22 @@ function Signup() {
         }
       );
 
-      // handle response
-      console.log(registerRes);
+    // handle response
+    if (registerRes.status === 201) {
       setShowNotification(true);
       setShowVerifyEmail(true);
+      setErrors({});
+      setShowError(false);
+    } else {
+      setShowNotification(false);
+      setShowVerifyEmail(false);
+      setErrors({ ...errors, message: "Signup failed" });
       setShowError(true);
-    } catch (err) {
-      console.log(err);
     }
-  };
+  } catch (err) {
+    console.log(err);
+  }
+};
   const validateEmail = (email) => {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
