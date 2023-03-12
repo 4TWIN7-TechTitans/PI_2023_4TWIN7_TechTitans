@@ -53,17 +53,21 @@ function Login() {
   };
 
   const validatePassword = (password) => {
-    return password.length >= 6;
+    return password.length >= 8;
   };
 
   const handleEmailChange = (e) => {
     const email = e.target.value;
     const emailError = document.querySelector(".email.error");
+  
+    let errorMessage = "";
     if (!validateEmail(email)) {
-      emailError.textContent = "Please enter a valid email address.";
+      errorMessage += "&#10060; <span class='error-text'>Please enter a valid email address.</span> ";
     } else {
-      emailError.textContent = "";
+      errorMessage += "&#9989; <span class='success-text'>Email address is valid.</span> ";
     }
+  
+    emailError.innerHTML = errorMessage;
   };
 
   const handlePasswordChange = (e) => {
@@ -71,7 +75,7 @@ function Login() {
     const passwordError = document.querySelector(".password.error");
     if (!validatePassword(password)) {
       passwordError.textContent =
-        "Password must be at least 6 characters long.";
+        "Password must be at least 8 characters long.";
     } else {
       passwordError.textContent = "";
     }
