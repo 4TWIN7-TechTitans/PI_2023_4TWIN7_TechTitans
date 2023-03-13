@@ -93,6 +93,12 @@ const userSchema = new mongoose.Schema({
   two_factor_auth_code: {
     type: String,
   },
+  phone_number: {
+    type: String,
+    required: false,
+    match: [/^\+216[0-9]{8}$/, "Phone number should start with +216 followed by 8 digits"],
+  }
+
 });
 
 // fire a function before doc saved to db

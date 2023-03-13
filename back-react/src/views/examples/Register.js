@@ -10,7 +10,7 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 import { checkEmail } from "../services/api";
 import axios from "axios";
@@ -33,6 +33,7 @@ function Register() {
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
     const role = form.role.value;
+    const phone_number = "+216" + form.phone_number.value;
 
     // Verify that passwords match
     if (password !== password2) {
@@ -41,7 +42,7 @@ function Register() {
       setErrors({ ...errors, password2: "Passwords do not match" });
       setShowError(true);
       return;
-    } 
+    }
     try {
       // Check if email is already in use
       console.log(email);
@@ -63,32 +64,32 @@ function Register() {
           last_name,
           first_name,
           role,
+          phone_number,
         },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
 
-    // handle response
-    if (registerRes.status === 201) {
-      setShowNotification(true);
-      setShowVerifyEmail(true);
-      setErrors({});
-      setShowError(false);
-    } else {
-      setShowNotification(false);
-      setShowVerifyEmail(false);
-      setErrors({ ...errors, message: "Signup failed" });
-      setShowError(true);
+      // handle response
+      if (registerRes.status === 201) {
+        setShowNotification(true);
+        setShowVerifyEmail(true);
+        setErrors({});
+        setShowError(false);
+      } else {
+        setShowNotification(false);
+        setShowVerifyEmail(false);
+        setErrors({ ...errors, message: "Signup failed" });
+        setShowError(true);
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
+  };
   const validateEmail = (email) => {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
-  
   };
   // const validatePassword = (password) => {
   //   const lowercaseRegex = /[a-z]/;
@@ -129,53 +130,66 @@ function Register() {
     emailError.innerHTML = errorMessage;
   };
 
+
+
   const handlePasswordChange = (e) => {
     const password = e.target.value;
     const passwordError = document.querySelector(".password.error");
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /[0-9]/;
-  
+
     let errorMessage = "";
     let strengthMessage = "";
     let strength = 0;
-  
+
     if (password.length >= 8) {
       strength += 1;
-      strengthMessage += "✅ <span class='success-text'>Password is at least 8 characters long.</span> ";
+      strengthMessage +=
+        "✅ <span class='success-text'>Password is at least 8 characters long.</span> ";
     } else {
-      strengthMessage += "❌ <span class='error-text'>Password must be at least 8 characters long.</span> ";
+      strengthMessage +=
+        "❌ <span class='error-text'>Password must be at least 8 characters long.</span> ";
     }
-  
+
     if (lowercaseRegex.test(password)) {
       strength += 1;
-      strengthMessage += "✅ <span class='success-text'>Password contains a lowercase letter.</span> ";
+      strengthMessage +=
+        "✅ <span class='success-text'>Password contains a lowercase letter.</span> ";
     } else {
-      strengthMessage += "❌ <span class='error-text'>Password must contain a lowercase letter.</span> ";
+      strengthMessage +=
+        "❌ <span class='error-text'>Password must contain a lowercase letter.</span> ";
     }
-  
+
     if (uppercaseRegex.test(password)) {
       strength += 1;
-      strengthMessage += "✅ <span class='success-text'>Password contains a capital letter.</span> ";
+      strengthMessage +=
+        "✅ <span class='success-text'>Password contains a capital letter.</span> ";
     } else {
-      strengthMessage += "❌ <span class='error-text'>Password must contain a capital letter.</span> ";
+      strengthMessage +=
+        "❌ <span class='error-text'>Password must contain a capital letter.</span> ";
     }
-  
+
     if (numberRegex.test(password)) {
       strength += 1;
-      strengthMessage += "✅ <span class='success-text'>Password contains a number.</span> ";
+      strengthMessage +=
+        "✅ <span class='success-text'>Password contains a number.</span> ";
     } else {
-      strengthMessage += "❌ <span class='error-text'>Password must contain a number.</span> ";
+      strengthMessage +=
+        "❌ <span class='error-text'>Password must contain a number.</span> ";
     }
-  
+
     if (strength === 4) {
-      strengthMessage += "✅ <span class='success-text'>Password is strong.</span> ";
+      strengthMessage +=
+        "✅ <span class='success-text'>Password is strong.</span> ";
     } else if (strength >= 2) {
-      strengthMessage += "😊 <span class='warning-text'>Password is medium.</span> ";
+      strengthMessage +=
+        "😊 <span class='warning-text'>Password is medium.</span> ";
     } else {
-      strengthMessage += "😔 <span class='error-text'>Password is weak.</span> ";
+      strengthMessage +=
+        "😔 <span class='error-text'>Password is weak.</span> ";
     }
-  
+
     errorMessage = strengthMessage;
     passwordError.innerHTML = errorMessage;
   };
@@ -265,12 +279,18 @@ function Register() {
                             type={showPassword ? "text" : "password"} // Change input type based on showPassword state
                             placeholder="Password"
                             required
-                            onChange={handlePasswordChange} 
+                            onChange={handlePasswordChange}
                           />
                           <div className="password error"></div>
                           <InputGroupAddon addonType="append">
-                            <InputGroupText onClick={() => setShowPassword(!showPassword)}>
-                              {showPassword ? <i className="fas fa-eye-slash" /> : <i className="fas fa-eye" />}
+                            <InputGroupText
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? (
+                                <i className="fas fa-eye-slash" />
+                              ) : (
+                                <i className="fas fa-eye" />
+                              )}
                             </InputGroupText>
                           </InputGroupAddon>
                         </InputGroup>
@@ -288,32 +308,63 @@ function Register() {
                           />
                           <div className="password2 error"></div>
                           <InputGroupAddon addonType="append">
-                            <InputGroupText onClick={() => setShowPassword2(!showPassword2)}>
-                              {showPassword2 ? <i className="fas fa-eye-slash" /> : <i className="fas fa-eye" />} {/* Change icon based on showPassword2 state */}
+                            <InputGroupText
+                              onClick={() => setShowPassword2(!showPassword2)}
+                            >
+                              {showPassword2 ? (
+                                <i className="fas fa-eye-slash" />
+                              ) : (
+                                <i className="fas fa-eye" />
+                              )}{" "}
+                              {/* Change icon based on showPassword2 state */}
                             </InputGroupText>
                           </InputGroupAddon>
                         </InputGroup>
-                        {errors.password2 && <p className="text-danger">{errors.password2}</p>}
+                        {errors.password2 && (
+                          <p className="text-danger">{errors.password2}</p>
+                        )}
                       </FormGroup>
                     </Col>
                   </Row>
+                  <FormGroup>
+                    <label className="phone_number">
+                      Phone number (+216) <span className="optional">(optional)</span>
+                    </label>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="fa fa-phone" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        type="text"
+                        id="phone_number"
+                        name="phone_number"
+                        placeholder="+216XXXXXXXX"
+                        pattern="^\[0-9]{8}$"
+                        title="Please enter a valid Tunisian phone number (including the country code +216)"
+                 
+                      />
+                    </InputGroup>
+                  </FormGroup>
+
                   <Row>
                     <Col md="12">
                       <FormGroup>
                         <label>Role</label>
                         <Input name="role" type="select" required>
-                        <option value="Admin">Admin</option>
-                        <option value="Expert">Expert</option>
-                        <option value="Agence">Agence</option>
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Button className="btn-fill" color="primary" type="submit">
-                  Register
-                </Button>
-              </Form>
-              {showNotification && (
+                          <option value="Admin">Admin</option>
+                          <option value="Expert">Expert</option>
+                          <option value="Agence">Agence</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Button className="btn-fill" color="primary" type="submit">
+                    Register
+                  </Button>
+                </Form>
+                {showNotification && (
                   <div className="alert alert-success mt-3" role="alert">
                     {showVerifyEmail
                       ? "Signup successful! Please check your email to verify your account."
@@ -325,12 +376,12 @@ function Register() {
                     Invalid fields , Please Recheck !
                   </div>
                 )}
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </div>
-</>
-);
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
+  );
 }
 export default Register;
