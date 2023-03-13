@@ -441,45 +441,62 @@ module.exports.show_users_get = async (req, res) => {
   }
 };
 
-// // Get user by ID
-// module.exports.get_user_by_id = async (req, res) => {
-//   const { id } = req.params;
+//Get user by email
+module.exports.get_user_by_email = async (req, res) => {
+  const { email } = req.params;
 
-//   try {
-//     const user = await userModel.findById(id);
-//     if (!user) {
-//       return res.status(404).json({
-//         message: "User not found",
-//         status: "error",
-//       });
-//     }
+  // check if user is authorized to access user information
+  const userRole = req.user.role;
+  if (userRole !== "admin" && userRole !== "expert" && userRole !== "client" && userRole !== "agence") {
+    return res.status(403).json({
+      message: "You are not authorized to access this resource",
+      status: "error",
+    });
+  }
 
-//     // Only return public user data
-//     const publicUser = {
-//       id: user._id,
-//       email: user.email,
-//       last_name: user.last_name,
-//       first_name: user.first_name,
-//       gender: user.gender,
-//       role: user.role,
-//       date_of_birth: user.date_of_birth,
-//       phone_number: user.phone_number,
-//       address: user.address,
-//       verified: user.verified,
-//     };
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: "error",
+      });
+    }
 
-//     res.status(200).json({
-//       user: publicUser,
-//       status: "success",
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json({
-//       message: "An error occurred while getting user data",
-//       status: "error",
-//     });
-//   }
-// };
+    // check if user is authorized to access this user's information
+    if (userRole === "client" && user.id !== req.user.id) {
+      return res.status(403).json({
+        message: "You are not authorized to access this resource",
+        status: "error",
+      });
+    }
+    if (userRole === "agence" && user.agenceId !== req.user.agenceId) {
+      return res.status(403).json({
+        message: "You are not authorized to access this resource",
+        status: "error",
+      });
+    }
+
+    if (userRole === "Expert" && user.expertId !== req.user.expertId) {
+      return res.status(403).json({
+        message: "You are not authorized to access this resource",
+        status: "error",
+      });
+    }
+
+    // return user information if authorized
+    return res.status(200).json({
+      user,
+      status: "success",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "An error occurred while fetching user information",
+      status: "error",
+    });
+  }
+};
+
 
 module.exports.get_user_by_email = async (req, res) => {
   const email = req.params.email;
