@@ -252,13 +252,13 @@ function Login() {
                 </label>
               </div>
               {showNotification && (
-                <div className="col-12 my-3 alert alert-danger">
+                <div className="col-12 my-3 alert alert-success">
                   Login successful!
                 </div>
               )}
               
               {emailNotFound && (
-                <div className="mt-2 text-danger">
+                <div className="col-12 my-3 alert alert-danger">
                   Email not found. Please check your email address and try
                   again.
                 </div>
