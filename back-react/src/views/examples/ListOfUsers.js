@@ -16,6 +16,7 @@ import Header from "components/Headers/Header.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+
 function ListOfUsers() {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
