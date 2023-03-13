@@ -70,7 +70,7 @@ function Login() {
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
-            window.location.href = "/admin/index";
+            window.location.href = "/index.js";
           },
           (err) => {
             console.log("err then");
@@ -183,7 +183,7 @@ function Login() {
             <div className="text-center text-muted mb-4">
               <small>Or sign in with credentials</small>
             </div>
-            <Form role="form" onSubmit={handleSubmit} noValidate>
+            <Form onSubmit={handleSubmit} noValidate>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -193,12 +193,13 @@ function Login() {
                   </InputGroupAddon>
                   <Input
                     placeholder="Email"
-                    type="email"
+                    type="text"
+                    name="email"
                     autoComplete="new-email"
                     required
                     onChange={handleEmailChange}
                   />
-                  
+
                 </InputGroup>
                 <div className="email error"></div>
               </FormGroup>
@@ -211,12 +212,13 @@ function Login() {
                   </InputGroupAddon>
                   <Input
                     placeholder="Password"
-                    type={showPassword? 'text': 'password'}
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
                     autoComplete="new-password"
                     required
                     onChange={handlePasswordChange}
                   />
-                  
+
                   <InputGroupAddon addonType="append">
                     <InputGroupText onClick={() => setShowPassword(!showPassword)}>
                       {showPassword ? <i className="fas fa-eye-slash" /> : <i className="fas fa-eye" />}
@@ -253,11 +255,6 @@ function Login() {
                   <span className="text-muted">Remember me</span>
                 </label>
               </div>
-              <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
-                  Sign in
-                </Button>
-              </div>
               {showNotification && (
                 <div className="col-12 my-3 alert alert-success">
                   Login successful!
@@ -273,6 +270,12 @@ function Login() {
                   Email not verified.
                 </div>
               )}
+              <div className="text-center">
+                <Button className="my-4" color="primary" type="submit">
+                  Sign in
+                </Button>
+              </div>
+              
             </Form>
           </CardBody>
         </Card>

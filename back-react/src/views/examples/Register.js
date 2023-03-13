@@ -31,7 +31,7 @@ import {
   Row,
   Col
 } from "reactstrap";
-import { checkEmail } from "../../services/api";
+import { checkEmail } from "../services/api";
 import axios from "axios";
 import React, { useState } from "react";
 
