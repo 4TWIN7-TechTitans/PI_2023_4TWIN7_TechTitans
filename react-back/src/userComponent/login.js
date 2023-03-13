@@ -8,6 +8,7 @@ function Login() {
   const [showError, setShowError] = useState(false);
   const [showVerifiedError, setShowVerifiedError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [show2FAform, setShow2FAform] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,37 +16,60 @@ function Login() {
     const email = form.email.value;
     const password = form.password.value;
 
-    await axios
-      .post("http://127.0.0.1:5000/login", {
-        email,
-        password,
-      })
-      .then(
-        (res) => {
-          setShowError(false);
-          setShowVerifiedError(false);
-          setShowNotification(true);
-          window.location.href = "/index.js";
-        },
-        (err) => {
-          console.log("err then");
-          console.log(err.response.data.errors.email);
-          if (err.response.data.errors.email === "email not verified") {
-            setShowVerifiedError(true);
-            setShowError(false);
+    if (form.tfa !== undefined) {
+      const code = form.tfa.value;
 
-          } else {
-            setShowError(true);
-            setShowVerifiedError(false);
-
+      await axios
+        .post("http://127.0.0.1:5000/2fa", {
+          email,
+          code,
+        })
+        .then(
+          (res) => {
+            console.log("res 2FA");
+          },
+          (err) => {
+            console.log("err 2FA");
           }
-        }
-      )
-      .catch((err) => {
-        console.log("catch");
-        console.log(err);
-        setShowError(true);
-      });
+        );
+    } else {
+      await axios
+        .post("http://127.0.0.1:5000/login", {
+          email,
+          password,
+        })
+        .then(
+          (res) => {
+            setShowError(false);
+            setShowVerifiedError(false);
+            setShowNotification(true);
+            window.location.href = "/index.js";
+          },
+          (err) => {
+            console.log("err then");
+            console.log(err.response.data.errors.email);
+
+            if (err.response.data.errors.tfa === "check your sms to 2FA auth") {
+              setShow2FAform(true);
+              setShowVerifiedError(false);
+              setShowError(false);
+            }
+
+            if (err.response.data.errors.email === "email not verified") {
+              setShowVerifiedError(true);
+              setShowError(false);
+            } else {
+              setShowError(true);
+              setShowVerifiedError(false);
+            }
+          }
+        )
+        .catch((err) => {
+          console.log("catch");
+          console.log(err);
+          setShowError(true);
+        });
+    }
   };
 
   const validateEmail = (email) => {
@@ -60,14 +84,16 @@ function Login() {
   const handleEmailChange = (e) => {
     const email = e.target.value;
     const emailError = document.querySelector(".email.error");
-  
+
     let errorMessage = "";
     if (!validateEmail(email)) {
-      errorMessage += "&#10060; <span class='error-text'>Please enter a valid email address.</span> ";
+      errorMessage +=
+        "&#10060; <span class='error-text'>Please enter a valid email address.</span> ";
     } else {
-      errorMessage += "&#9989; <span class='success-text'>Email address is valid.</span> ";
+      errorMessage +=
+        "&#9989; <span class='success-text'>Email address is valid.</span> ";
     }
-  
+
     emailError.innerHTML = errorMessage;
   };
 
@@ -111,7 +137,11 @@ function Login() {
                         </p>
                       </div>
 
-                      <form className="row g-3" onSubmit={handleSubmit} noValidate>
+                      <form
+                        className="row g-3"
+                        onSubmit={handleSubmit}
+                        noValidate
+                      >
                         <label className="form-label" htmlFor="email">
                           Email
                         </label>
@@ -127,18 +157,35 @@ function Login() {
                           Password
                         </label>
                         <input
-                        type={showPassword ? "text" : "password"}
+                          type={showPassword ? "text" : "password"}
                           className="form-control"
                           name="password"
                           required
                           onChange={handlePasswordChange}
                         />
-                        <i class="bi bi-eye-slash"
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? "Hide" : "Show"}
-                      </i>
+
+                        {show2FAform && (
+                          <>
+                            <label className="form-label" htmlFor="tfa">
+                              2FA Code
+                            </label>{" "}
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="tfa"
+                              required
+                              maxLength={6}
+                            />
+                          </>
+                        )}
+
+                        <i
+                          class="bi bi-eye-slash"
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? "Hide" : "Show"}
+                        </i>
                         <div className="password error"></div>
                         <div className="col-12">
                           <button

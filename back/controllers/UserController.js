@@ -37,6 +37,12 @@ const handleErrors = (err) => {
     return errors;
   }
 
+  // 2fa code generated
+  if (err.message === "check your sms to 2FA auth") {
+    errors.tfa = "check your sms to 2FA auth";
+    return errors;
+  }
+
   // validation errors
   if (err.message.includes("user validation failed")) {
     Object.values(err.errors).forEach(({ properties }) => {
@@ -218,11 +224,7 @@ module.exports.login2FA = async (req, res) => {
     const token = createToken(user._id);
 
     if (auth) {
-      user.two_factor_auth_code = "";
-      console.log(user);
-      await userModel.updateOne(user);
-      console.log(user);
-
+      await userModel.findByIdAndUpdate(user._id, {two_factor_auth_code : ""});
       res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
       res.status(200).json({ user: user._id });
     } else {
@@ -251,10 +253,12 @@ module.exports.login_post = async (req, res) => {
       throw Error("email not verified");
     }
 
+
+
     if (user.two_factor_auth === "sms") {
-      user.two_factor_auth_code = Math.floor(100000 + Math.random() * 900000);
-      await userModel.updateOne(user);
-      sendSms(user);
+      const code = Math.floor(100000 + Math.random() * 900000);
+      await userModel.findByIdAndUpdate(user._id, {two_factor_auth_code : code});
+      // sendSms(user);
       throw Error("check your sms to 2FA auth"); // redirect
     }
 
