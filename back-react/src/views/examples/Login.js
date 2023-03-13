@@ -1,16 +1,3 @@
-/*!
-=========================================================
-* Argon Dashboard React - v1.2.2
-=========================================================
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-* Coded by Creative Tim
-=========================================================
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// reactstrap components
 import {
   Button,
   Card,
@@ -23,12 +10,10 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col,
 } from "reactstrap";
 import React, { useState } from "react";
 import axios from "axios";
-
-
 
 function Login() {
   const [showNotification, setShowNotification] = useState(false);
@@ -36,6 +21,7 @@ function Login() {
   const [showVerifiedError, setShowVerifiedError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [show2FAform, setShow2FAform] = useState(false);
+  const [emailNotFound, setEmailNotFound] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,9 +71,14 @@ function Login() {
             if (err.response.data.errors.email === "email not verified") {
               setShowVerifiedError(true);
               setShowError(false);
+            } else if (err.response.data.errors.email === "email not found") {
+              setShowVerifiedError(false);
+              setShowError(false);
             } else {
+              setEmailNotFound(false);
               setShowError(true);
               setShowVerifiedError(false);
+
             }
           }
         )
@@ -199,7 +190,6 @@ function Login() {
                     required
                     onChange={handleEmailChange}
                   />
-
                 </InputGroup>
                 <div className="email error"></div>
               </FormGroup>
@@ -212,7 +202,7 @@ function Login() {
                   </InputGroupAddon>
                   <Input
                     placeholder="Password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     autoComplete="new-password"
                     required
@@ -220,8 +210,14 @@ function Login() {
                   />
 
                   <InputGroupAddon addonType="append">
-                    <InputGroupText onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? <i className="fas fa-eye-slash" /> : <i className="fas fa-eye" />}
+                    <InputGroupText
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <i className="fas fa-eye-slash" />
+                      ) : (
+                        <i className="fas fa-eye" />
+                      )}
                     </InputGroupText>
                   </InputGroupAddon>
                 </InputGroup>
@@ -256,10 +252,18 @@ function Login() {
                 </label>
               </div>
               {showNotification && (
-                <div className="col-12 my-3 alert alert-success">
+                <div className="col-12 my-3 alert alert-danger">
                   Login successful!
                 </div>
               )}
+              
+              {emailNotFound && (
+                <div className="mt-2 text-danger">
+                  Email not found. Please check your email address and try
+                  again.
+                </div>
+              )}
+
               {showError && (
                 <div className="col-12 my-3 alert alert-danger">
                   Invalid email or password.
@@ -270,12 +274,13 @@ function Login() {
                   Email not verified.
                 </div>
               )}
+              
+
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
                   Sign in
                 </Button>
               </div>
-              
             </Form>
           </CardBody>
         </Card>
@@ -302,6 +307,6 @@ function Login() {
       </Col>
     </>
   );
-};
+}
 
 export default Login;
