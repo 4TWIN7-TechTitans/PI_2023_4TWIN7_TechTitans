@@ -422,3 +422,87 @@ module.exports.checkEmail = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+// show all users
+module.exports.show_users_get = async (req, res) => {
+  try {
+    const users = await userModel.find({});
+    res.status(200).json({
+      users,
+      message: "All users retrieved successfully",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to retrieve users",
+      status: "error",
+    });
+  }
+};
+
+// // Get user by ID
+// module.exports.get_user_by_id = async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const user = await userModel.findById(id);
+//     if (!user) {
+//       return res.status(404).json({
+//         message: "User not found",
+//         status: "error",
+//       });
+//     }
+
+//     // Only return public user data
+//     const publicUser = {
+//       id: user._id,
+//       email: user.email,
+//       last_name: user.last_name,
+//       first_name: user.first_name,
+//       gender: user.gender,
+//       role: user.role,
+//       date_of_birth: user.date_of_birth,
+//       phone_number: user.phone_number,
+//       address: user.address,
+//       verified: user.verified,
+//     };
+
+//     res.status(200).json({
+//       user: publicUser,
+//       status: "success",
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({
+//       message: "An error occurred while getting user data",
+//       status: "error",
+//     });
+//   }
+// };
+
+module.exports.get_user_by_email = async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const user = await userModel.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        status: "error",
+      });
+    }
+
+    res.status(200).json({
+      user: user,
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
