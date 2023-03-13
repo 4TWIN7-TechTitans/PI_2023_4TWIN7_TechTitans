@@ -61,15 +61,27 @@ export const checkEmailVerification = async (email) => {
   }
 };
 
-/*export const getUsers = async () => {
+
+export const getUsers = async () => {
   try {
-    const response = await axios.get(`${url}/users`);
-    return response.data;
+    const response = await axios.get(`http://127.0.0.1:5000/all-users`);
+    const users = response.data.filter(user => user.role !== 'admin');
+    return users;
   } catch (error) {
     console.log(error);
   }
 };
 
+/*export const getUsers = async () => {
+  try {
+    const response = await axios.get(`http://127.0.0.1:5000/all-users`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};*/
+
+/*
 export const getUserById = async (id) => {
   try {
     const response = await axios.get(`${url}/users/${id}`);
