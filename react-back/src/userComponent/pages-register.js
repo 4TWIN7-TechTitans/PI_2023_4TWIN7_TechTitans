@@ -24,12 +24,18 @@ function Signup() {
 
     // Verify that passwords match
     if (password !== password2) {
+      // If passwords don't match, show a warning message
       setShowNotification(false);
       setShowVerifyEmail(false);
       setErrors({ ...errors, password2: "Passwords do not match" });
       setShowError(true);
-      return;
-    } 
+    } else {
+      // If passwords match, show a success message
+      setShowNotification(true);
+      setShowVerifyEmail(true);
+      setErrors({});
+      setShowError(false);
+    }
     try {
       // Check if email is already in use
       console.log(email);
@@ -123,41 +129,51 @@ function Signup() {
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /[0-9]/;
-
+  
     let errorMessage = "";
-    if (!validatePassword(password)) {
- if (password.length < 8) {
-      errorMessage +=
-        "&#10060; <span class='error-text'>Password must be at least 8 characters long.</span> ";
+    let strengthMessage = "";
+    let strength = 0;
+  
+    if (password.length >= 8) {
+      strength += 1;
+      strengthMessage += "✅ <span class='success-text'>Password is at least 8 characters long.</span> ";
     } else {
-      errorMessage +=
-        "&#9989; <span class='success-text'>Password is at least 8 characters long.</span> ";
+      strengthMessage += "❌ <span class='error-text'>Password must be at least 8 characters long.</span> ";
     }
-    if (!lowercaseRegex.test(password)) {
-      errorMessage +=
-        "&#10060; <span class='error-text'>Password must contain a lowercase letter.</span> ";
+  
+    if (lowercaseRegex.test(password)) {
+      strength += 1;
+      strengthMessage += "✅ <span class='success-text'>Password contains a lowercase letter.</span> ";
     } else {
-      errorMessage +=
-        "&#9989; <span class='success-text'>Password contains a lowercase letter.</span> ";
+      strengthMessage += "❌ <span class='error-text'>Password must contain a lowercase letter.</span> ";
     }
-    if (!uppercaseRegex.test(password)) {
-      errorMessage +=
-        "&#10060; <span class='error-text'>Password must contain a capital letter.</span> ";
+  
+    if (uppercaseRegex.test(password)) {
+      strength += 1;
+      strengthMessage += "✅ <span class='success-text'>Password contains a capital letter.</span> ";
     } else {
-      errorMessage +=
-        "&#9989; <span class='success-text'>Password contains a capital letter.</span> ";
+      strengthMessage += "❌ <span class='error-text'>Password must contain a capital letter.</span> ";
     }
-    if (!numberRegex.test(password)) {
-      errorMessage +=
-        "&#10060; <span class='error-text'>Password must contain a number.</span> ";
+  
+    if (numberRegex.test(password)) {
+      strength += 1;
+      strengthMessage += "✅ <span class='success-text'>Password contains a number.</span> ";
     } else {
-      errorMessage +=
-        "&#9989; <span class='success-text'>Password contains a number.</span> ";
+      strengthMessage += "❌ <span class='error-text'>Password must contain a number.</span> ";
     }
-  }
+  
+    if (strength === 4) {
+      strengthMessage += "✅ <span class='success-text'>Password is strong.</span> ";
+    } else if (strength >= 2) {
+      strengthMessage += "😊 <span class='warning-text'>Password is medium.</span> ";
+    } else {
+      strengthMessage += "😔 <span class='error-text'>Password is weak.</span> ";
+    }
+  
+    errorMessage = strengthMessage;
     passwordError.innerHTML = errorMessage;
-
   };
+  
 
   const handleFirstNameChange = (e) => {
     const first_name = e.target.value;
