@@ -56,7 +56,7 @@ function Login() {
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
-            window.location.href = "/index.js";
+            window.location.href = "/admin/index";
           },
           (err) => {
             console.log("err then");
@@ -71,14 +71,14 @@ function Login() {
             if (err.response.data.errors.email === "email not verified") {
               setShowVerifiedError(true);
               setShowError(false);
-            } else if (err.response.data.errors.email === "email not found") {
+            } else if (err.response.data.errors.email === "email not found" ) {
               setShowVerifiedError(false);
               setShowError(false);
+              setEmailNotFound(true);
             } else {
               setEmailNotFound(false);
               setShowError(true);
               setShowVerifiedError(false);
-
             }
           }
         )
