@@ -24,18 +24,12 @@ function Signup() {
 
     // Verify that passwords match
     if (password !== password2) {
-      // If passwords don't match, show a warning message
       setShowNotification(false);
       setShowVerifyEmail(false);
       setErrors({ ...errors, password2: "Passwords do not match" });
       setShowError(true);
-    } else {
-      // If passwords match, show a success message
-      setShowNotification(true);
-      setShowVerifyEmail(true);
-      setErrors({});
-      setShowError(false);
-    }
+      return;
+    } 
     try {
       // Check if email is already in use
       console.log(email);
@@ -173,7 +167,6 @@ function Signup() {
     errorMessage = strengthMessage;
     passwordError.innerHTML = errorMessage;
   };
-  
 
   const handleFirstNameChange = (e) => {
     const first_name = e.target.value;
