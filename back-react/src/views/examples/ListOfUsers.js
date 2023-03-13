@@ -1,21 +1,20 @@
+
 import {
   Badge,
   Card,
   CardHeader,
   CardFooter,
-  Media,
   Pagination,
   PaginationItem,
   PaginationLink,
   Table,
   Container,
-  Row
+  Row,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 
 function ListOfUsers() {
   const [users, setUsers] = useState([]);
@@ -25,15 +24,15 @@ function ListOfUsers() {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:5000/all-users");
-        console.log(response.data);
-        if (Array.isArray(response.data)) {
-          const filteredData = response.data.filter(user => user.role !== "admin");
+          const filteredData = response.data.users.filter(
+            (user) => user.role !== "admin"
+          );
           console.log(filteredData);
           setUsers(filteredData);
-          console.log(users);
-        }
+        
       } catch (error) {
         console.log(error);
+        
       }
     };
     fetchData();
@@ -43,7 +42,7 @@ function ListOfUsers() {
     console.log(users);
   }, [users]);
 
-  const pageSize = 10;
+  const pageSize = 1;
   const pageCount = Math.ceil(users.length / pageSize);
   const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
 
@@ -51,8 +50,10 @@ function ListOfUsers() {
     setCurrentPage(page);
   };
 
-  const paginatedUsers = users.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
+  const paginatedUsers = users.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <>
@@ -75,9 +76,9 @@ function ListOfUsers() {
                   </tr>
                 </thead>
                 <tbody>
-                {paginatedUsers.map(user => (
+                  {paginatedUsers.map((user) => (
                     <tr key={user._id}>
-                      <td>{user.first_name}sss</td>
+                      <td>{user.first_name}</td>
                       <td>{user.last_name}</td>
                       <td>
                         <Badge color="primary" className="badge-dot mr-4">
@@ -105,16 +106,18 @@ function ListOfUsers() {
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    {pages.map(page => (
-                      <PaginationItem
-                        key={page} active={currentPage === page}>
+                    {pages.map((page) => (
+                      <PaginationItem key={page} active={currentPage === page}>
                         <PaginationLink onClick={() => handlePageClick(page)}>
                           {page}
                         </PaginationLink>
                       </PaginationItem>
                     ))}
                     <PaginationItem disabled={currentPage === pageCount}>
-                      <PaginationLink onClick={() => handlePageClick(currentPage + 1)}>
+                      <PaginationLink
+                        onClick={() => handlePageClick(currentPage + 1)}
+                        tabIndex="-1"
+                      >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>
                       </PaginationLink>
@@ -128,6 +131,6 @@ function ListOfUsers() {
       </Container>
     </>
   );
-};
+}
 
 export default ListOfUsers;
