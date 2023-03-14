@@ -35,7 +35,16 @@ function Register() {
     const role = form.role.value;
     const phone_number = form.phone_number.value ? "+216" + form.phone_number.value : "";
 
-    // Verify that passwords match
+
+    if (!email || !password || !password2 || !last_name || !first_name || !role) {
+      setShowNotification(false);
+      setShowVerifyEmail(false);
+      setErrors({});
+      setShowError(true); 
+      setErrors({ ...errors, message: "Please fill in at least one field except phone number" });
+      return;
+    }
+
     if (password !== password2) {
       setShowNotification(false);
       setShowVerifyEmail(false);
@@ -138,60 +147,47 @@ function Register() {
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /[0-9]/;
-
-    let errorMessage = "";
-    let strengthMessage = "";
+  
     let strength = 0;
-
+    let strengthMessage = "";
+  
     if (password.length >= 8) {
       strength += 1;
-      strengthMessage +=
-        "✅ <span class='success-text'>Password is at least 8 characters long.</span> ";
+      strengthMessage += "✅ Password is at least 8 characters long. ";
     } else {
-      strengthMessage +=
-        "❌ <span class='error-text'>Password must be at least 8 characters long.</span> ";
+      strengthMessage += "❌ Password must be at least 8 characters long. ";
     }
-
+  
     if (lowercaseRegex.test(password)) {
       strength += 1;
-      strengthMessage +=
-        "✅ <span class='success-text'>Password contains a lowercase letter.</span> ";
+      strengthMessage += "✅ Password contains a lowercase letter. ";
     } else {
-      strengthMessage +=
-        "❌ <span class='error-text'>Password must contain a lowercase letter.</span> ";
+      strengthMessage += "❌ Password must contain a lowercase letter. ";
     }
-
+  
     if (uppercaseRegex.test(password)) {
       strength += 1;
-      strengthMessage +=
-        "✅ <span class='success-text'>Password contains a capital letter.</span> ";
+      strengthMessage += "✅ Password contains a capital letter. ";
     } else {
-      strengthMessage +=
-        "❌ <span class='error-text'>Password must contain a capital letter.</span> ";
+      strengthMessage += "❌ Password must contain a capital letter. ";
     }
-
+  
     if (numberRegex.test(password)) {
       strength += 1;
-      strengthMessage +=
-        "✅ <span class='success-text'>Password contains a number.</span> ";
+      strengthMessage += "✅ Password contains a number. ";
     } else {
-      strengthMessage +=
-        "❌ <span class='error-text'>Password must contain a number.</span> ";
+      strengthMessage += "❌ Password must contain a number. ";
     }
-
+  
     if (strength === 4) {
-      strengthMessage +=
-        "✅ <span class='success-text'>Password is strong.</span> ";
+      strengthMessage += "✅ Password is strong.";
     } else if (strength >= 2) {
-      strengthMessage +=
-        "😊 <span class='warning-text'>Password is medium.</span> ";
+      strengthMessage += "😊 Password is medium.";
     } else {
-      strengthMessage +=
-        "😔 <span class='error-text'>Password is weak.</span> ";
+      strengthMessage += "😔 Password is weak.";
     }
-
-    errorMessage = strengthMessage;
-    passwordError.innerHTML = errorMessage;
+  
+    passwordError.innerHTML = strengthMessage;
   };
 
   const handleFirstNameChange = (e) => {
@@ -228,7 +224,7 @@ function Register() {
                 <Form onSubmit={handleSubmit} noValidate>
                   <Row>
                     <Col md="6">
-                      <FormGroup>
+                      <FormGroup >
                         <label>First Name</label>
                         <Input
                           name="first_name"
