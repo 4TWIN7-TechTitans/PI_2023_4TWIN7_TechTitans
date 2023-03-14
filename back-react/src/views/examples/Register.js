@@ -33,7 +33,7 @@ function Register() {
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
     const role = form.role.value;
-    const phone_number = "+216" + form.phone_number.value;
+    const phone_number = form.phone_number.value ? "+216" + form.phone_number.value : "";
 
     // Verify that passwords match
     if (password !== password2) {
@@ -343,7 +343,7 @@ function Register() {
                         placeholder="+216XXXXXXXX"
                         pattern="^\[0-9]{8}$"
                         title="Please enter a valid Tunisian phone number (including the country code +216)"
-                 
+                        required="false"
                       />
                     </InputGroup>
                   </FormGroup>

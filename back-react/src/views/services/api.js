@@ -92,3 +92,12 @@ export const getUserById = async (id) => {
     console.log(error);
   }
 };*/
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await axios.post(`${url}/forgot-password`, { email });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
