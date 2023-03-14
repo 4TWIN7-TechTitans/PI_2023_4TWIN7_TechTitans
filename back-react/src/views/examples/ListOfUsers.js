@@ -15,6 +15,8 @@ import {
 import Header from "components/Headers/Header.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 
 function ListOfUsers() {
   const [users, setUsers] = useState([]);
@@ -55,6 +57,11 @@ function ListOfUsers() {
     currentPage * pageSize
   );
 
+  const handleUserClick = (email) => {
+    // navigate to user details page with id
+    window.location.href = `/admin/user-profile/${email}`;
+  }
+
   return (
     <>
       <Header />
@@ -77,8 +84,10 @@ function ListOfUsers() {
                 </thead>
                 <tbody>
                   {paginatedUsers.map((user) => (
-                    <tr key={user._id}>
-                      <td>{user.first_name}</td>
+                    <tr key={user._id} onClick={() => handleUserClick(user.email)}>
+                      <td>
+                      <Link to={`/admin/user-profile/${user.email}`}>{user.first_name}</Link>
+                      </td>
                       <td>{user.last_name}</td>
                       <td>
                         <Badge color="primary" className="badge-dot mr-4">
