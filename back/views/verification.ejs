@@ -1,0 +1,64 @@
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+      <div class="bg-secondary shadow border-0 card">
+        <div class="bg-transparent pb-5 card-header">
+          <div class="text-muted text-center mt-2 mb-3">
+            <small>Sign in with</small>
+          </div>
+          <div class="text-center btn-wrapper">
+            <Button class="btn-neutral btn-icon" color="default" href="#pablo" onClick="(e) => e.preventDefault()">
+              <span class="btn-inner--icon">
+                
+              </span>
+              <span class="btn-inner--text">Github</span>
+            </Button>
+            <Button class="btn-neutral btn-icon" color="default" href="#pablo" onClick="(e) => e.preventDefault()">
+              <span class="btn-inner--icon">
+                
+              </span>
+              <span class="btn-inner--text">Google</span>
+            </Button>
+          </div>
+        </div>
+        <div class="px-lg-5 py-lg-5 card-body">
+          <div class="text-center text-muted mb-4">
+            <small>Or sign in with credentials</small>
+          </div>
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-md-6">
+                <div class="mt-5 card">
+                  <div class="card-header">
+                    <h3>Verification</h3>
+                  </div>
+                  <div class="card-body">
+                    <% if (status === "success") { %>
+                      <div class="text-success text-center">
+                        <p>Email verified successfully</p>
+                        <a href="/login">Login</a>
+                      </div>
+                    <% } else if (status === "expired") { %>
+                      <div class="text-danger text-center">
+                        <p>Token has expired</p>
+                        <a href="/resend-verification">Resend verification email</a>
+                      </div>
+                    <% } else { %>
+                      <div class="text-danger text-center">
+                        <p>Invalid token</p>
+                        <a href="/resend-verification">Resend verification email</a>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

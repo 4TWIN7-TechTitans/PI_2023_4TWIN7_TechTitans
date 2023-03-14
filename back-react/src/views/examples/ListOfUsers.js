@@ -84,9 +84,9 @@ function ListOfUsers() {
                 </thead>
                 <tbody>
                   {paginatedUsers.map((user) => (
-                    <tr key={user._id} onClick={() => handleUserClick(user.email)}>
+                    <tr key={user._id} onClick={() => handleUserClick(user._id)}>
                       <td>
-                      <Link to={`/admin/user-profile/${user.email}`}>{user.first_name}</Link>
+                      <Link to={`/admin/user-profile/${user._id }`}>{user.first_name}</Link>
                       </td>
                       <td>{user.last_name}</td>
                       <td>

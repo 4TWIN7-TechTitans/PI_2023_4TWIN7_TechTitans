@@ -9,7 +9,11 @@ router.get("/check-email/:email", checkEmail);
 router.post('/signup', userController.signup_post);
 router.post('/login', userController.login_post);
 router.get('/logout', userController.logout_get);
-router.get("/verify-email/:token", userController.verify_email_get);
+router.get("/verify-email/:token", (req, res) => {
+    const verificationToken = req.params.token;
+    res.render('verification.ejs', { verificationToken });
+    });
+router.get('/resend-verification', userController.resend_verification_post);
 router.post("/2fa", userController.login2FA);
 router.post("/forget-password", userController.forgot_password_post);
 router.post("/reset-password", userController.reset_password_post);

@@ -138,10 +138,58 @@ module.exports.signup_post = async (req, res) => {
       to: email,
       subject: "Verify your email",
       html: `
-        <h2>Welcome to Assurini!</h2>
-        <p>Please click on the link below to verify your email address:</p>
-        <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>  
-      `,
+      <html>
+      <head>
+        <title>Welcome to Assurini!</title>
+        <style>
+          table {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+          }
+          .logo {
+            max-width: 150px;
+          }
+          .button {
+            display: inline-block;
+            background-color: #05445E;
+            color: #FFFFFF;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+          }
+          .signature {
+            text-align: center;
+            font-style: italic;
+          }
+        </style>
+      </head>
+      <body>
+        <table>
+          <tr>
+            <td>
+              <img src="cid:logo" alt="Assurini logo" class="logo">
+              <h2 style="color: #050A30; font-family: Arial, sans-serif;">Welcome to Assurini!</h2>
+              <p style="font-family: Arial, sans-serif;">Please click on the link below to verify your email address:</p>
+              <p style="font-family: Arial, color: #FFFFFF;,sans-serif;"><a href="http://localhost:5000/verify-email/${verificationToken}" class="button">Verify Email</a></p>
+            </td>
+          </tr>
+        </table>
+        <p class="signature">Best regards, <br> Assurini Groupe <br>  Assurini <br> assurini.tunisien0reply@gmail.com   </p>
+      </body>
+    </html>
+    `,
+      //   <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>  
+      attachments: [
+        {
+          filename: "logo.png",
+          path: "./public/images/logo.png",
+          cid: "logo",
+        },
+      ],
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -199,6 +247,116 @@ module.exports.verify_email_get = async (req, res) => {
     });
   }
 };
+
+// Resend verification email
+module.exports.resend_verification_post = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // find user by email
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found", status: "error" });
+    }
+
+    if (user.verified) {
+      return res.status(400).json({ message: "Email already verified", status: "error" });
+    }
+
+    // send verification email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_MARIEM,
+        pass: process.env.PASS_MAIL_MARIEM,
+      },
+    });
+
+    const verificationToken = createToken(user._id);
+    user.verificationToken = verificationToken;
+    const mailOptions = {
+      from: process.env.EMAIL_MARIEM,
+      to: email,
+      subject: "Verify your email",
+      html: `
+      <html>
+      <head>
+        <title>Welcome to Assurini!</title>
+        <style>
+          table {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+          }
+          .logo {
+            max-width: 150px;
+          }
+          .button {
+            display: inline-block;
+            background-color: #05445E;
+            color: #FFFFFF;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+          }
+          .signature {
+            text-align: center;
+            font-style: italic;
+          }
+        </style>
+      </head>
+      <body>
+        <table>
+          <tr>
+            <td>
+              <img src="cid:logo" alt="Assurini logo" class="logo">
+              <h2 style="color: #050A30; font-family: Arial, sans-serif;">Welcome to Assurini!</h2>
+              <p style="font-family: Arial, sans-serif;">Please click on the link below to verify your email address:</p>
+              <p style="font-family: Arial, color: #FFFFFF;,sans-serif;"><a href="http://localhost:5000/verify-email/${verificationToken}" class="button">Verify Email</a></p>
+            </td>
+          </tr>
+        </table>
+        <p class="signature">Best regards, <br> Assurini Groupe <br>  Assurini <br> assurini.tunisien0reply@gmail.com   </p>
+      </body> 
+    </html>
+    `,
+      attachments: [
+        {
+          filename: "logo.png",
+          path: "./public/images/logo.png",
+          cid: "logo",
+        },
+      ],
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Verification email resent successfully",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: "Error resending verification email",
+      status: "error",
+    });
+  }
+};
+
+
 
 module.exports.login2FA = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
