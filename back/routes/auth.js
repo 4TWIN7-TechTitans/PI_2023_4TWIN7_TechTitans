@@ -34,10 +34,9 @@ router.get(
     const token = createToken(req.user._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
 
-    res.status(200).json({
-      message: "/admin/index",
-      status: "success",
-    });
+
+    res.redirect('http://localhost:3000/admin/index');
+    
   }
 );
 

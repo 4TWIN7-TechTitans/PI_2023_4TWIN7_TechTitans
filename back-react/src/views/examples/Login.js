@@ -116,6 +116,17 @@ function Login() {
     emailError.innerHTML = errorMessage;
   };
 
+  const googleauth = async () => {
+
+    /*try {
+      await axios.get("http://127.0.0.1:5000/logout");
+      console.log("Logged out successfully");
+    } catch (error) {
+      console.error(error);
+    }*/
+    window.location.replace("http://localhost:5000/auth/google");
+  };
+
   const handlePasswordChange = (e) => {
     const password = e.target.value;
     const passwordError = document.querySelector(".password.error");
@@ -138,14 +149,14 @@ function Login() {
               <Button
                 className="btn-neutral btn-icon"
                 color="default"
-                href="#pablo"
+                href=""
                 onClick={(e) => e.preventDefault()}
               >
                 <span className="btn-inner--icon">
                   <img
                     alt="..."
                     src={
-                      require("../../assets/img/icons/common/github.svg")
+                      require("../../assets/img/icons/common/facebook.svg")
                         .default
                     }
                   />
@@ -155,8 +166,8 @@ function Login() {
               <Button
                 className="btn-neutral btn-icon"
                 color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                href=""
+                onClick={googleauth}
               >
                 <span className="btn-inner--icon">
                   <img
