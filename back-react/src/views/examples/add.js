@@ -366,6 +366,9 @@ import {
                       </FormGroup>
                     </Col>
                   </Row>
+                    <Button className="btn-fill" color="primary" type="submit">
+                      Add
+                    </Button>
 
                     <Button href="/admin/listofusers">
                             Back 
