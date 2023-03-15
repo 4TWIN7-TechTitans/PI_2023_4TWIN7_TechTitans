@@ -74,6 +74,14 @@ export const getUsers = async () => {
   }
 };
 
+export const resend_verification_post = async (email) => {
+  try {
+    const response = await axios.post(`http://127.0.0.1:5000/resend-verification/${email}`);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
 /*export const getUsers = async () => {
   try {
     const response = await axios.get(`http://127.0.0.1:5000/all-users`);

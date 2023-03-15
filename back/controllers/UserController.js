@@ -365,7 +365,8 @@ module.exports.verify_email_get = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).send("Invalid verification token");
+      //invalid
+      res.redirect("http://localhost:3000/auth/error");
     }
 
     // update user document to mark email as verified
@@ -373,32 +374,34 @@ module.exports.verify_email_get = async (req, res) => {
     user.verificationToken = null;
     console.log(user);
     await userModel.updateOne(user);
-
+    //success so we can login
     res.redirect("http://localhost:3000/auth/login");
   } catch (err) {
     console.log(err);
-    res.status(400).json({
-      message: "Invalid or expired token",
-      status: "error",
-    });
+    //expired
+    res.redirect("http://localhost:3000/auth/error");
+    
   }
 };
 
 // Resend verification email
 module.exports.resend_verification_post = async (req, res) => {
-  const { email } = req.body;
+  const email = req.params.email;
+  //const { email } = req.body;
 
   try {
     // find user by email
     const user = await userModel.findOne({ email });
 
     if (!user) {
+      console.log("user not found");
       return res
         .status(400)
         .json({ message: "User not found", status: "error" });
     }
 
     if (user.verified) {
+      console.log("user already exists");
       return res
         .status(400)
         .json({ message: "Email already verified", status: "error" });
@@ -420,49 +423,13 @@ module.exports.resend_verification_post = async (req, res) => {
       to: email,
       subject: "Verify your email",
       html: `
-      <html>
-      <head>
-        <title>Welcome to Assurini!</title>
-        <style>
-          table {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-          }
-          .logo {
-            max-width: 150px;
-          }
-          .button {
-            display: inline-block;
-            background-color: #05445E;
-            color: #FFFFFF;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
-          }
-          .signature {
-            text-align: center;
-            font-style: italic;
-          }
-        </style>
-      </head>
-      <body>
-        <table>
-          <tr>
-            <td>
-              <img src="cid:logo" alt="Assurini logo" class="logo">
-              <h2 style="color: #050A30; font-family: Arial, sans-serif;">Welcome to Assurini!</h2>
-              <p style="font-family: Arial, sans-serif;">Please click on the link below to verify your email address:</p>
-              <p style="font-family: Arial, color: #FFFFFF;,sans-serif;"><a href="http://localhost:5000/verify-email/${verificationToken}" class="button">Verify Email</a></p>
-            </td>
-          </tr>
-        </table>
-        <p class="signature">Best regards, <br> Assurini Groupe <br>  Assurini <br> assurini.tunisien0reply@gmail.com   </p>
-      </body> 
-    </html>
+      <h1>Resend verification email</h1>
+      <p>Hello,</p>
+      <p>We received a request to resend the verification email for your account. Please click on the following link to verify your email address:</p>
+      <a href="http://localhost:5000/verify-email/${verificationToken}">verify</a>
+      <p>If you did not request a resend of the verification email, please ignore this message.</p>
+      <img src="cid:logo" alt="logo">
+    
     `,
       attachments: [
         {
@@ -495,6 +462,7 @@ module.exports.resend_verification_post = async (req, res) => {
     });
   }
 };
+
 
 module.exports.login2FA = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {

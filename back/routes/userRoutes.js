@@ -16,7 +16,7 @@ router.get(
     res.render("verification.twig", { verificationToken });
   }
 );
-router.get("/resend-verification", userController.resend_verification_post);
+router.post("/resend-verification/:email", userController.resend_verification_post);
 router.post("/2fa", userController.login2FA);
 router.post("/forget-password", userController.forgot_password_post);
 router.post("/reset-password", userController.reset_password_post);
