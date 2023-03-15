@@ -21,8 +21,8 @@ function Register() {
   const [showVerifyEmail, setShowVerifyEmail] = useState(false);
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Add state for showing or hiding the password
-  const [showPassword2, setShowPassword2] = useState(false); // Add state for showing or hiding the password
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword2, setShowPassword2] = useState(false); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
