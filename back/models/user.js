@@ -52,12 +52,6 @@ const userSchema = new mongoose.Schema({
     min: [moment().subtract(120, "years"), "You must be at most 120 years old"],
     max: [moment().subtract(18, "years"), "You must be at least 18 years old"],
   },
-  phone_number: {
-    type: Number,
-    required: false,
-    match: [/^(\+216)?[0-9]{8}$/, "Phone number should start with +216 followed by 8 digits",
-    ],
-  },
   address: {
     type: String,
     required: false,
