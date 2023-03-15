@@ -2,26 +2,30 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const mongoose = require("mongoose");
 const FacebookStrategy = require('passport-facebook').Strategy
 const User = require("../models/user");
-
+var path = require("path");
+require("dotenv").config();
 
 
 module.exports = function (passport) {
     passport.use(
       new GoogleStrategy(
         {
-          clientID:
-            "919398135132-0heuietj7ctqin29oq2r2s60njtc5ah8.apps.googleusercontent.com",
-          clientSecret: "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",
+          clientID: process.env.Google_clientID,
+          clientSecret: process.env.Google_clientSecret,
           callbackURL: "/auth/google/callback",
         },
         async (accessToken, refreshToken, profile, done) => {
+            var randomstring = Math.random().toString(36).slice(-8);
           const newUser = {
             googleId: profile.id,
+            verified:true,
             first_name: profile.name.givenName,
             last_name: profile.name.familyName,
             image: profile.photos[0].value,
             email : profile.emails[0].value,
-            password:"aaaaaa"
+            password:randomstring,
+            two_factor_auth:"none",
+            two_factor_auth_code:""
 
           };
           console.log(newUser);
@@ -49,8 +53,8 @@ module.exports = function (passport) {
     });
 
     passport.use(new FacebookStrategy({
-        clientID: "3152955421517258",
-        clientSecret: "0d6bc38a1ab1745f378b99f1641aba39",
+        clientID:  process.env.FB_clientID,
+        clientSecret: process.env.FB_clientSecret,
         callbackURL: "http://localhost:5000/auth/facebook/callback",
         profileFields: ['id', 'displayName', 'name', 'gender', 'picture.type(large)','email']
       },
@@ -77,10 +81,17 @@ module.exports = function (passport) {
      
                     // set all of the facebook information in our user model
                     newUser.id    = profile.id; // set the users facebook id                  
-                    newUser.token = token; // we will save the token that facebook provides to the user                    
+                    newUser.token = token; // we will save the token that facebook provides to the user  
+                    newUser.first_name=profile.name.givenName;
+                    newUser.last_name=profile.name.familyName;
+                    newUser.verified=true;
+                    newUser.two_factor_auth="none";
+                    newUser.two_factor_auth_code="";
                    // newUser.name  = profile.name.familyName; // look at the passport user profile to see how names are returned
-                    newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    newUser.password="aaaaaa";
+                    newUser.email = profile.emails[0].value; 
+                    var randomstring = Math.random().toString(36).slice(-8);
+                    // facebook can return multiple emails so we'll take the first
+                    newUser.password=randomstring;
                     // save our user to the database
                     user = await User.create(newUser);
                     done(null, user);

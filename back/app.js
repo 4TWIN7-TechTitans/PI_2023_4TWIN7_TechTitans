@@ -30,14 +30,14 @@ mongoose.set("strictQuery", true);
 //Sessions middleware
 app.use(
   session({
-    secret: "aaa",
+    secret: process.env.Session_Middleware_Secret,
     resave: false,
     saveUninitialized: true,
   })
 );
 
 //Passport middleware
-app.use(session({ secret: "aaa" }));
+app.use(session({ secret: process.env.Session_Middleware_Secret }));
 app.use(passport.initialize());
 app.use(passport.session());
 const PORT = process.env.PORT;

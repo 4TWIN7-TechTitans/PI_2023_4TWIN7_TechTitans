@@ -15,7 +15,10 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect("/users");
+    res.status(200).json({
+        message: "facebook login OK",
+        status: "success",
+      });
   }
 );
 
@@ -37,7 +40,10 @@ router.get(
   passport.authenticate("facebook", { failureRedirect: "/" }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect("/users");
+    res.status(200).json({
+        message: "facebook login OK",
+        status: "success",
+      });
   }
 );
 
