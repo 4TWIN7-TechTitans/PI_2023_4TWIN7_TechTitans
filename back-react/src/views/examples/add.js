@@ -354,20 +354,18 @@ import {
                         />
                       </InputGroup>
                     </FormGroup>
-                        <FormGroup>
-                        <label classe="role" className="form-label">
-                        Role
-                      </label>
-                      <select name="role">
-                        <option value="">Select role</option>
-                        <option value="Admin">Admin</option>
-                        <option value="Expert">Expert</option>
-                        <option value="Agence">Agence</option>
-                      </select>
-                        </FormGroup>
-                    <Button className="btn-fill" color="primary" type="submit">
-                      Add
-                    </Button>
+                    <Row>
+                    <Col md="12">
+                      <FormGroup>
+                        <label>Role</label>
+                        <Input name="role" type="select" required>
+                          <option value="Admin">Admin</option>
+                          <option value="Expert">Expert</option>
+                          <option value="Agence">Agence</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                  </Row>
 
                     <Button href="/admin/listofusers">
                             Back 
