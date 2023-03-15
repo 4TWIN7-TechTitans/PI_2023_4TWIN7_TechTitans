@@ -127,6 +127,18 @@ function Login() {
     window.location.replace("http://localhost:5000/auth/google");
   };
 
+
+  const facebookauth = async () => {
+
+    /*try {
+      await axios.get("http://127.0.0.1:5000/logout");
+      console.log("Logged out successfully");
+    } catch (error) {
+      console.error(error);
+    }*/
+    window.location.replace("http://localhost:5000/auth/facebook");
+  };
+
   const handlePasswordChange = (e) => {
     const password = e.target.value;
     const passwordError = document.querySelector(".password.error");
@@ -150,7 +162,7 @@ function Login() {
                 className="btn-neutral btn-icon"
                 color="default"
                 href=""
-                onClick={(e) => e.preventDefault()}
+                onClick={facebookauth}
               >
                 <span className="btn-inner--icon">
                   <img
@@ -161,7 +173,7 @@ function Login() {
                     }
                   />
                 </span>
-                <span className="btn-inner--text">Github</span>
+                <span className="btn-inner--text">Facebook</span>
               </Button>
               <Button
                 className="btn-neutral btn-icon"
