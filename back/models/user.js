@@ -91,6 +91,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     match: [/^\+216[0-9]{8}$/, "Phone number should start with +216 followed by 8 digits"],
+  },
+  banned :{
+    type:Boolean,
   }
 
 });

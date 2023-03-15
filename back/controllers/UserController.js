@@ -522,7 +522,7 @@ module.exports.login2FA = async (req, res) => {
     if (auth) {
       await userModel.findByIdAndUpdate(user._id, {two_factor_auth_code : ""});
       res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-      res.status(200).json({ user: user._id });
+      res.status(200).json({ user: user._id , role : user.role});
     } else {
       throw Error("code non valide");
     }
@@ -561,7 +561,17 @@ module.exports.login_post = async (req, res) => {
     const auth = await userModel.login(email, password);
     const token = createToken(user._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(200).json({ user: user._id });
+    let nextLink = "";
+
+
+    if (user.role === "Admin")  nextLink = "/admin/index";
+    if (user.role === "Client")  nextLink = "/admin/user-profile";
+    if (user.role === "Agence")  nextLink = "/admin/index";
+    if (user.role === "Expert")  nextLink = "/admin/index";
+
+    //TODO : TEMPLATES
+
+    res.status(200).json({ user: user._id  , next: nextLink });
   } catch (err) {
     const errors = handleErrors(err);
     console.log({ errors });
@@ -693,7 +703,7 @@ module.exports.logout_get = (req, res) => {
   res.status(200).json({ message: "User logged out successfully." });
 };
 
-sendSms = (user) => {
+const sendSms = (user) => {
   client.messages
     .create({
       body: "Twillio sms Test : " + user.two_factor_auth_code,
@@ -819,3 +829,45 @@ module.exports.get_user_by_email = async (req, res) => {
     });
   }
 };
+
+
+module.exports.post_ban_user =async (req,res) => {
+  const {mail }= req.params;
+  const user = await userModel.findOne({ email: mail });
+
+  if(!user) {
+    throw Error("mail incorrect")
+  }
+
+  if(user.banned){
+    throw Error("user already banned");
+  }
+
+  await userModel.findByIdAndUpdate(user._id, {banned : true});
+
+  try {
+    res.status(200).json(true);
+  }catch (err) {
+    res.status(400).json(err.message);
+  };
+}
+module.exports.post_remove_ban_user =async (req,res) => {
+  const {mail }= req.params;
+  const user = await userModel.findOne({ email: mail });
+
+  if(!user) {
+    throw Error("mail incorrect")
+  }
+
+  if(!user.banned){
+    throw Error("user already unbanned");
+  }
+
+  await userModel.findByIdAndUpdate(user._id, {banned : false});
+
+  try {
+    res.status(200).json(true);
+  }catch (err) {
+    res.status(400).json(err.message);
+  };
+}

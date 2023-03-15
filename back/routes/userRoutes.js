@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const { checkEmail } = require('../controllers/userController');
+const userController = require('../controllers/UserController.js');
+const { checkEmail } = require('../controllers/UserController.js');
 
 router.get("/check-email/:email", checkEmail);
 
@@ -20,6 +20,10 @@ router.post("/reset-password", userController.reset_password_post);
 router.get("/all-users", userController.show_users_get);
 router.get("/userbyemail/:email", userController.get_user_by_email);
 router.get("/users/:email", userController.get_user_by_email);
+
+//ban
+router.post("/users/ban/:mail", userController.post_ban_user);
+router.post("/users/unban/:mail", userController.post_remove_ban_user);
 
 
 

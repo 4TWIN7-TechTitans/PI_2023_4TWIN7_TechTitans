@@ -57,7 +57,14 @@ function Login() {
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
+            
+            //roles redirect
+            console.log(res.data.next);
             window.location.href = "/admin/index";
+            window.location.href = res.data.next;
+            
+
+
           },
           (err) => {
             console.log("err then");
