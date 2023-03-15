@@ -200,7 +200,6 @@ function Login() {
                     name="email"
                     autoComplete="new-email"
                     required
-                    onChange={handleEmailChange}
                   />
                 </InputGroup>
                 <div className="email error"></div>
@@ -218,7 +217,6 @@ function Login() {
                     name="password"
                     autoComplete="new-password"
                     required
-                    onChange={handlePasswordChange}
                   />
 
                   <InputGroupAddon addonType="append">
