@@ -6,7 +6,10 @@ const { checkEmail } = require("../controllers/UserController.js");
 router.get("/check-email/:email", checkEmail);
 
 router.post("/signup", userController.signup_post);
+router.post("/add", userController.add_post);
 router.post("/login", userController.login_post);
+
+
 router.get("/logout", userController.logout_get);
 router.get(
   "/verify-email/:token",

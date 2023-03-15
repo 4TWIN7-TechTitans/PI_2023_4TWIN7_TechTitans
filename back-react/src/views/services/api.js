@@ -19,7 +19,8 @@ export const registerUser = async (
   last_name,
   first_name,
   role,
-  phone_number
+  phone_number,
+  
 ) => {
   try {
     const response = await axios.post(`${url}/signup`, {
@@ -29,6 +30,31 @@ export const registerUser = async (
       first_name,
       role,
       phone_number
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const add = async (
+  email,
+  password,
+  last_name,
+  first_name,
+  role,
+  phone_number,
+  verified = true
+) => {
+  try {
+    const response = await axios.post(`${url}/signup`, {
+      email,
+      password,
+      last_name,
+      first_name,
+      role,
+      phone_number,
+      verified
     });
     return response.data;
   } catch (error) {

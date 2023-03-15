@@ -351,6 +351,57 @@ module.exports.signup_post = async (req, res) => {
   }
 };
 
+
+module.exports.add_post = async (req, res) => {
+  /*  #swagger.parameters['parameter_name'] = {
+      in: 'body',
+      schema: {
+        "email": "Your-Email@gmail.com",
+        "password": "Please enter your Password",
+        "last_name": "John",
+        "first_name": "Doe",
+        "gender": "Male",
+        "role": "Admin/Expert/Agence/Client",
+        "date_of_birth": "Year/Month/DAy",
+        "phone_number": "Please enter your phone number",
+        "address": "Elmourouj"
+      }
+    }
+  } */
+
+  const {
+    email,
+    password,
+    last_name,
+    first_name,
+    gender,
+    role,
+    date_of_birth,
+    phone_number,
+    address,
+    verified = "true"
+  } = req.body;
+
+  try {
+    const user = await userModel.create({
+      email,
+      password,
+      last_name,
+      first_name,
+      gender,
+      role,
+      date_of_birth,
+      phone_number,
+      address,
+      verified 
+    });
+    res.status(201).json({ message: "User created successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+    
 // Verify email
 module.exports.verify_email_get = async (req, res) => {
   const { token } = req.params;
@@ -839,3 +890,5 @@ module.exports.post_remove_ban_user = async (req, res) => {
     res.status(400).json(err.message);
   }
 };
+
+
