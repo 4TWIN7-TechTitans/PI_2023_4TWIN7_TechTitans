@@ -13,7 +13,9 @@ const Admin = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
  
- 
+  const filteredRoutes = routes.filter((route) => {
+    return route.showInSidebar;
+  });
  
 
 
@@ -54,9 +56,9 @@ const Admin = (props) => {
 
   return (
     <>
-      <Sidebar
+     <Sidebar
         {...props}
-        routes={routes}
+        routes={filteredRoutes}
         logo={{
           innerLink: "/admin/index",
           imgSrc: require("../assets/img/brand/argon-react.png"),

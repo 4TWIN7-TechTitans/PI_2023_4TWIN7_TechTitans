@@ -32,70 +32,80 @@ var routes = [
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
-    layout: "/admin"
+    layout: "/admin",
+    showInSidebar: true,
   },
   {
     path: "/icons",
     name: "Icons",
     icon: "ni ni-planet text-blue",
     component: Icons,
-    layout: "/admin"
+    layout: "/admin",
+    showInSidebar: false,
   },
   {
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
     component: Maps,
-    layout: "/admin"
+    layout: "/admin",
+    showInSidebar: false,
   },
   {
     path: "/user-profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
-    layout: "/admin"
+    layout: "/admin",
+    showInSidebar: false,
   },
   {
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
     component: Tables,
-    layout: "/admin"
+    layout: "/admin",
+    showInSidebar: false,
   },
   {
     path: "/listofusers",
     name: "List Of Users",
     icon: "ni ni-bullet-list-67 text-red",
     component: ListOfUsers,
-    layout: "/admin"
+    layout: "/admin",
+    showInSidebar: true,
   },
   {
     path: "/add",
     name: "Add new user",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-circle-08 text-green",
     component: AddNew,
-    layout: "/admin"
+    layout: "/admin",
+    showInSidebar: true,
   },
   {
     path: "/error",
     name: "Something wrong !",
     icon: "ni ni-fat-remove text-red",
     component: NotFound,
-    layout: "/auth"
+    layout: "/auth",
+    showInSidebar: false
   },
   {
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: Login,
-    layout: "/auth"
+    layout: "/auth",
+    showInSidebar: false,
   },
   {
     path: "/register",
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
     component: Register,
-    layout: "/auth"
+    layout: "/auth",
+    showInSidebar: false,
   }
 ];
 export default routes;
