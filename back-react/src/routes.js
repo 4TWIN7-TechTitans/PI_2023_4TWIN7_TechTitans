@@ -23,6 +23,7 @@ import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import ListOfUsers from "views/examples/ListOfUsers.js";
 import Icons from "views/examples/Icons.js";
+import NotFound from "views/examples/error";
 
 var routes = [
   {
@@ -61,11 +62,18 @@ var routes = [
     layout: "/admin"
   },
   {
-    path: "/ListOfUsers",
+    path: "/listofusers",
     name: "List Of Users",
     icon: "ni ni-bullet-list-67 text-red",
     component: ListOfUsers,
     layout: "/admin"
+  },
+  {
+    path: "/error",
+    name: "Something wrong !",
+    icon: "ni ni-fat-remove text-red",
+    component: NotFound,
+    layout: "/auth"
   },
   {
     path: "/login",
