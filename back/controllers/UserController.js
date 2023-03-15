@@ -375,16 +375,14 @@ module.exports.verify_email_get = async (req, res) => {
     console.log(user);
     await userModel.updateOne(user);
 
-    res.status(200).json({
-      message: "Email verified successfully",
-      status: "success",
-    });
+    res.redirect("http://localhost:3000/auth/login");
   } catch (err) {
     console.log(err);
     res.status(400).json({
       message: "Invalid or expired token",
       status: "error",
     });
+
   }
 };
 
