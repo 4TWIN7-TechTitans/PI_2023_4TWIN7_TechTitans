@@ -1,4 +1,3 @@
-
 import {
   Badge,
   Card,
@@ -17,26 +16,24 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-
 function ListOfUsers() {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:5000/all-users");
+      const filteredData = response.data.users.filter(
+        (user) => user.role !== "admin"
+      );
+      console.log(filteredData);
+      setUsers(filteredData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:5000/all-users");
-          const filteredData = response.data.users.filter(
-            (user) => user.role !== "admin"
-          );
-          console.log(filteredData);
-          setUsers(filteredData);
-        
-      } catch (error) {
-        console.log(error);
-        
-      }
-    };
     fetchData();
   }, []);
 
@@ -44,7 +41,7 @@ function ListOfUsers() {
     console.log(users);
   }, [users]);
 
-  const pageSize = 1;
+  const pageSize = 5;
   const pageCount = Math.ceil(users.length / pageSize);
   const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
 
@@ -52,6 +49,24 @@ function ListOfUsers() {
     setCurrentPage(page);
   };
 
+  const handleBanUser = async (e, user) => {
+    e.preventDefault();
+    console.log("hello world");
+
+    try {
+      const response = !  user.banned
+        ? await axios.post("http://127.0.0.1:5000/users/ban/" + user.email)
+        : await axios.post("http://127.0.0.1:5000/users/unban/" + user.email);
+
+      console.log(response);
+      if (response.data === true) {
+        fetchData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
   const paginatedUsers = users.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
@@ -60,7 +75,7 @@ function ListOfUsers() {
   const handleUserClick = (email) => {
     // navigate to user details page with id
     window.location.href = `/admin/user-profile/${email}`;
-  }
+  };
 
   return (
     <>
@@ -80,13 +95,16 @@ function ListOfUsers() {
                     <th scope="col">Last Name</th>
                     <th scope="col">Role</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedUsers.map((user) => (
-                    <tr key={user._id} onClick={() => handleUserClick(user._id)}>
+                    <tr key={user._id}>
                       <td>
-                      <Link to={`/admin/user-profile/${user._id }`}>{user.first_name}</Link>
+                        <Link to={`/admin/user-profile/${user._id}`}>
+                          {user.first_name}
+                        </Link>
                       </td>
                       <td>{user.last_name}</td>
                       <td>
@@ -95,6 +113,13 @@ function ListOfUsers() {
                         </Badge>
                       </td>
                       <td>{user.email}</td>
+                      <td>
+                        {" "}
+                        <button onClick={(e) => handleBanUser(e, user)}>
+                          {" "}
+                          {!user.banned ? "Ban User" : "Unban user"}{" "}
+                        </button>{" "}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

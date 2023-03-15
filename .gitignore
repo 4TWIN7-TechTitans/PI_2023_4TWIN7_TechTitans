@@ -4,7 +4,9 @@
 
 ### swagger ###
 /back/swagger.json
+back/swagger.json
 swagger.json
+
 
 ### Django ###
 *.log
