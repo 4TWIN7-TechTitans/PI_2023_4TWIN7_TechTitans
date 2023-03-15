@@ -351,7 +351,6 @@ module.exports.signup_post = async (req, res) => {
   }
 };
 
-
 module.exports.add_post = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
@@ -379,7 +378,7 @@ module.exports.add_post = async (req, res) => {
     date_of_birth,
     phone_number,
     address,
-    verified = "true"
+    verified = "true",
   } = req.body;
 
   try {
@@ -393,7 +392,7 @@ module.exports.add_post = async (req, res) => {
       date_of_birth,
       phone_number,
       address,
-      verified 
+      verified,
     });
     res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
@@ -401,7 +400,6 @@ module.exports.add_post = async (req, res) => {
   }
 };
 
-    
 // Verify email
 module.exports.verify_email_get = async (req, res) => {
   const { token } = req.params;
@@ -431,7 +429,6 @@ module.exports.verify_email_get = async (req, res) => {
     console.log(err);
     //expired
     res.redirect("http://localhost:3000/auth/error");
-    
   }
 };
 
@@ -513,7 +510,6 @@ module.exports.resend_verification_post = async (req, res) => {
     });
   }
 };
-
 
 module.exports.login2FA = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
@@ -839,6 +835,9 @@ module.exports.get_user_by_email = async (req, res) => {
       });
     }
 
+    //TODO : fix
+    delete user.password;
+    console.log(user);
     res.status(200).json({
       user: user,
       status: "success",
@@ -891,4 +890,55 @@ module.exports.post_remove_ban_user = async (req, res) => {
   }
 };
 
+module.exports.post_update_user = async (req, res) => {
+  /*  #swagger.parameters['parameter_name'] = {
+      in: 'body',
+      schema: {
+        "email": "Your-Email@gmail.com",
+        "password": "Please enter your Password",
+        "last_name": "John",
+        "first_name": "Doe",
+        "gender": "Male",
+        "role": "Admin/Expert/Agence/Client",
+        "date_of_birth": "Year/Month/DAy",
+        "phone_number": "Please enter your phone number",
+        "address": "Elmourouj"
+      }
+    }
+  } */
 
+  const {
+    email,
+    last_name,
+    first_name,
+    gender,
+    role,
+    date_of_birth,
+    phone_number,
+    address,
+    two_factor_auth,
+  } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      throw Error("user not found ");
+    }
+
+    user.last_name = last_name;
+    user.first_name = first_name;
+    user.gender = gender;
+    user.role = role;
+    user.date_of_birth = date_of_birth;
+    user.phone_number = phone_number;
+    user.address = address;
+    user.two_factor_auth = two_factor_auth;
+
+    await userModel.findByIdAndUpdate(user._id, user);
+
+    res.status(201).json(true);
+  } catch (error) {
+    res.status(500).json(false);
+  }
+};

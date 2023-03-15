@@ -103,7 +103,7 @@ function ListOfUsers() {
                   {paginatedUsers.map((user) => (
                     <tr key={user._id}>
                       <td>
-                        <Link to={`/admin/user-profile/${user._id}`}>
+                        <Link to={`/admin/user-profile/?mail=${user.email}`}>
                           {user.first_name}
                         </Link>
                       </td>

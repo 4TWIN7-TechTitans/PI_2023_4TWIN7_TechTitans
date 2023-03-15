@@ -92,6 +92,59 @@
         "responses": {}
       }
     },
+    "/add": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "Your-Email@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Please enter your Password"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "first_name": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "gender": {
+                  "type": "string",
+                  "example": "Male"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "Admin/Expert/Agence/Client"
+                },
+                "date_of_birth": {
+                  "type": "string",
+                  "example": "Year/Month/DAy"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "Please enter your phone number"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "Elmourouj"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/login": {
       "post": {
         "description": "",
@@ -372,6 +425,59 @@
             "description": "Bad Request"
           }
         }
+      }
+    },
+    "/users/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "parameter_name",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "Your-Email@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Please enter your Password"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "first_name": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "gender": {
+                  "type": "string",
+                  "example": "Male"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "Admin/Expert/Agence/Client"
+                },
+                "date_of_birth": {
+                  "type": "string",
+                  "example": "Year/Month/DAy"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "Please enter your phone number"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "Elmourouj"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
       }
     }
   }
