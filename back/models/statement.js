@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const moment = require('moment');
+const moment = require("moment");
 
 const statementSchema = new mongoose.Schema({
   id: {
@@ -30,7 +30,10 @@ const statementSchema = new mongoose.Schema({
   location: {
     type: String,
     required: true,
-    match: [/^[a-zA-Z0-9\s,'-]*$/, "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens"],
+    match: [
+      /^[a-zA-Z0-9\s,'-]*$/,
+      "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
+    ],
   },
   injured: {
     type: String,

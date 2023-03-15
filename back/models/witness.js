@@ -21,7 +21,10 @@ const witnessSchema = new mongoose.Schema({
   address: {
     type: String,
     required: true,
-    match: [/^[a-zA-Z0-9\s,'-]*$/, "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens"],
+    match: [
+      /^[a-zA-Z0-9\s,'-]*$/,
+      "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
+    ],
   },
   contact: {
     type: String,

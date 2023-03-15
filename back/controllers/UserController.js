@@ -20,7 +20,6 @@ const handleErrors = (err) => {
     errors.email = "That email is not registered";
   }
 
-
   //mail not verified
   if (err.message === "email not verified") {
     errors.email = "email not verified";
@@ -322,7 +321,7 @@ module.exports.signup_post = async (req, res) => {
       
       </html>
     `,
-      //   <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>  
+      //   <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>
       attachments: [
         {
           filename: "logo.png",
@@ -382,7 +381,6 @@ module.exports.verify_email_get = async (req, res) => {
       message: "Invalid or expired token",
       status: "error",
     });
-
   }
 };
 
@@ -395,11 +393,15 @@ module.exports.resend_verification_post = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found", status: "error" });
+      return res
+        .status(400)
+        .json({ message: "User not found", status: "error" });
     }
 
     if (user.verified) {
-      return res.status(400).json({ message: "Email already verified", status: "error" });
+      return res
+        .status(400)
+        .json({ message: "Email already verified", status: "error" });
     }
 
     // send verification email
@@ -494,8 +496,6 @@ module.exports.resend_verification_post = async (req, res) => {
   }
 };
 
-
-
 module.exports.login2FA = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
@@ -520,9 +520,9 @@ module.exports.login2FA = async (req, res) => {
     const token = createToken(user._id);
 
     if (auth) {
-      await userModel.findByIdAndUpdate(user._id, {two_factor_auth_code : ""});
+      await userModel.findByIdAndUpdate(user._id, { two_factor_auth_code: "" });
       res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-      res.status(200).json({ user: user._id , role : user.role});
+      res.status(200).json({ user: user._id, role: user.role });
     } else {
       throw Error("code non valide");
     }
@@ -549,11 +549,11 @@ module.exports.login_post = async (req, res) => {
       throw Error("email not verified");
     }
 
-
-
     if (user.two_factor_auth === "sms") {
       const code = Math.floor(100000 + Math.random() * 900000);
-      await userModel.findByIdAndUpdate(user._id, {two_factor_auth_code : code});
+      await userModel.findByIdAndUpdate(user._id, {
+        two_factor_auth_code: code,
+      });
       // sendSms(user);
       throw Error("check your sms to 2FA auth"); // redirect
     }
@@ -563,15 +563,14 @@ module.exports.login_post = async (req, res) => {
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     let nextLink = "";
 
-
-    if (user.role === "Admin")  nextLink = "/admin/index";
-    if (user.role === "Client")  nextLink = "/admin/user-profile";
-    if (user.role === "Agence")  nextLink = "/admin/index";
-    if (user.role === "Expert")  nextLink = "/admin/index";
+    if (user.role === "Admin") nextLink = "/admin/index";
+    if (user.role === "Client") nextLink = "/admin/user-profile";
+    if (user.role === "Agence") nextLink = "/admin/index";
+    if (user.role === "Expert") nextLink = "/admin/index";
 
     //TODO : TEMPLATES
 
-    res.status(200).json({ user: user._id  , next: nextLink });
+    res.status(200).json({ user: user._id, next: nextLink });
   } catch (err) {
     const errors = handleErrors(err);
     console.log({ errors });
@@ -753,7 +752,12 @@ module.exports.get_user_by_email = async (req, res) => {
 
   // check if user is authorized to access user information
   const userRole = req.user.role;
-  if (userRole !== "admin" && userRole !== "expert" && userRole !== "client" && userRole !== "agence") {
+  if (
+    userRole !== "admin" &&
+    userRole !== "expert" &&
+    userRole !== "client" &&
+    userRole !== "agence"
+  ) {
     return res.status(403).json({
       message: "You are not authorized to access this resource",
       status: "error",
@@ -803,7 +807,6 @@ module.exports.get_user_by_email = async (req, res) => {
   }
 };
 
-
 module.exports.get_user_by_email = async (req, res) => {
   const email = req.params.email;
 
@@ -830,44 +833,43 @@ module.exports.get_user_by_email = async (req, res) => {
   }
 };
 
-
-module.exports.post_ban_user =async (req,res) => {
-  const {mail }= req.params;
+module.exports.post_ban_user = async (req, res) => {
+  const { mail } = req.params;
   const user = await userModel.findOne({ email: mail });
 
-  if(!user) {
-    throw Error("mail incorrect")
+  if (!user) {
+    throw Error("mail incorrect");
   }
 
-  if(user.banned){
+  if (user.banned) {
     throw Error("user already banned");
   }
 
-  await userModel.findByIdAndUpdate(user._id, {banned : true});
+  await userModel.findByIdAndUpdate(user._id, { banned: true });
 
   try {
     res.status(200).json(true);
-  }catch (err) {
+  } catch (err) {
     res.status(400).json(err.message);
-  };
-}
-module.exports.post_remove_ban_user =async (req,res) => {
-  const {mail }= req.params;
+  }
+};
+module.exports.post_remove_ban_user = async (req, res) => {
+  const { mail } = req.params;
   const user = await userModel.findOne({ email: mail });
 
-  if(!user) {
-    throw Error("mail incorrect")
+  if (!user) {
+    throw Error("mail incorrect");
   }
 
-  if(!user.banned){
+  if (!user.banned) {
     throw Error("user already unbanned");
   }
 
-  await userModel.findByIdAndUpdate(user._id, {banned : false});
+  await userModel.findByIdAndUpdate(user._id, { banned: false });
 
   try {
     res.status(200).json(true);
-  }catch (err) {
+  } catch (err) {
     res.status(400).json(err.message);
-  };
-}
+  }
+};

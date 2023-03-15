@@ -18,7 +18,7 @@ const claimSchema = new mongoose.Schema({
   id_contrat: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Contract'
+    ref: "Contract",
   },
   a_or_b: {
     type: String,

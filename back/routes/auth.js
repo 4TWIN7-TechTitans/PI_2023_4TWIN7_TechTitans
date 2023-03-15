@@ -5,8 +5,15 @@ const passport = require("passport");
 /* GET home page. */
 // @desc Auth with google
 //@route GET /auth/google
-router.get("/google", passport.authenticate("google", { scope: [  'https://www.googleapis.com/auth/userinfo.profile',
-'https://www.googleapis.com/auth/userinfo.email'] }));
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
+  })
+);
 
 /* GET home page. */
 // @desc Auth with google
@@ -16,9 +23,9 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     res.status(200).json({
-        message: "facebook login OK",
-        status: "success",
-      });
+      message: "facebook login OK",
+      status: "success",
+    });
   }
 );
 
@@ -33,7 +40,10 @@ router.get("/logout", (req, res) => {
   });
 });
 
-router.get("/facebook", passport.authenticate("facebook",{ scope: ["email"] }));
+router.get(
+  "/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
 
 router.get(
   "/facebook/callback",
@@ -41,9 +51,9 @@ router.get(
   function (req, res) {
     // Successful authentication, redirect home.
     res.status(200).json({
-        message: "facebook login OK",
-        status: "success",
-      });
+      message: "facebook login OK",
+      status: "success",
+    });
   }
 );
 
