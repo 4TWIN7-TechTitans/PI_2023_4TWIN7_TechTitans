@@ -834,41 +834,39 @@ module.exports.get_user_by_email = async (req, res) => {
 };
 
 module.exports.post_ban_user = async (req, res) => {
-  const { mail } = req.params;
-  const user = await userModel.findOne({ email: mail });
-
-  if (!user) {
-    throw Error("mail incorrect");
-  }
-
-  if (user.banned) {
-    throw Error("user already banned");
-  }
-
-  await userModel.findByIdAndUpdate(user._id, { banned: true });
-
   try {
     res.status(200).json(true);
+    const { mail } = req.params;
+    const user = await userModel.findOne({ email: mail });
+
+    if (!user) {
+      throw Error("mail incorrect");
+    }
+
+    if (user.banned) {
+      throw Error("user already banned");
+    }
+
+    await userModel.findByIdAndUpdate(user._id, { banned: true });
   } catch (err) {
     res.status(400).json(err.message);
   }
 };
 module.exports.post_remove_ban_user = async (req, res) => {
-  const { mail } = req.params;
-  const user = await userModel.findOne({ email: mail });
-
-  if (!user) {
-    throw Error("mail incorrect");
-  }
-
-  if (!user.banned) {
-    throw Error("user already unbanned");
-  }
-
-  await userModel.findByIdAndUpdate(user._id, { banned: false });
-
   try {
     res.status(200).json(true);
+    const { mail } = req.params;
+    const user = await userModel.findOne({ email: mail });
+
+    if (!user) {
+      throw Error("mail incorrect");
+    }
+
+    if (!user.banned) {
+      throw Error("user already unbanned");
+    }
+
+    await userModel.findByIdAndUpdate(user._id, { banned: false });
   } catch (err) {
     res.status(400).json(err.message);
   }
