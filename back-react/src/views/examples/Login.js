@@ -15,7 +15,6 @@ import {
 import React, { useState } from "react";
 import axios from "axios";
 
-
 function Login() {
   const [showNotification, setShowNotification] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -58,14 +57,7 @@ function Login() {
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
-            
-            //roles redirect
-            console.log(res.data.next);
             window.location.href = "/admin/index";
-            window.location.href = res.data.next;
-            
-
-
           },
           (err) => {
             console.log("err then");
@@ -103,10 +95,6 @@ function Login() {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
-
-  sayHello() {
-    alert('Hello!');
-  }
 
   const validatePassword = (password) => {
     return password.length >= 8;
@@ -168,7 +156,7 @@ function Login() {
                 className="btn-neutral btn-icon"
                 color="default"
                 href="#pablo"
-                onClick={googleauth}
+                onClick={(e) => e.preventDefault()}
               >
                 <span className="btn-inner--icon">
                   <img
@@ -201,7 +189,7 @@ function Login() {
                     name="email"
                     autoComplete="new-email"
                     required
-                   // onChange={handleEmailChange}
+                    onChange={handleEmailChange}
                   />
                 </InputGroup>
                 <div className="email error"></div>
@@ -219,7 +207,7 @@ function Login() {
                     name="password"
                     autoComplete="new-password"
                     required
-                    //onChange={handlePasswordChange}
+                    onChange={handlePasswordChange}
                   />
 
                   <InputGroupAddon addonType="append">
@@ -320,12 +308,6 @@ function Login() {
       </Col>
     </>
   );
-
-  
 }
-
-
-
-
 
 export default Login;
