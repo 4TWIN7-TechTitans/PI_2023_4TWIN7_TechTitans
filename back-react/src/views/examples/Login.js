@@ -15,6 +15,7 @@ import {
 import React, { useState } from "react";
 import axios from "axios";
 
+
 function Login() {
   const [showNotification, setShowNotification] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -103,6 +104,10 @@ function Login() {
     return emailRegex.test(email);
   };
 
+  sayHello() {
+    alert('Hello!');
+  }
+
   const validatePassword = (password) => {
     return password.length >= 8;
   };
@@ -163,7 +168,7 @@ function Login() {
                 className="btn-neutral btn-icon"
                 color="default"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={googleauth}
               >
                 <span className="btn-inner--icon">
                   <img
@@ -315,6 +320,12 @@ function Login() {
       </Col>
     </>
   );
+
+  
 }
+
+
+
+
 
 export default Login;

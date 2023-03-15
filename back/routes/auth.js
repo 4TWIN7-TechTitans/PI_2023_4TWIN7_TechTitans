@@ -34,19 +34,8 @@ router.get(
     const token = createToken(req.user._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
 
-
-
-    //decodage token
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-    // find user by id and verificationToken
-    const user = await userModel.findOne({
-      _id: decodedToken.id,
-      verificationToken: token,
-    });
-
     res.status(200).json({
-      message: "facebook login OK",
+      message: "/admin/index",
       status: "success",
     });
   }
@@ -73,8 +62,18 @@ router.get(
   passport.authenticate("facebook", { failureRedirect: "/" }),
   function (req, res) {
     // Successful authentication, redirect home.
+
+    const maxAge = 3 * 24 * 60 * 60;
+    const createToken = (id) => {
+      return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: maxAge,
+      });
+    };
+    const token = createToken(req.user._id);
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+
     res.status(200).json({
-      message: "facebook login OK",
+      message: "/admin/index",
       status: "success",
     });
   }

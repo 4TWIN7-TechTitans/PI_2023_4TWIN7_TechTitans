@@ -328,6 +328,48 @@
           }
         }
       }
+    },
+    "/users/ban/{mail}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "mail",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/unban/{mail}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "mail",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
     }
   }
 }

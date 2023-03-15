@@ -33,6 +33,8 @@ function Register() {
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
     const role = "Client";
+    const two_factor_auth = "none";
+    const two_factor_auth_code = "";
     const phone_number = form.phone_number.value
       ? "+216" + form.phone_number.value
       : "";
