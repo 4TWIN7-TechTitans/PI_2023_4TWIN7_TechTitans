@@ -32,16 +32,27 @@ function Register() {
     const password2 = form.password2.value;
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
-    const role = form.role.value;
-    const phone_number = form.phone_number.value ? "+216" + form.phone_number.value : "";
+    const role = "Client";
+    const phone_number = form.phone_number.value
+      ? "+216" + form.phone_number.value
+      : "";
 
-
-    if (!email || !password || !password2 || !last_name || !first_name || !role) {
+    if (
+      !email ||
+      !password ||
+      !password2 ||
+      !last_name ||
+      !first_name ||
+      !role
+    ) {
       setShowNotification(false);
       setShowVerifyEmail(false);
       setErrors({});
-      setShowError(true); 
-      setErrors({ ...errors, message: "Please fill in at least one field except phone number" });
+      setShowError(true);
+      setErrors({
+        ...errors,
+        message: "Please fill in at least one field except phone number",
+      });
       return;
     }
 
@@ -113,13 +124,13 @@ function Register() {
   //   );
   // };
 
-  const validateFirstName = (last_name) => {
-    const first_nameRegex = /^[a-zA-Z]+$/;
-    return first_nameRegex.test(last_name);
+  const validateFirstName = (first_name) => {
+    const first_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
+    return first_nameRegex.test(first_name);
   };
 
   const validateLastName = (last_name) => {
-    const last_nameRegex = /^[a-zA-Z]+$/;
+    const last_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
     return last_nameRegex.test(last_name);
   };
 
@@ -139,46 +150,44 @@ function Register() {
     emailError.innerHTML = errorMessage;
   };
 
-
-
   const handlePasswordChange = (e) => {
     const password = e.target.value;
     const passwordError = document.querySelector(".password.error");
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /[0-9]/;
-  
+
     let strength = 0;
     let strengthMessage = "";
-  
+
     if (password.length >= 8) {
       strength += 1;
       strengthMessage += "✅ Password is at least 8 characters long. ";
     } else {
       strengthMessage += "❌ Password must be at least 8 characters long. ";
     }
-  
+
     if (lowercaseRegex.test(password)) {
       strength += 1;
-      strengthMessage += "✅ Password contains a lowercase letter. ";
+      strengthMessage += "✅ Password can contains a lowercase letter. ";
     } else {
-      strengthMessage += "❌ Password must contain a lowercase letter. ";
+      strengthMessage += " Password can contains a lowercase letter. ";
     }
-  
+
     if (uppercaseRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ Password contains a capital letter. ";
     } else {
-      strengthMessage += "❌ Password must contain a capital letter. ";
+      strengthMessage += " Password can contains a capital letter. ";
     }
-  
+
     if (numberRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ Password contains a number. ";
     } else {
-      strengthMessage += "❌ Password must contain a number. ";
+      strengthMessage += " Password can contains a number. ";
     }
-  
+
     if (strength === 4) {
       strengthMessage += "✅ Password is strong.";
     } else if (strength >= 2) {
@@ -186,7 +195,7 @@ function Register() {
     } else {
       strengthMessage += "😔 Password is weak.";
     }
-  
+
     passwordError.innerHTML = strengthMessage;
   };
 
@@ -194,8 +203,7 @@ function Register() {
     const first_name = e.target.value;
     const first_nameError = document.querySelector(".first_name.error");
     if (!validateFirstName(first_name)) {
-      first_nameError.textContent =
-        "Please enter a valid first name (letters only).";
+      first_nameError.textContent = "Please enter a valid first name .";
     } else {
       first_nameError.textContent = "";
     }
@@ -205,8 +213,7 @@ function Register() {
     const last_name = e.target.value;
     const last_nameError = document.querySelector(".last_name.error");
     if (!validateLastName(last_name)) {
-      last_nameError.textContent =
-        "Please enter a valid last name (letters only).";
+      last_nameError.textContent = "Please enter a valid last name .";
     } else {
       last_nameError.textContent = "";
     }
@@ -224,7 +231,7 @@ function Register() {
                 <Form onSubmit={handleSubmit} noValidate>
                   <Row>
                     <Col md="6">
-                      <FormGroup >
+                      <FormGroup>
                         <label>First Name</label>
                         <Input
                           name="first_name"
@@ -272,7 +279,7 @@ function Register() {
                         <InputGroup>
                           <Input
                             name="password"
-                            type={showPassword ? "text" : "password"} // Change input type based on showPassword state
+                            type={showPassword ? "text" : "password"}
                             placeholder="Password"
                             required
                             onChange={handlePasswordChange}
@@ -324,7 +331,8 @@ function Register() {
                   </Row>
                   <FormGroup>
                     <label className="phone_number">
-                      Phone number (+216) <span className="optional">(optional)</span>
+                      Phone number (+216){" "}
+                      <span className="optional">(optional)</span>
                     </label>
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
@@ -344,18 +352,6 @@ function Register() {
                     </InputGroup>
                   </FormGroup>
 
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Role</label>
-                        <Input name="role" type="select" required>
-                          <option value="Admin">Admin</option>
-                          <option value="Expert">Expert</option>
-                          <option value="Agence">Agence</option>
-                        </Input>
-                      </FormGroup>
-                    </Col>
-                  </Row>
                   <Button className="btn-fill" color="primary" type="submit">
                     Register
                   </Button>
