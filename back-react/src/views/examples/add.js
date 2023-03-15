@@ -35,6 +35,7 @@ import {
       const last_name = form.last_name.value;
       const first_name = form.first_name.value;
       const role = form.role.value;
+      const verified = true;
       const phone_number = form.phone_number.value
         ? "+216" + form.phone_number.value
         : "";
@@ -45,7 +46,8 @@ import {
         !password2 ||
         !last_name ||
         !first_name ||
-        !role
+        !role||
+        !verified
       ) {
         setShowNotification(false);
         setShowVerifyEmail(false);
@@ -77,15 +79,17 @@ import {
           return;
         }
         console.log("out");
+        const verif1 = "true"; 
         // Register user
-        const registerRes = await axios.post(
-          "http://127.0.0.1:5000/signup",
+        const add = await axios.post(
+          "http://127.0.0.1:5000/add",
           {
             email,
             password,
             last_name,
             first_name,
             role,
+            verif1,
             phone_number,
           },
           {
@@ -94,7 +98,7 @@ import {
         );
   
         // handle response
-        if (registerRes.status === 201) {
+        if (add.status === 201) {
           setShowNotification(true);
           setShowVerifyEmail(true);
           setErrors({});
@@ -377,8 +381,8 @@ import {
                   {showNotification && (
                     <div className="alert alert-success mt-3" role="alert">
                       {showVerifyEmail
-                        ? "Signup successful! Please check The email that will be sent to verify this account."
-                        : "The account is already a member in the website."}
+                        ? "Account Added."
+                        : "This email is already a member in the website."}
                     </div>
                   )}
                   {showError && (
