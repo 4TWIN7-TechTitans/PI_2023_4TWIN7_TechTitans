@@ -7,12 +7,41 @@ const http = require("http");
 var indexRouter = require("./routes/index");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
+var authRouter = require("./routes/auth");
+const passport = require("passport");
+const session = require("express-session");
+const ensureGuest = require("./middleware/auth");
+
+const FacebookStrategy = require('passport-facebook').Strategy
 require("dotenv").config();
+require("./config/passport")(passport);
+
+
+
 
 
 require("./models/user");
 var app = express();
 mongoose.set("strictQuery", true);
+
+
+
+
+//Sessions middleware
+app.use(
+  session({
+    secret: "aaa",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+//Passport middleware
+app.use(session({ secret: "aaa" }));
+app.use(passport.initialize());
+app.use(passport.session());
+const PORT = process.env.PORT;
+
 
 //middleware
 app.use(logger("dev"));
@@ -38,6 +67,7 @@ swaggerAutogen(outputFile, endpointsFiles ,doc)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(userRoutes); 
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 app.use(function (req, res, next) {
   next(createError(404));
 });
