@@ -33,8 +33,19 @@ import {
   Container,
   Media
 } from "reactstrap";
+import axios from "axios";
 
 const AdminNavbar = (props) => {
+  
+  const handleLogout = async () => {
+    try {
+      await axios.get("http://127.0.0.1:5000/logout");
+      console.log("Logged out successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -95,10 +106,13 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+               
+                <DropdownItem href="/auth/login"  onClick={handleLogout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
+               
                 </DropdownItem>
+              
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
