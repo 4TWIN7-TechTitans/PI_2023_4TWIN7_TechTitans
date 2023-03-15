@@ -23,6 +23,7 @@ module.exports = function (passport) {
           image: profile.photos[0].value,
           email: profile.emails[0].value,
           password: randomstring,
+          role:"client",
           two_factor_auth: "none",
           two_factor_auth_code: "",
         };
@@ -87,6 +88,7 @@ module.exports = function (passport) {
             newUser.first_name = profile.name.givenName;
             newUser.last_name = profile.name.familyName;
             newUser.verified = true;
+            newUser.role = "client";
             newUser.two_factor_auth = "none";
             newUser.two_factor_auth_code = "";
             // newUser.name  = profile.name.familyName; // look at the passport user profile to see how names are returned
