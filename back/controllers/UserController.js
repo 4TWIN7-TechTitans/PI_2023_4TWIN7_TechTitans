@@ -20,7 +20,6 @@ const handleErrors = (err) => {
     errors.email = "That email is not registered";
   }
 
-
   //mail not verified
   if (err.message === "email not verified") {
     errors.email = "email not verified";
@@ -138,51 +137,191 @@ module.exports.signup_post = async (req, res) => {
       to: email,
       subject: "Verify your email",
       html: `
+      <!DOCTYPE html>
       <html>
+      
       <head>
-        <title>Welcome to Assurini!</title>
-        <style>
-          table {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-          }
-          .logo {
-            max-width: 150px;
-          }
-          .button {
-            display: inline-block;
-            background-color: #05445E;
-            color: #FFFFFF;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
-          }
-          .signature {
-            text-align: center;
-            font-style: italic;
-          }
-        </style>
+          <title></title>
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <style type="text/css">
+              @media screen {
+                  @font-face {
+                      font-family: 'Lato';
+                      font-style: normal;
+                      font-weight: 400;
+                  }
+      
+                  @font-face {
+                      font-family: 'Lato';
+                      font-style: normal;
+                      font-weight: 700;
+                  }
+      
+                  @font-face {
+                      font-family: 'Lato';
+                      font-style: italic;
+                      font-weight: 400;
+                  }
+      
+                  @font-face {
+                      font-family: 'Lato';
+                      font-style: italic;
+                      font-weight: 700;
+                  }
+              }
+      
+              /* CLIENT-SPECIFIC STYLES */
+              body,
+              table,
+              td,
+              a {
+                  -webkit-text-size-adjust: 100%;
+                  -ms-text-size-adjust: 100%;
+              }
+      
+              table,
+              td {
+                  mso-table-lspace: 0pt;
+                  mso-table-rspace: 0pt;
+              }
+      
+              img {
+                  -ms-interpolation-mode: bicubic;
+              }
+      
+              /* RESET STYLES */
+              img {
+                  border: 0;
+                  height: auto;
+                  line-height: 100%;
+                  outline: none;
+                  text-decoration: none;
+              }
+      
+              table {
+                  border-collapse: collapse !important;
+              }
+      
+              body {
+                  height: 100% !important;
+                  margin: 0 !important;
+                  padding: 0 !important;
+                  width: 100% !important;
+              }
+      
+              /* iOS BLUE LINKS */
+              a[x-apple-data-detectors] {
+                  color: inherit !important;
+                  text-decoration: none !important;
+                  font-size: inherit !important;
+                  font-family: inherit !important;
+                  font-weight: inherit !important;
+                  line-height: inherit !important;
+              }
+      
+              /* MOBILE STYLES */
+              @media screen and (max-width:600px) {
+                  h1 {
+                      font-size: 32px !important;
+                      line-height: 32px !important;
+                  }
+              }
+      
+              /* ANDROID CENTER FIX */
+              div[style*="margin: 16px 0;"] {
+                  margin: 0 !important;
+              }
+          </style>
       </head>
-      <body>
-        <table>
-          <tr>
-            <td>
-              <img src="cid:logo" alt="Assurini logo" class="logo">
-              <h2 style="color: #050A30; font-family: Arial, sans-serif;">Welcome to Assurini!</h2>
-              <p style="font-family: Arial, sans-serif;">Please click on the link below to verify your email address:</p>
-              <p style="font-family: Arial, color: #FFFFFF;,sans-serif;"><a href="http://localhost:5000/verify-email/${verificationToken}" class="button">Verify Email</a></p>
-            </td>
-          </tr>
-        </table>
-        <p class="signature">Best regards, <br> Assurini Groupe <br>  Assurini <br> assurini.tunisien0reply@gmail.com   </p>
+      
+      <body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
+          <!-- HIDDEN PREHEADER TEXT -->
+          <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"> We're thrilled to have you here! Get ready to dive into your new account.
+          </div>
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <!-- LOGO -->
+              <tr>
+                  <td bgcolor="#172b4d" align="center">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                          <tr>
+                              <td align="center" valign="top" style="padding: 40px 10px 40px 10px;"> </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+              <tr>
+                  <td bgcolor="#172b4d" align="center" style="padding: 0px 10px 0px 10px;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                          <tr>
+                              <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
+                                  <h1 style="font-size: 48px; font-weight: 400; margin: 2;">Welcome!</h1> <img src="cid:logo" width="125" height="120" style="display: block; border: 0px;" />
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+              <tr>
+                  <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                          <tr>
+                              <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                                  <p style="margin: 0;">We're excited to have you get started. First, you need to confirm your account. Just press the button below.</p>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td bgcolor="#ffffff" align="left">
+                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                      <tr>
+                                          <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
+                                              <table border="0" cellspacing="0" cellpadding="0">
+                                                  <tr>
+                                                      <td align="center" style="border-radius: 3px;" bgcolor="#172b4d"><a href="http://localhost:5000/verify-email/${verificationToken}" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #172b4d; display: inline-block;">Confirm Account</a></td>
+                                                  </tr>
+                                              </table>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </td>
+                          </tr> <!-- COPY -->
+                          <tr>
+                              <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                                  <p style="margin: 0;">Sent By :<br>Assurini Team</p>
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+              <tr>
+                  <td bgcolor="#f4f4f4" align="center" style="padding: 30px 10px 0px 10px;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                          <tr>
+                              <td bgcolor="#F0FFFF" align="center" style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                                  <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">Contact us on :</h2>
+                                  <p style="margin: 0;"><a href="#" target="_blank" style="color: #172b4d;">assurini.tunisien0reply@gmail.com </a></p>
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+              <tr>
+                  <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                          <tr>
+                              <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;"> <br>
+                                  <p style="margin: 0;">If these emails get annoying, please feel free to <a href="#" target="_blank" style="color: #111111; font-weight: 700;">unsubscribe</a>.</p>
+                              </td>
+                          </tr>
+                      </table>
+                  </td>
+              </tr>
+          </table>
       </body>
-    </html>
+      
+      </html>
     `,
-      //   <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>  
+      //   <a href="http://localhost:5000/verify-email/${verificationToken}">Verify Email</a>
       attachments: [
         {
           filename: "logo.png",
@@ -235,10 +374,7 @@ module.exports.verify_email_get = async (req, res) => {
     console.log(user);
     await userModel.updateOne(user);
 
-    res.status(200).json({
-      message: "Email verified successfully",
-      status: "success",
-    });
+    res.redirect("http://localhost:3000/auth/login");
   } catch (err) {
     console.log(err);
     res.status(400).json({
@@ -257,11 +393,15 @@ module.exports.resend_verification_post = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found", status: "error" });
+      return res
+        .status(400)
+        .json({ message: "User not found", status: "error" });
     }
 
     if (user.verified) {
-      return res.status(400).json({ message: "Email already verified", status: "error" });
+      return res
+        .status(400)
+        .json({ message: "Email already verified", status: "error" });
     }
 
     // send verification email
@@ -356,8 +496,6 @@ module.exports.resend_verification_post = async (req, res) => {
   }
 };
 
-
-
 module.exports.login2FA = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
@@ -382,9 +520,9 @@ module.exports.login2FA = async (req, res) => {
     const token = createToken(user._id);
 
     if (auth) {
-      await userModel.findByIdAndUpdate(user._id, {two_factor_auth_code : ""});
+      await userModel.findByIdAndUpdate(user._id, { two_factor_auth_code: "" });
       res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-      res.status(200).json({ user: user._id });
+      res.status(200).json({ user: user._id, role: user.role });
     } else {
       throw Error("code non valide");
     }
@@ -411,11 +549,11 @@ module.exports.login_post = async (req, res) => {
       throw Error("email not verified");
     }
 
-
-
     if (user.two_factor_auth === "sms") {
       const code = Math.floor(100000 + Math.random() * 900000);
-      await userModel.findByIdAndUpdate(user._id, {two_factor_auth_code : code});
+      await userModel.findByIdAndUpdate(user._id, {
+        two_factor_auth_code: code,
+      });
       // sendSms(user);
       throw Error("check your sms to 2FA auth"); // redirect
     }
@@ -423,7 +561,16 @@ module.exports.login_post = async (req, res) => {
     const auth = await userModel.login(email, password);
     const token = createToken(user._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(200).json({ user: user._id });
+    let nextLink = "";
+
+    if (user.role === "Admin") nextLink = "/admin/index";
+    if (user.role === "Client") nextLink = "/admin/user-profile";
+    if (user.role === "Agence") nextLink = "/admin/index";
+    if (user.role === "Expert") nextLink = "/admin/index";
+
+    //TODO : TEMPLATES
+
+    res.status(200).json({ user: user._id, next: nextLink });
   } catch (err) {
     const errors = handleErrors(err);
     console.log({ errors });
@@ -555,7 +702,7 @@ module.exports.logout_get = (req, res) => {
   res.status(200).json({ message: "User logged out successfully." });
 };
 
-sendSms = (user) => {
+const sendSms = (user) => {
   client.messages
     .create({
       body: "Twillio sms Test : " + user.two_factor_auth_code,
@@ -605,7 +752,12 @@ module.exports.get_user_by_email = async (req, res) => {
 
   // check if user is authorized to access user information
   const userRole = req.user.role;
-  if (userRole !== "admin" && userRole !== "expert" && userRole !== "client" && userRole !== "agence") {
+  if (
+    userRole !== "admin" &&
+    userRole !== "expert" &&
+    userRole !== "client" &&
+    userRole !== "agence"
+  ) {
     return res.status(403).json({
       message: "You are not authorized to access this resource",
       status: "error",
@@ -655,7 +807,6 @@ module.exports.get_user_by_email = async (req, res) => {
   }
 };
 
-
 module.exports.get_user_by_email = async (req, res) => {
   const email = req.params.email;
 
@@ -679,5 +830,46 @@ module.exports.get_user_by_email = async (req, res) => {
       message: "Internal server error",
       status: "error",
     });
+  }
+};
+
+module.exports.post_ban_user = async (req, res) => {
+  const { mail } = req.params;
+  const user = await userModel.findOne({ email: mail });
+
+  if (!user) {
+    throw Error("mail incorrect");
+  }
+
+  if (user.banned) {
+    throw Error("user already banned");
+  }
+
+  await userModel.findByIdAndUpdate(user._id, { banned: true });
+
+  try {
+    res.status(200).json(true);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+};
+module.exports.post_remove_ban_user = async (req, res) => {
+  const { mail } = req.params;
+  const user = await userModel.findOne({ email: mail });
+
+  if (!user) {
+    throw Error("mail incorrect");
+  }
+
+  if (!user.banned) {
+    throw Error("user already unbanned");
+  }
+
+  await userModel.findByIdAndUpdate(user._id, { banned: false });
+
+  try {
+    res.status(200).json(true);
+  } catch (err) {
+    res.status(400).json(err.message);
   }
 };

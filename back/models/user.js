@@ -52,36 +52,33 @@ const userSchema = new mongoose.Schema({
     min: [moment().subtract(120, "years"), "You must be at most 120 years old"],
     max: [moment().subtract(18, "years"), "You must be at least 18 years old"],
   },
-  phone_number: {
-    type: Number,
-    required: false,
-    match: [/^(\+216)?[0-9]{8}$/, "Phone number should start with +216 followed by 8 digits",
-    ],
-  },
   address: {
     type: String,
     required: false,
-    match: [/^[a-zA-Z0-9\s,'-]*$/, "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens"],
+    match: [
+      /^[a-zA-Z0-9\s,'-]*$/,
+      "Address should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
+    ],
   },
   verified: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  googleId:{
+  googleId: {
     type: String,
-    required: false
+    required: false,
   },
   image: {
     type: String,
-    required: false
+    required: false,
   },
   id: {
-    type:String,
-    required: false
+    type: String,
+    required: false,
   },
   token: {
-  type:String,
-  required: false
+    type: String,
+    required: false,
   },
   two_factor_auth: {
     type: String,
@@ -96,9 +93,14 @@ const userSchema = new mongoose.Schema({
   phone_number: {
     type: String,
     required: false,
-    match: [/^\+216[0-9]{8}$/, "Phone number should start with +216 followed by 8 digits"],
-  }
-
+    match: [
+      /^\+216[0-9]{8}$/,
+      "Phone number should start with +216 followed by 8 digits",
+    ],
+  },
+  banned: {
+    type: Boolean,
+  },
 });
 
 // fire a function before doc saved to db

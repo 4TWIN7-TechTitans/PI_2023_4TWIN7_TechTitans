@@ -21,7 +21,7 @@ const carSchema = new mongoose.Schema({
   id_contrat: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Contract'
+    ref: "Contract",
   },
 });
 

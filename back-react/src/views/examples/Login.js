@@ -57,7 +57,14 @@ function Login() {
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
+            
+            //roles redirect
+            console.log(res.data.next);
             window.location.href = "/admin/index";
+            window.location.href = res.data.next;
+            
+
+
           },
           (err) => {
             console.log("err then");
@@ -189,7 +196,7 @@ function Login() {
                     name="email"
                     autoComplete="new-email"
                     required
-                    onChange={handleEmailChange}
+                   // onChange={handleEmailChange}
                   />
                 </InputGroup>
                 <div className="email error"></div>
@@ -207,7 +214,7 @@ function Login() {
                     name="password"
                     autoComplete="new-password"
                     required
-                    onChange={handlePasswordChange}
+                    //onChange={handlePasswordChange}
                   />
 
                   <InputGroupAddon addonType="append">

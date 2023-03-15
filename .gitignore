@@ -1,6 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/react,reactnative,node,windows,macos,linux,python,django
 # Edit at https://www.toptal.com/developers/gitignore?templates=react,reactnative,node,windows,macos,linux,python,django
 
+
+### swagger ###
+/back/swagger.json
+swagger.json
+
 ### Django ###
 *.log
 *.pot
