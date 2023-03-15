@@ -24,6 +24,7 @@ import Tables from "views/examples/Tables.js";
 import ListOfUsers from "views/examples/ListOfUsers.js";
 import Icons from "views/examples/Icons.js";
 import NotFound from "views/examples/error";
+import AddNew from "views/examples/add";
 
 var routes = [
   {
@@ -66,6 +67,13 @@ var routes = [
     name: "List Of Users",
     icon: "ni ni-bullet-list-67 text-red",
     component: ListOfUsers,
+    layout: "/admin"
+  },
+  {
+    path: "/add",
+    name: "Add new user",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: AddNew,
     layout: "/admin"
   },
   {

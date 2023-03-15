@@ -9,6 +9,7 @@ import {
   Table,
   Container,
   Row,
+  Button,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -54,7 +55,7 @@ function ListOfUsers() {
     console.log("hello world");
 
     try {
-      const response = !  user.banned
+      const response = !user.banned
         ? await axios.post("http://127.0.0.1:5000/users/ban/" + user.email)
         : await axios.post("http://127.0.0.1:5000/users/unban/" + user.email);
 
@@ -115,10 +116,10 @@ function ListOfUsers() {
                       <td>{user.email}</td>
                       <td>
                         {" "}
-                        <button onClick={(e) => handleBanUser(e, user)}>
+                        <Button onClick={(e) => handleBanUser(e, user)}>
                           {" "}
                           {!user.banned ? "Ban User" : "Unban user"}{" "}
-                        </button>{" "}
+                        </Button>{" "}
                       </td>
                     </tr>
                   ))}
@@ -158,6 +159,9 @@ function ListOfUsers() {
                     </PaginationItem>
                   </Pagination>
                 </nav>
+                <Button href="/admin/add" >
+                  Add an account
+                </Button>
               </CardFooter>
             </Card>
           </div>
