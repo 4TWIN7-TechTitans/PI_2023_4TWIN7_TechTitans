@@ -9,9 +9,9 @@ router.get("/check-email/:email", checkEmail);
 router.post('/signup', userController.signup_post);
 router.post('/login', userController.login_post);
 router.get('/logout', userController.logout_get);
-router.get("/verify-email/:token", (req, res) => {
+router.get("/verify-email/:token", userController.verify_email_get,(req, res) => {
     const verificationToken = req.params.token;
-    res.render('verification.ejs', { verificationToken });
+    res.render('verification.twig', { verificationToken });
     });
 router.get('/resend-verification', userController.resend_verification_post);
 router.post("/2fa", userController.login2FA);

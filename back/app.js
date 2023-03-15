@@ -49,8 +49,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.set('views', './views'); // set the views directory
-app.set('view engine', 'ejs'); // set the view engine
+app.set('views', 'views'); // set the views directory
+app.set('view engine', 'twig'); // set the view engine
 
 //Swagger API
 const swaggerAutogen = require('swagger-autogen')();
@@ -67,7 +67,10 @@ swaggerAutogen(outputFile, endpointsFiles ,doc)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(userRoutes); 
 app.use("/", indexRouter);
-app.use("/auth", authRouter);
+app.use("/auth", authRouter); 
+app.get("/verify-email/:token", function (req, res) {
+  res.render("verification");
+});
 app.use(function (req, res, next) {
   next(createError(404));
 });

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Webpage</title>
+    </head>
+    <body>
+<h1>Verification</h1>
+      {% if (message === "success") {  %} 
+        <div class="text-success text-center">
+          <p>Email verified successfully</p>
+          <a href="/login">Login</a>
+        </div>
+        {%  } else if (message === "expired") { %} 
+        <div class="text-danger text-center">
+          <p>Token has expired</p>
+          <a href="/resend-verification">Resend verification email</a>
+        </div>
+        {%  } else { %} 
+        <div class="text-danger text-center">
+          <p>Invalid token</p>
+          <a href="/resend-verification">Resend verification email</a>
+        </div>
+        {%  } %} 
+
+
+
+    </body>
+</html>
