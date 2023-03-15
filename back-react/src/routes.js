@@ -25,6 +25,8 @@ import ListOfUsers from "views/examples/ListOfUsers.js";
 import Icons from "views/examples/Icons.js";
 import NotFound from "views/examples/error";
 import AddNew from "views/examples/add";
+import ResetPass from "views/examples/resetPass";
+import ForgetPass from "views/examples/forgetPass";
 
 var routes = [
   {
@@ -106,6 +108,22 @@ var routes = [
     component: Register,
     layout: "/auth",
     showInSidebar: false,
-  }
+  },
+  {
+    path: "/forgetpwd",
+    name: "Forget Password",
+    icon: "ni ni ni-key-25 text-red",
+    component: ForgetPass,
+    layout: "/auth",
+    showInSidebar: false,
+  },
+  {
+    path: "/resetpwd",
+    name: "Reset Password",
+    icon: "ni ni ni-key-25 text-yellow",
+    component: ResetPass,
+    layout: "/auth",
+    showInSidebar: true,
+  },
 ];
 export default routes;
