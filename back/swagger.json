@@ -260,21 +260,15 @@
         "responses": {}
       }
     },
-    "/forget-password": {
+    "/forget-password/{email}": {
       "post": {
         "description": "",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

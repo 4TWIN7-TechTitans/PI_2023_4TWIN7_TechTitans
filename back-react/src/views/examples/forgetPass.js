@@ -20,13 +20,13 @@ import React, { useState } from "react";
 
 function ForgetPass() {
 
-    const handleResendEmail = async (e) => {
+    const handleForgotPassword= async (e) => {
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         try {
             console.log(email);
-            const response = await axios.post(`http://127.0.0.1:5000/resend-verification/${email}`);
+            const response = await axios.post(`http://127.0.0.1:5000/forget-password/${email}`);
             return response;
         } catch (error) {
             console.log(error);
@@ -45,7 +45,7 @@ function ForgetPass() {
                         <div className="text-center text-muted mb-4">
                             <small>Type your email here to reset your password</small>
                         </div>
-                        <Form onSubmit={handleResendEmail} noValidate>
+                        <Form onSubmit={handleForgotPassword} noValidate>
                             <Col md="6">
                                 <FormGroup>
                                     <label>Retype Your email</label>

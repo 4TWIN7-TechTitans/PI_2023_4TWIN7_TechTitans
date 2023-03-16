@@ -594,7 +594,7 @@ module.exports.login_post = async (req, res) => {
 };
 
 module.exports.forgot_password_post = async (req, res) => {
-  const { email } = req.body;
+  const email = req.params.email;
 
   try {
     const user = await userModel.findOne({ email });
