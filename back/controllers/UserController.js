@@ -13,6 +13,7 @@ const handleErrors = (err) => {
     email: "",
     password: "",
     role: "",
+    tfa: "",
   };
 
   // incorrect email
@@ -537,6 +538,25 @@ module.exports.login2FA = async (req, res) => {
     if (auth) {
       await userModel.findByIdAndUpdate(user._id, { two_factor_auth_code: "" });
       res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+      const user1 = await userModel.findOne({
+        _id: decodedToken.id,
+        verificationToken: token,
+      });
+  
+      res.cookie("firstname", user1.first_name, {
+        expiresIn:maxAge, // same as above
+      })
+      res.cookie("lastname", user1.last_name, {
+        expiresIn:maxAge, // same as above
+      })
+      res.cookie("role", user1.role, {
+        expiresIn:maxAge, // same as above
+      })
+  
+      res.cookie("userid", user1.id, {
+        expiresIn:maxAge, // same as above
+      })  
       res.status(200).json({ user: user._id, role: user.role });
     } else {
       throw Error("code non valide");
@@ -569,7 +589,7 @@ module.exports.login_post = async (req, res) => {
       await userModel.findByIdAndUpdate(user._id, {
         two_factor_auth_code: code,
       });
-      // sendSms(user);
+      sendSms(user);
       throw Error("check your sms to 2FA auth"); // redirect
     }
 
@@ -743,8 +763,7 @@ const sendSms = (user) => {
       from: process.env.TWILIO_SENDER,
       to: process.env.TWILIO_RECEIVER,
     })
-    .then((message) => console.log(message.sid, user))
-    .done();
+    .then((message) => console.log(message.sid, user));
 };
 
 module.exports.checkEmail = async (req, res) => {

@@ -41,6 +41,7 @@ function Login() {
         .then(
           (res) => {
             console.log("res 2FA");
+            window.location.href = "/admin/index";
           },
           (err) => {
             console.log("err 2FA");
@@ -61,7 +62,9 @@ function Login() {
           },
           (err) => {
             console.log("err then");
+            console.log(err)
             console.log(err.response.data.errors.email);
+            console.log(err.response.data.errors.tfa);
 
             if (err.response.data.errors.tfa === "check your sms to 2FA auth") {
               setShow2FAform(true);
