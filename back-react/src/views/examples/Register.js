@@ -113,19 +113,18 @@ function Register() {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
-  // const validatePassword = (password) => {
-  //   const lowercaseRegex = /[a-z]/;
-  //   const uppercaseRegex = /[A-Z]/;
-  //   const numberRegex = /[0-9]/;
-
-  //   return (
-  //     password.length >= 8 &&
-  //     lowercaseRegex.test(password) &&
-  //     uppercaseRegex.test(password) &&
-  //     numberRegex.test(password)
-  //   );
-  // };
-
+/*  const validatePassword = (password) => {
+    const lowercaseRegex = /[a-z]/;
+    const uppercaseRegex = /[A-Z]/;
+    const numberRegex = /[0-9]/;
+  
+    return (
+      password.length >= 8 &&
+      lowercaseRegex.test(password) &&
+      uppercaseRegex.test(password) &&
+      numberRegex.test(password)
+    );
+  };*/
   const validateFirstName = (first_name) => {
     const first_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
     return first_nameRegex.test(first_name);
