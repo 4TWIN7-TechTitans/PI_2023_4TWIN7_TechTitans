@@ -18,7 +18,7 @@
 /*eslint-disable*/
 
 // reactstrap components
-import { Container, Row, Col, Nav, NavItem, NavLink } from "reactstrap";
+import { Container, Row, Col, Nav, NavItem, NavLink, Button } from "reactstrap";
 
 const Footer = () => {
   return (
@@ -31,14 +31,7 @@ const Footer = () => {
   
   <div className="container p-4 pb-0">
     
-    <section className="">
-      <p className="d-flex justify-content-center align-items-center">
-        <span className=" me-3"> Register for free  &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;</span>
-        <button type="button" href="/auth/register" className=" btn btn-outline-light btn-rounded">
-           Sign up!
-        </button>
-      </p>
-    </section>
+
 
     © 2020 Copyright&nbsp;&nbsp;:
     <a className="text-dark" href="/admin/index"> &nbsp;&nbsp;Assurini</a>
