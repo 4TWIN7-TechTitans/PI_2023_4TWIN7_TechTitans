@@ -27,7 +27,7 @@ const Header = () => {
           <div className="header-body">
             {/* Card stats */}
             <Row>
-              <Col  className=" center" lg="12" xl="6">
+              <Col  className="center m-3 text-uppercase fs-1" lg="12" xl="3">
 <h1 >Welcome To Assurini</h1>
 
               </Col>

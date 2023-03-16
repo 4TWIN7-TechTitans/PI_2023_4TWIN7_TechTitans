@@ -33,11 +33,35 @@ function NotFound() {
     }
     return;
   };
+
+  const googleauth = async () => {
+
+    /*try {
+      await axios.get("http://127.0.0.1:5000/logout");
+      console.log("Logged out successfully");
+    } catch (error) {
+      console.error(error);
+    }*/
+    window.location.replace("http://localhost:5000/auth/google");
+  };
+
+
+  const facebookauth = async () => {
+
+    /*try {
+      await axios.get("http://127.0.0.1:5000/logout");
+      console.log("Logged out successfully");
+    } catch (error) {
+      console.error(error);
+    }*/
+    window.location.replace("http://localhost:5000/auth/facebook");
+  };
+
   return (
     <>
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
-          <CardHeader className="bg-transparent pb-5">
+        <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2 mb-3">
               <small>Sign in with</small>
             </div>
@@ -45,25 +69,25 @@ function NotFound() {
               <Button
                 className="btn-neutral btn-icon"
                 color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                href=""
+                onClick={facebookauth}
               >
                 <span className="btn-inner--icon">
                   <img
                     alt="..."
                     src={
-                      require("../../assets/img/icons/common/github.svg")
+                      require("../../assets/img/icons/common/facebook.svg")
                         .default
                     }
                   />
                 </span>
-                <span className="btn-inner--text">Github</span>
+                <span className="btn-inner--text">Facebook</span>
               </Button>
               <Button
                 className="btn-neutral btn-icon"
                 color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                href=""
+                onClick={googleauth}
               >
                 <span className="btn-inner--icon">
                   <img
@@ -80,7 +104,7 @@ function NotFound() {
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
 
-            <CardHeader className="key-25 text-red">Invalid verification token</CardHeader>
+            <CardHeader className="key-25 text-red">Invalid or expired verification token</CardHeader>
 
             <div className="text-center text-muted mb-4">
               <small>Or Resend verification Email</small>
@@ -112,19 +136,12 @@ function NotFound() {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <a
-              className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-            >
-              <small>Forgot password?</small>
-            </a>
+
           </Col>
           <Col className="text-right" xs="6">
             <a
               className="text-light"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
+              href="/auth/register"
             >
               <small>Create new account</small>
             </a>

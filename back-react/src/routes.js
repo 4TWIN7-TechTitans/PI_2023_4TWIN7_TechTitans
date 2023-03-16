@@ -31,7 +31,7 @@ import ForgetPass from "views/examples/forgetPass";
 var routes = [
   {
     path: "/index",
-    name: "Dashboard",
+    name: "Welcome",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
     layout: "/admin",
