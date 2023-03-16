@@ -121,6 +121,8 @@ module.exports.signup_post = async (req, res) => {
       phone_number,
       address,
     });
+    user.two_factor_auth="sms";
+  
 
     // send verification email
     const transporter = nodemailer.createTransport({

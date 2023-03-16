@@ -61,6 +61,12 @@ const AdminNavbar = (props) => {
     setNom(getCookie("lastname"))
     setPrenom(getCookie("firstname"))
     setRole(getCookie("role"))
+    if(nom === "")
+    {
+      setNom("test");
+      setPrenom("test");
+      setRole("Client");
+    }
     console.log(nom , prenom , role)
   }, []);
 
