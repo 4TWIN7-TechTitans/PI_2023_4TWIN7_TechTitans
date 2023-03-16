@@ -34,8 +34,16 @@ import {
   Media
 } from "reactstrap";
 import axios from "axios";
+import { useEffect, useState } from "react";
+
+
 
 const AdminNavbar = (props) => {
+
+  const [nom , setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [role, setRole] = useState("");
+ 
   
   const handleLogout = async () => {
     try {
@@ -45,6 +53,16 @@ const AdminNavbar = (props) => {
       console.error(error);
     }
   };
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+  useEffect(() => {
+    setNom(getCookie("lastname"))
+    setPrenom(getCookie("firstname"))
+    setRole(getCookie("role"))
+    console.log(nom , prenom , role)
+  }, []);
 
   return (
     <>
@@ -80,7 +98,9 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      {nom + " " + prenom}
+                      <br></br>
+                      {role}
                     </span>
                   </Media>
                 </Media>
