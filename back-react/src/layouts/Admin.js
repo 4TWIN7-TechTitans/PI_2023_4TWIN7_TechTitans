@@ -24,6 +24,14 @@ const Admin = (props) => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
+    const nom=getCookie("lastname");
+    const prenom=getCookie("firstname");
+    const role=getCookie("role");
+   
+
+  
+
+
   }, [location]);
 
   const getRoutes = (routes) => {
@@ -86,5 +94,8 @@ const Admin = (props) => {
     </>
   );
 };
-
+function getCookie(key) {
+  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
 export default Admin;
