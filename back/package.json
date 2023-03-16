@@ -35,5 +35,8 @@
     "swagger-ui-express": "^4.6.2",
     "twilio": "^4.8.0",
     "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "supertest": "^6.3.3"
   }
 }

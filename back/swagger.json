@@ -51,19 +51,19 @@
               "properties": {
                 "email": {
                   "type": "string",
-                  "example": "Your-Email@gmail.com"
+                  "example": "dddd@gmail.com"
                 },
                 "password": {
                   "type": "string",
-                  "example": "Please enter your Password"
+                  "example": "12345678"
                 },
                 "last_name": {
                   "type": "string",
-                  "example": "John"
+                  "example": "Flen"
                 },
                 "first_name": {
                   "type": "string",
-                  "example": "Doe"
+                  "example": "Ben Flen"
                 },
                 "gender": {
                   "type": "string",
@@ -71,15 +71,15 @@
                 },
                 "role": {
                   "type": "string",
-                  "example": "Admin/Expert/Agence/Client"
+                  "example": "Client"
                 },
                 "date_of_birth": {
                   "type": "string",
-                  "example": "Year/Month/DAy"
+                  "example": "1990/01/01"
                 },
                 "phone_number": {
                   "type": "string",
-                  "example": "Please enter your phone number"
+                  "example": "+21612345678"
                 },
                 "address": {
                   "type": "string",
@@ -380,27 +380,6 @@
       }
     },
     "/users/ban/{mail}": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "mail",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/users/unban/{mail}": {
       "post": {
         "description": "",
         "parameters": [

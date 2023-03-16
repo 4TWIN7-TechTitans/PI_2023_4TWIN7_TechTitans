@@ -85,44 +85,23 @@ module.exports.signup_post = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
       schema: {
-        "email": "Your-Email@gmail.com",
-        "password": "Please enter your Password",
-        "last_name": "John",
-        "first_name": "Doe",
+        "email": "dddd@gmail.com",
+        "password": "12345678",
+        "last_name": "Flen",
+        "first_name": "Ben Flen",
         "gender": "Male",
-        "role": "Admin/Expert/Agence/Client",
-        "date_of_birth": "Year/Month/DAy",
-        "phone_number": "Please enter your phone number",
+        "role": "Client",
+        "date_of_birth": "1990/01/01",
+        "phone_number": "+21612345678",
         "address": "Elmourouj"
       }
     }
   } */
 
-  const {
-    email,
-    password,
-    last_name,
-    first_name,
-    gender,
-    role,
-    date_of_birth,
-    phone_number,
-    address,
-  } = req.body;
   try {
     const user = await userModel.create({
-      email,
-      password,
-      last_name,
-      first_name,
-      gender,
-      role,
-      date_of_birth,
-      phone_number,
-      address,
+      ...req.body,
     });
-    user.two_factor_auth="sms";
-  
 
     // send verification email
     const transporter = nodemailer.createTransport({
@@ -137,7 +116,7 @@ module.exports.signup_post = async (req, res) => {
     user.verificationToken = verificationToken;
     const mailOptions = {
       from: process.env.EMAIL_MARIEM,
-      to: email,
+      to: user.email,
       subject: "Verify your email",
       html: `
       <!DOCTYPE html>
@@ -371,31 +350,10 @@ module.exports.add_post = async (req, res) => {
     }
   } */
 
-  const {
-    email,
-    password,
-    last_name,
-    first_name,
-    gender,
-    role,
-    date_of_birth,
-    phone_number,
-    address,
-    verified = "true",
-  } = req.body;
-
   try {
     const user = await userModel.create({
-      email,
-      password,
-      last_name,
-      first_name,
-      gender,
-      role,
-      date_of_birth,
-      phone_number,
-      address,
-      verified,
+      ...req.body,
+      verified: "true",
     });
     res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
@@ -545,20 +503,20 @@ module.exports.login2FA = async (req, res) => {
         _id: decodedToken.id,
         verificationToken: token,
       });
-  
+
       res.cookie("firstname", user1.first_name, {
-        expiresIn:maxAge, // same as above
-      })
+        expiresIn: maxAge, // same as above
+      });
       res.cookie("lastname", user1.last_name, {
-        expiresIn:maxAge, // same as above
-      })
+        expiresIn: maxAge, // same as above
+      });
       res.cookie("role", user1.role, {
-        expiresIn:maxAge, // same as above
-      })
-  
+        expiresIn: maxAge, // same as above
+      });
+
       res.cookie("userid", user1.id, {
-        expiresIn:maxAge, // same as above
-      })  
+        expiresIn: maxAge, // same as above
+      });
       res.status(200).json({ user: user._id, role: user.role });
     } else {
       throw Error("code non valide");
@@ -614,18 +572,18 @@ module.exports.login_post = async (req, res) => {
     });
 
     res.cookie("firstname", user1.first_name, {
-      expiresIn:maxAge, // same as above
-    })
+      expiresIn: maxAge, // same as above
+    });
     res.cookie("lastname", user1.last_name, {
-      expiresIn:maxAge, // same as above
-    })
+      expiresIn: maxAge, // same as above
+    });
     res.cookie("role", user1.role, {
-      expiresIn:maxAge, // same as above
-    })
+      expiresIn: maxAge, // same as above
+    });
 
     res.cookie("userid", user1.id, {
-      expiresIn:maxAge, // same as above
-    })
+      expiresIn: maxAge, // same as above
+    });
     res.status(200).json({ user: user._id, next: nextLink });
   } catch (err) {
     const errors = handleErrors(err);
@@ -751,9 +709,6 @@ module.exports.logout_get = (req, res) => {
       }
     }
   } */
-  /*   res.cookie('jwt', '', { maxAge: 1 });
-    res.redirect('/');
-    res.status(200).json({ user: user._id , message: "User Logged Out", status: "Success" }); */
   res.cookie("jwt", "", { maxAge: 1 });
   res.status(200).json({ message: "User logged out successfully." });
 };
@@ -893,7 +848,6 @@ module.exports.get_user_by_email = async (req, res) => {
 
 module.exports.post_ban_user = async (req, res) => {
   try {
-    res.status(200).json(true);
     const { mail } = req.params;
     const user = await userModel.findOne({ email: mail });
 
@@ -902,29 +856,11 @@ module.exports.post_ban_user = async (req, res) => {
     }
 
     if (user.banned) {
-      throw Error("user already banned");
+      await userModel.findByIdAndUpdate(user._id, { banned: true });
+    } else {
+      await userModel.findByIdAndUpdate(user._id, { banned: false });
     }
-
-    await userModel.findByIdAndUpdate(user._id, { banned: true });
-  } catch (err) {
-    res.status(400).json(err.message);
-  }
-};
-module.exports.post_remove_ban_user = async (req, res) => {
-  try {
     res.status(200).json(true);
-    const { mail } = req.params;
-    const user = await userModel.findOne({ email: mail });
-
-    if (!user) {
-      throw Error("mail incorrect");
-    }
-
-    if (!user.banned) {
-      throw Error("user already unbanned");
-    }
-
-    await userModel.findByIdAndUpdate(user._id, { banned: false });
   } catch (err) {
     res.status(400).json(err.message);
   }
@@ -947,17 +883,7 @@ module.exports.post_update_user = async (req, res) => {
     }
   } */
 
-  const {
-    email,
-    last_name,
-    first_name,
-    gender,
-    role,
-    date_of_birth,
-    phone_number,
-    address,
-    two_factor_auth,
-  } = req.body;
+  const { email } = req.body;
 
   try {
     const user = await userModel.findOne({ email });
@@ -966,16 +892,9 @@ module.exports.post_update_user = async (req, res) => {
       throw Error("user not found ");
     }
 
-    user.last_name = last_name;
-    user.first_name = first_name;
-    user.gender = gender;
-    user.role = role;
-    user.date_of_birth = date_of_birth;
-    user.phone_number = phone_number;
-    user.address = address;
-    user.two_factor_auth = two_factor_auth;
+    const newUser = { ...user, ...req.body };
 
-    await userModel.findByIdAndUpdate(user._id, user);
+    await userModel.findByIdAndUpdate(newUser._id, newUser);
 
     res.status(201).json(true);
   } catch (error) {

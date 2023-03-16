@@ -94,7 +94,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     match: [
-      /^\+216[0-9]{8}$/,
+      /^\+216\d{8}$/,
       "Phone number should start with +216 followed by 8 digits",
     ],
   },
@@ -130,7 +130,7 @@ userSchema.statics.login2FA = async function (email, twoFactorCode) {
     throw Error("incorrect email");
   }
   if (user) {
-    if (!(twoFactorCode === user.two_factor_auth_code)) {
+    if (twoFactorCode !== user.two_factor_auth_code) {
       throw Error("incorrect 2fa code");
     }
     return user;
