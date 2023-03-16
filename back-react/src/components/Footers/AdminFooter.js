@@ -22,67 +22,31 @@ import { Container, Row, Col, Nav, NavItem, NavLink } from "reactstrap";
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <Row className="align-items-center justify-content-xl-between">
-        <Col xl="6">
-          <div className="copyright text-center text-xl-left text-muted">
-            © {new Date().getFullYear()}{" "}
-            <a
-              className="font-weight-bold ml-1"
-              href="https://www.creative-tim.com?ref=adr-admin-footer"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Creative Tim
-            </a>
-          </div>
-        </Col>
 
-        <Col xl="6">
-          <Nav className="nav-footer justify-content-center justify-content-xl-end">
-            <NavItem>
-              <NavLink
-                href="https://www.creative-tim.com?ref=adr-admin-footer"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Creative Tim
-              </NavLink>
-            </NavItem>
+<div className="container my-5">
 
-            <NavItem>
-              <NavLink
-                href="https://www.creative-tim.com/presentation?ref=adr-admin-footer"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                About Us
-              </NavLink>
-            </NavItem>
+<section className="">
 
-            <NavItem>
-              <NavLink
-                href="http://blog.creative-tim.com?ref=adr-admin-footer"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Blog
-              </NavLink>
-            </NavItem>
+<footer className="text-center text-dark" >
+  
+  <div className="container p-4 pb-0">
+    
+    <section className="">
+      <p className="d-flex justify-content-center align-items-center">
+        <span className=" me-3"> Register for free  &nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;</span>
+        <button type="button" href="/auth/register" className=" btn btn-outline-light btn-rounded">
+           Sign up!
+        </button>
+      </p>
+    </section>
 
-            <NavItem>
-              <NavLink
-                href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md?ref=adr-admin-footer"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                MIT License
-              </NavLink>
-            </NavItem>
-          </Nav>
-        </Col>
-      </Row>
-    </footer>
+    © 2020 Copyright&nbsp;&nbsp;:
+    <a className="text-dark" href="/admin/index"> &nbsp;&nbsp;Assurini</a>
+  </div>
+</footer>
+</section>
+
+</div>
   );
 };
 

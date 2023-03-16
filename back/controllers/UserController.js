@@ -585,6 +585,25 @@ module.exports.login_post = async (req, res) => {
 
     //TODO : TEMPLATES
 
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const user1 = await userModel.findOne({
+      _id: decodedToken.id,
+      verificationToken: token,
+    });
+
+    res.cookie("firstname", user1.first_name, {
+      expiresIn:maxAge, // same as above
+    })
+    res.cookie("lastname", user1.last_name, {
+      expiresIn:maxAge, // same as above
+    })
+    res.cookie("role", user1.role, {
+      expiresIn:maxAge, // same as above
+    })
+
+    res.cookie("userid", user1.id, {
+      expiresIn:maxAge, // same as above
+    })
     res.status(200).json({ user: user._id, next: nextLink });
   } catch (err) {
     const errors = handleErrors(err);
@@ -594,7 +613,7 @@ module.exports.login_post = async (req, res) => {
 };
 
 module.exports.forgot_password_post = async (req, res) => {
-  const { email } = req.body;
+  const email = req.params.email;
 
   try {
     const user = await userModel.findOne({ email });

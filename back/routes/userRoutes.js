@@ -23,7 +23,7 @@ router.post(
   userController.resend_verification_post
 );
 router.post("/2fa", userController.login2FA);
-router.post("/forget-password", userController.forgot_password_post);
+router.post("/forget-password/:email", userController.forgot_password_post);
 router.post("/reset-password", userController.reset_password_post);
 router.get("/all-users", userController.show_users_get);
 router.get("/userbyemail/:email", userController.get_user_by_email);
