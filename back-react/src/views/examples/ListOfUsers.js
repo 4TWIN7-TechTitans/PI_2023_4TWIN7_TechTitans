@@ -55,9 +55,9 @@ function ListOfUsers() {
     console.log("hello world");
 
     try {
-      const response = !user.banned
-        ? await axios.post("http://127.0.0.1:5000/users/ban/" + user.email)
-        : await axios.post("http://127.0.0.1:5000/users/unban/" + user.email);
+      const response = await axios.post(
+        "http://127.0.0.1:5000/users/ban/" + user.email
+      );
 
       console.log(response);
       if (response.data === true) {
@@ -159,9 +159,7 @@ function ListOfUsers() {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-                <Button href="/admin/add" >
-                  Add an account
-                </Button>
+                <Button href="/admin/add">Add an account</Button>
               </CardFooter>
             </Card>
           </div>
