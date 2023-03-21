@@ -43,12 +43,6 @@ const userSchema = new mongoose.Schema({
   date_of_birth: {
     type: Date,
     required: false,
-    validate: {
-      validator: function (value) {
-        return moment(value).isValid();
-      },
-      message: "Invalid date format",
-    },
     min: [moment().subtract(120, "years"), "You must be at most 120 years old"],
     max: [moment().subtract(18, "years"), "You must be at least 18 years old"],
   },

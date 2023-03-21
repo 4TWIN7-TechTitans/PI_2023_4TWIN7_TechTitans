@@ -15,9 +15,11 @@ import {
 import { checkEmail } from "../services/api";
 import axios from "axios";
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 
 function Register() {
   const [showNotification, setShowNotification] = useState(false);
+  const [showWait, setShowWait] = useState(false);
   const [showVerifyEmail, setShowVerifyEmail] = useState(false);
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
@@ -33,8 +35,8 @@ function Register() {
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
     const role = "Client";
-    const two_factor_auth = "none";
-    const two_factor_auth_code = "";
+    const address = "";
+    const date_of_birth = "";
     const phone_number = form.phone_number.value
       ? "+216" + form.phone_number.value
       : "";
@@ -45,7 +47,8 @@ function Register() {
       !password2 ||
       !last_name ||
       !first_name ||
-      !role
+      !role ||
+      !phone_number
     ) {
       setShowNotification(false);
       setShowVerifyEmail(false);
@@ -65,9 +68,17 @@ function Register() {
       setShowError(true);
       return;
     }
+
+    if (password.length < 8) {
+      setShowNotification(false);
+      setShowVerifyEmail(false);
+      setErrors({ ...errors, password2: "weak password" });
+      setShowError(true);
+      return;
+    }
+
     try {
       // Check if email is already in use
-      console.log(email);
       const checkEmailRes = await checkEmail(email);
       if (checkEmailRes) {
         setShowNotification(true);
@@ -76,8 +87,14 @@ function Register() {
         setErrors({ ...errors, email: "Email already in use" }); // Display error message
         return;
       }
-      console.log("out");
       // Register user
+
+      setShowWait(true);
+
+      setShowNotification(false);
+      setShowVerifyEmail(false);
+      setShowError(false);
+
       const registerRes = await axios.post(
         "http://127.0.0.1:5000/signup",
         {
@@ -87,18 +104,17 @@ function Register() {
           first_name,
           role,
           phone_number,
+          date_of_birth,
+          address,
         },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-
       // handle response
       if (registerRes.status === 201) {
-        setShowNotification(true);
-        setShowVerifyEmail(true);
-        setErrors({});
-        setShowError(false);
+        // TODO : change route
+        window.location.replace("http://127.0.0.1:3000/auth/login");
       } else {
         setShowNotification(false);
         setShowVerifyEmail(false);
@@ -110,21 +126,10 @@ function Register() {
     }
   };
   const validateEmail = (email) => {
-    const emailRegex = /\S+@\S+\.\S+/;
+    const emailRegex = /^(?!\d)\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
-  /*  const validatePassword = (password) => {
-    const lowercaseRegex = /[a-z]/;
-    const uppercaseRegex = /[A-Z]/;
-    const numberRegex = /[0-9]/;
-  
-    return (
-      password.length >= 8 &&
-      lowercaseRegex.test(password) &&
-      uppercaseRegex.test(password) &&
-      numberRegex.test(password)
-    );
-  };*/
+
   const validateFirstName = (first_name) => {
     const first_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
     return first_nameRegex.test(first_name);
@@ -363,6 +368,13 @@ function Register() {
                       : "An account with that email already exists."}
                   </div>
                 )}
+
+                {showWait && (
+                  <div className="alert alert-success mt-3" role="alert">
+                    "Waiting for the verification mail to be sent..."
+                  </div>
+                )}
+
                 <div className="password error"></div>
                 {showError && (
                   <div className="col-12 my-3 alert alert-danger">
