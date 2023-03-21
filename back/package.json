@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "nodemonConfig": {
     "ignore": [
@@ -37,6 +37,7 @@
     "validator": "^13.9.0"
   },
   "devDependencies": {
+    "jest": "^29.5.0",
     "supertest": "^6.3.3"
   }
 }

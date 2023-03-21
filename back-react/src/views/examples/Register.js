@@ -21,8 +21,8 @@ function Register() {
   const [showVerifyEmail, setShowVerifyEmail] = useState(false);
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); 
-  const [showPassword2, setShowPassword2] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,7 +113,7 @@ function Register() {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
-/*  const validatePassword = (password) => {
+  /*  const validatePassword = (password) => {
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /[0-9]/;
@@ -156,45 +156,45 @@ function Register() {
     const passwordError = document.querySelector(".password.error");
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
-    const numberRegex = /[0-9]/;
+    const numberRegex = /\d/;
 
     let strength = 0;
     let strengthMessage = "";
 
     if (password.length >= 8) {
       strength += 1;
-      strengthMessage += "✅ Password is at least 8 characters long. ";
+      strengthMessage += "✅ is at least 8 characters long. <br>";
     } else {
-      strengthMessage += "❌ Password must be at least 8 characters long. ";
+      strengthMessage += "❌ must be at least 8 characters long. <br>";
     }
 
     if (lowercaseRegex.test(password)) {
       strength += 1;
-      strengthMessage += "✅ Password can contains a lowercase letter. ";
+      strengthMessage += "✅ can contains a lowercase letter. <br>";
     } else {
-      strengthMessage += " Password can contains a lowercase letter. ";
+      strengthMessage += "";
     }
 
     if (uppercaseRegex.test(password)) {
       strength += 1;
-      strengthMessage += "✅ Password contains a capital letter. ";
+      strengthMessage += "✅ contains a capital letter. <br>";
     } else {
-      strengthMessage += " Password can contains a capital letter. ";
+      strengthMessage += "";
     }
 
     if (numberRegex.test(password)) {
       strength += 1;
-      strengthMessage += "✅ Password contains a number. ";
+      strengthMessage += "✅ contains a number. <br>";
     } else {
-      strengthMessage += " Password can contains a number. ";
+      strengthMessage += "";
     }
 
     if (strength === 4) {
-      strengthMessage += "✅ Password is strong.";
+      strengthMessage += "✅ strong.<br>";
     } else if (strength >= 2) {
-      strengthMessage += "😊 Password is medium.";
+      strengthMessage += "😊 medium.<br>";
     } else {
-      strengthMessage += "😔 Password is weak.";
+      strengthMessage += "😔 weak.<br>";
     }
 
     passwordError.innerHTML = strengthMessage;
@@ -285,7 +285,6 @@ function Register() {
                             required
                             onChange={handlePasswordChange}
                           />
-                          <div className="password error"></div>
                           <InputGroupAddon addonType="append">
                             <InputGroupText
                               onClick={() => setShowPassword(!showPassword)}
@@ -364,6 +363,7 @@ function Register() {
                       : "An account with that email already exists."}
                   </div>
                 )}
+                <div className="password error"></div>
                 {showError && (
                   <div className="col-12 my-3 alert alert-danger">
                     Invalid fields , Please Recheck !
