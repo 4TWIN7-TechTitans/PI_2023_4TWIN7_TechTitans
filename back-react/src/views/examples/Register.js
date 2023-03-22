@@ -110,7 +110,7 @@ function Register() {
     }
   };
   const validateEmail = (email) => {
-    const emailRegex = /\S+@\S+\.\S+/;
+    const emailRegex = /^(?![0-9])\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
 /*  const validatePassword = (password) => {
