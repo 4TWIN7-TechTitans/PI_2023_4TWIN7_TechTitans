@@ -43,12 +43,6 @@ const userSchema = new mongoose.Schema({
   date_of_birth: {
     type: Date,
     required: false,
-    validate: {
-      validator: function (value) {
-        return moment(value).isValid();
-      },
-      message: "Invalid date format",
-    },
     min: [moment().subtract(120, "years"), "You must be at most 120 years old"],
     max: [moment().subtract(18, "years"), "You must be at least 18 years old"],
   },
@@ -94,7 +88,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     match: [
-      /^\+216[0-9]{8}$/,
+      /^\+216\d{8}$/,
       "Phone number should start with +216 followed by 8 digits",
     ],
   },
@@ -130,7 +124,7 @@ userSchema.statics.login2FA = async function (email, twoFactorCode) {
     throw Error("incorrect email");
   }
   if (user) {
-    if (!(twoFactorCode === user.two_factor_auth_code)) {
+    if (twoFactorCode !== user.two_factor_auth_code) {
       throw Error("incorrect 2fa code");
     }
     return user;

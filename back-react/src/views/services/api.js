@@ -19,8 +19,7 @@ export const registerUser = async (
   last_name,
   first_name,
   role,
-  phone_number,
-  
+  phone_number
 ) => {
   try {
     const response = await axios.post(`${url}/signup`, {
@@ -29,11 +28,11 @@ export const registerUser = async (
       last_name,
       first_name,
       role,
-      phone_number
+      phone_number,
     });
     return response.data;
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 };
 
@@ -54,11 +53,11 @@ export const add = async (
       first_name,
       role,
       phone_number,
-      verified
+      verified,
     });
     return response.data;
   } catch (error) {
-    throw error;
+    console.log(error);
   }
 };
 
@@ -74,10 +73,11 @@ export const loginUser = async (email, password) => {
   }
 };
 
-
 export const checkEmailVerification = async (email) => {
   try {
-    const res = await axios.get(`http://127.0.0.1:5000/email-verification/${email}`);
+    const res = await axios.get(
+      `http://127.0.0.1:5000/email-verification/${email}`
+    );
     if (res.data.verified) {
       return true;
     } else {
@@ -89,11 +89,10 @@ export const checkEmailVerification = async (email) => {
   }
 };
 
-
 export const getUsers = async () => {
   try {
     const response = await axios.get(`http://127.0.0.1:5000/all-users`);
-    const users = response.data.users(user => user.role !== 'admin');
+    const users = response.data.users((user) => user.role !== "admin");
     return users;
   } catch (error) {
     console.log(error);
@@ -102,7 +101,9 @@ export const getUsers = async () => {
 
 export const resend_verification_post = async (email) => {
   try {
-    const response = await axios.post(`http://127.0.0.1:5000/resend-verification/${email}`);
+    const response = await axios.post(
+      `http://127.0.0.1:5000/resend-verification/${email}`
+    );
     return response;
   } catch (error) {
     console.log(error);

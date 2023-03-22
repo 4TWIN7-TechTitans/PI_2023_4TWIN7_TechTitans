@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "nodemonConfig": {
     "ignore": [
@@ -35,5 +35,9 @@
     "swagger-ui-express": "^4.6.2",
     "twilio": "^4.8.0",
     "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3"
   }
 }

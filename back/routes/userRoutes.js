@@ -5,19 +5,12 @@ const { checkEmail } = require("../controllers/UserController.js");
 
 router.get("/check-email/:email", checkEmail);
 
-router.post("/signup", userController.signup_post);
+router.post("/signup", userController.post_signup);
 router.post("/add", userController.add_post);
 router.post("/login", userController.login_post);
 
 router.get("/logout", userController.logout_get);
-router.get(
-  "/verify-email/:token",
-  userController.verify_email_get,
-  (req, res) => {
-    const verificationToken = req.params.token;
-    res.render("verification.twig", { verificationToken });
-  }
-);
+router.get("/verify-email/:token", userController.verify_email_get);
 router.post(
   "/resend-verification/:email",
   userController.resend_verification_post
@@ -31,7 +24,6 @@ router.get("/users/:email", userController.get_user_by_email);
 
 //ban
 router.post("/users/ban/:mail", userController.post_ban_user);
-router.post("/users/unban/:mail", userController.post_remove_ban_user);
 
 router.post("/users/", userController.post_update_user);
 
