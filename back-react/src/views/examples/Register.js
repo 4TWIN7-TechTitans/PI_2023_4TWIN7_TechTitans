@@ -15,7 +15,6 @@ import {
 import { checkEmail } from "../services/api";
 import axios from "axios";
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 
 function Register() {
   const [showNotification, setShowNotification] = useState(false);

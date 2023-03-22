@@ -43,6 +43,13 @@ app.use(cookieParser());
 app.set("views", "views"); // set the views directory
 app.set("view engine", "twig"); // set the view engin
 
+//Swagger API
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 app.use(userRoutes);
 app.use("/", indexRouter);

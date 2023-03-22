@@ -1,5 +1,7 @@
 const app = require("../app.js");
 const request = require("supertest");
+const mongoose = require("mongoose");
+
 
 describe("user", () => {
   it("create user", async () => {
@@ -18,8 +20,16 @@ describe("user", () => {
     expect(res.statusCode).toEqual(201);
     expect(res.body.message).toEqual("User Created, Success");
     expect(res.body.status).toEqual("success");
-  },  20000);
-  it("login", async () => {});
+  }, 20000);
+  it("verify mail", async () => {
+    // const res = await request(app).post;
+  });
+  it("login", async () => {
+    const res = await request(app).post("/signup").send({
+      email: "aaaaaaaaa@gmail.com",
+      password: "12345678",
+    });
+  });
   it("enable 2fa", async () => {});
   it("login 2fa", async () => {});
 });

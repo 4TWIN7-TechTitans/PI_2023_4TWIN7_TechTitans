@@ -10,14 +10,7 @@ router.post("/add", userController.add_post);
 router.post("/login", userController.login_post);
 
 router.get("/logout", userController.logout_get);
-router.get(
-  "/verify-email/:token",
-  userController.verify_email_get,
-  (req, res) => {
-    const verificationToken = req.params.token;
-    res.render("verification.twig", { verificationToken });
-  }
-);
+router.get("/verify-email/:token", userController.verify_email_get);
 router.post(
   "/resend-verification/:email",
   userController.resend_verification_post
