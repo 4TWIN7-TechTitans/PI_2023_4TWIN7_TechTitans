@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 
 const contractSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   start_date: {
     type: Date,
     required: true,
@@ -32,15 +27,15 @@ const contractSchema = new mongoose.Schema({
     ref: "Client",
     required: true,
   },
-  id_insurance: {
+  id_agence: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Insurance",
+    ref: "Agence",
     required: true,
   },
   id_car: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Car",
-    required: true,
+    required: false,
   },
 });
 
