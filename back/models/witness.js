@@ -29,6 +29,10 @@ const witnessSchema = new mongoose.Schema({
       "Phone number should start with +216 followed by 8 digits",
     ],
   },
+  disponibility:{
+    type: Boolean,
+    default:true,
+  },
   removed: {
     type: Boolean,
     default: false,

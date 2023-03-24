@@ -7,6 +7,16 @@ const statementSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  agence_a:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Agence",
+    required: true,
+  },
+  agence_b:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"Agence",
+    required: true,
+  },
   id_contract_a: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Contract",
