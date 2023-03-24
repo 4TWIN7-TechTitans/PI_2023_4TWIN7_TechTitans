@@ -10,7 +10,7 @@ router.get("/checkwitness/:contact", witnessController.check_witness);
 //remove witness
 router.delete("/remove/:contact", witnessController.remove_witness);
 
-
+router.get("/check_availability/:contact", witnessController.check_availability);
 
 
 

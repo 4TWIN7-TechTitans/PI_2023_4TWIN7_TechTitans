@@ -25,11 +25,11 @@ const witnessSchema = new mongoose.Schema({
     type: String,
     required: false,
     match: [
-      /^\+216\d{8}$/,
+      /^\d{8}$/,
       "Phone number should start with +216 followed by 8 digits",
     ],
   },
-  disponibility:{
+  availability :{
     type: Boolean,
     default:true,
   },

@@ -1,18 +1,6 @@
 const witnessModel = require("../models/witness");
 require("dotenv").config();
 
-module.exports.check_witness = async (req, res) => {
-  try {
-    const witness = await witnessModel.findOne({ contact: req.params.contact });
-    if (witness) {
-      res.status(200).json({ message: "Witness exists" });
-    } else {
-      res.status(404).json({ message: "Witness does not exist" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
-  }
-};
 
 module.exports.add_witness = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
@@ -35,6 +23,22 @@ module.exports.add_witness = async (req, res) => {
   }
 };
 
+
+module.exports.check_witness = async (req, res) => {
+    try {
+      const witness = await witnessModel.findOne({ contact: req.params.contact });
+      if (witness) {
+        res.status(200).json({ message: "Witness exists" });
+      } else {
+        res.status(404).json({ message: "Witness does not exist" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error", error });
+    }
+  };
+
+  
+
 module.exports.remove_witness = async (req, res) => {
   try {
     const witness = await witnessModel.findOneAndUpdate(
@@ -54,3 +58,17 @@ module.exports.remove_witness = async (req, res) => {
   }
 };
 
+module.exports.check_availability = async (req, res) => {
+    try {
+      const witness = await witnessModel.findOne({ contact: req.params.contact });
+      if (witness) {
+        const status = witness.availability ? "available" : "not available";
+        res.status(200).json({ message: `Witness is ${status}` });
+      } else {
+        res.status(404).json({ message: "Witness does not exist" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error", error });
+    }
+  };
+  
