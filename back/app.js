@@ -6,6 +6,7 @@ const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
+const witnessRoutes = require("./routes/witnessRoutes");
 const authRouter = require("./routes/auth");
 const passport = require("passport");
 const session = require("express-session");
@@ -16,6 +17,7 @@ require("dotenv").config();
 require("./config/passport")(passport);
 
 require("./models/user");
+require("./models/witness");
 const app = express();
 mongoose.set("strictQuery", true);
 
@@ -52,6 +54,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 app.use(userRoutes);
+app.use(witnessRoutes);
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.get("/verify-email/:token", function (req, res) {

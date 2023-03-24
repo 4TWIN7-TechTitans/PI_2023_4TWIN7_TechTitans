@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 
 const witnessSchema = new mongoose.Schema({
-  id_witness: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   last_name: {
     type: String,
     required: true,
@@ -28,8 +23,16 @@ const witnessSchema = new mongoose.Schema({
   },
   contact: {
     type: String,
-    required: true,
+    required: false,
+    match: [
+      /^\+216\d{8}$/,
+      "Phone number should start with +216 followed by 8 digits",
+    ],
   },
+  removed: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const Witness = mongoose.model("Witness", witnessSchema);
