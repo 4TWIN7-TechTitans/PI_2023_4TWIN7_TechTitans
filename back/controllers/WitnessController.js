@@ -31,7 +31,7 @@ module.exports.add_witness = async (req, res) => {
     });
     res.status(201).json({ message: "Witness created successfully", witness });
   } catch (error) {
-    res.status(400).json({ errors });
+    res.status(400).json({ error });
   }
 };
 

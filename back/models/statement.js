@@ -2,11 +2,7 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 
 const statementSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
+
   agence_a:{
     type: mongoose.Schema.Types.ObjectId,
     ref:"Agence",
