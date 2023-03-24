@@ -6,6 +6,13 @@ const carSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  brand: {
+    type: String,
+    enum: ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan","Audi","Isuzu" , "BMW" , "Golf"
+     ,"Tesla","Chevrolet" , "Hyundai" , "Infiniti" , "Volkswagen" , "Volvo" , "Alfa Romeo" 
+     , "Mitsubishi"],
+    required: true,
+  },
   model: {
     type: String,
     required: true,

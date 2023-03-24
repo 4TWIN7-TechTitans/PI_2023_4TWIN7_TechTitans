@@ -2,6 +2,7 @@ const userModel = require("../models/user");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
+
 const client = require("twilio")(
   process.env.ACCOUNT_SID,
   process.env.AUTH_TOKEN
@@ -569,13 +570,13 @@ module.exports.login_post = async (req, res) => {
     if (user.role === "Expert") nextLink = "/admin/index";
 
     //TODO : TEMPLATES
-
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const user1 = await userModel.findOne({
       _id: decodedToken.id,
       verificationToken: token,
     });
-
+    console.log(user1);
+    console.log(decodedToken);
     res.cookie("firstname", user1.first_name, {
       expiresIn: maxAge, // same as above
     });
