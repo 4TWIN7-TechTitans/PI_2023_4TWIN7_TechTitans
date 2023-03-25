@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 
 const carSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   brand: {
     type: String,
     enum: ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan","Audi","Isuzu" , "BMW" , "Golf"

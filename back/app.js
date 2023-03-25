@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 const witnessRoutes = require("./routes/witnessRoutes");
 const statementRoutes = require("./routes/statementRoutes");
 const contractRoutes = require("./routes/contractRoutes");
+const carRoutes = require("./routes/carRoutes");
 const authRouter = require("./routes/auth");
 const passport = require("passport");
 const session = require("express-session");
@@ -22,6 +23,7 @@ require("./models/user");
 require("./models/witness");
 require("./models/statement");
 require("./models/contract");
+require("./models/car");
 const app = express();
 mongoose.set("strictQuery", true);
 
@@ -61,6 +63,7 @@ app.use(userRoutes);
 app.use(witnessRoutes);
 app.use(statementRoutes);
 app.use(contractRoutes);
+app.use(carRoutes);
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.get("/verify-email/:token", function (req, res) {
