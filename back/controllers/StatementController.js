@@ -19,12 +19,25 @@ module.exports.check_statement = async (req, res) => {
       const statement = await StatementModel.create({
         ...req.body,
       });
-      res.status(201).json({ message: "Statement created successfully", statement });
+      res.status(201).json({ message: "statement created successfully", statement });
     } catch (error) {
       if (error.code === 11000) {
         res.status(400).json({ message: "Duplicate key error" });
       } else {
         res.status(400).json({ message: "Error creating statement", error });
       }
+    }
+  };
+
+  module.exports.create_or_update_statement_post = async (req, res) => {
+    try {
+      const statement = await StatementModel.findOneAndUpdate(
+        { _id: req.body._id },
+        req.body,
+        { upsert: true, new: true }
+      );
+      res.status(201).json({ message: "Statement created or updated successfully", statement });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to create or update statement", error });
     }
   };

@@ -6,22 +6,22 @@ const statementSchema = new mongoose.Schema({
   agence_a:{
     type: mongoose.Schema.Types.ObjectId,
     ref:"Agence",
-    required: true,
+    required: false,
   },
   agence_b:{
     type: mongoose.Schema.Types.ObjectId,
     ref:"Agence",
-    required: true,
+    required: false,
   },
   id_contract_a: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Contract",
-    required: true,
+    required: false,
   },
   id_contract_b: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Contract",
-    required: true,
+    required: false,
   },
   date: {
     type: Date,
@@ -84,6 +84,10 @@ const statementSchema = new mongoose.Schema({
   image_pdf: {
     type: String,
     required: true,
+  },
+  case_state:{
+    type: Boolean,
+    required :true,
   },
 });
 
