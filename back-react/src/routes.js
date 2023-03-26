@@ -74,7 +74,7 @@ var routes = [
     name: "List Of Users",
     icon: "ni ni-bullet-list-67 text-red",
     component: ListOfUsers,
-    layout: "/admin",
+    layout: "/main",
     showInSidebar: true,
   },
   {
