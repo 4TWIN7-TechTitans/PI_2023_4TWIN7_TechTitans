@@ -27,6 +27,7 @@ import NotFound from "views/examples/error";
 import AddNew from "views/examples/add";
 import ResetPass from "views/examples/resetPass";
 import ForgetPass from "views/examples/forgetPass";
+import AddNewContract from "views/examples/addContract";
 
 var routes = [
   {
@@ -34,7 +35,7 @@ var routes = [
     name: "Welcome",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
-    layout: "/admin",
+    layout: "/main",
     showInSidebar: true,
   },
   {
@@ -74,7 +75,7 @@ var routes = [
     name: "List Of Users",
     icon: "ni ni-bullet-list-67 text-red",
     component: ListOfUsers,
-    layout: "/main",
+    layout: "/admin",
     showInSidebar: true,
   },
   {
@@ -123,6 +124,14 @@ var routes = [
     icon: "ni ni ni-key-25 text-yellow",
     component: ResetPass,
     layout: "/auth",
+    showInSidebar: true,
+  },
+  {
+    path: "/addcontract",
+    name: "Add New Contract",
+    icon: "ni ni-fat-add text-black",
+    component: AddNewContract,
+    layout: "/agence",
     showInSidebar: true,
   },
 ];

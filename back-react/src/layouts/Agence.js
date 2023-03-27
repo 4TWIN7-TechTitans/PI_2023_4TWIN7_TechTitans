@@ -1,46 +1,37 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.2.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
-import { Container, Row, Col } from "reactstrap";
-
+import { Button, Container } from "reactstrap";
 // core components
-import AuthNavbar from "components/Navbars/AuthNavbar.js";
-import AuthFooter from "components/Footers/AuthFooter.js";
+import AdminNavbar from "components/Navbars/AdminNavbar.js";
+import AdminFooter from "components/Footers/AdminFooter.js";
+import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
 
 const Agence = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
+ 
+  const filteredRoutes = routes.filter((route) => {
+    return route.showInSidebar;
+  });
+ 
+  
+  const [role, setRole] = useState("");
 
-  React.useEffect(() => {
-    document.body.classList.add("bg-default");
-    return () => {
-      document.body.classList.remove("bg-default");
-    };
-  }, []);
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
+
   }, [location]);
+
+  React.useEffect(() => {
+    setRole(getCookie("role"))
+
+  }, []);
+
 
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
@@ -58,53 +49,52 @@ const Agence = (props) => {
     });
   };
 
+  const getBrandText = (path) => {
+    for (let i = 0; i < routes.length; i++) {
+      if (
+        props.location.pathname.indexOf(routes[i].layout + routes[i].path) !==
+        -1
+      ) {
+        return routes[i].name;
+      }
+    }
+    return "Brand";
+  };
+
   return (
     <>
+     <Sidebar
+        {...props}
+        routes={filteredRoutes}
+        logo={{
+          innerLink: "/agence/index",
+          imgSrc: require("../assets/img/brand/argon-react.png"),
+          imgAlt: "..."
+        }}
+      />
+      
       <div className="main-content" ref={mainContent}>
-        <AuthNavbar />
-        <div className="header bg-gradient-info py-7 py-lg-8">
-          <Container>
-            <div className="header-body text-center mb-7">
-              <Row className="justify-content-center">
-                <Col lg="5" md="6">
-                  <h1 className="text-white">Welcome To Assurini Page !</h1>
-                  <p className="text-lead text-light">
-                    Dear user if you already have an account ,<br/>
-                     please signup or create new account
-                  </p>
-                </Col>
-              </Row>
-            </div>
-          </Container>
-          <div className="separator separator-bottom separator-skew zindex-100">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="none"
-              version="1.1"
-              viewBox="0 0 2560 100"
-              x="0"
-              y="0"
-            >
-              <polygon
-                className="fill-default"
-                points="2560 0 2560 100 0 100"
-              />
-            </svg>
-          </div>
-        </div>
-        {/* Page content */}
-        <Container className="mt--8 pb-5">
-          <Row className="justify-content-center">
-            <Switch>
-              {getRoutes(routes)}
-              <Redirect from="*" to="/agence/login" />
-            </Switch>
-          </Row>
+        <AdminNavbar
+          {...props}
+          brandText={getBrandText(props.location.pathname)}
+        />
+       
+        <Switch>
+          {getRoutes(routes)}
+          
+          <Redirect from="*" to="/agence/index" />
+        </Switch>
+        
+        <Container fluid>
+          <AdminFooter />
+          
         </Container>
       </div>
-      <AuthFooter />
     </>
   );
 };
-
+function getCookie(key) {
+  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
 export default Agence;
