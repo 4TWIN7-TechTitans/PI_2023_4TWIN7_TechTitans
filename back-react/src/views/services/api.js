@@ -99,6 +99,8 @@ export const getUsers = async () => {
   }
 };
 
+
+
 export const resend_verification_post = async (email) => {
   try {
     const response = await axios.post(
@@ -133,6 +135,22 @@ export const forgotPassword = async (email) => {
     const response = await axios.post(`${url}/forgot-password`, { email });
     return response.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const addcar = async (brand, model, type, registration_number, id_contrat) => {
+  try {
+    const response = await axios.post(`${url}/add_car`, {
+      brand: brand,
+      model: model,
+      type: type,
+      registrationNumber: registration_number,
+      contratId: id_contrat
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

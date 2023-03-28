@@ -28,6 +28,7 @@ import AddNew from "views/examples/add";
 import ResetPass from "views/examples/resetPass";
 import ForgetPass from "views/examples/forgetPass";
 import AddNewContract from "views/examples/addContract";
+import addcar from "views/examples/addcar";
 
 var routes = [
   {
@@ -132,6 +133,15 @@ var routes = [
     icon: "ni ni-fat-add text-black",
     component: AddNewContract,
     layout: "/agence",
+    showInSidebar: true,
+  },
+  
+{
+    path: "/addcar",
+    name: "Add Your Car",
+    icon: "ni ni-tv-2 text-primary",
+    component: addcar,
+    layout: "/admin",
     showInSidebar: true,
   },
 ];
