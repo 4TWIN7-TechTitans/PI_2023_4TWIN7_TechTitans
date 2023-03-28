@@ -73,7 +73,7 @@ function AddCar() {
       setShowError(true);
       setErrors({
         ...errors,
-        message: "Please fill in all the fields",
+        message: "Please fill  all the fields",
       });
       return;
     }
@@ -103,6 +103,44 @@ function AddCar() {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+  const validateRegistrationnumber = (registration_number) => {
+    const registration_numberRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F\u0600-\u06FF"]+$/;
+    return registration_numberRegex.test(registration_number);
+  };
+  const handleRgNumberChange = (e) => {
+    const registration_number = e.target.value;
+    if (!validateRegistrationnumber(registration_number)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        registration_number: "Please enter a valid registration number.",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        registration_number: "",
+      }));
+    }
+  };
+
+  const validateModel = (model) => {
+    const modelRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
+    return modelRegex.test(model);
+  };
+
+  const handleModelChange = (e) => {
+    const model = e.target.value;
+    if (!validateModel(model)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        model: "Please enter a valid model.",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        model: "",
+      }));
     }
   };
 
@@ -150,7 +188,10 @@ function AddCar() {
                           name="model"
                           id="model"
                           value={model}
-                          onChange={(e) => setModel(e.target.value)}
+                          onChange={(e) => {
+                            setModel(e.target.value);
+                            handleModelChange(e);
+                          }}
                           required
                         />
                         {showError && errors.model && (
@@ -192,9 +233,10 @@ function AddCar() {
                           name="registration_number"
                           id="registration_number"
                           value={registration_number}
-                          onChange={(e) =>
-                            setRegistrationNumber(e.target.value)
-                          }
+                          onChange={(e) => {
+                            setRegistrationNumber(e.target.value);
+                            handleRgNumberChange(e);
+                          }}
                           required
                         />
                         {showError && errors.registration_number && (
@@ -202,7 +244,10 @@ function AddCar() {
                             {errors.registration_number}
                           </p>
                         )}
+                        <div className="registration_number error"></div>
                       </FormGroup>
+                    </Col>
+                    <Col md="12">
                       <FormGroup>
                         <label>Contracts</label>
                         <Input name="id_contrat" type="select" required>
@@ -214,7 +259,6 @@ function AddCar() {
                         </Input>
                         <div className="id_contrat error"></div>
                       </FormGroup>
-                   
                     </Col>
                   </Row>
                   {showError && (
