@@ -28,7 +28,8 @@ import AddNew from "views/examples/add";
 import ResetPass from "views/examples/resetPass";
 import ForgetPass from "views/examples/forgetPass";
 import AddNewContract from "views/examples/addContract";
-import addcar from "views/examples/addcar";
+import addcar from "views/examples/addCar";
+import AddStatement from "views/examples/addStatement";
 
 var routes = [
   {
@@ -36,7 +37,7 @@ var routes = [
     name: "Welcome",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
-    layout: "/main",
+    layout: "/admin",
     showInSidebar: true,
   },
   {
@@ -135,14 +136,21 @@ var routes = [
     layout: "/agence",
     showInSidebar: true,
   },
-  
-{
-    path: "/addcar",
-    name: "Add Your Car",
-    icon: "ni ni-tv-2 text-primary",
-    component: addcar,
-    layout: "/admin",
-    showInSidebar: true,
-  },
+  {
+      path: "/addcar",
+      name: "Add Your Car",
+      icon: "ni ni-bus-front-12 text-primary",
+      component: addcar,
+      layout: "/main",
+      showInSidebar: true,
+    },
+    {
+      path: "/addstatement",
+      name: "Add a Statement",
+      icon: "ni ni-collection text-red",
+      component: AddStatement,
+      layout: "/main",
+      showInSidebar: true,
+    },
 ];
 export default routes;
