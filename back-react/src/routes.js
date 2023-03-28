@@ -28,7 +28,7 @@ import AddNew from "views/examples/add";
 import ResetPass from "views/examples/resetPass";
 import ForgetPass from "views/examples/forgetPass";
 import AddNewContract from "views/examples/addContract";
-import addcar from "views/examples/addcar";
+import addcar from "views/examples/addCar";
 
 var routes = [
   {
