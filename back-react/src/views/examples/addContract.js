@@ -105,7 +105,7 @@ function AddNewContract() {
                         <Input name="id_client" type="select" required>
                           {users.map((user) => (
                             <option key={user._id} value={user._id} >
-                              {user._id}
+                              {user.first_name}
                             </option>
                           ))}
                         </Input>
@@ -118,7 +118,7 @@ function AddNewContract() {
                         <Input name="id_agence" type="select" required>
                           {agencies.map((agency) => (
                             <option key={agency._id} value={agency._id} >
-                              {agency._id}
+                              {agency.first_name}
                             </option>
                           ))}
                         </Input>

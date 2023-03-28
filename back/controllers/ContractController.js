@@ -16,3 +16,21 @@ module.exports.add_contract = async (req, res) => {
     }
   }
 };
+
+// show all users
+module.exports.contarcts = async (req, res) => {
+  try {
+    const contracts = await ContractModel.find({});
+    res.status(200).json({
+      contracts,
+      message: "All contracts retrieved successfully",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to retrieve users",
+      status: "error",
+    });
+  }
+};
