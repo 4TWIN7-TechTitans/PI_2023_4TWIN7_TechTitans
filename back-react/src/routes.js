@@ -30,8 +30,18 @@ import ForgetPass from "views/examples/forgetPass";
 import AddNewContract from "views/examples/addContract";
 import addcar from "views/examples/addCar";
 import AddStatement from "views/examples/addStatement";
+import ViewProfile from "views/examples/ViewProfile";
 
 var routes = [
+  //TODO : change admin to user view profile
+  {
+    path: "/view-user-profile",
+    name: "Welcome",
+    icon: "ni ni-tv-2 text-primary",
+    component: ViewProfile,
+    layout: "/admin",
+    showInSidebar: true,
+  },
   {
     path: "/index",
     name: "Welcome",

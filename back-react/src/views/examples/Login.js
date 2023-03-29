@@ -23,10 +23,8 @@ function Login() {
   const [show2FAform, setShow2FAform] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("hello")
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
@@ -56,6 +54,7 @@ function Login() {
         })
         .then(
           (res) => {
+            console.error(res.data);
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
@@ -63,7 +62,7 @@ function Login() {
           },
           (err) => {
             console.log("err then");
-            console.log(err)
+            console.log(err);
             console.log(err.response.data.errors.email);
             console.log(err.response.data.errors.tfa);
 
@@ -76,7 +75,7 @@ function Login() {
             if (err.response.data.errors.email === "email not verified") {
               setShowVerifiedError(true);
               setShowError(false);
-            } else if (err.response.data.errors.email === "email not found" ) {
+            } else if (err.response.data.errors.email === "email not found") {
               setShowVerifiedError(false);
               setShowError(false);
               setEmailNotFound(true);
@@ -121,7 +120,6 @@ function Login() {
   };
 
   const googleauth = async () => {
-
     /*try {
       await axios.get("http://127.0.0.1:5000/logout");
       console.log("Logged out successfully");
@@ -131,9 +129,7 @@ function Login() {
     window.location.replace("http://localhost:5000/auth/google");
   };
 
-
   const facebookauth = async () => {
-
     /*try {
       await axios.get("http://127.0.0.1:5000/logout");
       console.log("Logged out successfully");
@@ -282,7 +278,7 @@ function Login() {
                   Login successful!
                 </div>
               )}
-              
+
               {emailNotFound && (
                 <div className="col-12 my-3 alert alert-danger">
                   Email not found. Please check your email address and try
@@ -300,7 +296,6 @@ function Login() {
                   Email not verified.
                 </div>
               )}
-              
 
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
@@ -312,19 +307,12 @@ function Login() {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <a
-              className="text-light"
-              href="/auth/forgetpwd"
-             
-            >
+            <a className="text-light" href="/auth/forgetpwd">
               <small>Forgot password?</small>
             </a>
           </Col>
           <Col className="text-right" xs="6">
-            <a
-              className="text-light"
-              href="/auth/register"
-            >
+            <a className="text-light" href="/auth/register">
               <small>Create new account</small>
             </a>
           </Col>

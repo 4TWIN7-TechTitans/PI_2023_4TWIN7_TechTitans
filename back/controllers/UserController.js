@@ -555,7 +555,7 @@ module.exports.login_post = async (req, res) => {
       await userModel.findByIdAndUpdate(user._id, {
         two_factor_auth_code: code,
       });
-      sendSms(user);
+      // sendSms(user);
       throw Error("check your sms to 2FA auth"); // redirect
     }
 
@@ -587,9 +587,10 @@ module.exports.login_post = async (req, res) => {
       expiresIn: maxAge, // same as above
     });
 
-    res.cookie("userid", user1.id, {
+    res.cookie("userid", user1._id, {
       expiresIn: maxAge, // same as above
     });
+
     res.status(200).json({ user: user._id, next: nextLink });
   } catch (err) {
     const errors = handleErrors(err);
@@ -898,7 +899,9 @@ module.exports.post_update_user = async (req, res) => {
       throw Error("user not found ");
     }
 
-    const newUser = { ...user, ...req.body };
+    const newUser = { ...user._doc, ...req.body };
+
+    console.log(newUser);
 
     await userModel.findByIdAndUpdate(newUser._id, newUser);
 

@@ -31,20 +31,16 @@ import {
   Navbar,
   Nav,
   Container,
-  Media
+  Media,
 } from "reactstrap";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-
-
 const AdminNavbar = (props) => {
-
-  const [nom , setNom] = useState("");
+  const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("");
- 
-  
+
   const handleLogout = async () => {
     try {
       await axios.get("http://127.0.0.1:5000/logout");
@@ -58,17 +54,15 @@ const AdminNavbar = (props) => {
     return b ? b.pop() : "";
   }
   useEffect(() => {
-    setNom(getCookie("lastname"))
-    setPrenom(getCookie("firstname"))
-    setRole(getCookie("role"))
-    if(nom === "")
-    {
+    setNom(decodeURI(getCookie("lastname")));
+    setPrenom(decodeURI(getCookie("firstname")));
+    setRole(decodeURI(getCookie("role")));
+    if (nom === "") {
       setNom("test");
       setPrenom("test");
       setRole("Client");
     }
-    console.log(nom , prenom , role)
-  }, []);
+  }, [nom, prenom, role]);
 
   return (
     <>
@@ -132,13 +126,11 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-               
-                <DropdownItem href="/auth/login"  onClick={handleLogout}>
+
+                <DropdownItem href="/auth/login" onClick={handleLogout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
-               
                 </DropdownItem>
-              
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>

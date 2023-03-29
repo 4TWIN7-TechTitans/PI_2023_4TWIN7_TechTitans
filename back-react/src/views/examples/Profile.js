@@ -32,6 +32,8 @@ import {
   InputGroupAddon,
   InputGroupText,
 } from "reactstrap";
+import { Link, Redirect } from "react-router-dom";
+
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useEffect, useState } from "react";
@@ -66,13 +68,19 @@ const Profile = () => {
 
     const response = await axios.post("http://127.0.0.1:5000/users/", user);
 
-    if (response === true) {
-      //TODO : redirect profile ?
+    console.log(response)
+
+    console.log("after")
+    if (response.data === true) {
+      //TODO : redirect profile ? /dmin/user-profile/?mail
+      
       console.log(true);
+      window.location.href = '/admin/view-user-profile/?mail=' + email;
+
     }
-    if (response === false) {
+    if (response.data === false) {
       //TODO :afficher erreur
-      console.log(!true);
+      console.log(false);
     }
   };
 
@@ -83,13 +91,13 @@ const Profile = () => {
     async function getUser(mail) {
       const response = (await axios.get("http://127.0.0.1:5000/users/" + mail))
         .data.user;
-
+      
       setFirstName(response.first_name);
       setLastName(response.last_name);
       setEmail(response.email);
       setGender(response.gender);
       setTfa(response.two_factor_auth);
-      setPhone(response.phone_number);
+      setPhone(response.phone_number);  
       setAddress(response.address);
 
       const date = new Date(response.date_of_birth);
@@ -276,7 +284,7 @@ const Profile = () => {
                           </InputGroup>
                         </FormGroup>
                         <Button color="info" type="submit">
-                          Edit profile
+                          Edit Profile
                         </Button>
                       </Col>
                     </Row>
