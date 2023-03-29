@@ -7,14 +7,14 @@ import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
-import routesMain from "routesMain.js";
-import SidebarMain from "components/Sidebar/SidebarMain";
+import routesExpert from "routesExpert.js";
+import SidebarExpert from "components/Sidebar/SidebarExpert";
 
-const Main = (props) => {
+const Expert = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
  
-  const filteredRoutes = routesMain.filter((route) => {
+  const filteredRoutes = routesExpert.filter((route) => {
     return route.showInSidebar;
   });
  
@@ -34,9 +34,9 @@ const Main = (props) => {
   }, []);
 
 
-  const getRoutes = (routesMain) => {
-    return routesMain.map((prop, key) => {
-      if (prop.layout === "/main") {
+  const getRoutes = (routesExpert) => {
+    return routesExpert.map((prop, key) => {
+      if (prop.layout === "/expert") {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -51,12 +51,12 @@ const Main = (props) => {
   };
 
   const getBrandText = (path) => {
-    for (let i = 0; i < routesMain.length; i++) {
+    for (let i = 0; i < routesExpert.length; i++) {
       if (
-        props.location.pathname.indexOf(routesMain[i].layout + routesMain[i].path) !==
+        props.location.pathname.indexOf(routesExpert[i].layout + routesExpert[i].path) !==
         -1
       ) {
-        return routesMain[i].name;
+        return routesExpert[i].name;
       }
     }
     return "Brand";
@@ -64,11 +64,11 @@ const Main = (props) => {
 
   return (
     <>
-     <SidebarMain
+     <SidebarExpert
         {...props}
-        routesMain={filteredRoutes}
+        routesExpert={filteredRoutes}
         logo={{
-          innerLink: "/main/index",
+          innerLink: "/expert/index",
           imgSrc: require("../assets/img/brand/argon-react.png"),
           imgAlt: "..."
         }}
@@ -81,9 +81,9 @@ const Main = (props) => {
         />
        
         <Switch>
-          {getRoutes(routesMain)}
+          {getRoutes(routesExpert)}
           
-          <Redirect from="*" to="/main/index" />
+          <Redirect from="*" to="/expert/index" />
         </Switch>
         
         <Container fluid>
@@ -98,4 +98,4 @@ function getCookie(key) {
   var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
   return b ? b.pop() : "";
 }
-export default Main;
+export default Expert;

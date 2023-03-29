@@ -36,10 +36,10 @@ var routes = [
   //TODO : change admin to user view profile
   {
     path: "/view-user-profile",
-    name: "Welcome",
+    name: "User Profile",
     icon: "ni ni-tv-2 text-primary",
     component: ViewProfile,
-    layout: "/admin",
+    layout: "/main",
     showInSidebar: true,
   },
   {
@@ -71,7 +71,7 @@ var routes = [
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
-    layout: "/admin",
+    layout: "/main",
     showInSidebar: false,
   },
   {

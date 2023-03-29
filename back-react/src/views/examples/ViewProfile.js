@@ -41,7 +41,6 @@ const ViewProfile = () => {
   const [gender, setGender] = useState("");
   const [tfa, setTfa] = useState("");
   const [date, setDate] = useState("");
-
   useEffect(() => {
     const search = window.location.search;
     const params = new URLSearchParams(search);
@@ -111,7 +110,7 @@ const ViewProfile = () => {
                   <Button
                     className="float-right"
                     color="default"
-                    href={"/admin/user-profile/?mail=" + email}
+                    href={"/main/user-profile/?mail=" + email}
                     size="sm"
                   >
                     Modifier
