@@ -78,7 +78,7 @@ var routesAdmin = [
   {
     path: "/tickets",
     name: "Tickets",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-bullet-list-67 text-blue",
     component: Tickets,
     layout: "/admin",
     showInSidebar: true,
