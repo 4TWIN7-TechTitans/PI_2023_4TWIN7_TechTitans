@@ -24,6 +24,7 @@ require("./models/witness");
 require("./models/statement");
 require("./models/contract");
 require("./models/car");
+require("./models/ticket");
 const app = express();
 mongoose.set("strictQuery", true);
 
