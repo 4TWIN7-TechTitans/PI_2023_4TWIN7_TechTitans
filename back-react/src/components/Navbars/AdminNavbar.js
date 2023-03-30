@@ -35,20 +35,30 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { useEffect, useState } from "react";
+const cookie = require("cookie");
 
 const AdminNavbar = (props) => {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("");
 
+  
   const handleLogout = async () => {
     try {
-      await axios.get("http://127.0.0.1:5000/logout");
+      const response = await axios.get("http://127.0.0.1:5000/logout", { responseType: "text" });
       console.log("Logged out successfully");
+      
+      // Delete all cookies
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
     } catch (error) {
-      console.error(error);
+      console.error("Error while logging out", error);
     }
   };
+  
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
     return b ? b.pop() : "";

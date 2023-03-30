@@ -28,10 +28,25 @@ function Login() {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-
+  
+    try {
+      const response = await axios.get(`http://127.0.0.1:5000/users/checkban/` +email );
+      const isBanned = response.data.isBanned;
+      console.log(isBanned)
+      if (isBanned)
+       {
+        alert("You Are Banned.");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      alert("An error occurred while checking if you are banned.");
+      return;
+    }
+  
     if (form.tfa !== undefined) {
       const code = form.tfa.value;
-
+  
       await axios
         .post("http://127.0.0.1:5000/2fa", {
           email,
@@ -65,13 +80,13 @@ function Login() {
             console.log(err);
             console.log(err.response.data.errors.email);
             console.log(err.response.data.errors.tfa);
-
+  
             if (err.response.data.errors.tfa === "check your sms to 2FA auth") {
               setShow2FAform(true);
               setShowVerifiedError(false);
               setShowError(false);
             }
-
+  
             if (err.response.data.errors.email === "email not verified") {
               setShowVerifiedError(true);
               setShowError(false);
@@ -92,17 +107,8 @@ function Login() {
           setShowError(true);
         });
     }
-
-//////////////checkUser banned
-    const response = await axios.get(`http://127.0.0.1:5000/ban?email=${email}`);
-  const { isBanned } = response.data;
-  if (isBanned) {
-    alert("You are banned.");
-    return false;
-  }
-
-  
   };
+  
 
   const validateEmail = (email) => {
     const emailRegex = /\S+@\S+\.\S+/;
