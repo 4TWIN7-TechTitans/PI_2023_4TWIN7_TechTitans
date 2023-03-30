@@ -22,7 +22,6 @@ import ListOfUsers from "views/examples/ListOfUsers.js";
 import Icons from "views/examples/Icons.js";
 import AddNew from "views/examples/add";
 import Tickets from "views/examples/Tickets";
-import myAccount from "views/front/my-account";
 
 var routesAdmin = [
   //TODO : change admin to user view profile
@@ -82,14 +81,6 @@ var routesAdmin = [
     icon: "ni ni-bullet-list-67 text-blue",
     component: Tickets,
     layout: "/admin",
-    showInSidebar: true,
-  },
-  {
-    path: "/myaccount",
-    name: "account",
-    icon: "ni ni-bullet-list-67 text-blue",
-    component: myAccount,
-    layout: "/views",
     showInSidebar: true,
   },
 
