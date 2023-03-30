@@ -32,6 +32,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Redirect, useNavigate } from "react-router-dom";
 
+function getCookie(key) {
+  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
+
 const ViewProfile = () => {
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -41,13 +46,13 @@ const ViewProfile = () => {
   const [gender, setGender] = useState("");
   const [tfa, setTfa] = useState("");
   const [date, setDate] = useState("");
+  const [image, setImage] = useState("");
   useEffect(() => {
     const search = window.location.search;
-    const params = new URLSearchParams(search);
-    const mail = params.get("mail");
-    async function getUser(mail) {
-      const response = (await axios.get("http://127.0.0.1:5000/users/" + mail))
-        .data.user;
+    const jwt = getCookie("jwt")
+    async function getUser(jwt) {
+      const response = (await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt))
+        .data;
 
       setFirstName(response.first_name);
       setLastName(response.last_name);
@@ -56,6 +61,7 @@ const ViewProfile = () => {
       setTfa(response.two_factor_auth);
       setPhone(response.phone_number);
       setAddress(response.address);
+      setImage(response.image);
 
       const date = new Date(response.date_of_birth);
       const formattedDate = date.toLocaleDateString("en-US");
@@ -72,7 +78,7 @@ const ViewProfile = () => {
         date
       );
     }
-    getUser(mail);
+    getUser(jwt);
   }, []);
 
   return (
@@ -90,7 +96,8 @@ const ViewProfile = () => {
                       <img
                         alt="..."
                         className="rounded-circle"
-                        src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                        // src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                        src={image === "" ? require("../../assets/img/theme/team-4-800x800.jpg") : image}
                       />
                     </a>
                   </div>

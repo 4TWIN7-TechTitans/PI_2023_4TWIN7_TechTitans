@@ -503,7 +503,7 @@ module.exports.login2FA = async (req, res) => {
 
     if (auth) {
       await userModel.findByIdAndUpdate(user._id, { two_factor_auth_code: "" });
-      res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+      res.cookie("jwt", token, { maxAge: maxAge * 1000 });
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
       const user1 = await userModel.findOne({
         _id: decodedToken.id,
@@ -561,7 +561,7 @@ module.exports.login_post = async (req, res) => {
 
     const auth = await userModel.login(email, password);
     const token = createToken(user._id);
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie("jwt", token, { maxAge: maxAge * 1000 });
     let nextLink = "";
 
     if (user.role === "Admin") nextLink = "/admin/index";
@@ -926,4 +926,19 @@ module.exports.post_update_user = async (req, res) => {
   } catch (error) {
     res.status(500).json(false);
   }
+};
+
+module.exports.get_get_email_from_token = async (req, res) => {
+  console.log(req.params);
+  const token = req.query.token;
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  console.log(decodedToken);
+
+  // find user by id and verificationToken
+  const user = await userModel.findOne({
+    _id: decodedToken.id,
+    verificationToken: token,
+  });
+
+  res.status(201).json(user);
 };

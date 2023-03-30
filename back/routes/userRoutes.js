@@ -29,4 +29,8 @@ router.get("/users/checkban/:email", userController.check_ban_user);
 
 router.post("/users/", userController.post_update_user);
 
+router.get("/getmailfromtoken", userController.get_get_email_from_token);
+
+
+
 module.exports = router;

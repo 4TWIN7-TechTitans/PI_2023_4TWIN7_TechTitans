@@ -41,6 +41,7 @@ root.render(
       <Route path="/main" render={(props) => <MainLayout {...props} />} />
       <Route path="/expert" render={(props) => <ExpertLayout {...props} />} />
 
+      //TODO : 404
       <Redirect from="/" to="/admin/index" />
     </Switch>
   </BrowserRouter>
