@@ -24,6 +24,8 @@ router.get("/users/:email", userController.get_user_by_email);
 
 //ban
 router.post("/users/ban/:mail", userController.post_ban_user);
+router.get("/users/checkban/:email", userController.check_ban_user);
+
 
 router.post("/users/", userController.post_update_user);
 

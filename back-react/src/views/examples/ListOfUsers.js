@@ -50,19 +50,21 @@ function ListOfUsers() {
     setCurrentPage(page);
   };
 
-  const handleBanUser = async (e, user) => {
-    e.preventDefault();
-    console.log("hello world");
 
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000/users/ban/" + user.email
-      );
-
-      console.log(response);
-      if (response.data === true) {
-        fetchData();
-      }
+   
+    const handleBanUser = async (e, user) => {
+      e.preventDefault();
+    
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:5000/users/ban/" + user.email
+        );
+    
+        console.log(response);
+        if (response.data === true) {
+          user.banned = !user.banned;
+          fetchData();
+        }
     } catch (error) {
       console.log(error);
     }
@@ -114,13 +116,11 @@ function ListOfUsers() {
                         </Badge>
                       </td>
                       <td>{user.email}</td>
-                      <td>
-                        {" "}
-                        <Button onClick={(e) => handleBanUser(e, user)}>
-                          {" "}
-                          {!user.banned ? "Ban User" : "Unban user"}{" "}
-                        </Button>{" "}
-                      </td>
+          <td>
+            <Button onClick={(e) => handleBanUser(e, user)}>
+              {user.banned ? "Unban User" : "Ban User"}
+            </Button>
+          </td>
                     </tr>
                   ))}
                 </tbody>

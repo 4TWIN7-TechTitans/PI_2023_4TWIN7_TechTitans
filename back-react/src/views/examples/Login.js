@@ -92,6 +92,16 @@ function Login() {
           setShowError(true);
         });
     }
+
+//////////////checkUser banned
+    const response = await axios.get(`http://127.0.0.1:5000/ban?email=${email}`);
+  const { isBanned } = response.data;
+  if (isBanned) {
+    alert("You are banned.");
+    return false;
+  }
+
+  
   };
 
   const validateEmail = (email) => {

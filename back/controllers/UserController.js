@@ -852,7 +852,6 @@ module.exports.get_user_by_email = async (req, res) => {
     });
   }
 };
-
 module.exports.post_ban_user = async (req, res) => {
   try {
     const { mail } = req.params;
@@ -862,14 +861,32 @@ module.exports.post_ban_user = async (req, res) => {
       throw Error("mail incorrect");
     }
 
-    if (user.banned) {
-      await userModel.findByIdAndUpdate(user._id, { banned: true });
-    } else {
-      await userModel.findByIdAndUpdate(user._id, { banned: false });
-    }
-    res.status(200).json(true);
+    const updatedUser = await userModel.findByIdAndUpdate(
+      user._id,
+      { banned: !user.banned },
+      { new: true } // Returns the updated document
+    );
+
+    res.status(200).json(updatedUser.banned);
   } catch (err) {
     res.status(400).json(err.message);
+  }
+};
+
+module.exports.check_ban_user = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isBanned = user.banned;
+
+    res.status(200).json({ isBanned });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 };
 
