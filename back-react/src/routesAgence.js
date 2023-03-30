@@ -17,6 +17,7 @@
 */
 
 import AddNewContract from "views/examples/addContract";
+import Tickets from "views/examples/Tickets";
 
 var routesAgence = [
   //TODO : change admin to user view profile
@@ -27,6 +28,15 @@ var routesAgence = [
     icon: "ni ni-fat-add text-black",
     component: AddNewContract,
     layout: "/agence",
+    showInSidebar: true,
+  },
+  
+  {
+    path: "/tickets",
+    name: "Tickets",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Tickets,
+    layout: "/admin",
     showInSidebar: true,
   },
 
