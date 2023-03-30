@@ -75,7 +75,7 @@ const Profile = () => {
       //TODO : redirect profile ? /dmin/user-profile/?mail
       
       console.log(true);
-      window.location.href = '/admin/view-user-profile/?mail=' + email;
+      window.location.href = '/main/view-user-profile/?mail=' + email;
 
     }
     if (response.data === false) {

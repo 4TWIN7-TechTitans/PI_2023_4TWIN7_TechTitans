@@ -27,6 +27,7 @@ import AdminLayout from "layouts/Admin.js";
 import MainLayout from "layouts/Main.js";
 import AuthLayout from "layouts/Auth.js";
 import AgenceLayout from "layouts/Agence.js";
+import ExpertLayout from "layouts/Expert.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -38,6 +39,7 @@ root.render(
 
       <Route path="/agence" render={(props) => <AgenceLayout {...props} />} />
       <Route path="/main" render={(props) => <MainLayout {...props} />} />
+      <Route path="/expert" render={(props) => <ExpertLayout {...props} />} />
 
       <Redirect from="/" to="/admin/index" />
     </Switch>

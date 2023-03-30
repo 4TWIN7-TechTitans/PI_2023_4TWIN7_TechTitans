@@ -5,15 +5,15 @@ import { Button, Container } from "reactstrap";
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
 
-import routes from "routes.js";
+import routesAdmin from "routesAdmin.js";
+import SidebarAdmin from "components/Sidebar/SidebarAdmin";
 
 const Admin = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
  
-  const filteredRoutes = routes.filter((route) => {
+  const filteredRoutes = routesAdmin.filter((route) => {
     return route.showInSidebar;
   });
  
@@ -33,8 +33,8 @@ const Admin = (props) => {
   }, []);
 
 
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
+  const getRoutes = (routesAdmin) => {
+    return routesAdmin.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
           <Route
@@ -50,12 +50,12 @@ const Admin = (props) => {
   };
 
   const getBrandText = (path) => {
-    for (let i = 0; i < routes.length; i++) {
+    for (let i = 0; i < routesAdmin.length; i++) {
       if (
-        props.location.pathname.indexOf(routes[i].layout + routes[i].path) !==
+        props.location.pathname.indexOf(routesAdmin[i].layout + routesAdmin[i].path) !==
         -1
       ) {
-        return routes[i].name;
+        return routesAdmin[i].name;
       }
     }
     return "Brand";
@@ -63,9 +63,9 @@ const Admin = (props) => {
 
   return (
     <>
-     <Sidebar
+     <SidebarAdmin
         {...props}
-        routes={filteredRoutes}
+        routesAdmin={filteredRoutes}
         logo={{
           innerLink: "/admin/index",
           imgSrc: require("../assets/img/brand/argon-react.png"),
@@ -80,7 +80,7 @@ const Admin = (props) => {
         />
        
         <Switch>
-          {getRoutes(routes)}
+          {getRoutes(routesAdmin)}
           
           <Redirect from="*" to="/admin/index" />
         </Switch>

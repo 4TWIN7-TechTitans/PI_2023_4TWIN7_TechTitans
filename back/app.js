@@ -11,9 +11,11 @@ const statementRoutes = require("./routes/statementRoutes");
 const contractRoutes = require("./routes/contractRoutes");
 const carRoutes = require("./routes/carRoutes");
 const authRouter = require("./routes/auth");
+const ticketRoutes= require("./routes/ticketRoutes");
 const passport = require("passport");
 const session = require("express-session");
 const ensureGuest = require("./middleware/auth");
+
 
 const FacebookStrategy = require("passport-facebook").Strategy;
 require("dotenv").config();
@@ -24,6 +26,9 @@ require("./models/witness");
 require("./models/statement");
 require("./models/contract");
 require("./models/car");
+require("./models/ticket");
+
+
 const app = express();
 mongoose.set("strictQuery", true);
 
@@ -64,6 +69,7 @@ app.use(witnessRoutes);
 app.use(statementRoutes);
 app.use(contractRoutes);
 app.use(carRoutes);
+app.use("/ticket",ticketRoutes);
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.get("/verify-email/:token", function (req, res) {

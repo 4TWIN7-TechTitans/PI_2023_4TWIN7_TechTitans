@@ -5,15 +5,15 @@ import { Button, Container } from "reactstrap";
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
+import SidebarAgence from "components/Sidebar/SidebarAgence.js";
 
-import routes from "routes.js";
+import routesAgence from "routesAgence.js";
 
 const Agence = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
  
-  const filteredRoutes = routes.filter((route) => {
+  const filteredRoutes = routesAgence.filter((route) => {
     return route.showInSidebar;
   });
  
@@ -33,8 +33,8 @@ const Agence = (props) => {
   }, []);
 
 
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
+  const getRoutes = (routesAgence) => {
+    return routesAgence.map((prop, key) => {
       if (prop.layout === "/agence") {
         return (
           <Route
@@ -50,12 +50,12 @@ const Agence = (props) => {
   };
 
   const getBrandText = (path) => {
-    for (let i = 0; i < routes.length; i++) {
+    for (let i = 0; i < routesAgence.length; i++) {
       if (
-        props.location.pathname.indexOf(routes[i].layout + routes[i].path) !==
+        props.location.pathname.indexOf(routesAgence[i].layout + routesAgence[i].path) !==
         -1
       ) {
-        return routes[i].name;
+        return routesAgence[i].name;
       }
     }
     return "Brand";
@@ -63,9 +63,9 @@ const Agence = (props) => {
 
   return (
     <>
-     <Sidebar
+     <SidebarAgence
         {...props}
-        routes={filteredRoutes}
+        routesAgence={filteredRoutes}
         logo={{
           innerLink: "/agence/index",
           imgSrc: require("../assets/img/brand/argon-react.png"),
@@ -80,7 +80,7 @@ const Agence = (props) => {
         />
        
         <Switch>
-          {getRoutes(routes)}
+          {getRoutes(routesAgence)}
           
           <Redirect from="*" to="/agence/index" />
         </Switch>
