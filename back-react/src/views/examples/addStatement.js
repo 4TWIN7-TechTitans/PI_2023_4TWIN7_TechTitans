@@ -70,12 +70,12 @@ const AddStatement = () => {
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="order-xl-1" xl="6">
+          <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Client A information</h3>
+                    <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
                   <Col className="text-right" xs="4"></Col>
                 </Row>
@@ -83,11 +83,11 @@ const AddStatement = () => {
               <CardBody>
                 <form onSubmit="">
                   <h6 className="heading-small text-muted mb-4">
-                    User information A
+                  set all the infromations related to the accident please
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col lg="12">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
@@ -103,15 +103,31 @@ const AddStatement = () => {
                           />
                         </FormGroup>
                       </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-email"
+                          >
+                            Person B Full Name
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="email"
+
+                            type="email"
+                          />
+                        </FormGroup>
+                      </Col>
                     </Row>
                     <Row>
-                      <Col lg="6">
+                      <Col lg="3">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-first-name"
                           >
-                            Agence
+                            Agence of client A
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -121,13 +137,46 @@ const AddStatement = () => {
                           />
                         </FormGroup>
                       </Col>
-                      <Col lg="6">
+                      <Col lg="3">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-last-name"
                           >
-                            Contarct ID
+                            Contarct ID of client A
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="last_name"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+
+                      {/* CLEINT B */}
+                      <Col lg="3">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-first-name"
+                          >
+                            Agence of client B
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="first_name"
+                            type="text"
+                            name="first_name"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-last-name"
+                          >
+                            Contarct ID of client B
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -138,18 +187,34 @@ const AddStatement = () => {
                       </Col>
                     </Row>
                   </div>
-                  <h6 className="heading-small text-muted mb-4">
+                  {/* <h6 className="heading-small text-muted mb-4">
                     Contact information
-                  </h6>
+                  </h6> */}
                   <div className="pl-lg-4">
                     <Row>
-                      <Col md="12">
+                      <Col md="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-address"
                           >
-                            Circumstances
+                            Circumstances By client A
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            defaultValue="Stopped too suddenly"
+                            id="input-address"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-address"
+                          >
+                            Circumstances By client B
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -161,13 +226,13 @@ const AddStatement = () => {
                       </Col>
                     </Row>
                     <Row>
-                      <Col lg="6">
+                      <Col lg="3">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-city"
                           >
-                            Injured
+                             If Cleint A Injured
                           </label>
                           <Input
                             name="gender"
@@ -179,13 +244,13 @@ const AddStatement = () => {
                           </Input>
                         </FormGroup>
                       </Col>
-                      <Col lg="6">
+                      <Col lg="3">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-country"
                           >
-                            Material damage
+                            Material damage of cleint A
                           </label>
                           <Input
                             name="tfa"
@@ -197,13 +262,64 @@ const AddStatement = () => {
                           </Input>
                         </FormGroup>
                       </Col>
-                      <Col md="12">
+                      <Col lg="3">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-city"
+                          >
+                             If Cleint B Injured
+                          </label>
+                          <Input
+                            name="gender"
+                            type="select"
+                            required
+                          >
+                            <option value="Male">yes</option>
+                            <option value="Female">no</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="3">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-country"
+                          >
+                            Material damage of cleint B
+                          </label>
+                          <Input
+                            name="tfa"
+                            type="select"
+                            required
+                          >
+                            <option value="Minor">Minor</option>
+                            <option value="Major">Major</option>
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col md="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-address"
                           >
-                            Notes
+                            Notes By Person A
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-address"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-address"
+                          >
+                            Notes By Person B
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -273,13 +389,31 @@ const AddStatement = () => {
 
                       </Col>
 
-                      <Col lg="12">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-address"
                           >
-                           Signature
+                           Signature of Person A 
+                          </label>
+                          <InputGroup className="input-group-alternative">
+                          <Input
+                            className="form-control-alternative"
+                            id="input-address"
+                            type="text"
+                          />
+                          </InputGroup>
+                        </FormGroup>
+
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-address"
+                          >
+                           Signature of Person B 
                           </label>
                           <InputGroup className="input-group-alternative">
                           <Input
@@ -303,7 +437,7 @@ const AddStatement = () => {
 
           {/* CLIENT B */}
 
-          <Col className="order-xl-1" xl="6">
+          {/* <Col className="order-xl-1" xl="6">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
@@ -473,7 +607,7 @@ const AddStatement = () => {
                 </form>
               </CardBody>
             </Card>
-          </Col>
+          </Col> */}
 
 
 

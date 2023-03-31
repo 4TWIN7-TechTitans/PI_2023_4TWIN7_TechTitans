@@ -45,7 +45,7 @@ const AdminNavbar = (props) => {
   
   const handleLogout = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:5000/logout", { responseType: "text" });
+      const response = await axios.get("http://localhost:5000/logout", { responseType: "text" });
       console.log("Logged out successfully");
       
       // Delete all cookies
