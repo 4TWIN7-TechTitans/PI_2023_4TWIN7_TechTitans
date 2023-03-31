@@ -51,6 +51,9 @@ function AddCar() {
     return b ? b.pop() : "";
   }
 
+  useEffect(() => {
+    if (getCookie("role") !== "Client") window.location.href = "/auth/login";
+  }, []);
   
   useEffect(() => {
     const fetchData = async () => {

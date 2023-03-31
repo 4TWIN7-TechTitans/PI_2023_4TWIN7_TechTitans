@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { checkEmail } from "../services/api";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "components/Headers/Header";
 
 function AddNew() {
@@ -24,6 +24,17 @@ function AddNew() {
   const [showError, setShowError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+
+
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+
+  useEffect(() => {
+    if (getCookie("role") !== "admin") window.location.href = "/auth/login";
+  }, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

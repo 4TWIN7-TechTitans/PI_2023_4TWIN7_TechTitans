@@ -8,24 +8,33 @@ import {
   NavLink,
   Nav,
   TabContent,
-  TabPane
+  TabPane,
 } from "reactstrap";
 import Header from "components/Headers/Header";
 
+function getCookie(key) {
+  var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  return b ? b.pop() : "";
+}
 class Index extends React.Component {
   state = {
-    tabs: 1
+    tabs: 1,
   };
   toggleNavs = (e, state, index) => {
     e.preventDefault();
     this.setState({
-      [state]: index
+      [state]: index,
     });
   };
+
+  componentDidMount() {
+    if (getCookie("role") !== "admin") window.location.href = "/auth/login";
+  }
+
   render() {
     return (
       <>
-      <Header/>
+        <Header />
         <div className="nav-wrapper">
           <Nav
             className="nav-fill flex-column flex-md-row"
@@ -37,9 +46,9 @@ class Index extends React.Component {
               <NavLink
                 aria-selected={this.state.tabs === 1}
                 className={classnames("mb-sm-3 mb-md-0", {
-                  active: this.state.tabs === 1
+                  active: this.state.tabs === 1,
                 })}
-                onClick={e => this.toggleNavs(e, "tabs", 1)}
+                onClick={(e) => this.toggleNavs(e, "tabs", 1)}
                 href="/index"
                 role="tab"
               >
@@ -47,13 +56,12 @@ class Index extends React.Component {
                 Home
               </NavLink>
             </NavItem>
-            <NavItem onClick={e => this.toggleNavs(e, "tabs", 2)}>
+            <NavItem onClick={(e) => this.toggleNavs(e, "tabs", 2)}>
               <NavLink
                 aria-selected={this.state.tabs === 2}
                 className={classnames("mb-sm-3 mb-md-0", {
-                  active: this.state.tabs === 2
+                  active: this.state.tabs === 2,
                 })}
-                
                 href="/admin/add"
                 role="tab"
               >
@@ -65,9 +73,9 @@ class Index extends React.Component {
               <NavLink
                 aria-selected={this.state.tabs === 3}
                 className={classnames("mb-sm-3 mb-md-0", {
-                  active: this.state.tabs === 3
+                  active: this.state.tabs === 3,
                 })}
-                onClick={e => this.toggleNavs(e, "tabs", 3)}
+                onClick={(e) => this.toggleNavs(e, "tabs", 3)}
                 href="/admin/listofusers"
                 role="tab"
               >
@@ -77,9 +85,7 @@ class Index extends React.Component {
             </NavItem>
           </Nav>
         </div>
-        <Card className="shadow">
-          
-        </Card>
+        <Card className="shadow"></Card>
       </>
     );
   }

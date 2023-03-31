@@ -22,6 +22,16 @@ function AddNewContract() {
   const [users, setUsers] = useState([]);
   const [agencies, setAgencies] = useState([]);
 
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+
+  useEffect(() => {
+    if (getCookie("role") !== "agence") window.location.href = "/auth/login";
+  }, []);
+
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {

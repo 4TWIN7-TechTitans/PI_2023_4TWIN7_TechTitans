@@ -89,6 +89,12 @@ const Profile = () => {
     }
   };
 
+
+  useEffect(() => {
+    if (getCookie("role") !== "Client") window.location.href = "/auth/login";
+  }, []);
+
+  
   useEffect(() => {
     const jwt = getCookie("jwt")
 

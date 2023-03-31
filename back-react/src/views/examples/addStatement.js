@@ -63,6 +63,14 @@ const AddStatement = () => {
 
 
 
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+
+  useEffect(() => {
+    if (getCookie("role") !== "Client") window.location.href = "/auth/login";
+  }, []);
 
   return (
     <>

@@ -47,12 +47,18 @@ const ViewProfile = () => {
   const [tfa, setTfa] = useState("");
   const [date, setDate] = useState("");
   const [image, setImage] = useState("");
+
+  useEffect(() => {
+    if (getCookie("role") !== "Client") window.location.href = "/auth/login";
+  }, []);
+
   useEffect(() => {
     const search = window.location.search;
-    const jwt = getCookie("jwt")
+    const jwt = getCookie("jwt");
     async function getUser(jwt) {
-      const response = (await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt))
-        .data;
+      const response = (
+        await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+      ).data;
 
       setFirstName(response.first_name);
       setLastName(response.last_name);
@@ -87,7 +93,7 @@ const ViewProfile = () => {
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4"> 
+          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
               <Row className="justify-content-center">
                 <Col className="order-lg-2" lg="3">
@@ -97,7 +103,11 @@ const ViewProfile = () => {
                         alt="..."
                         className="rounded-circle"
                         // src={require("../../assets/img/theme/team-4-800x800.jpg")}
-                        src={image === "" ? require("../../assets/img/theme/team-4-800x800.jpg") : image}
+                        src={
+                          image === ""
+                            ? require("../../assets/img/theme/team-4-800x800.jpg")
+                            : image
+                        }
                       />
                     </a>
                   </div>
