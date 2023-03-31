@@ -40,7 +40,7 @@ function Login() {
       }
     } catch (error) {
       console.log(error);
-      alert("An error occurred while checking if you are banned.");
+      alert("Please Register Thank for your comprehension dear client.");
       return;
     }
   
