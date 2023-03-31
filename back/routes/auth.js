@@ -34,7 +34,7 @@ router.get(
     };
 
     const token = createToken(req.user._id);
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie("jwt", token, {  maxAge: maxAge * 1000 });
 
 
 
@@ -94,7 +94,7 @@ router.get(
       });
     };
     const token = createToken(req.user._id);
-    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
+    res.cookie("jwt", token, {  maxAge: maxAge * 1000 });
 
 
 

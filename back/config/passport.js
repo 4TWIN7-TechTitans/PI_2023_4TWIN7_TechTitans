@@ -22,6 +22,12 @@ module.exports = function (passport) {
           last_name: profile.name.familyName,
           image: profile.photos[0].value,
           email: profile.emails[0].value,
+          date_of_birth:"",
+          address:"",
+          id:"",
+          token:"",
+          banned:false,
+          phone_number:"",
           password: randomstring,
           role:"Client",
           two_factor_auth: "none",
@@ -88,6 +94,12 @@ module.exports = function (passport) {
             newUser.first_name = profile.name.givenName;
             newUser.last_name = profile.name.familyName;
             newUser.verified = true;
+            newUser.date_of_birth="";
+            newUser.address="";
+            newUser.id="";
+            newUser.token="";
+            newUser.banned=false;
+            newUser.phone_number="";
             newUser.role = "Client";
             newUser.two_factor_auth = "none";
             newUser.two_factor_auth_code = "";

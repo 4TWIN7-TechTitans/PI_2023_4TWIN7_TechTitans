@@ -325,7 +325,7 @@ module.exports.post_signup = async (req, res) => {
     const verificationToken = createToken(user._id);
     user.verificationToken = verificationToken;
 
-    await sendVerifMail("mariem.nacib@esprit.tn", verificationToken);
+    await sendVerifMail(user.email, verificationToken);
 
     res.status(201).json({
       user_created: user._id,
@@ -561,7 +561,7 @@ module.exports.login_post = async (req, res) => {
 
     const auth = await userModel.login(email, password);
     const token = createToken(user._id);
-    res.cookie("jwt", token, { maxAge: maxAge * 1000 });
+    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
     let nextLink = "";
 
     if (user.role === "Admin") nextLink = "/admin/index";
@@ -575,8 +575,7 @@ module.exports.login_post = async (req, res) => {
       _id: decodedToken.id,
       verificationToken: token,
     });
-    console.log(user1);
-    console.log(decodedToken);
+
     res.cookie("firstname", user1.first_name, {
       expiresIn: maxAge, // same as above
     });

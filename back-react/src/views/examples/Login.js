@@ -30,7 +30,7 @@ function Login() {
     const password = form.password.value;
   
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/users/checkban/` +email );
+      const response = await axios.get(`http://localhost:5000/users/checkban/` +email );
       const isBanned = response.data.isBanned;
       console.log(isBanned)
       if (isBanned)
@@ -48,7 +48,7 @@ function Login() {
       const code = form.tfa.value;
   
       await axios
-        .post("http://127.0.0.1:5000/2fa", {
+        .post("http://localhost:5000/2fa", {
           email,
           code,
         })
@@ -63,7 +63,7 @@ function Login() {
         );
     } else {
       await axios
-        .post("http://127.0.0.1:5000/login", {
+        .post("http://localhost:5000/login", {
           email,
           password,
         })
