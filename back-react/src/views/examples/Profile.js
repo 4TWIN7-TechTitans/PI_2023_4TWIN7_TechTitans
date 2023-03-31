@@ -51,6 +51,11 @@ const Profile = () => {
   const [tfa, setTfa] = useState("");
   const [date, setDate] = useState("");
 
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+
   const handleEdit = async (e) => {
     e.preventDefault();
 
@@ -85,12 +90,11 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
-    const mail = params.get("mail");
+    const jwt = getCookie("jwt")
+
     async function getUser(mail) {
-      const response = (await axios.get("http://127.0.0.1:5000/users/" + mail))
-        .data.user;
+        const response = (await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt))
+        .data;
       
       setFirstName(response.first_name);
       setLastName(response.last_name);
@@ -104,7 +108,8 @@ const Profile = () => {
       const formattedDate = date.toLocaleDateString("en-US");
       setDate(new Date(formattedDate));
     }
-    getUser(mail);
+    getUser(jwt);
+
   }, []);
 
   return (
