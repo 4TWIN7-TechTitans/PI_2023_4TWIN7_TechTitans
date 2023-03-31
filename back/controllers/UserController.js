@@ -325,7 +325,7 @@ module.exports.post_signup = async (req, res) => {
     const verificationToken = createToken(user._id);
     user.verificationToken = verificationToken;
 
-    await sendVerifMail("mahmoud.cheikh@esprit.tn", verificationToken);
+    await sendVerifMail("mariem.nacib@esprit.tn", verificationToken);
 
     res.status(201).json({
       user_created: user._id,
@@ -389,7 +389,7 @@ module.exports.verify_email_get = async (req, res) => {
     user.verified = true;
     user.verificationToken = null;
     console.log(user);
-    await userModel.updateOne(user);
+    await userModel.findByIdAndUpdate(decodedToken.id,{verified:'true'});
     //success so we can login
     res.redirect("http://localhost:3000/auth/login");
   } catch (err) {
