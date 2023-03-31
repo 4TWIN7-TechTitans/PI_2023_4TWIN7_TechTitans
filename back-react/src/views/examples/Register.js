@@ -139,6 +139,21 @@ function Register() {
     return last_nameRegex.test(last_name);
   };
 
+  const validatePhoneNumber = (phone_number) => {
+    const phone_numberRegex = /^(?:\+216|00216|0)?[1-9]\d{7}$/;
+    return phone_numberRegex.test(phone_number);
+  };
+  
+  const handlePhoneNumberChange = (e) => {
+    const phone_number = e.target.value;
+    const phone_numberError = document.querySelector(".phone_number.error");
+    if (!validatePhoneNumber(phone_number)) {
+      phone_numberError.textContent = "Please enter a valid Tunisian phone number";
+    } else {
+      phone_numberError.textContent = "Phone number is correct";
+    }
+  };
+
   const handleEmailChange = (e) => {
     const email = e.target.value;
     const emailError = document.querySelector(".email.error");
@@ -349,11 +364,10 @@ function Register() {
                         id="phone_number"
                         name="phone_number"
                         placeholder="+216XXXXXXXX"
-                        pattern="^\[0-9]{8}$"
-                        title="Please enter a valid Tunisian phone number (including the country code +216)"
-                        required="false"
+                        onChange={handlePhoneNumberChange}
                       />
                     </InputGroup>
+                    <div className="phone_number error"></div>
                   </FormGroup>
 
                   <Button className="btn-fill" color="primary" type="submit">
