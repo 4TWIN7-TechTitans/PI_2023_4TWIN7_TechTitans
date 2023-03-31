@@ -23,6 +23,7 @@ function AddCar() {
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
   const [contracts, setContracts] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   const types = ["Car", "Truck", "MotoCycle"];
   const brands = [
@@ -45,17 +46,29 @@ function AddCar() {
     "Mitsubishi",
   ];
 
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+
+  
   useEffect(() => {
-    const fetchContracts = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:5000/contarcts");
-        setContracts(response.data.contracts);
-      } catch (err) {
-        console.log(err);
-      }
+    const fetchData = async () => {
+      const jwt = getCookie("jwt");
+      const idUtilisateur = (
+        await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+      ).data._id;
+      console.log(idUtilisateur);
+
+      const response = await axios.get(
+        "http://127.0.0.1:5000/contarctsunique/" + idUtilisateur
+      );
+      setContracts(response.data.contracts);
+      console.log(contracts);
     };
-    fetchContracts();
-  }, []);
+
+    fetchData();
+  }, [contracts]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -106,7 +119,8 @@ function AddCar() {
     }
   };
   const validateRegistrationnumber = (registration_number) => {
-    const registration_numberRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F\u0600-\u06FF"]+$/;
+    const registration_numberRegex =
+      /^[a-zA-Z0-9\s\-'\u00C0-\u024F\u0600-\u06FF"]+$/;
     return registration_numberRegex.test(registration_number);
   };
   const handleRgNumberChange = (e) => {
