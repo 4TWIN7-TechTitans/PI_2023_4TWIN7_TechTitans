@@ -520,7 +520,7 @@ module.exports.login2FA = async (req, res) => {
         expiresIn: maxAge, // same as above
       });
 
-      res.cookie("userid", user1.id, {
+      res.cookie("userid", user1._id, {
         expiresIn: maxAge, // same as above
       });
       res.status(200).json({ user: user._id, role: user.role });

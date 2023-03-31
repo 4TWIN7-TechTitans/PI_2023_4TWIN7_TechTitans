@@ -82,7 +82,7 @@ import {
         const verif1 = "true"; 
         // Register user
         const add = await axios.post(
-          "http://127.0.0.1:5000/add",
+          "http://localhost:5000/add",
           {
             email,
             password,
@@ -103,6 +103,8 @@ import {
           setShowVerifyEmail(true);
           setErrors({});
           setShowError(false);
+          window.location.replace("http://localhost:3000/admin/listofusers");
+
         } else {
           setShowNotification(false);
           setShowVerifyEmail(false);
