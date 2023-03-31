@@ -95,7 +95,7 @@ function Register() {
       setShowError(false);
 
       const registerRes = await axios.post(
-        "http://127.0.0.1:5000/signup",
+        "http://localhost:5000/signup",
         {
           email,
           password,
@@ -113,7 +113,7 @@ function Register() {
       // handle response
       if (registerRes.status === 201) {
         // TODO : change route
-        window.location.replace("http://127.0.0.1:3000/auth/login");
+        window.location.replace("http://localhost:3000/auth/login");
       } else {
         setShowNotification(false);
         setShowVerifyEmail(false);

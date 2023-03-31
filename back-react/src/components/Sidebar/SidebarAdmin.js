@@ -16,10 +16,14 @@
 
 */
 /*eslint-disable*/
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
+import routesAdmin1 from "routesAdmin.js";
+import routesAgence from "routesAgence.js";
+import routesMain from "routesMain.js";
+import routesExpert from "routesExpert.js";
 
 // reactstrap components
 import {
@@ -68,6 +72,37 @@ const SidebarAdmin = (props) => {
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
+  
+
+  useEffect(() => {
+    
+    
+  }, []);
+
+  const Role=getCookie('role');
+
+  //get the current role routes list
+  const currentrole=(Role)=>{
+    if (Role==="Admin")
+{
+  return routesAdmin1;
+
+}else if(Role==="Expert")
+{
+  return routesExpert;
+}
+else if(Role==="Client")
+{
+  return routesMain;
+}
+else if(Role==="Agence")
+{
+  return routesAgence;
+}
+   
+  }
+
+ 
   // creates the links that appear in the left menu / Sidebar
   const createLinks = (routesAdmin) => {
     return routesAdmin.map((prop, key) => {
@@ -86,6 +121,7 @@ const SidebarAdmin = (props) => {
       );
     });
   };
+
 
   const { bgColor, routesAdmin, logo } = props;
   let navbarBrandProps;
@@ -128,21 +164,7 @@ const SidebarAdmin = (props) => {
         ) : null}
         {/* User */}
         <Nav className="align-items-center d-md-none">
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
-            </DropdownToggle>
-            <DropdownMenu
-              aria-labelledby="navbar-default_dropdown_1"
-              className="dropdown-menu-arrow"
-              right
-            >
-              <DropdownItem>Action</DropdownItem>
-              <DropdownItem>Another action</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Something else here</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
+       
           <UncontrolledDropdown nav>
             <DropdownToggle nav>
               <Media className="align-items-center">
@@ -162,14 +184,8 @@ const SidebarAdmin = (props) => {
                 <i className="ni ni-single-02" />
                 <span>My profile</span>
               </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-settings-gear-65" />
-                <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-calendar-grid-58" />
-                <span>Activity</span>
-              </DropdownItem>
+           
+          
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-support-16" />
                 <span>Support</span>
@@ -213,23 +229,10 @@ const SidebarAdmin = (props) => {
             </Row>
           </div>
           {/* Form */}
-          <Form className="mt-4 mb-3 d-md-none">
-            <InputGroup className="input-group-rounded input-group-merge">
-              <Input
-                aria-label="Search"
-                className="form-control-rounded form-control-prepended"
-                placeholder="Search"
-                type="search"
-              />
-              <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                  <span className="fa fa-search" />
-                </InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Form>
+       
           {/* Navigation */}
-          <Nav navbar>{createLinks(routesAdmin)}</Nav>
+          
+          <Nav navbar>{createLinks(currentrole(Role))}</Nav>
           {/* Divider */}
           
 
@@ -259,5 +262,19 @@ SidebarAdmin.propTypes = {
     imgAlt: PropTypes.string.isRequired
   })
 };
-
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 export default SidebarAdmin;
