@@ -2,77 +2,399 @@ const mongoose = require("mongoose");
 const moment = require("moment");
 
 const statementSchema = new mongoose.Schema({
-
-  agence_a:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:"Agence",
-    required: false,
+//Partie 1 : 
+date: {
+  type: Date,
+  required: true,
+  validate: {
+    validator: function (value) {
+      return moment(value).isValid();
+    },
+    message: "Invalid date format",
   },
-  agence_b:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:"Agence",
-    required: false,
+},
+//Partie 2 : 
+location: {
+  type: String,
+  required: true,
+  match: [
+    /^[a-zA-Z0-9\s,'-]*$/,
+    "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
+  ],
+},
+//Partie 3 : 
+injured: {
+  type: String,
+  required: true,
+},
+//Partie 4 
+material_damage: {
+  type: String,
+  required: true,
+},
+//Partie 5 
+witness: {
+  type: String,
+  required: true,
+  maxlength: [50, "Witness name should not exceed 50 characters"],
+  match: [/^[A-Za-z\s'À-ÖØ-öø-ÿ]+$/, "Witness name should only contain letters, spaces, quotes, and French characters"],
+  required: true,
+},
+//Partie 6 
+vehicule_a: {
+  assureBy: {
+    type: String, // Vehicule assure par (in english)
   },
-  id_contract_a: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Contract",
-    required: false,
+  assuranceNumber: {
+    type: String, // Police D'assurance Number
   },
-  id_contract_b: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Contract",
-    required: false,
+  agency: {
+    type: mongoose.Schema.Types.ObjectId, // Agence (id_agence foreign key)
+    ref: 'Agency', // replace 'Agency' with the actual name of the Agency model
   },
-  date: {
-    type: Date,
-    required: true,
-    validate: {
-      validator: function (value) {
-        return moment(value).isValid();
-      },
-      message: "Invalid date format",
+  contract: {
+    id_contrat: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Contract', // replace 'Contract' with the actual name of the Contract model
+    },
+    start_date: {
+      type: Date,
+      default: Date.now,
+    },
+    end_date: {
+      type: Date,
     },
   },
-  location: {
+},
+
+vehicule_b: {
+  assureBy: {
+    type: String, 
+    required: true
+  },
+  assuranceNumber: {
+    type: String, // Police D'assurance Number
+    required: true
+
+  },
+  agency: {
+    type: mongoose.Schema.Types.ObjectId, // Agence (id_agence foreign key)
+    ref: 'Agence', // replace 'Agency' with the actual name of the Agency model
+    required: true  
+  },
+  contract: {
+    id_contrat: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Contract', // replace 'Contract' with the actual name of the Contract model
+      required : true 
+    },
+    start_date: {
+      type: Date,
+      default: Date.now,
+      required : true 
+    },
+    end_date: {
+      type: Date,
+      required : true 
+    },
+  },
+},
+
+  //Partie7
+  drivers_identity_a: {
+    type: String,
+    maxlength: [50, "drivers_identity_a"],
+    match: [/^\d+$/, "drivers_identity_a should only contain numbers"],
+    required: true,
+  },
+  drivers_identity_b: {
+    type: String,
+    maxlength: [50, "drivers_identity_b "],
+    match: [/^\d+$/, "drivers_identity_b should only contain numbers"],
+    required: true,
+  },
+  //Partie 8 
+  Insured_a: {
+    first_name: {
+      type: String,
+      required: true,
+    },
+    last_name: {
+      type: String,
+      required: true,
+    },
+    phone_number: {
+      type: String,
+      required: true,
+    },
+  },
+  Insured_b: {
+    first_name: {
+      type: String,
+      required: true,
+    },
+    last_name: {
+      type: String,
+      required: true,
+    },
+    phone_number: {
+      type: String,
+      required: true,
+    },
+  },
+ //Partie 9 
+vehicule_identity_a : {
+  brand: {
+    type: String,
+    enum: ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan","Audi","Isuzu" , "BMW" , "Golf"
+     ,"Tesla","Chevrolet" , "Hyundai" , "Infiniti" , "Volkswagen" , "Volvo" , "Alfa Romeo" 
+     , "Mitsubishi"],
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ["Car" , "Truck" ,"MotoCycle" ],
+    required: true,
+  },
+  matriculation: {
     type: String,
     required: true,
-    match: [
-      /^[a-zA-Z0-9\s,'-]*$/,
-      "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
+  },
+  id_contrat: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Contract",
+  },
+    country: {
+      type: String,
+      enum: ["Tunisia", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
+        "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
+        "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina",
+        "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde",
+        "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia",
+        "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo",
+        "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea",
+        "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany",
+        "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary",
+        "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+        "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia",
+        "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali",
+        "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia",
+        "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand",
+        "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau",
+        "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania",
+        "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+        "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"],
+        required: true ,
+  }
+  
+},
+vehicule_identity_b : {
+  brand: {
+    type: String,
+    enum: ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan","Audi","Isuzu" , "BMW" , "Golf"
+     ,"Tesla","Chevrolet" , "Hyundai" , "Infiniti" , "Volkswagen" , "Volvo" , "Alfa Romeo" 
+     , "Mitsubishi"],
+    required: true,
+  },
+  type: {
+    type: String,
+    enum: ["Car" , "Truck" ,"MotoCycle" ],
+    required: true,
+  },
+  matriculation: {
+    type: String,
+    required: true,
+  },
+  id_contrat: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Contract",
+  },
+    country: {
+      type: String,
+      enum: ["Tunisia", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
+        "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
+        "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina",
+        "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde",
+        "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia",
+        "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo",
+        "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea",
+        "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany",
+        "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary",
+        "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+        "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia",
+        "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali",
+        "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia",
+        "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand",
+        "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau",
+        "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania",
+        "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+        "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"],
+        required: true ,
+  },
+  coming_from: {
+    type: String,
+    required: true,
+  },
+  going_to: {
+    type: String,
+    required: true,
+  }
+},
+
+ //Partie 10 
+ hits_a: {
+  type: String,
+  possible_place: [
+    "Front Left Fender",
+    "Front Right Fender",
+    "Rear Left Fender",
+    "Rear Right Fender",
+    "Front Bumper",
+    "Rear Bumper",
+    "Hood",
+    "Trunk",
+    "Roof",
+    "Front Windshield",
+    "Rear Windshield",
+    "Side Mirrors",
+    "Doors",
+    "Other"
+  ],
+  required: true
+},
+hit_direction: {
+  type: String,
+  enum: ["Front", "Back", "Left", "Right"],
+  required: true
+},
+
+hits_b: {
+  type: String,
+  possible_place: [
+    "Front Left Fender",
+    "Front Right Fender",
+    "Rear Left Fender",
+    "Rear Right Fender",
+    "Front Bumper",
+    "Rear Bumper",
+    "Hood",
+    "Trunk",
+    "Roof",
+    "Front Windshield",
+    "Rear Windshield",
+    "Side Mirrors",
+    "Doors",
+    "Other"
+  ],
+  required: true
+},
+hit_direction: {
+  type: String,
+  enum: ["Front", "Back", "Left", "Right"],
+  required: true
+},
+  //Partie 11 
+  apparent_damages_a: {
+    type: [String],
+    damageplaces: [
+    "Scratches",
+    "Dents",
+    "Cracks",
+    "Paint Damage",
+    "Broken Lights",
+    "Broken Windows",
+    "Missing Parts",
+    "Other"
     ],
-  },
-  injured: {
+    required: true
+    },
+    damage_direction: {
     type: String,
-    required: true,
-  },
-  material_damage: {
-    type: String,
-    required: true,
-  },
-  driver_a: {
-    type: String,
-    required: true,
-  },
-  driver_b: {
-    type: String,
-    required: true,
-  },
-  notes_a: {
-    type: String,
-    required: true,
-  },
-  notes_b: {
-    type: String,
-    required: true,
-  },
-  circumstances_a: {
-    type: String,
-    required: true,
-  },
-  circumstances_b: {
-    type: String,
-    required: true,
-  },
+    enum: ["Front", "Back", "Left", "Right"],
+    required: true
+    },
+
+    apparent_damages_b: {
+      type: [String],
+      damageplaces: [
+      "Scratches",
+      "Dents",
+      "Cracks",
+      "Paint Damage",
+      "Broken Lights",
+      "Broken Windows",
+      "Missing Parts",
+      "Other"
+      ],
+      required: true
+      },
+      damage_direction: {
+      type: String,
+      enum: ["Front", "Back", "Left", "Right"],
+      required: true
+      },
+  
+//Partie 12 
+circumstances_a: {
+  type: String,
+  enum: [
+    "Driving in a normal and careful manner",
+    "Driving under the influence of drugs or alcohol",
+    "Speeding",
+    "Ignoring traffic signals or signs",
+    "Distracted driving",
+    "Driving while fatigued",
+    "Reckless driving",
+    "Tailgating",
+    "Changing lanes without signaling",
+    "Making an illegal turn",
+    "Backing up without looking",
+    "Driving in the wrong lane",
+    "Driving in a construction zone",
+    "Driving during inclement weather",  
+    "Other"
+  ],
+  required: true
+},
+
+circumstances_b: {
+  type: String,
+  enum: [
+    "Driving in a normal and careful manner",
+    "Driving under the influence of drugs or alcohol",
+    "Speeding",
+    "Ignoring traffic signals or signs",
+    "Distracted driving",
+    "Driving while fatigued",
+    "Reckless driving",
+    "Tailgating",
+    "Changing lanes without signaling",
+    "Making an illegal turn",
+    "Backing up without looking",
+    "Driving in the wrong lane",
+    "Driving in a construction zone",
+    "Driving during inclement weather",
+    "Other"
+  ],
+  required: true
+},
+//Partie 13 
+accident_croquis: {
+  type: String,
+  required: true
+},
+ // Partie 14 
+ notes_a: {
+  type: mongoose.Schema.Types.Mixed,
+  required: true,
+},
+notes_b: {
+  type: mongoose.Schema.Types.Mixed,
+  required: true,
+},
+ //Partie 15 
   signature_a: {
     type: String,
     required: true,
@@ -81,10 +403,9 @@ const statementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  image_pdf: {
-    type: String,
-    required: true,
-  },
+
+// Partie 16     const [case_state, setCase_state] = useState(true); // waiting / treated /claused ma3adech boolean
+
   case_state:{
     type: Boolean,
     required :true,
