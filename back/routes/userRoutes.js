@@ -31,6 +31,7 @@ router.post("/users/", userController.post_update_user);
 
 router.get("/getmailfromtoken", userController.get_get_email_from_token);
 
+router.get("/all-experts", userController.show_experts_get);
 
 
 module.exports = router;

@@ -6,13 +6,6 @@ const statementSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: Date.now,
-    validate: {
-      validator: function (value) {
-        return moment(value).isValid();
-      },
-      message: "Invalid date format",
-    },
   },
   //Partie 2 : 
   location: {
@@ -52,7 +45,6 @@ const statementSchema = new mongoose.Schema({
     },
     agency: {
       type: String, // Agence (id_agence foreign key)
-      ref: 'Agence', // replace 'Agency' with the actual name of the Agency model
     },
     contractValidity: {
 
@@ -69,36 +61,28 @@ const statementSchema = new mongoose.Schema({
 
   vehicule_b: {
     assureBy: {
-      type: String,
-      required: true
+      type: String, // Vehicule assure par (in english)
     },
     contractNumber: {
       type: String, // Police D'assurance Number
-      required: true
-
     },
     agency: {
       type: String, // Agence (id_agence foreign key)
-      ref: 'Agence', // replace 'Agency' with the actual name of the Agency model
-      required: true
     },
     contractValidity: {
 
       start_date: {
         type: Date,
         default: Date.now,
-        required: true
       },
       end_date: {
         type: Date,
-        required: true
       },
     },
   },
 
   //Partie7
   drivers_identity_a: {
-
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
@@ -130,8 +114,6 @@ const statementSchema = new mongoose.Schema({
   },
 
   drivers_identity_b: {
-
-
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
@@ -303,12 +285,6 @@ const statementSchema = new mongoose.Schema({
     ],
     required: true
   },
-  hit_direction: {
-    type: String,
-    enum: ["Front", "Back", "Left", "Right"],
-    required: true
-  },
-
   hits_b: {
     type: String,
     possible_place: [
@@ -329,42 +305,30 @@ const statementSchema = new mongoose.Schema({
     ],
     required: true
   },
-  hit_direction: {
-    type: String,
-    enum: ["Front", "Back", "Left", "Right"],
-    required: true
-  },
-  //Partie 11 
+  //Partie 11
   apparent_damages_a: {
     type: String,
-
-    damageplaces: {
-      type: String,
-      enum: [
-        "Scratches",
-        "Dents",
-        "Cracks",
-        "Paint Damage",
-        "Broken Lights",
-        "Broken Windows",
-        "Missing Parts",
-        "Other"
-
-      ],
-      required: true,
-    },
-    damage_direction_a: {
-      type: String,
-      enum: ["Front", "Back", "Left", "Right"],
-      required: true,
-    },
-
-  },
-
-
-  apparent_damages_b: {
-    type: String,
     damageplaces: [
+    "Scratches",
+    "Dents",
+    "Cracks",
+    "Paint Damage",
+    "Broken Lights",
+    "Broken Windows",
+    "Missing Parts",
+    "Other",
+    ],
+    required: true,
+    damage_direction_a: {
+    type: String,
+    enum: ["Front", "Back", "Left", "Right"],
+    required: true,
+    },
+    },
+
+    apparent_damages_b: {
+      type: String,
+      damageplaces: [
       "Scratches",
       "Dents",
       "Cracks",
@@ -372,15 +336,15 @@ const statementSchema = new mongoose.Schema({
       "Broken Lights",
       "Broken Windows",
       "Missing Parts",
-      "Other"
-    ],
-    damage_direction_b: {
+      "Other",
+      ],
+      required: true,
+      damage_direction_b: {
       type: String,
       enum: ["Front", "Back", "Left", "Right"],
-      required: true
-    },
-  },
-  
+      required: true,
+      },
+      },
 
 
   //Partie 12 
@@ -437,6 +401,11 @@ const statementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  // Partie 14
+  notes_a: {
+    type: String,
+    required: true,
+  },
   notes_b: {
     type: String,
     required: true,
@@ -451,12 +420,20 @@ const statementSchema = new mongoose.Schema({
     required: true,
   },
 
-  // Partie 16     const [case_state, setCase_state] = useState(true); // waiting / treated /claused ma3adech boolean
+  // Partie 16     const [case_state, setCase_state] = useState(true); // waiting / treated /closed ma3adech boolean
 
   case_state: {
-    type: Boolean,
+    type: String,
     required: true,
+    enum: ['waiting', 'treated', 'closed']
   },
+
+  assign_to_expert : {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "Expert",
+  }
+  
 });
 
 const Statement = mongoose.model("Statement", statementSchema);

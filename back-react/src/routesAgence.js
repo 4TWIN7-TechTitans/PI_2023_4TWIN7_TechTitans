@@ -18,6 +18,7 @@
 
 import AddNewContract from "views/examples/addContract";
 import Tickets from "views/examples/Tickets";
+import ListofStatement from "views/examples/ListOfStatement";
 
 var routesAgence = [
   //TODO : change admin to user view profile
@@ -37,6 +38,14 @@ var routesAgence = [
     icon: "ni ni-bullet-list-67 text-blue",
     component: Tickets,
     layout: "/admin",
+    showInSidebar: true,
+  },
+  {
+    path: "/ListofStatements",
+    name: "ListOfStatement",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: ListofStatement,
+    layout: "/agence",
     showInSidebar: true,
   },
 
