@@ -18,6 +18,7 @@
 import Index from "views/Index.js";
 import Profile from "views/examples/Profile.js";
 import Maps from "views/examples/Maps.js";
+import Landing from "views/examples/Landing.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
@@ -160,6 +161,14 @@ var routes = [
       icon: "ni ni-collection text-red",
       component: AddStatement,
       layout: "/main",
+      showInSidebar: true,
+    },
+    {
+      path: "/landing",
+      name: "Add a Statement",
+      icon: "ni ni-collection text-red",
+      component: Landing,
+      layout: "/landing",
       showInSidebar: true,
     },
 ];

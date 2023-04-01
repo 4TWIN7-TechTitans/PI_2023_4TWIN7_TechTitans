@@ -23,10 +23,26 @@ import { Container, Row, Col } from "reactstrap";
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
+import AddStatement from "views/examples/addStatement.js";
+import Chat from "views/examples/chat.js";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+import {
+    Badge,
+    Card,
+    CardHeader,
+    CardFooter,
+    Pagination,
+    PaginationItem,
+    PaginationLink,
+    Table,
+    
+    Button,
+  } from "reactstrap";
 
 import routes from "routes.js";
 
-const Auth = (props) => {
+const Landing = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
 
@@ -60,13 +76,26 @@ const Auth = (props) => {
 
   return (
     <>
+
       <div className="main-content" ref={mainContent}>
         <AuthNavbar />
-        <div className="header bg-gradient-info py-7 py-lg-8">
+        <div className="header container-fluid bg-gradient-info py-7 py-lg-8">
           <Container>
+       
+          <div className="header-body text-center mb-7">
+              <Row className="justify-content-center">
+                <Col lg="5" md="6">
+                  <h1 className="text-white">Welcome to Assurini</h1>
+                
+                </Col>
+              </Row>
+            </div>
+            <div>
+  
+                </div>
            
           </Container>
-          <div className="separator separator-bottom separator-skew zindex-100">
+          <div className="separator container-fluid separator-bottom separator-skew zindex-100">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               preserveAspectRatio="none"
@@ -83,18 +112,32 @@ const Auth = (props) => {
           </div>
         </div>
         {/* Page content */}
-        <Container className="mt--8 pb-5">
-          <Row className="justify-content-center">
-            <Switch>
-              {getRoutes(routes)}
-              <Redirect from="*" to="/auth/login" />
-            </Switch>
-          </Row>
-        </Container>
+        <Container className="mt--8 w-75 container-fluid" fluid>
+       {/* <Row>
+        <div className="col">
+          <Card className="shadow" >
+           
+  <Chat />
+          </Card>
+        </div>
+      </Row> */}
+      
+      <Row>
+      <AddStatement />
+      
+      </Row>
+    </Container>
+
+
+   
+
+
       </div>
+    
       <AuthFooter />
+    
     </>
   );
 };
 
-export default Auth;
+export default Landing;

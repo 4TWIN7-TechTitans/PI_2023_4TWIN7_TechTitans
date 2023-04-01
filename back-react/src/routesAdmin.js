@@ -34,7 +34,7 @@ var routesAdmin = [
     component: Index,
     layout: "/admin",
     showInSidebar: true,
-  },/*
+  },
   {
     path: "/icons",
     name: "Icons",
@@ -43,7 +43,7 @@ var routesAdmin = [
     layout: "/admin",
     showInSidebar: false,
   },
-  {
+  /*{
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",

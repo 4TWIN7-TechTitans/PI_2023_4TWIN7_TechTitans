@@ -55,7 +55,7 @@ function Login() {
         .then(
           (res) => {
             console.log("res 2FA");
-            window.location.href = "/admin/index";
+            window.location.href = "/";
           },
           (err) => {
             console.log("err 2FA");
@@ -75,7 +75,7 @@ function Login() {
             setShowNotification(true);
 
             //TODO : ROUTES ROLES 
-            window.location.href = "/admin/index";
+            window.location.href = "/";
           },
           (err) => {
             console.log("err then");

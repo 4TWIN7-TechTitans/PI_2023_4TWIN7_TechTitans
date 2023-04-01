@@ -565,7 +565,7 @@ module.exports.login_post = async (req, res) => {
     let nextLink = "";
 
     if (user.role === "Admin") nextLink = "/admin/index";
-    if (user.role === "Client") nextLink = "/admin/user-profile";
+    if (user.role === "Client") nextLink = "/";
     if (user.role === "Agence") nextLink = "/admin/index";
     if (user.role === "Expert") nextLink = "/admin/index";
 

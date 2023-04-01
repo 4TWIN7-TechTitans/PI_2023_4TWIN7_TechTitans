@@ -71,10 +71,19 @@ const AddStatement = () => {
   useEffect(() => {
     //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
   }, []);
+  const [isShown, setIsShown] = useState(true);
 
+  const handleClick = event => {
+    // 👇️ toggle shown state
+    setIsShown(current => !current);
+
+    // 👇️ or simply set it to true
+    // setIsShown(true);
+  };
   return (
     <>
-      <UserHeader />
+      
+       {/*<UserHeader /> */}
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -85,9 +94,14 @@ const AddStatement = () => {
                   <Col xs="8">
                     <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
-                  <Col className="text-right" xs="4"></Col>
+                  <Col className="text-right" xs="4">
+                  <Button color="info" onClick={handleClick} >
+                        {!isShown ? 'Show' : 'Hide'}
+                      </Button>
+                  </Col>
                 </Row>
               </CardHeader>
+              {isShown && (
               <CardBody>
                 <form onSubmit="">
                   <h6 className="heading-small text-muted mb-4">
@@ -439,7 +453,7 @@ const AddStatement = () => {
                     </Row>
                   </div>
                 </form>
-              </CardBody>
+              </CardBody>)}
             </Card>
           </Col>
 
