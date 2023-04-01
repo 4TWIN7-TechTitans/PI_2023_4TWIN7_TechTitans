@@ -303,7 +303,7 @@ const statementSchema = new mongoose.Schema({
       "Doors",
       "Other"
     ],
-    required: true
+    required: true,
   },
   //Partie 11
   apparent_damages_a: {
@@ -345,7 +345,6 @@ const statementSchema = new mongoose.Schema({
       required: true,
       },
       },
-
 
   //Partie 12 
   circumstances_a: {
