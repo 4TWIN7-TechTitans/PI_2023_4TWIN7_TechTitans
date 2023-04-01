@@ -41,6 +41,7 @@ import {
   InputGroup,
   Media,
 } from "reactstrap";
+import axios from "axios";
 const Role=getCookie('role');
 const nom="";
 const prenom="";
@@ -145,7 +146,7 @@ const AdminNavbar = () => {
             </DropdownItem>
             <DropdownItem divider />
 
-            <DropdownItem href="/">
+            <DropdownItem href="/" onClick={handleLogout}>
               <i className="ni ni-user-run" />
               <span>Logout</span>
             </DropdownItem>
@@ -158,6 +159,26 @@ const AdminNavbar = () => {
     </>
   );
 };
+
+
+const handleLogout = async () => {
+  try {
+    const response = await axios.get("http://localhost:5000/logout", { responseType: "text" });
+    console.log("Logged out successfully");
+    
+    // Delete all cookies
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+  } catch (error) {
+    console.error("Error while logging out", error);
+  }
+};
+
+
+
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
