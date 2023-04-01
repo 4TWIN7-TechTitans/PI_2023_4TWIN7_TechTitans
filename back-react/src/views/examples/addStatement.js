@@ -33,6 +33,8 @@ import {
   InputGroupText,
   Label,
 } from "reactstrap";
+import SignatureCanvas from 'react-signature-canvas';
+import CanvasDraw from "react-canvas-draw";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useEffect, useState } from "react";
@@ -92,6 +94,8 @@ const AddStatement = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
+
+  const [users, setUsers] = useState([]);
 
   const brands = [
     "Toyota",
@@ -336,6 +340,21 @@ const AddStatement = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/all-users");
+        setUsers(
+          response.data.users.filter((user) => user.role === "Agence")
+
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
   //hundle show for the whole card:
   const [isShown, setIsShown] = useState(true);
 
@@ -412,6 +431,12 @@ const AddStatement = () => {
     // 👇️ toggle shown state
     setIsShown13(current => !current);
   };
+
+  const handleClear = event => {
+    setAccident_croquis.current.clear();
+  };
+
+  const today = new Date().toISOString().substr(0, 10);
   return (
     <>
 
@@ -435,14 +460,14 @@ const AddStatement = () => {
               </CardHeader>
               {isShown && (
                 <CardBody>
-                  <form onSubmit="">
+                  <form onSubmit="" noValidate>
                     <h6 className="heading-small text-muted mb-4">
                       set all the infromations related to the accident please
                     </h6>
                     <div className="pl-lg-4">
 
 
-                    <Row> {/* Section 1 + 2 + 3 + 4 + 5 */}
+                      <Row> {/* Section 1 + 2 + 3 + 4 + 5 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 1 + 2 + 3 + 4 + 5
@@ -473,10 +498,12 @@ const AddStatement = () => {
                                 type="date"
                                 placeholder="date"
                                 required
+                                defaultValue={today}
                               />
                               <div className="date error"></div>
                             </FormGroup>
                           </Col>
+
                           <Col lg="6">
                             <FormGroup>
                               <label
@@ -589,12 +616,14 @@ const AddStatement = () => {
                               >
                                 vehicule Insured By :
                               </label>
-                              <Input
-                                className="form-control-alternative"
-                                id="email"
+                              <Input name="agency" type="select" required>
+                                {users.map((user) => (
+                                  <option key={user._id} value={user._id} >
+                                    {user.first_name}
+                                  </option>
+                                ))}
+                              </Input>
 
-                                type="email"
-                              />
                             </FormGroup>
                             <FormGroup>
                               <label
@@ -1526,12 +1555,17 @@ const AddStatement = () => {
                                   13. Simulation Image Of the Accident
                                 </label>
                                 <InputGroup className="input-group-alternative">
-                                  <Input
-                                    className="form-control-alternative"
-                                    id="input-address"
-                                    type="text"
+                                  <CanvasDraw
+                                    ref={setAccident_croquis}
+                                    brushRadius={2}
+                                    canvasWidth={12000}
+                                    canvasHeight={400}
+                                    hideGrid={true}
+                                    brushColor={"#000000"}
                                   />
+
                                 </InputGroup>
+                                <button onClick={(e) => handleClear(e, setAccident_croquis)}>Clear</button>
                               </FormGroup>
 
                             </Col>
@@ -1581,14 +1615,13 @@ const AddStatement = () => {
                                   15. Signature of A
                                 </label>
                                 <InputGroup className="input-group-alternative">
-                                  <Input
-                                    className="form-control-alternative"
-                                    id="input-address"
-                                    type="text"
+                                  <SignatureCanvas
+                                    penColor='black'
+                                    canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }}
+                                    ref={setSignature_a}
                                   />
                                 </InputGroup>
                               </FormGroup>
-
                             </Col>
                             <Col lg="6">
                               <FormGroup>
@@ -1600,10 +1633,10 @@ const AddStatement = () => {
                                   15. Signature of B
                                 </label>
                                 <InputGroup className="input-group-alternative">
-                                  <Input
-                                    className="form-control-alternative"
-                                    id="input-address"
-                                    type="text"
+                                  <SignatureCanvas
+                                    penColor='black'
+                                    canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }}
+                                    ref={setSignature_b}
                                   />
                                 </InputGroup>
                               </FormGroup>
