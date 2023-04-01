@@ -1,4 +1,5 @@
 const StatementModel = require("../models/statement");
+const UserModel = require("../models/user");
 require("dotenv").config();
 
 module.exports.check_statement = async (req, res) => {
@@ -29,6 +30,40 @@ module.exports.check_statement = async (req, res) => {
     }
   };
 
+  module.exports.assign_statement_post = async (req, res) => {
+    try {
+      // Find expert by email
+      const expert = await UserModel.findOne({ email: req.body.email });
+      if (!expert) {
+        return res.status(404).json({ message: "Expert not found" });
+      }
+  
+      // Assign statement to expert
+      const statement = await StatementModel.findOneAndUpdate(
+        { _id: req.params.id },
+        { assign_to_expert: expert._id },
+        { new: true }
+      );
+      res.status(200).json({ message: "Statement updated successfully", statement });
+    } catch (error) {
+      res.status(400).json({ message: "Error updating statement", error });
+    }
+  };  
+  
+
+  module.exports.get_all_statements = async (req, res) => {
+    try {
+      const statements = await StatementModel.find();
+      if (statements.length === 0) {
+        res.status(404).json({ message: "No statements found" });
+      } else {
+        res.status(200).json({ statements });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Error retrieving statements", error });
+    }
+  };
+
   module.exports.create_or_update_statement_post = async (req, res) => {
     try {
       const statement = await StatementModel.findOneAndUpdate(
@@ -41,3 +76,4 @@ module.exports.check_statement = async (req, res) => {
       res.status(400).json({ message: "Failed to create or update statement", error });
     }
   };
+

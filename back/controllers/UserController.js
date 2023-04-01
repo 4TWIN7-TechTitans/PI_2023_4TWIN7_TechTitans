@@ -761,6 +761,25 @@ module.exports.show_users_get = async (req, res) => {
     });
   }
 };
+// Show Expert
+module.exports.show_experts_get = async (req, res) => {
+  try {
+    const experts = await userModel.find({ role: 'Expert' });
+    res.status(200).json({
+      experts,
+      message: "All experts retrieved successfully",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to retrieve experts",
+      status: "error",
+    });
+  }
+};
+
+
 
 //Get user by email
 module.exports.get_user_by_email = async (req, res) => {
@@ -851,6 +870,7 @@ module.exports.get_user_by_email = async (req, res) => {
     });
   }
 };
+
 module.exports.post_ban_user = async (req, res) => {
   try {
     const { mail } = req.params;
