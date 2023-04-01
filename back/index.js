@@ -11,6 +11,10 @@ const doc = {
 swaggerAutogen(outputFile, endpointsFiles, doc);
 
 const server = http.createServer(app);
+
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
+
 server.listen(process.env.PORT, () => {
   console.log(`app is running on port ${process.env.PORT}`);
 });
