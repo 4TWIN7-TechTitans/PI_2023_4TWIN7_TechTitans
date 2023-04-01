@@ -24,9 +24,8 @@ const carSchema = new mongoose.Schema({
   id_contrat: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    unique: true,
     ref: "Contract",
-  },
+  }
 });
 
 const Car = mongoose.model("Car", carSchema);
