@@ -20,6 +20,11 @@ module.exports.add_ticket = async (req, res) => {
   } */
   
   try {
+    const last_ticket = await ticketModel.find().sort( { _id : -1 } ).limit(1);
+     
+      const ticketnumber=Number(last_ticket[0].number) + 1;
+      console.log(ticketnumber);
+      req.body.number=ticketnumber;
     const ticket = await ticketModel.create({...req.body,
     });
     res.status(201).json({ message: "ticket created successfully", ticket });

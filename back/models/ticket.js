@@ -8,6 +8,11 @@ const TicketSchema = new mongoose.Schema({
     required: true,
     maxlength: [100, "l'objet du ticket ne doit pas dépasser 100 caractéres"],
   },
+  number: {
+    type: String,
+    required: false,
+
+  },
   date_demande: {
     type: Date,
     required: true,

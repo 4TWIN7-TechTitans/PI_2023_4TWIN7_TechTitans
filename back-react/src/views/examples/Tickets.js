@@ -17,7 +17,29 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+
+
+
+
+
+
 const Tickets = () => {
+  
+const [tickets, setTickets] = useState([]);
+
+const fetchData = async () => {
+  try {
+    const response = await axios.get("http://localhost:5000/ticket");
+    const filteredData = response.data.tickets;
+    setTickets(filteredData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+useEffect(() => {
+  fetchData();
+}, []);
+
   return (
     <>
     <Header />
@@ -40,7 +62,15 @@ const Tickets = () => {
                 </tr>
               </thead>
               <tbody>
-                
+              {tickets.map((ticket) => (
+                    <tr key={ticket._id}>
+                     <td>{ticket.number}</td>
+                     <td>{ticket.objet}</td>
+                     <td>{ticket.date_demande}</td>
+                     <td>{ticket.etat}</td>
+                     <td></td>
+                    </tr>
+                  ))}
               </tbody>
             </Table>
 
