@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const statementController = require("../controllers/statementController.js");
+const statementController = require("../controllers/StatementController.js");
 //const { add_statement_post } = require("../controllers/statementController");
 
 // POST /statements

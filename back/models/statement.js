@@ -38,25 +38,23 @@ witness: {
   required: true,
   maxlength: [50, "Witness name should not exceed 50 characters"],
   match: [/^[A-Za-z\s'À-ÖØ-öø-ÿ]+$/, "Witness name should only contain letters, spaces, quotes, and French characters"],
-  required: true,
+  required: false,
 },
 //Partie 6 
+//Vehicule A
 vehicule_a: {
   assureBy: {
     type: String, // Vehicule assure par (in english)
   },
-  assuranceNumber: {
+  contractNumber: {
     type: String, // Police D'assurance Number
   },
   agency: {
-    type: mongoose.Schema.Types.ObjectId, // Agence (id_agence foreign key)
-    ref: 'Agency', // replace 'Agency' with the actual name of the Agency model
+    type: String, // Agence (id_agence foreign key)
+    ref: 'Agence', // replace 'Agency' with the actual name of the Agency model
   },
-  contract: {
-    id_contrat: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Contract', // replace 'Contract' with the actual name of the Contract model
-    },
+  contractValidity: {
+
     start_date: {
       type: Date,
       default: Date.now,
@@ -66,28 +64,25 @@ vehicule_a: {
     },
   },
 },
+//vehicule B
 
 vehicule_b: {
   assureBy: {
     type: String, 
     required: true
   },
-  assuranceNumber: {
+  contractNumber: {
     type: String, // Police D'assurance Number
     required: true
 
   },
   agency: {
-    type: mongoose.Schema.Types.ObjectId, // Agence (id_agence foreign key)
+    type: String, // Agence (id_agence foreign key)
     ref: 'Agence', // replace 'Agency' with the actual name of the Agency model
     required: true  
   },
-  contract: {
-    id_contrat: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Contract', // replace 'Contract' with the actual name of the Contract model
-      required : true 
-    },
+  contractValidity: {
+
     start_date: {
       type: Date,
       default: Date.now,
@@ -106,38 +101,95 @@ vehicule_b: {
     maxlength: [50, "drivers_identity_a"],
     match: [/^\d+$/, "drivers_identity_a should only contain numbers"],
     required: true,
-  },
-  drivers_identity_b: {
+    
+    first_name: {
     type: String,
-    maxlength: [50, "drivers_identity_b "],
-    match: [/^\d+$/, "drivers_identity_b should only contain numbers"],
+    maxlength: [50, "first_name"],
     required: true,
+    },
+    last_name: {
+    type: String,
+    maxlength: [50, "last_name"],
+    required: true,
+    },
+    address: {
+    type: String,
+    maxlength: [100, "address"],
+    required: true,
+    },
+    drivers_license_issue_date: {
+      type: Date,
+      required: true,
+    }, 
+    driver_license: {
+    type: String,
+    maxlength: [20, "driver_license"],
+    match: [/^[a-zA-Z0-9]+$/, "driver_license should only contain letters and numbers"],
+    required: true,
+    },
   },
+
+    drivers_identity_b: {
+      type: String,
+      maxlength: [50, "drivers_identity_b"],
+      match: [/^\d+$/, "drivers_identity_b should only contain numbers"],
+      required: true,
+      
+      first_name: {
+      type: String,
+      maxlength: [50, "first_name"],
+      required: true,
+      },
+      last_name: {
+      type: String,
+      maxlength: [50, "last_name"],
+      required: true,
+      },
+      address: {
+      type: String,
+      maxlength: [100, "address"],
+      required: true,
+      },
+      drivers_license_issue_date: {
+        type: Date,
+        required: true,
+      }, 
+      driver_license: {
+      type: String,
+      maxlength: [20, "driver_license"],
+      match: [/^[a-zA-Z0-9]+$/, "driver_license should only contain letters and numbers"],
+      required: true,
+      },
+      drivers_license_issue_date: {
+        type: Date,
+        required: true,
+      },
+    },
   //Partie 8 
-  Insured_a: {
-    first_name: {
+  insured_a: {
+    firstname: {
       type: String,
       required: true,
     },
-    last_name: {
+    lastname: {
       type: String,
       required: true,
     },
-    phone_number: {
+    phonenumber: {
       type: String,
       required: true,
     },
   },
-  Insured_b: {
-    first_name: {
+  insured_b: {
+    firstname: {
       type: String,
       required: true,
     },
-    last_name: {
+    lastname: {
       type: String,
       required: true,
     },
-    phone_number: {
+    phonenumber: {
       type: String,
       required: true,
     },
@@ -159,11 +211,6 @@ vehicule_identity_a : {
   matriculation: {
     type: String,
     required: true,
-  },
-  id_contrat: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Contract",
   },
     country: {
       type: String,
@@ -205,11 +252,6 @@ vehicule_identity_b : {
   matriculation: {
     type: String,
     required: true,
-  },
-  id_contrat: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Contract",
   },
     country: {
       type: String,
@@ -310,7 +352,7 @@ hit_direction: {
     ],
     required: true
     },
-    damage_direction: {
+    damage_direction_a: {
     type: String,
     enum: ["Front", "Back", "Left", "Right"],
     required: true
@@ -330,7 +372,7 @@ hit_direction: {
       ],
       required: true
       },
-      damage_direction: {
+      damage_direction_b: {
       type: String,
       enum: ["Front", "Back", "Left", "Right"],
       required: true
