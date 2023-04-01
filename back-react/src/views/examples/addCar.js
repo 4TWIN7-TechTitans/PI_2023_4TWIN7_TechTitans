@@ -52,7 +52,7 @@ function AddCar() {
   }
 
   useEffect(() => {
-    if (getCookie("role") !== "Client") window.location.href = "/auth/login";
+   // if (getCookie("role") !== "Client") window.location.href = "/auth/login";
   }, []);
   
   useEffect(() => {

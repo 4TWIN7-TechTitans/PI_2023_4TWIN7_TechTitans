@@ -40,7 +40,8 @@ function ListOfUsers() {
   }
 
   useEffect(() => {
-    if (getCookie("role") !== "admin") window.location.href = "/auth/login";
+    /*
+    if (getCookie("role") !== "admin") window.location.href = "/auth/login";*/
   }, []);
 
   useEffect(() => {

@@ -26,10 +26,10 @@ class Index extends React.Component {
       [state]: index,
     });
   };
-
+/*
   componentDidMount() {
     if (getCookie("role") !== "admin") window.location.href = "/auth/login";
-  }
+  }*/
 
   render() {
     return (

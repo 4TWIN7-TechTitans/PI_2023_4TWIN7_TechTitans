@@ -28,7 +28,7 @@ function AddNewContract() {
   }
 
   useEffect(() => {
-    if (getCookie("role") !== "agence") window.location.href = "/auth/login";
+    //if (getCookie("role") !== "agence") window.location.href = "/auth/login";
   }, []);
 
 
