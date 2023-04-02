@@ -33,8 +33,18 @@ const Tickets = () => {
   const [ticketadded, setTicketadded] = useState("default");
   const [num_ticket, setNum_ticket] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const role = getCookie("role");
   const fetchData = async () => {
     try {
+      const ticket_url="";
+      if(role==="Client")
+      ticket_url='http://127.0.0.1:5000/ticket/client';
+      else
+      if(role==="Agence")
+      ticket_url='http://127.0.0.1:5000/ticket/agence';
+
+
+
       const response = await axios.get("http://localhost:5000/ticket");
       const filteredData = response.data.tickets;
       setTickets(filteredData);
@@ -45,7 +55,7 @@ const Tickets = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const role = getCookie("role");
+
 
   const [isShownadd_ticket, setIsShownadd_ticket] = useState("list");
   const handleShownadd_ticket = (event) => {
@@ -113,6 +123,7 @@ const Tickets = () => {
       getCookie("userid").length - 2
     );
     try {
+    
       const addticket = await axios.post(
         "http://localhost:5000/ticket",
         {

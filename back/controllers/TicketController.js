@@ -56,10 +56,12 @@ module.exports.get_tickets = async (req, res) => {
     }
   };
 
-  module.exports.get_ticket = async (req, res) => {
-    const { id } = req.params;
+
+
+  module.exports.get_ticketsbyagence = async (req, res) => {
+    const { id } = req.body;
     try {
-      const ticket = await ticketModel.findOne({ id });
+      const ticket = await ticketModel.find( {id_agence : id}   );
       if (ticket) 
       res.status(200).json({ ticket: ticket});
       
@@ -67,5 +69,40 @@ module.exports.get_tickets = async (req, res) => {
      
       
       res.status(400).json({ err, status: "error" });
+    }
+  };
+
+
+
+  module.exports.get_ticketsbyclient = async (req, res) => {
+    const { id } = req.body;
+    try {
+      const ticket = await  ticketModel.find( {id_demandeur : id}   );
+      if (ticket) 
+      res.status(200).json({ ticket: ticket});
+      
+    } catch (err) {
+     
+      
+      res.status(400).json({ err, status: "error" });
+    }
+  };
+
+
+
+
+
+  module.exports.get_ticket = async (req, res) => {
+    const { id } = req.body;
+   
+    try {
+      const ticket = await ticketModel.find( {_id : id}   );
+      if (ticket) 
+      res.status(200).json({ ticket: ticket});
+      
+    } catch (err) {
+     
+      const errorp=err.message;
+      res.status(400).json({ errorp, status: "error" });
     }
   };
