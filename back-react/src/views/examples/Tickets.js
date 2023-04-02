@@ -33,56 +33,46 @@ const Tickets = () => {
   const [ticketadded, setTicketadded] = useState("default");
   const [num_ticket, setNum_ticket] = useState("");
   const [ticket_url, setTicket_url] = useState("");
+  const [ticket_number, setTicket_number] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const role = getCookie("role");
-  const userid = getCookie("userid").substring(3,getCookie("userid").length - 2);
-  
-
-   
+  const userid = getCookie("userid").substring(
+    3,
+    getCookie("userid").length - 1
+  );
 
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:5000/ticket");
-      if(role==="Client")
-      {  
+      if (role === "Client") {
         const filteredData = response.data.tickets.filter(
-          (obj) => obj.id_demandeur === userid);
+          (obj) => obj.id_demandeur === userid
+        );
         setTickets(filteredData);
-      }
-      else if(role==="Agence")
-      {
+      } else if (role === "Agence") {
         const filteredData = response.data.tickets.filter(
-          (obj) => obj.id_agence === "2");
+          (obj) => obj.id_agence === "2"
+        );
         setTickets(filteredData);
-      }
-      else if(role==="Admin")
-      {
+      } else if (role === "Admin") {
         const filteredData = response.data.tickets;
-        setTickets(filteredData); 
+        setTickets(filteredData);
       }
-       
-    
-
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-
     fetchData();
   }, []);
-
 
   const [isShownadd_ticket, setIsShownadd_ticket] = useState("list");
   const handleShownadd_ticket = (event) => {
     // 👇️ toggle shown state
-    if (isShownadd_ticket === "list")
-      setIsShownadd_ticket("add");
-    else if (isShownadd_ticket === "add")
-      setIsShownadd_ticket("list");
-    else if (isShownadd_ticket === "modif")
-      setIsShownadd_ticket("list");
+    if (isShownadd_ticket === "list") setIsShownadd_ticket("add");
+    else if (isShownadd_ticket === "add") setIsShownadd_ticket("list");
+    else if (isShownadd_ticket === "modif") setIsShownadd_ticket("list");
 
     fetchData();
     setTicketadded("default");
@@ -137,10 +127,9 @@ const Tickets = () => {
     const id_agence = "6427472224822a758e38d57d";
     const id_demandeur = getCookie("userid").substring(
       3,
-      getCookie("userid").length - 2
+      getCookie("userid").length - 1
     );
     try {
-    
       const addticket = await axios.post(
         "http://localhost:5000/ticket",
         {
@@ -158,6 +147,7 @@ const Tickets = () => {
       );
       if (addticket.status === 201) {
         setTicketadded("OK");
+        setIsShownadd_ticket("list");
       } else {
         setTicketadded("KO");
       }
@@ -168,17 +158,17 @@ const Tickets = () => {
 
   const DetailsTickets = async (e, id) => {
     try {
-      const response = await axios.get(" http://localhost:5000/ticket/one", {
-        id: id,
-      });
+      const response = await axios.get("http://localhost:5000/ticket/");
 
-      if (response.data.ticket._id.length > 0) {
-        const ticket = response.data.ticket;
-        setIsShownadd_ticket("modif");
-        setNum_ticket(ticket.number);
-        setObjet(ticket.objet);
+      //console.log(response.data)
 
-      }
+      const ticket = response.data.tickets.filter((obj) => obj._id === id);
+
+      setNum_ticket(ticket[0].number);
+      setObjet(ticket[0].objet);
+
+      setTicketadded("");
+      setIsShownadd_ticket("modif");
     } catch (error) {
       console.log(error);
     }
@@ -186,15 +176,15 @@ const Tickets = () => {
   };
 
   const pageSize = 5;
- const pageCount = Math.ceil(tickets.length / pageSize);
- const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
- const handlePageClick = (page) => {
-   setCurrentPage(page);
- };
- const paginatedTicket = tickets.slice(
-   (currentPage - 1) * pageSize,
-   currentPage * pageSize
- );
+  const pageCount = Math.ceil(tickets.length / pageSize);
+  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+  const paginatedTicket = tickets.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
   return (
     <>
       {role != "Client" ? <Header /> : ""}
@@ -210,10 +200,7 @@ const Tickets = () => {
                 {isShownadd_ticket === "add" && (
                   <h3 className="mb-0">New Ticket</h3>
                 )}
-                {isShownadd_ticket === "modif" && (
-                  <h3 className="mb-0">Ticket N° {num_ticket}</h3>
-                )}
-
+               
                 <Button
                   color="info float-right"
                   onClick={handleShownadd_ticket}
@@ -237,7 +224,6 @@ const Tickets = () => {
 
                   {tickets.length > 0 ? (
                     <tbody>
-
                       {paginatedTicket.map((ticket) => (
                         <tr key={ticket._id}>
                           <td>{ticket.number}</td>
@@ -255,12 +241,11 @@ const Tickets = () => {
                           </td>
                         </tr>
                       ))}
-
                     </tbody>
                   ) : (
                     <tbody>
                       <tr>
-                        <td  align="center" className="">
+                        <td align="center" className="">
                           No tickets found
                         </td>
                       </tr>
@@ -268,216 +253,220 @@ const Tickets = () => {
                   )}
                 </Table>
               )}
- {isShownadd_ticket === "list" && (
-              <CardFooter className="py-4">
-                <nav aria-label="...">
-                <Pagination
-                  className="pagination justify-content-end mb-0"
-                  listClassName="justify-content-end mb-0"
-                >
-                  <PaginationItem disabled={currentPage === 1}>
-                    <PaginationLink
-                      onClick={() => handlePageClick(currentPage - 1)}
-                      tabIndex="-1"
+              {isShownadd_ticket === "list" && (
+                <CardFooter className="py-4">
+                  <nav aria-label="...">
+                    <Pagination
+                      className="pagination justify-content-end mb-0"
+                      listClassName="justify-content-end mb-0"
                     >
-                      <i className="fas fa-angle-left" />
-                      <span className="sr-only">Previous</span>
-                    </PaginationLink>
-                  </PaginationItem>
-                  {pages.map((page) => (
-                    <PaginationItem key={page} active={currentPage === page}>
-                      <PaginationLink onClick={() => handlePageClick(page)}>
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  <PaginationItem disabled={currentPage === pageCount}>
-                    <PaginationLink
-                      onClick={() => handlePageClick(currentPage + 1)}
-                      tabIndex="-1"
-                    >
-                      <i className="fas fa-angle-right" />
-                      <span className="sr-only">Next</span>
-                    </PaginationLink>
-                  </PaginationItem>
-                </Pagination>
-              </nav>
-            </CardFooter>)}
+                      <PaginationItem disabled={currentPage === 1}>
+                        <PaginationLink
+                          onClick={() => handlePageClick(currentPage - 1)}
+                          tabIndex="-1"
+                        >
+                          <i className="fas fa-angle-left" />
+                          <span className="sr-only">Previous</span>
+                        </PaginationLink>
+                      </PaginationItem>
+                      {pages.map((page) => (
+                        <PaginationItem
+                          key={page}
+                          active={currentPage === page}
+                        >
+                          <PaginationLink onClick={() => handlePageClick(page)}>
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      <PaginationItem disabled={currentPage === pageCount}>
+                        <PaginationLink
+                          onClick={() => handlePageClick(currentPage + 1)}
+                          tabIndex="-1"
+                        >
+                          <i className="fas fa-angle-right" />
+                          <span className="sr-only">Next</span>
+                        </PaginationLink>
+                      </PaginationItem>
+                    </Pagination>
+                  </nav>
+                </CardFooter>
+              )}
 
-            {isShownadd_ticket === "add" && (
-              <CardBody>
-                <Form onSubmit={handleSubmitTicket} noValidate>
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Objet</label>
-                        <Input
-                          type="text"
-                          name="objet"
-                          id="objet"
-                          defaultValue={objet}
-                          onChange={(e) => {
-                            validateObjet(e.target.value);
-                            handleObjetChange(e);
-                          }}
-                          required
-                        />
-                        {showErrorObjet && (
-                          <p className="text-danger">
-                            l'objet du ticket ne doit etre entre 10 et 100
-                            caractéres
-                          </p>
-                        )}
-                      </FormGroup>
-                    </Col>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Description</label>
+              {isShownadd_ticket === "add" && (
+                <CardBody>
+                  <Form onSubmit={handleSubmitTicket} noValidate>
+                    <Row>
+                      <Col md="12">
+                        <FormGroup>
+                          <label>Objet</label>
+                          <Input
+                            type="text"
+                            name="objet"
+                            id="objet"
+                            defaultValue={objet}
+                            onChange={(e) => {
+                              validateObjet(e.target.value);
+                              handleObjetChange(e);
+                            }}
+                            required
+                          />
+                          {showErrorObjet && (
+                            <p className="text-danger">
+                              l'objet du ticket ne doit etre entre 10 et 100
+                              caractéres
+                            </p>
+                          )}
+                        </FormGroup>
+                      </Col>
+                      <Col md="12">
+                        <FormGroup>
+                          <label>Description</label>
 
-                        <Input
-                          type="textarea"
-                          name="description"
-                          rows="10"
-                          id="description"
-                          defaultValue={description}
-                          onChange={(e) => {
-                            validateDescription(e.target.value);
-                            handleDescriptionChange(e);
-                          }}
-                        />
-                        {showErroroDescription && (
-                          <p className="text-danger">
-                            la description du ticket doit avoit 10 caractéres
-                            au min
-                          </p>
-                        )}
-                      </FormGroup>
-                    </Col>
-                  </Row>
+                          <Input
+                            type="textarea"
+                            name="description"
+                            rows="10"
+                            id="description"
+                            defaultValue={description}
+                            onChange={(e) => {
+                              validateDescription(e.target.value);
+                              handleDescriptionChange(e);
+                            }}
+                          />
+                          {showErroroDescription && (
+                            <p className="text-danger">
+                              la description du ticket doit avoit 10 caractéres
+                              au min
+                            </p>
+                          )}
+                        </FormGroup>
+                      </Col>
+                    </Row>
 
-                  <div className="text-center">
-                    {ticketadded === "OK" && (
-                      <div className="alert alert-success mt-3" role="alert">
-                        Ticket Added
-                      </div>
-                    )}
-                    {ticketadded === "KO" && (
-                      <div className="alert alert-danger mt-3" role="alert">
-                        Something went wrong
-                      </div>
-                    )}
+                    <div className="text-center">
+                      {ticketadded === "OK" && (
+                        <div className="alert alert-success mt-3" role="alert">
+                          Ticket Added
+                        </div>
+                      )}
+                      {ticketadded === "KO" && (
+                        <div className="alert alert-danger mt-3" role="alert">
+                          Something went wrong
+                        </div>
+                      )}
 
-                    <Button
-                      className="my-4"
-                      color="primary"
-                      type="submit"
-                      disabled={formvalid}
-                    >
-                      Create ticket
-                    </Button>
+                      <Button
+                        className="my-4"
+                        color="primary"
+                        type="submit"
+                        disabled={formvalid}
+                      >
+                        Create ticket
+                      </Button>
+                    </div>
+                  </Form>
+                </CardBody>
+              )}
+
+              {isShownadd_ticket === "modif" && (
+                <CardBody>
+                  <div class="card-profile-stats d-flex justify-content-left ">
+                  
+                  <div>
+                      <span class="heading ">Ticket </span>
+                      <span class="heading ni ni-support-16"></span>
+                      <span class="description ">{num_ticket}</span>
+                    </div>
+                    <div>
+                      <span class="heading ">Created by </span>
+                      <span class="heading ni ni-user-run"></span>
+                      <span class="description ">Friends</span>
+                    </div>
+                    <div>
+                      <span class="heading">Date </span>
+                      <span class="heading ni ni-calendar-grid-58"> </span>
+                      <span class="description">Photos</span>
+                    </div>
+                    <div>
+                      <span class="heading">Etat</span>
+                      <span class="heading ni ni-sound-wave"></span>
+                      
+                      <span class="description">Comments</span>
+                    </div>
                   </div>
-                </Form>
-              </CardBody>
-            )}
 
+                  <Form onSubmit={handleSubmitTicket} noValidate>
+                    <Row>
+                      <Col md="12">
+                        <FormGroup></FormGroup>
+                      </Col>
+                      <Col md="12">
+                        <FormGroup>
+                          <label>Description</label>
 
+                          <Input
+                            type="textarea"
+                            name="description"
+                            rows="10"
+                            id="description"
+                            defaultValue={description}
+                            onChange={(e) => {
+                              validateDescription(e.target.value);
+                              handleDescriptionChange(e);
+                            }}
+                          />
+                          {showErroroDescription && (
+                            <p className="text-danger">
+                              la description du ticket doit avoit 10 caractéres
+                              au min
+                            </p>
+                          )}
+                        </FormGroup>
+                      </Col>
 
-            {isShownadd_ticket === "modif" && (
-              <CardBody>
-                <Form onSubmit={handleSubmitTicket} noValidate>
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Objet</label>
-                        <Input
-                          type="text"
-                          name="objet"
-                          id="objet"
-                          defaultValue={objet}
-                          onChange={(e) => {
-                            validateObjet(e.target.value);
-                            handleObjetChange(e);
-                          }}
-                          required
-                        />
-                        {showErrorObjet && (
-                          <p className="text-danger">
-                            l'objet du ticket ne doit etre entre 10 et 100
-                            caractéres
-                          </p>
-                        )}
-                      </FormGroup>
-                    </Col>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Description</label>
+                      <Col md="12">
+                        <FormGroup>
+                          <label>Log</label>
 
-                        <Input
-                          type="textarea"
-                          name="description"
-                          rows="10"
-                          id="description"
-                          defaultValue={description}
-                          onChange={(e) => {
-                            validateDescription(e.target.value);
-                            handleDescriptionChange(e);
-                          }}
-                        />
-                        {showErroroDescription && (
-                          <p className="text-danger">
-                            la description du ticket doit avoit 10 caractéres
-                            au min
-                          </p>
-                        )}
-                      </FormGroup>
-                    </Col>
+                          <Input
+                            type="textarea"
+                            name="log"
+                            rows="10"
+                            id="log"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
 
-                    <Col md="12">
-                      <FormGroup>
-                        <label>Log</label>
+                    <div className="text-center">
+                      {ticketadded === "OK" && (
+                        <div className="alert alert-success mt-3" role="alert">
+                          Ticket Added
+                        </div>
+                      )}
+                      {ticketadded === "KO" && (
+                        <div className="alert alert-danger mt-3" role="alert">
+                          Something went wrong
+                        </div>
+                      )}
 
-                        <Input
-                          type="textarea"
-                          name="log"
-                          rows="10"
-                          id="log"
-
-                        />
-
-                      </FormGroup>
-                    </Col>
-
-
-                  </Row>
-
-                  <div className="text-center">
-                    {ticketadded === "OK" && (
-                      <div className="alert alert-success mt-3" role="alert">
-                        Ticket Added
-                      </div>
-                    )}
-                    {ticketadded === "KO" && (
-                      <div className="alert alert-danger mt-3" role="alert">
-                        Something went wrong
-                      </div>
-                    )}
-
-                    <Button
-                      className="my-4"
-                      color="primary"
-                      type="submit"
-                      disabled={formvalid}
-                    >
-                      Create ticket
-                    </Button>
-                  </div>
-                </Form>
-              </CardBody>
-            )}
-          </Card>
-        </div>
-      </Row>
-    </Container >
+                      <Button
+                        className="my-4"
+                        color="primary"
+                        type="submit"
+                        disabled={formvalid}
+                      >
+                        Create ticket
+                      </Button>
+                    </div>
+                  </Form>
+                </CardBody>
+              )}
+            </Card>
+          </div>
+        </Row>
+      </Container>
     </>
   );
 };

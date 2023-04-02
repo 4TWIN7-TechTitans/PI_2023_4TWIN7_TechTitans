@@ -96,9 +96,13 @@ module.exports.get_tickets = async (req, res) => {
     const { id } = req.body;
    
     try {
-      const ticket = await ticketModel.find( {_id : id}   );
+      const ticket = await ticketModel.find( {number : id}   );
       if (ticket) 
-      res.status(200).json({ ticket: ticket});
+      {
+        console.log(ticket)
+        res.status(200).json({ ticket: ticket});
+      }
+    
       
     } catch (err) {
      
