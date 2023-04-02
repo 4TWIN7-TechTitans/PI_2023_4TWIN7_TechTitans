@@ -263,7 +263,7 @@ const AddStatement = () => {
       !last_name || !address || !drivers_license_issue_date ||
       !driver_license || !drivers_identity_b || !insured_a ||
       !firstname || !lastname || !phonenumber || !insured_b ||
-      !vehicule_identity_a || !brand || !type || !matriculation ||
+      !vehicule_identity_a  || !type || !matriculation ||
       !country || !vehicule_identity_b || !hits_a || !possible_place ||
       !hits_b || !hit_direction || !apparent_damages_a || !damageplaces ||
       !damage_direction || !apparent_damages_b || !circumstances_a ||
@@ -309,7 +309,7 @@ const AddStatement = () => {
           phonenumber,
           insured_b,
           vehicule_identity_a,
-          brand,
+          brand_a,
           type,
           matriculation,
           country,

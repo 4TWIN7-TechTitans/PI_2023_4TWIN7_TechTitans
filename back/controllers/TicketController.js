@@ -55,3 +55,17 @@ module.exports.get_tickets = async (req, res) => {
       });
     }
   };
+
+  module.exports.get_ticket = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const ticket = await ticketModel.findOne({ id });
+      if (ticket) 
+      res.status(200).json({ ticket: ticket});
+      
+    } catch (err) {
+     
+      
+      res.status(400).json({ err, status: "error" });
+    }
+  };
