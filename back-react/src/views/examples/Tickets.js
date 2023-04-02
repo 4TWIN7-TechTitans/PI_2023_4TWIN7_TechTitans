@@ -32,27 +32,44 @@ const Tickets = () => {
   const [formvalid, setFormvalid] = useState(true);
   const [ticketadded, setTicketadded] = useState("default");
   const [num_ticket, setNum_ticket] = useState("");
+  const [ticket_url, setTicket_url] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const role = getCookie("role");
+  const userid = getCookie("userid").substring(3,getCookie("userid").length - 2);
+  
+
+   
+
   const fetchData = async () => {
     try {
-      const ticket_url="";
-      if(role==="Client")
-      ticket_url='http://127.0.0.1:5000/ticket/client';
-      else
-      if(role==="Agence")
-      ticket_url='http://127.0.0.1:5000/ticket/agence';
-
-
-
       const response = await axios.get("http://localhost:5000/ticket");
-      const filteredData = response.data.tickets;
-      setTickets(filteredData);
+      if(role==="Client")
+      {  
+        const filteredData = response.data.tickets.filter(
+          (obj) => obj.id_demandeur === userid);
+        setTickets(filteredData);
+      }
+      else if(role==="Agence")
+      {
+        const filteredData = response.data.tickets.filter(
+          (obj) => obj.id_agence === "2");
+        setTickets(filteredData);
+      }
+      else if(role==="Admin")
+      {
+        const filteredData = response.data.tickets;
+        setTickets(filteredData); 
+      }
+       
+    
+
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
+
     fetchData();
   }, []);
 
@@ -117,7 +134,7 @@ const Tickets = () => {
     const log = "";
     const date_demande = new Date();
     const etat = "a traiter";
-    const id_agence = "2";
+    const id_agence = "6427472224822a758e38d57d";
     const id_demandeur = getCookie("userid").substring(
       3,
       getCookie("userid").length - 2
@@ -167,17 +184,17 @@ const Tickets = () => {
     }
     return;
   };
-  // pagination :
+
   const pageSize = 5;
-  const pageCount = Math.ceil(tickets.length / pageSize);
-  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
-  const handlePageClick = (page) => {
-    setCurrentPage(page);
-  };
-  const paginatedTicket = tickets.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+ const pageCount = Math.ceil(tickets.length / pageSize);
+ const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
+ const handlePageClick = (page) => {
+   setCurrentPage(page);
+ };
+ const paginatedTicket = tickets.slice(
+   (currentPage - 1) * pageSize,
+   currentPage * pageSize
+ );
   return (
     <>
       {role != "Client" ? <Header /> : ""}
@@ -243,7 +260,7 @@ const Tickets = () => {
                   ) : (
                     <tbody>
                       <tr>
-                        <td colspan="5" align="center" className="">
+                        <td  align="center" className="">
                           No tickets found
                         </td>
                       </tr>
@@ -251,7 +268,7 @@ const Tickets = () => {
                   )}
                 </Table>
               )}
-
+ {isShownadd_ticket === "list" && (
               <CardFooter className="py-4">
                 <nav aria-label="...">
                 <Pagination
@@ -285,7 +302,8 @@ const Tickets = () => {
                   </PaginationItem>
                 </Pagination>
               </nav>
-            </CardFooter>
+            </CardFooter>)}
+
             {isShownadd_ticket === "add" && (
               <CardBody>
                 <Form onSubmit={handleSubmitTicket} noValidate>
