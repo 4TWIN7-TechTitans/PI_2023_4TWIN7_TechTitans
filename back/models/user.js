@@ -20,14 +20,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     maxlength: [50, "Last name should not exceed 50 characters"],
-    match: [/^[A-Za-z\s'À-ÖØ-öø-ÿ]+$/, "First name should only contain letters, spaces, quotes, and French characters"],
-  },
+     },
   first_name: {
     type: String,
     required: true,
     maxlength: [50, "First name should not exceed 50 characters"],
-    match: [/^[A-Za-z\s'À-ÖØ-öø-ÿ]+$/, "First name should only contain letters, spaces, quotes, and French characters"],
-  },
+   },
   gender: {
     type: String,
     required: false,
