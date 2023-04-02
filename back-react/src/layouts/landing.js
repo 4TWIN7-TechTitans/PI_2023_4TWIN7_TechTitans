@@ -26,21 +26,21 @@ import AuthFooter from "components/Footers/AuthFooter.js";
 import AddStatement from "views/examples/addStatement.js";
 import Chat from "views/examples/chat.js";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from "react-responsive-carousel";
 import {
-    Badge,
-    Card,
-    CardHeader,
-    CardFooter,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    Table,
-    
-    Button,
-  } from "reactstrap";
+  Badge,
+  Card,
+  CardHeader,
+  CardFooter,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Table,
+  Button,
+} from "reactstrap";
 
-import routes from "routes.js";
+
+import Tickets from "views/examples/Tickets";
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -58,42 +58,22 @@ const Landing = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/auth") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
 
+  
   return (
     <>
-
       <div className="main-content" ref={mainContent}>
         <AuthNavbar />
         <div className="header container-fluid bg-gradient-info py-7 py-lg-8">
           <Container>
-       
-          <div className="header-body text-center mb-7">
+            <div className="header-body text-center mb-7">
               <Row className="justify-content-center">
                 <Col lg="5" md="6">
                   <h1 className="text-white">Welcome to Assurini</h1>
-                
                 </Col>
               </Row>
             </div>
-            <div>
-  
-                </div>
-           
+            <div></div>
           </Container>
           <div className="separator container-fluid separator-bottom separator-skew zindex-100">
             <svg
@@ -113,29 +93,19 @@ const Landing = (props) => {
         </div>
         {/* Page content */}
         <Container className="mt--8 w-75 container-fluid" fluid>
-       {/* <Row>
-        <div className="col">
-          <Card className="shadow" >
-           
-  <Chat />
-          </Card>
-        </div>
-      </Row> */}
-      
-      <Row>
-      <AddStatement />
-      
-      </Row>
-    </Container>
-
-
-   
-
-
+          {window.location.pathname=="/user_tickets" ?
+           <Row>
+            <Tickets />
+          </Row>
+          : 
+          <Row>
+            <AddStatement />
+          </Row>}
+          
+        </Container>
       </div>
-    
+
       <AuthFooter />
-    
     </>
   );
 };

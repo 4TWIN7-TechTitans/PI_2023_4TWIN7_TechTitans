@@ -91,6 +91,8 @@ const AdminNavbar = () => {
                   <span className="nav-link-inner--text">Home</span>
                 </NavLink>
               </NavItem>
+              {!Role.length>0 ? 
+              <>
               <NavItem>
                 <NavLink
                   className="nav-link-icon"
@@ -107,6 +109,10 @@ const AdminNavbar = () => {
                   <span className="nav-link-inner--text">Sign in</span>
                 </NavLink>
               </NavItem>
+              </>
+              
+              : ''}
+              
 
             </Nav>
           </UncontrolledCollapse>
@@ -140,7 +146,7 @@ const AdminNavbar = () => {
             </DropdownItem>
          
           
-            <DropdownItem to="/admin/user-profile" tag={Link}>
+            <DropdownItem to="/user_tickets" tag={Link}>
               <i className="ni ni-support-16" />
               <span>Support</span>
             </DropdownItem>

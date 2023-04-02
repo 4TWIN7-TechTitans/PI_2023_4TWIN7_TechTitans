@@ -32,7 +32,7 @@ import AddNewContract from "views/examples/addContract";
 import addcar from "views/examples/addCar";
 import AddStatement from "views/examples/addStatement";
 import ViewProfile from "views/examples/ViewProfile";
-
+import Tickets from "views/examples/Tickets";
 var routes = [
   //TODO : change admin to user view profile
   {
@@ -170,6 +170,7 @@ var routes = [
       component: Landing,
       layout: "/landing",
       showInSidebar: true,
-    },
+    }
+    
 ];
 export default routes;
