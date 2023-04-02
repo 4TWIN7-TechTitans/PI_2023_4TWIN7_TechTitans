@@ -5,12 +5,12 @@ const statementSchema = new mongoose.Schema({
   //Partie 1 : 
   date: {
     type: Date,
-    required: true,
+   
   },
   //Partie 2 : 
   location: {
     type: String,
-    required: true,
+   
     match: [
       /^[a-zA-Z0-9\s,'-]*$/,
       "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
@@ -19,17 +19,17 @@ const statementSchema = new mongoose.Schema({
   //Partie 3 : 
   injured: {
     type: String,
-    required: true,
+   
   },
   //Partie 4 
   material_damage: {
     type: String,
-    required: true,
+   
   },
   //Partie 5 
   witness: {
     type: String,
-    required: true,
+   
     maxlength: [50, "Witness name should not exceed 50 characters"],
     match: [/^[A-Za-z\s'À-ÖØ-öø-ÿ]+$/, "Witness name should only contain letters, spaces, quotes, and French characters"],
     required: false,
@@ -86,21 +86,21 @@ const statementSchema = new mongoose.Schema({
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
-      required: true,
+     
     },
     last_name: {
       type: String,
       maxlength: [50, "last_name"],
-      required: true,
+     
     },
     address: {
       type: String,
       maxlength: [100, "address"],
-      required: true,
+     
     },
     drivers_license_issue_date: {
       type: Date,
-      required: true,
+     
     },
     driver_license: {
       type: String,
@@ -109,7 +109,7 @@ const statementSchema = new mongoose.Schema({
         /^[a-zA-Z0-9]+$/,
         "driver_license should only contain letters and numbers",
       ],
-      required: true,
+     
     },
   },
 
@@ -117,68 +117,68 @@ const statementSchema = new mongoose.Schema({
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
-      required: true,
+     
     },
     last_name: {
       type: String,
       maxlength: [50, "last_name"],
-      required: true,
+     
     },
     address: {
       type: String,
       maxlength: [100, "address"],
-      required: true,
+     
     },
     drivers_license_issue_date: {
       type: Date,
-      required: true,
+     
     },
     driver_license: {
       type: String,
       maxlength: [20, "driver_license"],
       match: [/^[a-zA-Z0-9]+$/, "driver_license should only contain letters and numbers"],
-      required: true,
+     
     },
     drivers_license_issue_date: {
       type: Date,
-      required: true,
+     
     },
   },
   //Partie 8 
   insured_a: {
     firstname: {
       type: String,
-      required: true,
+     
     },
     lastname: {
       type: String,
-      required: true,
+     
     },
     phonenumber: {
       type: String,
-      required: true,
+     
     },
     addr: {
     type: String,
-    required: true,
+   
     },
   },
   insured_b: {
     firstname: {
       type: String,
-      required: true,
+     
     },
     lastname: {
       type: String,
-      required: true,
+     
     },
     phonenumber: {
       type: String,
-      required: true,
+     
     },
     addr: {
       type: String,
-      required: true,
+     
     },
   },
   //Partie 9 
@@ -188,16 +188,16 @@ const statementSchema = new mongoose.Schema({
       enum: ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "Audi", "Isuzu", "BMW", "Golf"
         , "Tesla", "Chevrolet", "Hyundai", "Infiniti", "Volkswagen", "Volvo", "Alfa Romeo"
         , "Mitsubishi"],
-      required: true,
+     
     },
     type: {
       type: String,
       enum: ["Car", "Truck", "MotoCycle"],
-      required: true,
+     
     },
     matriculation: {
       type: String,
-      required: true,
+     
     },
     country: {
       type: String,
@@ -219,7 +219,7 @@ const statementSchema = new mongoose.Schema({
         "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania",
         "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
         "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"],
-      required: true,
+     
     }
 
   },
@@ -229,16 +229,16 @@ const statementSchema = new mongoose.Schema({
       enum: ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "Audi", "Isuzu", "BMW", "Golf"
         , "Tesla", "Chevrolet", "Hyundai", "Infiniti", "Volkswagen", "Volvo", "Alfa Romeo"
         , "Mitsubishi"],
-      required: true,
+     
     },
     type: {
       type: String,
       enum: ["Car", "Truck", "MotoCycle"],
-      required: true,
+     
     },
     matriculation: {
       type: String,
-      required: true,
+     
     },
     country: {
       type: String,
@@ -260,22 +260,22 @@ const statementSchema = new mongoose.Schema({
         "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania",
         "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
         "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"],
-      required: true,
+     
     },
     coming_from: {
       type: String,
-      required: true,
+     
     },
     going_to: {
       type: String,
-      required: true,
+     
     },
   },
 
   //Partie 10 
   hits_a: {
     type: String,
-    possible_place: [
+    enum: [
       "Front Left Fender",
       "Front Right Fender",
       "Rear Left Fender",
@@ -294,7 +294,7 @@ const statementSchema = new mongoose.Schema({
   },
   hits_b: {
     type: String,
-    possible_place: [
+    enum: [
       "Front Left Fender",
       "Front Right Fender",
       "Rear Left Fender",
@@ -328,7 +328,7 @@ const statementSchema = new mongoose.Schema({
     damage_direction_a: {
     type: String,
     enum: ["Front", "Back", "Left", "Right"],
-    required: true,
+   
     },
     },
 
@@ -348,7 +348,7 @@ const statementSchema = new mongoose.Schema({
       damage_direction_b: {
       type: String,
       enum: ["Front", "Back", "Left", "Right"],
-      required: true,
+     
       },
       },
 
@@ -404,32 +404,32 @@ const statementSchema = new mongoose.Schema({
   // Partie 14 
   notes_a: {
     type: String,
-    required: true,
+   
   },
   // Partie 14
   notes_a: {
     type: String,
-    required: true,
+   
   },
   notes_b: {
     type: String,
-    required: true,
+   
   },
   //Partie 15 
   signature_a: {
     type: String,
-    required: true,
+   
   },
   signature_b: {
     type: String,
-    required: true,
+   
   },
 
   // Partie 16     const [case_state, setCase_state] = useState(true); // waiting / treated /closed ma3adech boolean
 
   case_state: {
     type: String,
-    required: true,
+   
     enum: ['waiting', 'treated', 'closed']
   },
 

@@ -41,7 +41,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ReactDatetime from "react-datetime";
 import moment from "moment";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+
 
 const AddStatement = () => {
 
@@ -248,133 +248,106 @@ const AddStatement = () => {
     const witness = "aaa";
 
     const vehicule_a = {
-      assureBy: form.assureBy_a,
-      contractNumber: form.contractNumber_a,
-      agency: form.agency_a,
+      assureBy: form.assureBy_a.value,
+      contractNumber: form.contractNumber_a.value,
+      agency: form.agency_a.value,
       contractValidity: {
-        start_date: form.start_date_a,
-        end_date: form.end_date_a,
+        start_date: form.start_date_a.value,
+        end_date: form.end_date_a.value,
       },
     };
 
     const vehicule_b = {
-      assureBy: form.assureBy_b,
-      contractNumber: form.contractNumber_b,
-      agency: form.agency_b,
+      assureBy: form.assureBy_b.value,
+      contractNumber: form.contractNumber_b.value,
+      agency: form.agency_b.value,
       contractValidity: {
-        start_date: form.start_date_b,
-        end_date: form.end_date_b,
+        start_date: form.start_date_b.value,
+        end_date: form.end_date_b.value,
       },
     };
 
     const drivers_identity_a = {
-      first_name: form.first_name_a,
-      last_name: form.last_name_a,
-      address: form.address_a,
-      drivers_license_issue_date: form.drivers_license_issue_date_a,
-      driver_license: form.driver_license_a,
+      first_name: form.first_name_a.value,
+      last_name: form.last_name_a.value,
+      address: form.address_a.value,
+      drivers_license_issue_date: form.drivers_license_issue_date_a.value,
+      driver_license: form.driver_license_a.value,
     };
 
     const drivers_identity_b = {
-      first_name: form.first_name_b,
-      last_name: form.last_name_b,
-      address: form.address_b,
-      drivers_license_issue_date: form.drivers_license_issue_date_b,
-      driver_license: form.driver_license_b,
+      first_name: form.first_name_b.value,
+      last_name: form.last_name_b.value,
+      address: form.address_b.value,
+      drivers_license_issue_date: form.drivers_license_issue_date_b.value,
+      driver_license: form.driver_license_b.value,
     };
 
     const insured_a = {
-      firstname: form.firstname_a,
-      lastname: form.lastname_a,
-      phonenumber: form.phonenumber_a,
-      addr: form.addr_a,
+      firstname: form.firstname_a.value,
+      lastname: form.lastname_a.value,
+      phonenumber: form.phonenumber_a.value,
+      addr: form.addr_a.value,
     };
 
     const insured_b = {
-      firstname: form.firstname_b,
-      lastname: form.lastname_b,
-      phonenumber: form.phonenumber_b,
-      addr: form.addr_b,
+      firstname: form.firstname_b.value,
+      lastname: form.lastname_b.value,
+      phonenumber: form.phonenumber_b.value,
+      addr: form.addr_b.value,
     };
 
     const vehicule_identity_a = {
-      brand: form.brand_a,
-      type: form.type_a,
-      matriculation: form.matriculation_a,
-      country: form.country_a,
-      coming_from: form.coming_from_a,
-      going_to: form.going_to_a,
+      brand: form.brand_a.value,
+      type: "",
+      matriculation: form.matriculation_a.value,
+      country: form.country_a.value,
+      coming_from: form.coming_from_a.value,
+      going_to: form.going_to_a.value,
     };
     const vehicule_identity_b = {
 
-      brand: form.brand_b,
-      type: form.type_b,
-      matriculation: form.matriculation_b,
-      country: form.country_b,
-      coming_from: form.coming_from_b,
-      going_to: form.going_to_b,
+      brand: form.brand_b.value,
+      type: "",
+      matriculation: form.matriculation_b.value,
+      country: form.country_b.value,
+      coming_from: form.coming_from_b.value,
+      going_to: form.going_to_b.value,
     }
 
     const hits_a = {
 
-      possible_place_a: form.possible_place_a,  
+      possible_place_a: "",  
     }
     const hits_b = {
 
-      possible_place_b: form.possible_place_b,  
+      possible_place_b: "",  
     }
     
     const apparent_damages_a = {
-      damage_direction: form.damage_direction_a,
+      damage_direction: form.damage_direction_a.value,
     };
 
     const apparent_damages_b = {
-      damage_direction: form.damage_direction_b,
+      damage_direction: form.damage_direction_b.value,
     };
     const circumstances_a = form.circumstances_a.value;
     const circumstances_b = form.circumstances_b.value;
-    const accident_croquis = form.accident_croquis.value;
+    const accident_croquis = "";
     const notes_a = form.notes_a.value;
     const notes_b = form.notes_b.value;
-    const signature_a = form.signature_a.value;
-    const signature_b = form.signature_b.value;
+    const signature_a = "";
+    const signature_b = "";
+
+    //console.log( notes_a)
 
 
-    if (!date || !location || !injured || !material_damage || !witness || !vehicule_a.assureBy || !vehicule_a.agency_a
-      || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date
-      || !vehicule_a.contractNumber || !vehicule_b.assureBy || !vehicule_b.agency_b || !vehicule_b.contractValidity
-      || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b
-        .contractNumber || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address
-      || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license || !drivers_identity_b.first_name
-      || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date
-      || !drivers_identity_b.driver_license || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber
-      || !insured_a.addr || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
-      || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country
-      || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to || !vehicule_identity_b.brand || !vehicule_identity_b.type
-      || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
-      || !hits_a.possible_place_a || !hits_b.possible_place_b   || !apparent_damages_a || !apparent_damages_a.damage_direction
-      || !apparent_damages_b.damage_direction || !circumstances_a || !circumstances_b || !accident_croquis || !notes_a || !notes_b
-      || !signature_a || !signature_b) {
-      setShowNotification(false);
-      setErrors({});
-      setShowError(true);
-      setErrors({
-        ...errors,
-        message: "Please fill all the fields",
-      });
-      return;
-    }
-
-
-    try {
-      const add = await axios.post(
-        "http://127.0.0.1:5000/addstatement",
-        {
-          date,
-          location,
-          injured,
-          material_damage,
-          witness,
+const mystatement=  {
+  date:date,
+          location:location,
+          injured:injured,
+          material_damage:material_damage,
+          witness:witness,
           drivers_identity_a: {
             first_name: drivers_identity_a.first_name,
             last_name: drivers_identity_a.last_name,
@@ -402,7 +375,7 @@ const AddStatement = () => {
           },
           vehicule_identity_a: {
             brand: vehicule_identity_a.brand,
-            type: vehicule_identity_a.type,
+            type: "Truck",
             matriculation: vehicule_identity_a.matriculation,
             country: vehicule_identity_a.country,
             coming_from: vehicule_identity_a.coming_from,
@@ -410,30 +383,119 @@ const AddStatement = () => {
           },
           vehicule_identity_b: {
             brand: vehicule_identity_b.brand,
-            type: vehicule_identity_b.type,
+            type: "Truck",
             matriculation: vehicule_identity_b.matriculation,
             country: vehicule_identity_b.country,
             coming_from: vehicule_identity_b.coming_from,
             going_to: vehicule_identity_b.going_to,
           },
-          hits_a: {
-            possible_place_a: hits_a.possible_place_a,
-
-          },
-          hits_b: {
-            possible_place_b: hits_a.possible_place_b,
-
-          },
+          hits_a: "Doors",
+          hits_b: "Doors",
           
-          apparent_damages_a,
-          apparent_damages_b,
-          circumstances_a,
-          circumstances_b,
-          accident_croquis,
-          notes_a,
-          notes_b,
-          signature_a,
-          signature_b,
+          apparent_damages_a:"Scratches",
+          apparent_damages_b:"Scratches",
+          circumstances_a:"Speeding",
+          circumstances_b: "Speeding",
+          accident_croquis:"Hello",
+          notes_a:notes_a,
+          notes_b: notes_b,
+          signature_a:signature_a,
+          signature_b:signature_b,
+};
+console.log( mystatement)
+
+
+    
+/*
+
+    if (!date || !location || !injured || !material_damage || !witness || !vehicule_a.assureBy || !vehicule_a.agency_a
+      || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date
+      || !vehicule_a.contractNumber || !vehicule_b.assureBy || !vehicule_b.agency_b || !vehicule_b.contractValidity
+      || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b
+        .contractNumber || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address
+      || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license || !drivers_identity_b.first_name
+      || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date
+      || !drivers_identity_b.driver_license || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber
+      || !insured_a.addr || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
+      || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country
+      || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to || !vehicule_identity_b.brand || !vehicule_identity_b.type
+      || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
+      || !hits_a.possible_place_a || !hits_b.possible_place_b   || !apparent_damages_a || !apparent_damages_a.damage_direction
+      || !apparent_damages_b.damage_direction || !circumstances_a || !circumstances_b || !accident_croquis || !notes_a || !notes_b
+      || !signature_a || !signature_b) {
+      setShowNotification(false);
+      setErrors({});
+      setShowError(true);
+      setErrors({
+        ...errors,
+        message: "Please fill all the fields",
+      });
+      return;
+    }
+
+*/
+    try {
+      const add = await axios.post(
+        "http://127.0.0.1:5000/addstatement",
+        {
+          date:date,
+          location:location,
+          injured:injured,
+          material_damage:material_damage,
+          witness:witness,
+          drivers_identity_a: {
+            first_name: drivers_identity_a.first_name,
+            last_name: drivers_identity_a.last_name,
+            address: drivers_identity_a.address,
+            drivers_license_issue_date: drivers_identity_a.drivers_license_issue_date,
+          },
+
+          drivers_identity_b: {
+            first_name: drivers_identity_b.first_name,
+            last_name: drivers_identity_b.last_name,
+            address: drivers_identity_b.address,
+            drivers_license_issue_date: drivers_identity_b.drivers_license_issue_date,
+          },
+          insured_a: {
+            firstname: insured_a.firstname,
+            lastname: insured_a.lastname,
+            phonenumber: insured_a.phonenumber,
+            address: insured_a.address,
+          },
+          insured_b: {
+            firstname: insured_b.firstname,
+            lastname: insured_b.lastname,
+            phonenumber: insured_b.phonenumber,
+            address: insured_b.address,
+          },
+          vehicule_identity_a: {
+            brand: vehicule_identity_a.brand,
+            type: "Truck",
+            matriculation: vehicule_identity_a.matriculation,
+            country: vehicule_identity_a.country,
+            coming_from: vehicule_identity_a.coming_from,
+            going_to: vehicule_identity_a.going_to,
+          },
+          vehicule_identity_b: {
+            brand: vehicule_identity_b.brand,
+            type: "Truck",
+            matriculation: vehicule_identity_b.matriculation,
+            country: vehicule_identity_b.country,
+            coming_from: vehicule_identity_b.coming_from,
+            going_to: vehicule_identity_b.going_to,
+          },
+          hits_a: "Doors",
+          hits_b: "Doors",
+          
+          apparent_damages_a:"Scratches",
+          apparent_damages_b:"Scratches",
+          circumstances_a:"Speeding",
+          circumstances_b: "Speeding",
+          accident_croquis:"Hello",
+          notes_a:notes_a,
+          notes_b: notes_b,
+          signature_a:signature_a,
+          signature_b:signature_b,
         },
         {
           headers: { "Content-Type": "application/json" },
