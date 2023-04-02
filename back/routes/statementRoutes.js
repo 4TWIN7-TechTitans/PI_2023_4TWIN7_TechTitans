@@ -15,5 +15,6 @@ router.get('/getstatements', statementController.get_all_statements);
 
 router.post('/assign_statements/:id/assign', statementController.assign_statement_post);
 
+router.get('/statementbyexpertemail/:email', statementController.getStatementByExpertEmail);
 
 module.exports = router;

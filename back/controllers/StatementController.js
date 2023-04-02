@@ -77,3 +77,17 @@ module.exports.check_statement = async (req, res) => {
     }
   };
 
+  module.exports.getStatementByExpertEmail = async function(req, res) {
+    try {
+      const expert = await UserModel.findOne({ email: req.params.email });
+      if (!expert) {
+        return res.status(404).json({ message: "Expert not found" });
+      }
+  
+      const statements = await StatementModel.find({ assign_to_expert: expert._id });
+      res.status(200).json({ message: "Statements retrieved successfully", statements });
+    } catch (error) {
+      console.error(`Error getting statement: ${error}`);
+      res.status(500).json({ message: `Error getting statement: ${error.message}` });
+    }
+  };
