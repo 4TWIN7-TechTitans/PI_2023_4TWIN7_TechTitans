@@ -72,3 +72,18 @@ function getDomainFromUrl(url) {
   }
   return null;
 }
+
+module.exports.get_all = async (req, res) => {
+  try {
+    const offres = await OffreModel.find({});
+    res.status(200).json({
+      offres,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to retrieve users",
+      status: "error",
+    });
+  }
+};

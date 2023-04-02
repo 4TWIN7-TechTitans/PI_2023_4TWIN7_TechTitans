@@ -39,8 +39,9 @@ import {
   Button,
 } from "reactstrap";
 
-
 import Tickets from "views/examples/Tickets";
+import routes from "routes.js";
+import MultipleRows from "./MultipleRows";
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -58,8 +59,6 @@ const Landing = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-
-  
   return (
     <>
       <div className="main-content" ref={mainContent}>
@@ -93,15 +92,22 @@ const Landing = (props) => {
         </div>
         {/* Page content */}
         <Container className="mt--8 w-75 container-fluid" fluid>
-          {window.location.pathname=="/user_tickets" ?
-           <Row>
-            <Tickets />
-          </Row>
-          : 
+          {window.location.pathname == "/user_tickets" ? (
+            <Row>
+              <Tickets />
+            </Row>
+          ) : (
+            <Row>
+              <AddStatement />
+            </Row>
+          )}
           <Row>
-            <AddStatement />
-          </Row>}
-          
+            <div className="col">
+              <Card className="shadow">
+                <MultipleRows />
+              </Card>
+            </div>
+          </Row>
         </Container>
       </div>
 
