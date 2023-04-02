@@ -19,7 +19,7 @@
 import AddNewContract from "views/examples/addContract";
 import Tickets from "views/examples/Tickets";
 import ListofStatement from "views/examples/ListOfStatement";
-
+import odm from "views/examples/OrdreMissionExpert";
 var routesAgence = [
   //TODO : change admin to user view profile
   
@@ -45,6 +45,14 @@ var routesAgence = [
     name: "ListOfStatement",
     icon: "ni ni-bullet-list-67 text-blue",
     component: ListofStatement,
+    layout: "/agence",
+    showInSidebar: true,
+  },
+  {
+    path: "/odm",
+    name: "Ordre de mission",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: odm,
     layout: "/agence",
     showInSidebar: true,
   },

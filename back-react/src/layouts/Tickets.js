@@ -11,7 +11,7 @@ import Tickets from "views/examples/Tickets";
 
 const Tickets = () => {
   return (
-    <Tickets />
+  <></>
   )
 }
 

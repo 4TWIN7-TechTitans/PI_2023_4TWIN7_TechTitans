@@ -48,7 +48,7 @@ root.render(
       <Route path="/expert" render={(props) => <ExpertLayout {...props} />} />
       <Route path="/" render={(props) => <LandingLayout {...props} />} />
       //TODO : 404
-      <Redirect from="/" to="/auth/login" />
+      
     </Switch>
   </BrowserRouter>
 );

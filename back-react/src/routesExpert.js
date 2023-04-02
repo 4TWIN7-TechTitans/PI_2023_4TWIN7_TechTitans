@@ -15,6 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
+import odm from "views/examples/OrdreMissionExpert";
 var routesExpert = [
   //TODO : change admin to user view profile
   {
@@ -26,14 +28,13 @@ var routesExpert = [
     showInSidebar: true,
   },
   {
-    path: "/OrdreMissionExpert",
-    name: "Mission Profile",
-    icon: "ni ni-tv-2 text-primary",
-    component: "OrdreMissionExpert",
+    path: "/odm",
+    name: "Ordre de mission",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: odm,
     layout: "/expert",
     showInSidebar: true,
-  }
- 
+  },
  
 ];
 export default routesExpert;
