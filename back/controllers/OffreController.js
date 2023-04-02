@@ -1,4 +1,6 @@
 const OffreModel = require("../models/offre");
+const request = require("request-promise");
+const cheerio = require("cheerio");
 
 module.exports.add_offre = async (req, res) => {
   try {
@@ -14,3 +16,59 @@ module.exports.add_offre = async (req, res) => {
     }
   }
 };
+
+module.exports.scrap = async (req, res) => {
+  try {
+    const result = await request.get(
+      "https://www.cga.gov.tn/index.php?id=148&L=0"
+    );
+    let reassurance = false;
+    const $ = cheerio.load(result);
+    const scrappedData = [];
+    $("#c357 > table > tbody > tr").each((index, element) => {
+      if (index === 0) return true;
+      if (reassurance === true) return true;
+      const tds = $(element).find("td");
+      const societe = $(tds[0]).text();
+
+      if (societe === " Réassurance ") {
+        reassurance = true;
+        return true;
+      }
+
+      const addresse = $(tds[4]).text();
+      const phone = $(tds[5]).text();
+      if (phone.length < 3) return true;
+      const site = $(tds[6]).text();
+      if (site.length < 3) return true;
+
+      const domaine = getDomainFromUrl(site);
+      const email = "contact@" + domaine;
+      const row = { societe, addresse, phone, site, email };
+
+      scrappedData.push(row);
+    });
+
+    await addOffres(scrappedData);
+    res.status(200).json(scrappedData);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+const addOffres = async (produits) => {
+  OffreModel.collection.drop();
+
+  produits.forEach((element) => {
+    OffreModel.create({ ...element });
+  });
+};
+
+function getDomainFromUrl(url) {
+  const domainRegex = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)/im;
+  const matches = domainRegex.exec(url);
+  if (matches && matches.length > 1) {
+    return matches[1];
+  }
+  return null;
+}

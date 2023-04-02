@@ -57,7 +57,7 @@
     "react-copy-to-clipboard": "5.1.0",
     "react-datetime": "3.1.1",
     "react-dom": "^18.2.0",
-    "react-froala-wysiwyg": "^4.0.18",
+    "react-icons": "^4.8.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "5.2.0",
     "react-scripts": "5.0.1",
