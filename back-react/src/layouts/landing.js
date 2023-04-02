@@ -92,15 +92,18 @@ const Landing = (props) => {
         </div>
         {/* Page content */}
         <Container className="mt--8 w-75 container-fluid" fluid>
-          {window.location.pathname == "/user_tickets" ? (
+          {window.location.pathname == "/user_tickets" && (
             <Row>
               <Tickets />
             </Row>
-          ) : (
-            <Row>
-              <AddStatement />
-            </Row>
           )}
+        {window.location.pathname == "/" && (
+            <Row>
+            <AddStatement />
+          </Row>
+          )}
+
+
           <Row>
             <div className="col">
               <Card className="shadow">

@@ -32,9 +32,12 @@ const Tickets = () => {
   const [formvalid, setFormvalid] = useState(true);
   const [ticketadded, setTicketadded] = useState("default");
   const [num_ticket, setNum_ticket] = useState("");
-  const [ticket_url, setTicket_url] = useState("");
-  const [ticket_number, setTicket_number] = useState("");
+
   const [currentPage, setCurrentPage] = useState(1);
+
+
+
+
   const role = getCookie("role");
   const userid = getCookie("userid").substring(
     3,
@@ -376,7 +379,7 @@ const Tickets = () => {
                   <div>
                       <span class="heading ">Ticket </span>
                       <span class="heading ni ni-support-16"></span>
-                      <span class="description ">{num_ticket}</span>
+                      <span class="description ">N° {num_ticket}</span>
                     </div>
                     <div>
                       <span class="heading ">Created by </span>
