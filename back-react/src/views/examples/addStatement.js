@@ -315,22 +315,12 @@ const AddStatement = () => {
       going_to: form.going_to_b.value,
     }
 
-    const hits_a = {
-
-      possible_place_a: "",  
-    }
-    const hits_b = {
-
-      possible_place_b: "",  
-    }
+    const hits_a = form.hits_a.value;
+    const hits_b = form.hits_b.value;
     
-    const apparent_damages_a = {
-      damage_direction: form.damage_direction_a.value,
-    };
+    const apparent_damages_a = form.apparent_damages_a.value;
 
-    const apparent_damages_b = {
-      damage_direction: form.damage_direction_b.value,
-    };
+    const apparent_damages_b = form.apparent_damages_b.value;
     const circumstances_a = form.circumstances_a.value;
     const circumstances_b = form.circumstances_b.value;
     const accident_croquis = "";
@@ -389,13 +379,13 @@ const mystatement=  {
             coming_from: vehicule_identity_b.coming_from,
             going_to: vehicule_identity_b.going_to,
           },
-          hits_a: "Doors",
-          hits_b: "Doors",
+          hits_a: hits_a,
+          hits_b: hits_b,
           
-          apparent_damages_a:"Scratches",
-          apparent_damages_b:"Scratches",
-          circumstances_a:"Speeding",
-          circumstances_b: "Speeding",
+          apparent_damages_a:apparent_damages_a,
+          apparent_damages_b:apparent_damages_b,
+          circumstances_a:circumstances_a,
+          circumstances_b: circumstances_b,
           accident_croquis:"Hello",
           notes_a:notes_a,
           notes_b: notes_b,
@@ -484,13 +474,13 @@ console.log( mystatement)
             coming_from: vehicule_identity_b.coming_from,
             going_to: vehicule_identity_b.going_to,
           },
-          hits_a: "Doors",
-          hits_b: "Doors",
+          hits_a: hits_a,
+          hits_b: hits_b,
           
-          apparent_damages_a:"Scratches",
-          apparent_damages_b:"Scratches",
-          circumstances_a:"Speeding",
-          circumstances_b: "Speeding",
+          apparent_damages_a:apparent_damages_a,
+          apparent_damages_b:apparent_damages_b,
+          circumstances_a:circumstances_a,
+          circumstances_b: circumstances_a,
           accident_croquis:"Hello",
           notes_a:notes_a,
           notes_b: notes_b,
@@ -746,8 +736,8 @@ console.log( mystatement)
                                 onChange={(e) => setMaterial_damage(e.target.value)}
 
                               >
-                                <option value="Minor">Yes</option>
-                                <option value="Major">No</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
                               </Input>
                             </FormGroup>
                           </Col>
@@ -1572,29 +1562,30 @@ console.log( mystatement)
                                 10. Choc Points
                               </label>
                               <Input
-                                name="possibleplaces_a"
+                                name="hits_a"
                                 type="select"
-                                value={possibleplaces_a}
-                                onChange={(e) => setPossiblePlace_a(e.target.value)}
+                                value={hits_a}
+                                onChange={(e) => setHits_a(e.target.value)}
                                 required
                               >
+                                <option value="Other">Select</option>
                                 <option value="Front Left Fender">Front Left Fender</option>
                                 <option value="Front Right Fender">Front Right Fender</option>
                                 <option value="Rear Left Fender">Rear Left Fender</option>
                                 <option value="Rear Right Fender">Rear Right Fender</option>
                                 <option value="Front Bumper">Front Bumper</option>
-                                <option value="Major">Rear Bumper</option>
-                                <option value="Major">Hood</option>
-                                <option value="Minor">Trunk</option>
-                                <option value="Major">Roof</option>
-                                <option value="Minor">Front Windshield</option>
-                                <option value="Major">Rear Windshield"</option>
-                                <option value="Minor">Side Mirror Left</option>
-                                <option value="Major">Side Mirror Right</option>
-                                <option value="Minor">Door Front Left</option>
-                                <option value="Major">Door Front Right</option>
-                                <option value="Major">Door Rear Left</option>
-                                <option value="Major">Door Rear Right</option>
+                                <option value="Rear Bumper">Rear Bumper</option>
+                                <option value="Hood">Hood</option>
+                                <option value="Trunk">Trunk</option>
+                                <option value="Roof">Roof</option>
+                                <option value="Front Windshield">Front Windshield</option>
+                                <option value="Rear Windshield">Rear Windshield</option>
+                                <option value="Side Mirror Left">Side Mirror Left</option>
+                                <option value="Side Mirror Right">Side Mirror Right</option>
+                                <option value="Door Front Left">Door Front Left</option>
+                                <option value="Door Front Right">Door Front Right</option>
+                                <option value="Door Rear Left">Door Rear Left</option>
+                                <option value="Door Rear Right">Door Rear Right</option>
 
                               </Input>
                             </FormGroup>
@@ -1608,29 +1599,30 @@ console.log( mystatement)
                                 10. Choc Points
                               </label>
                               <Input
-                                name="possibleplaces_b"
+                                name="hits_b"
                                 type="select"
-                                value={possibleplaces_b}
-                                onChange={(e) => setPossiblePlace_b(e.target.value)}
+                                value={hits_b}
+                                onChange={(e) => setHits_b(e.target.value)}
                                 required
                               >
-                                <option value="Minor">Front Left Fender</option>
-                                <option value="Major">Front Right Fender</option>
-                                <option value="Minor">Rear Left Fender</option>
-                                <option value="Major">Rear Right Fender</option>
-                                <option value="Minor">Front Bumper</option>
-                                <option value="Major">Rear Bumper</option>
-                                <option value="Major">Hood</option>
-                                <option value="Minor">Trunk</option>
-                                <option value="Major">Roof</option>
-                                <option value="Minor">Front Windshield</option>
-                                <option value="Major">Rear Windshield"</option>
-                                <option value="Minor">Side Mirror Left</option>
-                                <option value="Major">Side Mirror Right</option>
-                                <option value="Minor">Door Front Left</option>
-                                <option value="Major">Door Front Right</option>
-                                <option value="Major">Door Rear Left</option>
-                                <option value="Major">Door Rear Right</option>
+                                <option value="Other">Select</option>
+                                <option value="Front Left Fender">Front Left Fender</option>
+                                <option value="Front Right Fender">Front Right Fender</option>
+                                <option value="Rear Left Fender">Rear Left Fender</option>
+                                <option value="Rear Right Fender">Rear Right Fender</option>
+                                <option value="Front Bumper">Front Bumper</option>
+                                <option value="Rear Bumper">Rear Bumper</option>
+                                <option value="Hood">Hood</option>
+                                <option value="Trunk">Trunk</option>
+                                <option value="Roof">Roof</option>
+                                <option value="Front Windshield">Front Windshield</option>
+                                <option value="Rear Windshield">Rear Windshield</option>
+                                <option value="Side Mirror Left">Side Mirror Left</option>
+                                <option value="Side Mirror Right">Side Mirror Right</option>
+                                <option value="Door Front Left">Door Front Left</option>
+                                <option value="Door Front Right">Door Front Right</option>
+                                <option value="Door Rear Left">Door Rear Left</option>
+                                <option value="Door Rear Right">Door Rear Right</option>
 
                               </Input>
                             </FormGroup>
@@ -1661,10 +1653,10 @@ console.log( mystatement)
                                 11. Apparent Damages
                               </label>
                               <Input
-                                name="damage_direction_a"
+                                name="apparent_damages_a"
                                 type="select"
-                                value={damage_direction_a}
-                                onChange={(e) => setDamage_direction_a(e.target.value)}
+                                value={apparent_damages_a}
+                                onChange={(e) => setApparent_damages_a(e.target.value)}
                                 required
                               >
                                 <option value="Scratches">Scratches</option>
@@ -1686,10 +1678,10 @@ console.log( mystatement)
                                 11. Apparent Damages
                               </label>
                               <Input
-                                name="damage_direction_b"
+                                name="apparent_damages_b"
                                 type="select"
-                                value={damage_direction_b}
-                                onChange={(e) => setDamage_direction_b(e.target.value)}
+                                value={apparent_damages_b}
+                                onChange={(e) => setApparent_damages_b(e.target.value)}
                                 required
                               >
                                 <option value="Scratches">Scratches</option>
@@ -1739,11 +1731,27 @@ console.log( mystatement)
                               </label>
                               <Input
                                 name="circumstances_a"
-                                type="text"
+                                type="select"
                                 value={circumstances_a}
                                 onChange={(e) => setCircumstances_a(e.target.value)}
                                 required
-                              />
+                              >
+                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner</option>
+                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
+                                <option value="Speeding">Speeding</option>
+                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
+                                <option value="Distracted driving">Distracted driving</option>
+                                <option value="Driving while fatigued">Driving while fatigued</option>
+                                <option value="Reckless driving">Reckless driving</option>
+                                <option value="Tailgating">Tailgating</option>
+                                <option value="Changing lanes without signaling">Changing lanes without signaling</option>
+                                <option value="Making an illegal turn">Making an illegal turn</option>
+                                <option value="Backing up without looking">Backing up without looking</option>
+                                <option value="Driving in the wrong lane">Driving in the wrong lane</option>
+                                <option value="Driving in a construction zone">Driving in a construction zone</option>
+                                <option value="Driving during inclement weather">Driving during inclement weather</option>
+                                
+                              </Input>
                             </FormGroup>
                           </Col>
                           <Col md="6">
@@ -1756,11 +1764,27 @@ console.log( mystatement)
                               </label>
                               <Input
                                 name="circumstances_b"
-                                type="text"
+                                type="select"
                                 value={circumstances_b}
                                 onChange={(e) => setCircumstances_b(e.target.value)}
                                 required
-                              />
+                                                           >
+                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner</option>
+                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
+                                <option value="Speeding">Speeding</option>
+                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
+                                <option value="Distracted driving">Distracted driving</option>
+                                <option value="Driving while fatigued">Driving while fatigued</option>
+                                <option value="Reckless driving">Reckless driving</option>
+                                <option value="Tailgating">Tailgating</option>
+                                <option value="Changing lanes without signaling">Changing lanes without signaling</option>
+                                <option value="Making an illegal turn">Making an illegal turn</option>
+                                <option value="Backing up without looking">Backing up without looking</option>
+                                <option value="Driving in the wrong lane">Driving in the wrong lane</option>
+                                <option value="Driving in a construction zone">Driving in a construction zone</option>
+                                <option value="Driving during inclement weather">Driving during inclement weather</option>
+                                
+                              </Input>
                             </FormGroup>
                           </Col>
 
