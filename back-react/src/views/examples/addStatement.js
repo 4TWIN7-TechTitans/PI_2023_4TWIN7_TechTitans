@@ -69,7 +69,9 @@ const AddStatement = () => {
   const [phonenumber, setPhonenumber] = useState("");
   const [insured_b, setInsured_b] = useState("");
   const [vehicule_identity_a, setVehicule_identity_a] = useState("");
-  const [brand, setBrand] = useState("");
+  const [brand_a, setBrand_a] = useState("");
+  const [brand_b, setBrand_b] = useState("");
+
   const [type, setType] = useState("");
   const [matriculation, setMatriculation] = useState("");
   const [country, setCountry] = useState("");
@@ -1163,7 +1165,7 @@ const AddStatement = () => {
                                 name="Country"
                                 id="country"
                                 value={country}
-                                onChange={(e) => setBrand(e.target.value)}
+                                onChange={(e) => setCountry(e.target.value)}
                                 required
                               >
                                 <option value="">Select a country</option>
@@ -1241,15 +1243,44 @@ const AddStatement = () => {
                                 className="heading-small "
                                 htmlFor="input-email"
                               >
-                                Model , Brand
+                                Brand
                               </label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
-                              />
+                                type="select"
+                                name="brand"
+                                id="brand"
+                                value={brand}
+                                onChange={(e) => setBrand(e.target.value)}
+                                required
+                              >
+                                <option value="">Select a brand</option>
+                                {brands.map((brand, index) => (
+                                  <option key={`${brand}-${index}`} value={brand}>
+                                    {brand}
+                                  </option>
+                                ))}
+                              </Input>
                             </FormGroup>
+                            <FormGroup>
+                              <label>Country</label>
+                              <Input
+                                type="select"
+                                name="Country"
+                                id="country"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                required
+                              >
+                                <option value="">Select a country</option>
+                                {countries.map((country, index) => (
+                                  <option key={`${country}-${index}`} value={country}>
+                                    {country}
+                                  </option>
+                                ))}
+                              </Input>
+                              <p className="text-danger"></p>
+                            </FormGroup>
+
                             <FormGroup>
                               <label
                                 className="heading-small "
