@@ -41,49 +41,77 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ReactDatetime from "react-datetime";
 import moment from "moment";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const AddStatement = () => {
 
+
+
   const [date, setDate] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState();
   const [injured, setInjured] = useState("");
   const [material_damage, setMaterial_damage] = useState("");
   const [witness, setWitness] = useState("");
   const [vehicule_a, setVehicule_a] = useState("");
-  const [assureBy, setAssureBy] = useState("");
-  const [agency, setAgency] = useState("");
-  const [contractValidity, setContractValidity] = useState("");
-  const [start_date, setStartDate] = useState("");
-  const [end_date, setEndDate] = useState("");
+  const [assureBy_a, setAssureBy_a] = useState("");
+  const [assureBy_b, setAssureBy_b] = useState("");
+
+  const [agency_a, setAgency_a] = useState("");
+  const [agency_b, setAgency_b] = useState("");
+  const [contractValidity_a, setContractValidity_a] = useState("");
+  const [contractValidity_b, setContractValidity_b] = useState("");
+
+  const [start_date_a, setStartDate_a] = useState("");
+  const [start_date_b, setStartDate_b] = useState("");
+
+  const [end_date_a, setEndDate_a] = useState("");
+  const [end_date_b, setEndDate_b] = useState("");
+
   const [vehicule_b, setVehicule_b] = useState("");
   const [drivers_identity_a, setDriver_identity_a] = useState("");
-  const [first_name, setFirst_name] = useState("");
-  const [last_name, setLast_name] = useState("");
-  const [address, setAdress] = useState("");
-  const [drivers_license_issue_date, setDrivers_license_issue_date] = useState("");
-  const [driver_license, setDriver_license] = useState("");
+  const [first_name_a, setFirst_name_a] = useState("");
+  const [first_name_b, setFirst_name_b] = useState("");
+  const [last_name_a, setLast_name_a] = useState("");
+  const [last_name_b, setLast_name_b] = useState("");
+
+  const [address_a, setAddress_a] = useState("");
+  const [address_b, setAddress_b] = useState("");
+
+  const [drivers_license_issue_date_a, setDrivers_license_issue_date_a] = useState("");
+  const [drivers_license_issue_date_b, setDrivers_license_issue_date_b] = useState("");
+  const [driver_license_a, setDriver_license_a] = useState("");
+  const [driver_license_b, setDriver_license_b] = useState("");
   const [drivers_identity_b, setDriver_identity_b] = useState("");
   const [insured_a, setInsured_a] = useState("");
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [phonenumber, setPhonenumber] = useState("");
+  const [firstname_a, setFirstName_a] = useState("");
+  const [firstname_b, setFirstName_b] = useState("");
+
+  const [lastname_a, setLastname_a] = useState("");
+  const [lastname_b, setLastname_b] = useState("");
+
+  const [phonenumber_a, setPhonenumber_a] = useState("");
+  const [phonenumber_b, setPhonenumber_b] = useState("");
   const [insured_b, setInsured_b] = useState("");
   const [vehicule_identity_a, setVehicule_identity_a] = useState("");
   const [brand_a, setBrand_a] = useState("");
   const [brand_b, setBrand_b] = useState("");
 
   const [type, setType] = useState("");
-  const [matriculation, setMatriculation] = useState("");
-  const [country, setCountry] = useState("");
+  const [matriculation_a, setMatriculation_a] = useState("");
+  const [matriculation_b, setMatriculation_b] = useState("");
+  const [country_a, setCountry_a] = useState("");
+  const [country_b, setCountry_b] = useState("");
   const [vehicule_identity_b, setVehicule_identity_b] = useState("");
   const [hits_a, setHits_a] = useState("");
-  const [possible_place, setPossiblePlace] = useState("");
   const [hits_b, setHits_b] = useState("");
   const [hit_direction, setHit_direction] = useState("");
   const [apparent_damages_a, setApparent_damages_a] = useState("");
-  const [damageplaces, setDamageplaces] = useState("");
-  const [damage_direction, setDamage_direction] = useState("");
   const [apparent_damages_b, setApparent_damages_b] = useState("");
+
+
+  const [damage_direction_a, setDamage_direction_a] = useState("");
+  const [damage_direction_b, setDamage_direction_b] = useState("");
+
   const [circumstances_a, setCircumstances_a] = useState("");
   const [circumstances_b, setCircumstances_b] = useState("");
   const [accident_croquis, setAccident_croquis] = useState("");
@@ -91,6 +119,14 @@ const AddStatement = () => {
   const [notes_b, setNotes_b] = useState("");
   const [signature_a, setSignature_a] = useState("");
   const [signature_b, setSignature_b] = useState("");
+  const [addr_a, setAddr_a] = useState("");
+  const [addr_b, setAddr_b] = useState("");
+  const [coming_from_a, setComing_from_a] = useState("");
+  const [coming_from_b, setComing_from_b] = useState("");
+  const [going_to_a, setGoing_to_a] = useState("");
+  const [going_to_b, setGoing_to_b] = useState("");
+  const [possibleplaces_a, setPossiblePlace_a] = useState("");
+  const [possibleplaces_b, setPossiblePlace_b] = useState("");
 
 
   const [showNotification, setShowNotification] = useState(false);
@@ -98,6 +134,8 @@ const AddStatement = () => {
   const [showError, setShowError] = useState(false);
 
   const [users, setUsers] = useState([]);
+  const [contractNumber_a, setContractNumber_a] = useState([]);
+  const [contractNumber_b, setContractNumber_b] = useState([]);
 
   const brands = [
     "Toyota",
@@ -203,50 +241,96 @@ const AddStatement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const date = form.datetime.value;
+    const date = form.date.value;
     const location = form.location.value;
     const injured = form.injured.value;
     const material_damage = form.material_damage.value;
-    const witness = form.witness.value;
-    const vehicule_a = form.id_contrat.value;
-    const assureBy = form.assureBy.value;
-    const agency = form.agency.value;
-    const contractValidity = form.contractValidity.value;
-    const start_date = form.start_date.value;
-    const end_date = form.end_date.value;
-    const vehicule_b = form.vehicule_b.value;
-    const drivers_identity_a = form.drivers_identity_a.value;
-    const first_name = form.first_name.value;
-    const last_name = form.last_name.value;
-    const address = form.address.value;
-    const drivers_license_issue_date = form.drivers_license_issue_date.value;
-    const driver_license = form.driver_license.value;
-    const drivers_identity_b = form.drivers_identity_b.value;
-    const insured_a = form.insured_a.value;
-    const firstname = form.firstname.value;
-    const lastname = form.lastname.value;
-    const phonenumber = form.phonenumber.value;
-    const insured_b = form.insured_b.value;
-    const vehicule_identity_a = {
-      brand: form.brand_a };
-    const vehicule_identity_b = {
-        brand: form.brand_b }
-    
- 
+    const witness = "aaa";
 
+    const vehicule_a = {
+      assureBy: form.assureBy_a,
+      contractNumber: form.contractNumber_a,
+      agency: form.agency_a,
+      contractValidity: {
+        start_date: form.start_date_a,
+        end_date: form.end_date_a,
+      },
+    };
+
+    const vehicule_b = {
+      assureBy: form.assureBy_b,
+      contractNumber: form.contractNumber_b,
+      agency: form.agency_b,
+      contractValidity: {
+        start_date: form.start_date_b,
+        end_date: form.end_date_b,
+      },
+    };
+
+    const drivers_identity_a = {
+      first_name: form.first_name_a,
+      last_name: form.last_name_a,
+      address: form.address_a,
+      drivers_license_issue_date: form.drivers_license_issue_date_a,
+      driver_license: form.driver_license_a,
+    };
+
+    const drivers_identity_b = {
+      first_name: form.first_name_b,
+      last_name: form.last_name_b,
+      address: form.address_b,
+      drivers_license_issue_date: form.drivers_license_issue_date_b,
+      driver_license: form.driver_license_b,
+    };
+
+    const insured_a = {
+      firstname: form.firstname_a,
+      lastname: form.lastname_a,
+      phonenumber: form.phonenumber_a,
+      addr: form.addr_a,
+    };
+
+    const insured_b = {
+      firstname: form.firstname_b,
+      lastname: form.lastname_b,
+      phonenumber: form.phonenumber_b,
+      addr: form.addr_b,
+    };
+
+    const vehicule_identity_a = {
+      brand: form.brand_a,
+      type: form.type_a,
+      matriculation: form.matriculation_a,
+      country: form.country_a,
+      coming_from: form.coming_from_a,
+      going_to: form.going_to_a,
+    };
+    const vehicule_identity_b = {
+
+      brand: form.brand_b,
+      type: form.type_b,
+      matriculation: form.matriculation_b,
+      country: form.country_b,
+      coming_from: form.coming_from_b,
+      going_to: form.going_to_b,
+    }
+
+    const hits_a = {
+
+      possible_place_a: form.possible_place_a,  
+    }
+    const hits_b = {
+
+      possible_place_b: form.possible_place_b,  
+    }
     
-    const type = form.type.value;
-    const matriculation = form.matriculation.value;
-    const country = form.country.value;
-   
-    const hits_a = form.hits_a.value;
-    const possible_place = form.possible_place.value;
-    const hits_b = form.hits_b.value;
-    const hit_direction = form.hit_direction.value;
-    const apparent_damages_a = form.apparent_damages_a.value;
-    const damageplaces = form.damageplaces.value;
-    const damage_direction = form.damage_direction.value;
-    const apparent_damages_b = form.apparent_damages_b.value;
+    const apparent_damages_a = {
+      damage_direction: form.damage_direction_a,
+    };
+
+    const apparent_damages_b = {
+      damage_direction: form.damage_direction_b,
+    };
     const circumstances_a = form.circumstances_a.value;
     const circumstances_b = form.circumstances_b.value;
     const accident_croquis = form.accident_croquis.value;
@@ -256,19 +340,21 @@ const AddStatement = () => {
     const signature_b = form.signature_b.value;
 
 
-    if (!date || !location || !injured || !material_damage || !witness
-      || !vehicule_a || !assureBy || !agency ||
-      !contractValidity || !start_date || !end_date ||
-      !vehicule_b || !drivers_identity_a || !first_name ||
-      !last_name || !address || !drivers_license_issue_date ||
-      !driver_license || !drivers_identity_b || !insured_a ||
-      !firstname || !lastname || !phonenumber || !insured_b ||
-      !vehicule_identity_a  || !type || !matriculation ||
-      !country || !vehicule_identity_b || !hits_a || !possible_place ||
-      !hits_b || !hit_direction || !apparent_damages_a || !damageplaces ||
-      !damage_direction || !apparent_damages_b || !circumstances_a ||
-      !circumstances_b || !accident_croquis || !notes_a ||
-      !notes_b || !signature_a || !signature_b) {
+    if (!date || !location || !injured || !material_damage || !witness || !vehicule_a.assureBy || !vehicule_a.agency_a
+      || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date
+      || !vehicule_a.contractNumber || !vehicule_b.assureBy || !vehicule_b.agency_b || !vehicule_b.contractValidity
+      || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b
+        .contractNumber || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address
+      || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license || !drivers_identity_b.first_name
+      || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date
+      || !drivers_identity_b.driver_license || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber
+      || !insured_a.addr || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
+      || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country
+      || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to || !vehicule_identity_b.brand || !vehicule_identity_b.type
+      || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
+      || !hits_a.possible_place_a || !hits_b.possible_place_b   || !apparent_damages_a || !apparent_damages_a.damage_direction
+      || !apparent_damages_b.damage_direction || !circumstances_a || !circumstances_b || !accident_croquis || !notes_a || !notes_b
+      || !signature_a || !signature_b) {
       setShowNotification(false);
       setErrors({});
       setShowError(true);
@@ -289,38 +375,57 @@ const AddStatement = () => {
           injured,
           material_damage,
           witness,
-          vehicule_a,
-          assureBy,
-          agency,
-          contractValidity,
-          start_date,
-          end_date,
-          vehicule_b,
-          drivers_identity_a,
-          first_name,
-          last_name,
-          address,
-          drivers_license_issue_date,
-          driver_license,
-          drivers_identity_b,
-          insured_a,
-          firstname,
-          lastname,
-          phonenumber,
-          insured_b,
-          vehicule_identity_a,
-          brand_a,
-          type,
-          matriculation,
-          country,
-          vehicule_identity_b,
-          hits_a,
-          possible_place,
-          hits_b,
-          hit_direction,
+          drivers_identity_a: {
+            first_name: drivers_identity_a.first_name,
+            last_name: drivers_identity_a.last_name,
+            address: drivers_identity_a.address,
+            drivers_license_issue_date: drivers_identity_a.drivers_license_issue_date,
+          },
+
+          drivers_identity_b: {
+            first_name: drivers_identity_b.first_name,
+            last_name: drivers_identity_b.last_name,
+            address: drivers_identity_b.address,
+            drivers_license_issue_date: drivers_identity_b.drivers_license_issue_date,
+          },
+          insured_a: {
+            firstname: insured_a.firstname,
+            lastname: insured_a.lastname,
+            phonenumber: insured_a.phonenumber,
+            address: insured_a.address,
+          },
+          insured_b: {
+            firstname: insured_b.firstname,
+            lastname: insured_b.lastname,
+            phonenumber: insured_b.phonenumber,
+            address: insured_b.address,
+          },
+          vehicule_identity_a: {
+            brand: vehicule_identity_a.brand,
+            type: vehicule_identity_a.type,
+            matriculation: vehicule_identity_a.matriculation,
+            country: vehicule_identity_a.country,
+            coming_from: vehicule_identity_a.coming_from,
+            going_to: vehicule_identity_a.going_to,
+          },
+          vehicule_identity_b: {
+            brand: vehicule_identity_b.brand,
+            type: vehicule_identity_b.type,
+            matriculation: vehicule_identity_b.matriculation,
+            country: vehicule_identity_b.country,
+            coming_from: vehicule_identity_b.coming_from,
+            going_to: vehicule_identity_b.going_to,
+          },
+          hits_a: {
+            possible_place_a: hits_a.possible_place_a,
+
+          },
+          hits_b: {
+            possible_place_b: hits_a.possible_place_b,
+
+          },
+          
           apparent_damages_a,
-          damageplaces,
-          damage_direction,
           apparent_damages_b,
           circumstances_a,
           circumstances_b,
@@ -352,6 +457,7 @@ const AddStatement = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get("http://localhost:5000/all-users");
+        setUsers(response.data.users);
         setUsers(
           response.data.users.filter((user) => user.role === "Agence")
 
@@ -440,11 +546,14 @@ const AddStatement = () => {
     setIsShown13(current => !current);
   };
 
-  const handleClear = event => {
-    setAccident_croquis.current.clear();
-  };
+
 
   const today = new Date().toISOString().substr(0, 10);
+
+
+  const handleLocationChange = (event) => {
+    setLocation(event.target.value);
+  };
   return (
     <>
 
@@ -468,7 +577,7 @@ const AddStatement = () => {
               </CardHeader>
               {isShown && (
                 <CardBody>
-                  <form onSubmit="" noValidate>
+                  <form onSubmit={handleSubmit} noValidate>
                     <h6 className="heading-small text-muted mb-4">
                       set all the infromations related to the accident please
                     </h6>
@@ -505,8 +614,9 @@ const AddStatement = () => {
                                 name="date"
                                 type="date"
                                 placeholder="date"
+                                value={date}
                                 required
-                                defaultValue={today}
+                                onChange={(e) => setDate(e.target.value)}
                               />
                               <div className="date error"></div>
                             </FormGroup>
@@ -523,13 +633,19 @@ const AddStatement = () => {
                               <Input
                                 className="form-control-alternative"
                                 id="location"
-                                type="location"
+                                type="text"
+                                name="location"
                                 placeholder="location"
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
                                 required
                               />
                               <div className="location error"></div>
                             </FormGroup>
+
+
                           </Col>
+
                           <Col lg="3">
                             <FormGroup>
                               <label
@@ -542,6 +658,8 @@ const AddStatement = () => {
                                 name="injured"
                                 type="select"
                                 required
+                                value={injured}
+                                onChange={(e) => setInjured(e.target.value)}
                               >
                                 <option value="yes">Yes</option>
                                 <option value="No">No</option>
@@ -562,6 +680,9 @@ const AddStatement = () => {
                                 name="material_damage"
                                 type="select"
                                 required
+                                value={material_damage}
+                                onChange={(e) => setMaterial_damage(e.target.value)}
+
                               >
                                 <option value="Minor">Yes</option>
                                 <option value="Major">No</option>
@@ -624,7 +745,9 @@ const AddStatement = () => {
                               >
                                 vehicule Insured By :
                               </label>
-                              <Input name="agency" type="select" required>
+                              <Input name="assureBy_a" type="select" required
+                                value={assureBy_a}
+                                onChange={(e) => setAssureBy_a(e.target.value)}>
                                 {users.map((user) => (
                                   <option key={user._id} value={user._id} >
                                     {user.first_name}
@@ -642,9 +765,12 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="contractNumber_a"
+                                name="contractNumber_a"
+                                type="text"
+                                value={contractNumber_a}
+                                onChange={(e) => setContractNumber_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
@@ -658,9 +784,12 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="agency_a"
+                                name="agency_a"
+                                type="text"
+                                value={agency_a}
+                                onChange={(e) => setAgency_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
@@ -672,9 +801,11 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="start_date_a"
+                                name="start_date_a"
+                                type="date"
+                                value={start_date_a}
+                                onChange={(e) => setStartDate_a(e.target.value)}
                               />
                             </FormGroup>
                             <FormGroup>
@@ -686,9 +817,11 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="end_date_a"
+                                name="end_date_a"
+                                type="date"
+                                value={end_date_a}
+                                onChange={(e) => setEndDate_a(e.target.value)}
                               />
                             </FormGroup>
                           </Col>
@@ -713,9 +846,11 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="assureBy_b"
+                                name="assureBy_b"
+                                type="text"
+                                value={assureBy_b}
+                                onChange={(e) => setAssureBy_b(e.target.value)}
                               />
                             </FormGroup>
                             <FormGroup>
@@ -727,9 +862,11 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="contractNumber_b"
+                                name="contractNumber_b"
+                                type="text"
+                                value={contractNumber_b}
+                                onChange={(e) => setContractNumber_b(e.target.value)}
                               />
                             </FormGroup>
                             <FormGroup>
@@ -743,9 +880,11 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="agency_b"
+                                name="agency_b"
+                                type="text"
+                                value={agency_b}
+                                onChange={(e) => setAgency_b(e.target.value)}
                               />
                             </FormGroup>
                             <FormGroup>
@@ -757,9 +896,11 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="start_date_b"
+                                name="start_date_b"
+                                type="date"
+                                value={start_date_b}
+                                onChange={(e) => setStartDate_b(e.target.value)}
                               />
                             </FormGroup>
                             <FormGroup>
@@ -771,9 +912,11 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="end_date_b"
+                                name="end_date_b"
+                                type="date"
+                                value={end_date_b}
+                                onChange={(e) => setEndDate_b(e.target.value)}
                               />
                             </FormGroup>
                           </Col>
@@ -805,77 +948,74 @@ const AddStatement = () => {
                               7. Driver Identity
                             </label>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="first_name_a">
                                 First Name
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="first_name_a"
+                                id="first_name_a"
+                                maxLength="50"
+                                value={first_name_a}
+                                onChange={(e) => setFirst_name_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="last_name_a">
                                 Last Name
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="last_name_a"
+                                id="last_name_a"
+                                maxLength="50"
+                                value={last_name_a}
+                                onChange={(e) => setLast_name_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="address_a">
                                 Address
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="address_a"
+                                id="address_a"
+                                maxLength="100"
+                                value={address_a}
+                                onChange={(e) => setAddress_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                License Identity :
-                              </label>
+                              <Label className="heading-small" for="drivers_license_issue_date_a">
+                                Driver's License Issue Date
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="date"
+                                name="drivers_license_issue_date_a"
+                                id="drivers_license_issue_date_a"
+                                value={drivers_license_issue_date_a}
+                                onChange={(e) => setDrivers_license_issue_date_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
-                            <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                date of delivrance:
-                              </label>
-                              <Input
-                                className="form-control-alternative"
-                                id="email"
 
-                                type="email"
+                            <FormGroup>
+                              <Label className="heading-small" for="driver_license_a">
+                                Driver's License
+                              </Label>
+                              <Input
+                                type="text"
+                                name="driver_license_a"
+                                id="driver_license_a"
+                                maxLength="20"
+                                pattern="^[a-zA-Z0-9]+$"
+                                value={driver_license_a}
+                                onChange={(e) => setDriver_license_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -887,77 +1027,74 @@ const AddStatement = () => {
                               7. Driver Identity
                             </label>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="first_name_b">
                                 First Name
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="first_name_b"
+                                id="first_name_b"
+                                maxLength="50"
+                                value={first_name_b}
+                                onChange={(e) => setFirst_name_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="last_name_b">
                                 Last Name
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="last_name_b"
+                                id="last_name_b"
+                                maxLength="50"
+                                value={last_name_b}
+                                onChange={(e) => setLast_name_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="address_b">
                                 Address
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="address_b"
+                                id="address_b"
+                                maxLength="100"
+                                value={address_b}
+                                onChange={(e) => setAddress_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                License Identity :
-                              </label>
+                              <Label className="heading-small" for="drivers_license_issue_date_b">
+                                Driver's License Issue Date
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="date"
+                                name="drivers_license_issue_date_b"
+                                id="drivers_license_issue_date_b"
+                                value={drivers_license_issue_date_b}
+                                onChange={(e) => setDrivers_license_issue_date_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
-                            <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                date of delivrance:
-                              </label>
-                              <Input
-                                className="form-control-alternative"
-                                id="email"
 
-                                type="email"
+                            <FormGroup>
+                              <Label className="heading-small" for="drivers_identity_b">
+                                Driver's License
+                              </Label>
+                              <Input
+                                type="text"
+                                name="driver_license_b"
+                                id="driver_license_b"
+                                maxLength="20"
+                                pattern="^[a-zA-Z0-9]+$"
+                                value={driver_license_b}
+                                onChange={(e) => setDriver_license_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -988,63 +1125,61 @@ const AddStatement = () => {
                               8. Insured
                             </label>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="firstname_a">
                                 First Name
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="firstname_a"
+                                id="firstname_a"
+                                maxLength="50"
+                                value={firstname_a}
+                                onChange={(e) => setFirstName_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                Last Name
-                              </label>
+                              <Label className="heading-small" for="lastname_a">
+                                First Name
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="lastname_a"
+                                id="lastname_a"
+                                maxLength="50"
+                                value={lastname_a}
+                                onChange={(e) => setLastname_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="addr_a">
                                 Address
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="addr_a"
+                                id="addr_a"
+                                maxLength="100"
+                                value={addr_a}
+                                onChange={(e) => setAddr_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
                               <label
                                 className="heading-small "
-                                htmlFor="input-email"
+                                htmlFor="input-phonenumber"
                               >
                                 Phone Number
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="phonenumber_a"
+                                type="phonenumber_a"
+                                value={phonenumber_a}
+                                onChange={(e) => setPhonenumber_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
 
@@ -1057,63 +1192,61 @@ const AddStatement = () => {
                               8. Insured
                             </label>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="firstname_b">
                                 First Name
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="firstname_b"
+                                id="firstname_b"
+                                maxLength="50"
+                                value={firstname_b}
+                                onChange={(e) => setFirstName_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                Last Name
-                              </label>
+                              <Label className="heading-small" for="lastname_b">
+                                First Name
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="lastname_b"
+                                id="lastname_b"
+                                maxLength="50"
+                                value={lastname_b}
+                                onChange={(e) => setLastname_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <Label className="heading-small" for="addr_b">
                                 Address
-                              </label>
+                              </Label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="addr_b"
+                                id="addr_b"
+                                maxLength="100"
+                                value={addr_b}
+                                onChange={(e) => setAddr_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
                               <label
                                 className="heading-small "
-                                htmlFor="input-email"
+                                htmlFor="input-phonenumber"
                               >
                                 Phone Number
                               </label>
                               <Input
                                 className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                id="phonenumber_b"
+                                type="phonenumber_b"
+                                value={phonenumber_b}
+                                onChange={(e) => setPhonenumber_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
 
@@ -1169,9 +1302,9 @@ const AddStatement = () => {
                               <Input
                                 type="select"
                                 name="Country"
-                                id="country"
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
+                                id="country_a"
+                                value={country_a}
+                                onChange={(e) => setCountry_a(e.target.value)}
                                 required
                               >
                                 <option value="">Select a country</option>
@@ -1184,18 +1317,19 @@ const AddStatement = () => {
                               <p className="text-danger"></p>
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                Matriculation
-                              </label>
+                              <label>Matriculation </label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="matriculation_a"
+                                id="matriculation_a"
+                                value={matriculation_a}
+                                onChange={(e) => {
+                                  setMatriculation_a(e.target.value);
+                                }}
+                                required
                               />
+
+                              <div className="matriculation_a error"></div>
                             </FormGroup>
                             <label
                               className="form-control-label"
@@ -1213,10 +1347,14 @@ const AddStatement = () => {
                                 Coming From
                               </label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="coming_from_a"
+                                id="coming_from_a"
+                                value={coming_from_a}
+                                onChange={(e) => {
+                                  setComing_from_a(e.target.value);
+                                }}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
@@ -1227,10 +1365,14 @@ const AddStatement = () => {
                                 Going To
                               </label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="goi"
+                                id="going_to_a"
+                                value={going_to_a}
+                                onChange={(e) => {
+                                  setGoing_to_a(e.target.value);
+                                }}
+                                required
                               />
                             </FormGroup>
 
@@ -1243,14 +1385,7 @@ const AddStatement = () => {
                               9. Vehicule Identity
                             </label>
                             <FormGroup>
-
-
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                Brand
-                              </label>
+                              <label>Brand</label>
                               <Input
                                 type="select"
                                 name="brand_b"
@@ -1272,9 +1407,9 @@ const AddStatement = () => {
                               <Input
                                 type="select"
                                 name="Country"
-                                id="country"
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
+                                id="country_b"
+                                value={country_b}
+                                onChange={(e) => setCountry_b(e.target.value)}
                                 required
                               >
                                 <option value="">Select a country</option>
@@ -1286,20 +1421,20 @@ const AddStatement = () => {
                               </Input>
                               <p className="text-danger"></p>
                             </FormGroup>
-
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
-                                Matriculation
-                              </label>
+                              <label>Matriculation </label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="matriculation_b"
+                                id="matriculation_b"
+                                value={matriculation_b}
+                                onChange={(e) => {
+                                  setMatriculation_b(e.target.value);
+                                }}
+                                required
                               />
+
+                              <div className="matriculation_a error"></div>
                             </FormGroup>
                             <label
                               className="form-control-label"
@@ -1317,10 +1452,14 @@ const AddStatement = () => {
                                 Coming From
                               </label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="coming_from_b"
+                                id="coming_from_b"
+                                value={coming_from_b}
+                                onChange={(e) => {
+                                  setComing_from_b(e.target.value);
+                                }}
+                                required
                               />
                             </FormGroup>
                             <FormGroup>
@@ -1331,10 +1470,14 @@ const AddStatement = () => {
                                 Going To
                               </label>
                               <Input
-                                className="form-control-alternative"
-                                id="email"
-
-                                type="email"
+                                type="text"
+                                name="going_to_b"
+                                id="going_to_b"
+                                value={going_to_b}
+                                onChange={(e) => {
+                                  setGoing_to_b(e.target.value);
+                                }}
+                                required
                               />
                             </FormGroup>
 
@@ -1367,15 +1510,17 @@ const AddStatement = () => {
                                 10. Choc Points
                               </label>
                               <Input
-                                name="tfa"
+                                name="possibleplaces_a"
                                 type="select"
+                                value={possibleplaces_a}
+                                onChange={(e) => setPossiblePlace_a(e.target.value)}
                                 required
                               >
-                                <option value="Minor">Front Left Fender</option>
-                                <option value="Major">Front Right Fender</option>
-                                <option value="Minor">Rear Left Fender</option>
-                                <option value="Major">Rear Right Fender</option>
-                                <option value="Minor">Front Bumper</option>
+                                <option value="Front Left Fender">Front Left Fender</option>
+                                <option value="Front Right Fender">Front Right Fender</option>
+                                <option value="Rear Left Fender">Rear Left Fender</option>
+                                <option value="Rear Right Fender">Rear Right Fender</option>
+                                <option value="Front Bumper">Front Bumper</option>
                                 <option value="Major">Rear Bumper</option>
                                 <option value="Major">Hood</option>
                                 <option value="Minor">Trunk</option>
@@ -1401,8 +1546,10 @@ const AddStatement = () => {
                                 10. Choc Points
                               </label>
                               <Input
-                                name="tfa"
+                                name="possibleplaces_b"
                                 type="select"
+                                value={possibleplaces_b}
+                                onChange={(e) => setPossiblePlace_b(e.target.value)}
                                 required
                               >
                                 <option value="Minor">Front Left Fender</option>
@@ -1452,8 +1599,10 @@ const AddStatement = () => {
                                 11. Apparent Damages
                               </label>
                               <Input
-                                name="tfa"
+                                name="damage_direction_a"
                                 type="select"
+                                value={damage_direction_a}
+                                onChange={(e) => setDamage_direction_a(e.target.value)}
                                 required
                               >
                                 <option value="Scratches">Scratches</option>
@@ -1475,8 +1624,10 @@ const AddStatement = () => {
                                 11. Apparent Damages
                               </label>
                               <Input
-                                name="tfa"
+                                name="damage_direction_b"
                                 type="select"
+                                value={damage_direction_b}
+                                onChange={(e) => setDamage_direction_b(e.target.value)}
                                 required
                               >
                                 <option value="Scratches">Scratches</option>
@@ -1525,10 +1676,11 @@ const AddStatement = () => {
                                 12. Circumstances By client A
                               </label>
                               <Input
-                                className="form-control-alternative"
-                                defaultValue="Stopped too suddenly"
-                                id="input-address"
+                                name="circumstances_a"
                                 type="text"
+                                value={circumstances_a}
+                                onChange={(e) => setCircumstances_a(e.target.value)}
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -1541,10 +1693,11 @@ const AddStatement = () => {
                                 12. Circumstances By client B
                               </label>
                               <Input
-                                className="form-control-alternative"
-                                defaultValue="Stopped too suddenly"
-                                id="input-address"
+                                name="circumstances_b"
                                 type="text"
+                                value={circumstances_b}
+                                onChange={(e) => setCircumstances_b(e.target.value)}
+                                required
                               />
                             </FormGroup>
                           </Col>
@@ -1591,18 +1744,20 @@ const AddStatement = () => {
                                 >
                                   13. Simulation Image Of the Accident
                                 </label>
-                                <InputGroup className="input-group-alternative">
+                                <InputGroup className="input-group-alternative" >
+                                  
                                   <CanvasDraw
-                                    ref={setAccident_croquis}
+                                  name="accident_croquis"
                                     brushRadius={2}
                                     canvasWidth={12000}
                                     canvasHeight={400}
                                     hideGrid={true}
                                     brushColor={"#000000"}
+
                                   />
 
                                 </InputGroup>
-                                <button onClick={(e) => handleClear(e, setAccident_croquis)}>Clear</button>
+                                {/* <button onClick={(e) => handleClear(e, setAccident_croquis)}>Clear</button> */}
                               </FormGroup>
 
                             </Col>
@@ -1619,9 +1774,14 @@ const AddStatement = () => {
                                   14. Observations
                                 </label>
                                 <Input
-                                  className="form-control-alternative"
-                                  id="input-address"
                                   type="text"
+                                  name="notes_a"
+                                  id="notes_a"
+                                  value={notes_a}
+                                  onChange={(e) => {
+                                    setNotes_a(e.target.value);
+                                  }}
+                                  required
                                 />
                               </FormGroup>
                             </Col>
@@ -1634,9 +1794,14 @@ const AddStatement = () => {
                                   14. Observations
                                 </label>
                                 <Input
-                                  className="form-control-alternative"
-                                  id="input-address"
                                   type="text"
+                                  name="notes_b"
+                                  id="notes_b"
+                                  value={notes_b}
+                                  onChange={(e) => {
+                                    setNotes_b(e.target.value);
+                                  }}
+                                  required
                                 />
                               </FormGroup>
                             </Col>

@@ -158,6 +158,10 @@ const statementSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    addr: {
+    type: String,
+    required: true,
+    },
   },
   insured_b: {
     firstname: {
@@ -169,6 +173,10 @@ const statementSchema = new mongoose.Schema({
       required: true,
     },
     phonenumber: {
+      type: String,
+      required: true,
+    },
+    addr: {
       type: String,
       required: true,
     },
@@ -283,7 +291,6 @@ const statementSchema = new mongoose.Schema({
       "Doors",
       "Other"
     ],
-    required: true
   },
   hits_b: {
     type: String,
@@ -303,12 +310,11 @@ const statementSchema = new mongoose.Schema({
       "Doors",
       "Other"
     ],
-    required: true,
   },
   //Partie 11
   apparent_damages_a: {
     type: String,
-    damageplaces: [
+    enum: [
     "Scratches",
     "Dents",
     "Cracks",
@@ -318,7 +324,7 @@ const statementSchema = new mongoose.Schema({
     "Missing Parts",
     "Other",
     ],
-    required: true,
+  
     damage_direction_a: {
     type: String,
     enum: ["Front", "Back", "Left", "Right"],
@@ -328,7 +334,7 @@ const statementSchema = new mongoose.Schema({
 
     apparent_damages_b: {
       type: String,
-      damageplaces: [
+      enum: [
       "Scratches",
       "Dents",
       "Cracks",
@@ -338,7 +344,7 @@ const statementSchema = new mongoose.Schema({
       "Missing Parts",
       "Other",
       ],
-      required: true,
+   
       damage_direction_b: {
       type: String,
       enum: ["Front", "Back", "Left", "Right"],
