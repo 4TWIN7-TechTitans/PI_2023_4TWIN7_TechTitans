@@ -40,7 +40,7 @@ function Login() {
       }
     } catch (error) {
       console.log(error);
-      alert("Please Register Thank for your comprehension dear client.");
+      setShowError("true");
       return;
     }
   

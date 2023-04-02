@@ -90,4 +90,19 @@ module.exports.check_statement = async (req, res) => {
       console.error(`Error getting statement: ${error}`);
       res.status(500).json({ message: `Error getting statement: ${error.message}` });
     }
+
+    
+  };
+
+  module.exports.get_specific_statement = async (req, res) => {
+    const statementId = req.params.id;
+    try {
+      const statement = await StatementModel.findById(statementId);
+      if (!statement) {
+        return res.status(404).json({ message: "Statement not found" });
+      }
+      res.status(200).json({ statement });
+    } catch (error) {
+      res.status(500).json({ message: "Error retrieving statement", error });
+    }
   };
