@@ -227,12 +227,18 @@ const AddStatement = () => {
     const lastname = form.lastname.value;
     const phonenumber = form.phonenumber.value;
     const insured_b = form.insured_b.value;
-    const vehicule_identity_a = form.vehicule_identity_a.value;
-    const brand = form.brand.value;
+    const vehicule_identity_a = {
+      brand: form.brand_a };
+    const vehicule_identity_b = {
+        brand: form.brand_b }
+    
+ 
+
+    
     const type = form.type.value;
     const matriculation = form.matriculation.value;
     const country = form.country.value;
-    const vehicule_identity_b = form.vehicule_identity_b.value;
+   
     const hits_a = form.hits_a.value;
     const possible_place = form.possible_place.value;
     const hits_b = form.hits_b.value;
@@ -1144,10 +1150,10 @@ const AddStatement = () => {
                               <label>Brand</label>
                               <Input
                                 type="select"
-                                name="brand"
-                                id="brand"
-                                value={brand}
-                                onChange={(e) => setBrand(e.target.value)}
+                                name="brand_a"
+                                id="brand_a"
+                                value={brand_a}
+                                onChange={(e) => setBrand_a(e.target.value)}
                                 required
                               >
                                 <option value="">Select a brand</option>
@@ -1247,10 +1253,10 @@ const AddStatement = () => {
                               </label>
                               <Input
                                 type="select"
-                                name="brand"
-                                id="brand"
-                                value={brand}
-                                onChange={(e) => setBrand(e.target.value)}
+                                name="brand_b"
+                                id="brand_b"
+                                value={brand_b}
+                                onChange={(e) => setBrand_b(e.target.value)}
                                 required
                               >
                                 <option value="">Select a brand</option>
