@@ -33,7 +33,7 @@ import {
   InputGroupText,
   Label,
 } from "reactstrap";
-import SignatureCanvas from 'react-signature-canvas';
+import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -42,11 +42,7 @@ import axios from "axios";
 import ReactDatetime from "react-datetime";
 import moment from "moment";
 
-
 const AddStatement = () => {
-
-
-
   const [date, setDate] = useState("");
   const [location, setLocation] = useState();
   const [injured, setInjured] = useState("");
@@ -77,8 +73,10 @@ const AddStatement = () => {
   const [address_a, setAddress_a] = useState("");
   const [address_b, setAddress_b] = useState("");
 
-  const [drivers_license_issue_date_a, setDrivers_license_issue_date_a] = useState("");
-  const [drivers_license_issue_date_b, setDrivers_license_issue_date_b] = useState("");
+  const [drivers_license_issue_date_a, setDrivers_license_issue_date_a] =
+    useState("");
+  const [drivers_license_issue_date_b, setDrivers_license_issue_date_b] =
+    useState("");
   const [driver_license_a, setDriver_license_a] = useState("");
   const [driver_license_b, setDriver_license_b] = useState("");
   const [drivers_identity_b, setDriver_identity_b] = useState("");
@@ -108,7 +106,6 @@ const AddStatement = () => {
   const [apparent_damages_a, setApparent_damages_a] = useState("");
   const [apparent_damages_b, setApparent_damages_b] = useState("");
 
-
   const [damage_direction_a, setDamage_direction_a] = useState("");
   const [damage_direction_b, setDamage_direction_b] = useState("");
 
@@ -127,7 +124,6 @@ const AddStatement = () => {
   const [going_to_b, setGoing_to_b] = useState("");
   const [possibleplaces_a, setPossiblePlace_a] = useState("");
   const [possibleplaces_b, setPossiblePlace_b] = useState("");
-
 
   const [showNotification, setShowNotification] = useState(false);
   const [errors, setErrors] = useState({});
@@ -157,25 +153,164 @@ const AddStatement = () => {
     "Mitsubishi",
   ];
   const countries = [
-    "Tunisia", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
-    "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
-    "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina",
-    "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde",
-    "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia",
-    "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo",
-    "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea",
-    "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany",
-    "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary",
-    "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
-    "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia",
-    "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali",
-    "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia",
-    "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand",
-    "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau",
-    "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania",
-    "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
-    "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"
-  ]
+    "Tunisia",
+    "Afghanistan",
+    "Albania",
+    "Algeria",
+    "Andorra",
+    "Angola",
+    "Antigua and Barbuda",
+    "Argentina",
+    "Armenia",
+    "Australia",
+    "Austria",
+    "Azerbaijan",
+    "Bahamas",
+    "Bahrain",
+    "Bangladesh",
+    "Barbados",
+    "Belarus",
+    "Belgium",
+    "Belize",
+    "Benin",
+    "Bhutan",
+    "Bolivia",
+    "Bosnia and Herzegovina",
+    "Botswana",
+    "Brazil",
+    "Brunei",
+    "Bulgaria",
+    "Burkina Faso",
+    "Burundi",
+    "Côte d'Ivoire",
+    "Cabo Verde",
+    "Cambodia",
+    "Cameroon",
+    "Canada",
+    "Central African Republic",
+    "Chad",
+    "Chile",
+    "China",
+    "Colombia",
+    "Comoros",
+    "Congo",
+    "Costa Rica",
+    "Croatia",
+    "Cuba",
+    "Cyprus",
+    "Czech Republic",
+    "Democratic Republic of the Congo",
+    "Denmark",
+    "Djibouti",
+    "Dominica",
+    "Dominican Republic",
+    "Ecuador",
+    "Egypt",
+    "El Salvador",
+    "Equatorial Guinea",
+    "Eritrea",
+    "Estonia",
+    "Eswatini",
+    "Ethiopia",
+    "Fiji",
+    "Finland",
+    "France",
+    "Gabon",
+    "Gambia",
+    "Georgia",
+    "Germany",
+    "Ghana",
+    "Greece",
+    "Grenada",
+    "Guatemala",
+    "Guinea",
+    "Guinea-Bissau",
+    "Guyana",
+    "Haiti",
+    "Honduras",
+    "Hungary",
+    "Iceland",
+    "India",
+    "Indonesia",
+    "Iran",
+    "Iraq",
+    "Ireland",
+    "Israel",
+    "Italy",
+    "Jamaica",
+    "Japan",
+    "Jordan",
+    "Kazakhstan",
+    "Kenya",
+    "Kiribati",
+    "Kuwait",
+    "Kyrgyzstan",
+    "Laos",
+    "Latvia",
+    "Lebanon",
+    "Lesotho",
+    "Liberia",
+    "Libya",
+    "Liechtenstein",
+    "Lithuania",
+    "Luxembourg",
+    "Madagascar",
+    "Malawi",
+    "Malaysia",
+    "Maldives",
+    "Mali",
+    "Malta",
+    "Marshall Islands",
+    "Mauritania",
+    "Mauritius",
+    "Mexico",
+    "Micronesia",
+    "Moldova",
+    "Monaco",
+    "Mongolia",
+    "Montenegro",
+    "Morocco",
+    "Mozambique",
+    "Myanmar",
+    "Namibia",
+    "Nauru",
+    "Nepal",
+    "Netherlands",
+    "New Zealand",
+    "Nicaragua",
+    "Niger",
+    "Nigeria",
+    "North Korea",
+    "North Macedonia",
+    "Norway",
+    "Oman",
+    "Pakistan",
+    "Palau",
+    "Panama",
+    "Papua New Guinea",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Poland",
+    "Portugal",
+    "Qatar",
+    "Romania",
+    "Russia",
+    "Rwanda",
+    "Saint Kitts and Nevis",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines",
+    "Samoa",
+    "San Marino",
+    "Sao Tome and Principe",
+    "Saudi Arabia",
+    "Senegal",
+    "Serbia",
+    "Seychelles",
+    "Sierra Leone",
+    "Singapore",
+    "Slovakia",
+  ];
 
   const possibleplaces = [
     "Front Left Fender",
@@ -191,12 +326,10 @@ const AddStatement = () => {
     "Rear Windshield",
     "Side Mirrors",
     "Doors",
-    "Other"
-  ]
+    "Other",
+  ];
 
-  const hitdirections = [
-    "Front", "Back", "Left", "Right"
-  ]
+  const hitdirections = ["Front", "Back", "Left", "Right"];
   const dmgeplaces = [
     "Scratches",
     "Dents",
@@ -205,11 +338,9 @@ const AddStatement = () => {
     "Broken Lights",
     "Broken Windows",
     "Missing Parts",
-    "Other"
-  ]
-  const dmgdirections = [
-    "Front", "Back", "Left", "Right"
-  ]
+    "Other",
+  ];
+  const dmgdirections = ["Front", "Back", "Left", "Right"];
   const circumstance = [
     "Driving in a normal and careful manner",
     "Driving under the influence of drugs or alcohol",
@@ -225,8 +356,8 @@ const AddStatement = () => {
     "Driving in the wrong lane",
     "Driving in a construction zone",
     "Driving during inclement weather",
-    "Other"
-  ]
+    "Other",
+  ];
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -236,7 +367,6 @@ const AddStatement = () => {
   useEffect(() => {
     //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
   }, []);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -306,18 +436,17 @@ const AddStatement = () => {
       going_to: form.going_to_a.value,
     };
     const vehicule_identity_b = {
-
       brand: form.brand_b.value,
       type: "",
       matriculation: form.matriculation_b.value,
       country: form.country_b.value,
       coming_from: form.coming_from_b.value,
       going_to: form.going_to_b.value,
-    }
+    };
 
     const hits_a = form.hits_a.value;
     const hits_b = form.hits_b.value;
-    
+
     const apparent_damages_a = form.apparent_damages_a.value;
 
     const apparent_damages_b = form.apparent_damages_b.value;
@@ -331,72 +460,71 @@ const AddStatement = () => {
 
     //console.log( notes_a)
 
+    const mystatement = {
+      date: date,
+      location: location,
+      injured: injured,
+      material_damage: material_damage,
+      witness: witness,
+      drivers_identity_a: {
+        first_name: drivers_identity_a.first_name,
+        last_name: drivers_identity_a.last_name,
+        address: drivers_identity_a.address,
+        drivers_license_issue_date:
+          drivers_identity_a.drivers_license_issue_date,
+      },
 
-const mystatement=  {
-  date:date,
-          location:location,
-          injured:injured,
-          material_damage:material_damage,
-          witness:witness,
-          drivers_identity_a: {
-            first_name: drivers_identity_a.first_name,
-            last_name: drivers_identity_a.last_name,
-            address: drivers_identity_a.address,
-            drivers_license_issue_date: drivers_identity_a.drivers_license_issue_date,
-          },
+      drivers_identity_b: {
+        first_name: drivers_identity_b.first_name,
+        last_name: drivers_identity_b.last_name,
+        address: drivers_identity_b.address,
+        drivers_license_issue_date:
+          drivers_identity_b.drivers_license_issue_date,
+      },
+      insured_a: {
+        firstname: insured_a.firstname,
+        lastname: insured_a.lastname,
+        phonenumber: insured_a.phonenumber,
+        address: insured_a.address,
+      },
+      insured_b: {
+        firstname: insured_b.firstname,
+        lastname: insured_b.lastname,
+        phonenumber: insured_b.phonenumber,
+        address: insured_b.address,
+      },
+      vehicule_identity_a: {
+        brand: vehicule_identity_a.brand,
+        type: "Truck",
+        matriculation: vehicule_identity_a.matriculation,
+        country: vehicule_identity_a.country,
+        coming_from: vehicule_identity_a.coming_from,
+        going_to: vehicule_identity_a.going_to,
+      },
+      vehicule_identity_b: {
+        brand: vehicule_identity_b.brand,
+        type: "Truck",
+        matriculation: vehicule_identity_b.matriculation,
+        country: vehicule_identity_b.country,
+        coming_from: vehicule_identity_b.coming_from,
+        going_to: vehicule_identity_b.going_to,
+      },
+      hits_a: hits_a,
+      hits_b: hits_b,
 
-          drivers_identity_b: {
-            first_name: drivers_identity_b.first_name,
-            last_name: drivers_identity_b.last_name,
-            address: drivers_identity_b.address,
-            drivers_license_issue_date: drivers_identity_b.drivers_license_issue_date,
-          },
-          insured_a: {
-            firstname: insured_a.firstname,
-            lastname: insured_a.lastname,
-            phonenumber: insured_a.phonenumber,
-            address: insured_a.address,
-          },
-          insured_b: {
-            firstname: insured_b.firstname,
-            lastname: insured_b.lastname,
-            phonenumber: insured_b.phonenumber,
-            address: insured_b.address,
-          },
-          vehicule_identity_a: {
-            brand: vehicule_identity_a.brand,
-            type: "Truck",
-            matriculation: vehicule_identity_a.matriculation,
-            country: vehicule_identity_a.country,
-            coming_from: vehicule_identity_a.coming_from,
-            going_to: vehicule_identity_a.going_to,
-          },
-          vehicule_identity_b: {
-            brand: vehicule_identity_b.brand,
-            type: "Truck",
-            matriculation: vehicule_identity_b.matriculation,
-            country: vehicule_identity_b.country,
-            coming_from: vehicule_identity_b.coming_from,
-            going_to: vehicule_identity_b.going_to,
-          },
-          hits_a: hits_a,
-          hits_b: hits_b,
-          
-          apparent_damages_a:apparent_damages_a,
-          apparent_damages_b:apparent_damages_b,
-          circumstances_a:circumstances_a,
-          circumstances_b: circumstances_b,
-          accident_croquis:"Hello",
-          notes_a:notes_a,
-          notes_b: notes_b,
-          signature_a:signature_a,
-          signature_b:signature_b,
-};
-console.log( mystatement)
+      apparent_damages_a: apparent_damages_a,
+      apparent_damages_b: apparent_damages_b,
+      circumstances_a: circumstances_a,
+      circumstances_b: circumstances_b,
+      accident_croquis: "Hello",
+      notes_a: notes_a,
+      notes_b: notes_b,
+      signature_a: signature_a,
+      signature_b: signature_b,
+    };
+    console.log(mystatement);
 
-
-    
-/*
+    /*
 
     if (!date || !location || !injured || !material_damage || !witness || !vehicule_a.assureBy || !vehicule_a.agency_a
       || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date
@@ -428,23 +556,25 @@ console.log( mystatement)
       const add = await axios.post(
         "http://127.0.0.1:5000/addstatement",
         {
-          date:date,
-          location:location,
-          injured:injured,
-          material_damage:material_damage,
-          witness:witness,
+          date: date,
+          location: location,
+          injured: injured,
+          material_damage: material_damage,
+          witness: witness,
           drivers_identity_a: {
             first_name: drivers_identity_a.first_name,
             last_name: drivers_identity_a.last_name,
             address: drivers_identity_a.address,
-            drivers_license_issue_date: drivers_identity_a.drivers_license_issue_date,
+            drivers_license_issue_date:
+              drivers_identity_a.drivers_license_issue_date,
           },
 
           drivers_identity_b: {
             first_name: drivers_identity_b.first_name,
             last_name: drivers_identity_b.last_name,
             address: drivers_identity_b.address,
-            drivers_license_issue_date: drivers_identity_b.drivers_license_issue_date,
+            drivers_license_issue_date:
+              drivers_identity_b.drivers_license_issue_date,
           },
           insured_a: {
             firstname: insured_a.firstname,
@@ -476,16 +606,16 @@ console.log( mystatement)
           },
           hits_a: hits_a,
           hits_b: hits_b,
-          
-          apparent_damages_a:apparent_damages_a,
-          apparent_damages_b:apparent_damages_b,
-          circumstances_a:circumstances_a,
+
+          apparent_damages_a: apparent_damages_a,
+          apparent_damages_b: apparent_damages_b,
+          circumstances_a: circumstances_a,
           circumstances_b: circumstances_a,
-          accident_croquis:"Hello",
-          notes_a:notes_a,
+          accident_croquis: "Hello",
+          notes_a: notes_a,
           notes_b: notes_b,
-          signature_a:signature_a,
-          signature_b:signature_b,
+          signature_a: signature_a,
+          signature_b: signature_b,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -510,10 +640,7 @@ console.log( mystatement)
       try {
         const response = await axios.get("http://localhost:5000/all-users");
         setUsers(response.data.users);
-        setUsers(
-          response.data.users.filter((user) => user.role === "Agence")
-
-        );
+        setUsers(response.data.users.filter((user) => user.role === "Agence"));
       } catch (err) {
         console.log(err);
       }
@@ -524,91 +651,83 @@ console.log( mystatement)
   //hundle show for the whole card:
   const [isShown, setIsShown] = useState(true);
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     // 👇️ toggle shown state
-    setIsShown(current => !current);
+    setIsShown((current) => !current);
 
     // 👇️ or simply set it to true
     // setIsShown(true);
   };
 
-
-  //hundle show to the 1+2+3+4+5 section 
+  //hundle show to the 1+2+3+4+5 section
   const [isShown1, setIsShown1] = useState(true);
-  const handleShow1 = event => {
+  const handleShow1 = (event) => {
     // 👇️ toggle shown state
-    setIsShown1(current => !current);
-
+    setIsShown1((current) => !current);
   };
 
-  //hundle show to the 6 section 
+  //hundle show to the 6 section
   const [isShown6, setIsShown6] = useState(true);
-  const handleShow6 = event => {
+  const handleShow6 = (event) => {
     // 👇️ toggle shown state
-    setIsShown6(current => !current);
-
+    setIsShown6((current) => !current);
   };
 
-
-  //hundle show to the 7 section 
+  //hundle show to the 7 section
   const [isShown7, setIsShown7] = useState(true);
-  const handleShow7 = event => {
+  const handleShow7 = (event) => {
     // 👇️ toggle shown state
-    setIsShown7(current => !current);
+    setIsShown7((current) => !current);
   };
 
-  //hundle show to the 8 section 
+  //hundle show to the 8 section
   const [isShown8, setIsShown8] = useState(true);
-  const handleShow8 = event => {
+  const handleShow8 = (event) => {
     // 👇️ toggle shown state
-    setIsShown8(current => !current);
+    setIsShown8((current) => !current);
   };
 
-  //hundle show to the 9 section 
+  //hundle show to the 9 section
   const [isShown9, setIsShown9] = useState(true);
-  const handleShow9 = event => {
+  const handleShow9 = (event) => {
     // 👇️ toggle shown state
-    setIsShown9(current => !current);
+    setIsShown9((current) => !current);
   };
 
-  //hundle show to the 10 section 
+  //hundle show to the 10 section
   const [isShown10, setIsShown10] = useState(true);
-  const handleShow10 = event => {
+  const handleShow10 = (event) => {
     // 👇️ toggle shown state
-    setIsShown10(current => !current);
+    setIsShown10((current) => !current);
   };
 
-  //hundle show to the 11 section 
+  //hundle show to the 11 section
   const [isShown11, setIsShown11] = useState(true);
-  const handleShow11 = event => {
+  const handleShow11 = (event) => {
     // 👇️ toggle shown state
-    setIsShown11(current => !current);
+    setIsShown11((current) => !current);
   };
 
-  //hundle show to the 12 section 
+  //hundle show to the 12 section
   const [isShown12, setIsShown12] = useState(true);
-  const handleShow12 = event => {
+  const handleShow12 = (event) => {
     // 👇️ toggle shown state
-    setIsShown12(current => !current);
+    setIsShown12((current) => !current);
   };
-  //hundle show to the 13 section 
+  //hundle show to the 13 section
   const [isShown13, setIsShown13] = useState(true);
-  const handleShow13 = event => {
+  const handleShow13 = (event) => {
     // 👇️ toggle shown state
-    setIsShown13(current => !current);
+    setIsShown13((current) => !current);
   };
-
-
 
   const today = new Date().toISOString().substr(0, 10);
-
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
   return (
     <>
-
       {/*<UserHeader /> */}
       {/* Page content */}
       <Container className="mt--7" fluid>
@@ -621,8 +740,8 @@ console.log( mystatement)
                     <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button color="info" onClick={handleClick} >
-                      {!isShown ? 'Show' : 'Hide'}
+                    <Button color="info" onClick={handleClick}>
+                      {!isShown ? "Show" : "Hide"}
                     </Button>
                   </Col>
                 </Row>
@@ -634,26 +753,24 @@ console.log( mystatement)
                       set all the infromations related to the accident please
                     </h6>
                     <div className="pl-lg-4">
-
-
-                      <Row> {/* Section 1 + 2 + 3 + 4 + 5 */}
+                      <Row>
+                        {" "}
+                        {/* Section 1 + 2 + 3 + 4 + 5 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 1 + 2 + 3 + 4 + 5
                           </h6>
                         </Col>
-
                       </Row>
-
-
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow1} >
-                          {!isShown1 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow1}>
+                          {!isShown1 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown1 && (
-                        <Row> {/* SECTION 1 + 2 + 3 + 4 + 5 */}
-
+                        <Row>
+                          {" "}
+                          {/* SECTION 1 + 2 + 3 + 4 + 5 */}
                           <Col lg="3">
                             <FormGroup>
                               <label
@@ -673,7 +790,6 @@ console.log( mystatement)
                               <div className="date error"></div>
                             </FormGroup>
                           </Col>
-
                           <Col lg="6">
                             <FormGroup>
                               <label
@@ -694,10 +810,7 @@ console.log( mystatement)
                               />
                               <div className="location error"></div>
                             </FormGroup>
-
-
                           </Col>
-
                           <Col lg="3">
                             <FormGroup>
                               <label
@@ -719,7 +832,6 @@ console.log( mystatement)
                               <div className="injured error"></div>
                             </FormGroup>
                           </Col>
-
                           <Col lg="3">
                             <FormGroup>
                               <label
@@ -733,8 +845,9 @@ console.log( mystatement)
                                 type="select"
                                 required
                                 value={material_damage}
-                                onChange={(e) => setMaterial_damage(e.target.value)}
-
+                                onChange={(e) =>
+                                  setMaterial_damage(e.target.value)
+                                }
                               >
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
@@ -749,13 +862,14 @@ console.log( mystatement)
                               >
                                 5. Witness to add if exists
                               </label>
-
                             </FormGroup>
                           </Col>
-                        </Row>)} {/* FIN  1 + 2 + 3 + 4 + 5 */}
-
-
-                      <Row> {/* VEHICULE A VS B */}
+                        </Row>
+                      )}{" "}
+                      {/* FIN  1 + 2 + 3 + 4 + 5 */}
+                      <Row>
+                        {" "}
+                        {/* VEHICULE A VS B */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             VEHICULE A
@@ -772,15 +886,15 @@ console.log( mystatement)
                           </h6>
                         </Col>
                       </Row>
-
-
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow6} >
-                          {!isShown6 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow6}>
+                          {!isShown6 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown6 && (
-                        <Row> {/* SECTION 6 */}
+                        <Row>
+                          {" "}
+                          {/* SECTION 6 */}
                           <Col lg="6">
                             <label
                               className="form-control-label"
@@ -789,24 +903,25 @@ console.log( mystatement)
                               6. Insurance Agency
                             </label>
                             <FormGroup>
-
-
                               <label
                                 className="heading-small "
                                 htmlFor="input-email"
                               >
                                 vehicule Insured By :
                               </label>
-                              <Input name="assureBy_a" type="select" required
+                              <Input
+                                name="assureBy_a"
+                                type="select"
+                                required
                                 value={assureBy_a}
-                                onChange={(e) => setAssureBy_a(e.target.value)}>
+                                onChange={(e) => setAssureBy_a(e.target.value)}
+                              >
                                 {users.map((user) => (
-                                  <option key={user._id} value={user._id} >
+                                  <option key={user._id} value={user._id}>
                                     {user.first_name}
                                   </option>
                                 ))}
                               </Input>
-
                             </FormGroup>
                             <FormGroup>
                               <label
@@ -821,13 +936,13 @@ console.log( mystatement)
                                 name="contractNumber_a"
                                 type="text"
                                 value={contractNumber_a}
-                                onChange={(e) => setContractNumber_a(e.target.value)}
+                                onChange={(e) =>
+                                  setContractNumber_a(e.target.value)
+                                }
                                 required
                               />
                             </FormGroup>
                             <FormGroup>
-
-
                               <label
                                 className="heading-small "
                                 htmlFor="input-email"
@@ -877,10 +992,7 @@ console.log( mystatement)
                               />
                             </FormGroup>
                           </Col>
-
                           <Col lg="6">
-
-
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -888,8 +1000,6 @@ console.log( mystatement)
                               6. Insurance Agency
                             </label>
                             <FormGroup>
-
-
                               <label
                                 className="heading-small "
                                 htmlFor="input-email"
@@ -918,12 +1028,12 @@ console.log( mystatement)
                                 name="contractNumber_b"
                                 type="text"
                                 value={contractNumber_b}
-                                onChange={(e) => setContractNumber_b(e.target.value)}
+                                onChange={(e) =>
+                                  setContractNumber_b(e.target.value)
+                                }
                               />
                             </FormGroup>
                             <FormGroup>
-
-
                               <label
                                 className="heading-small "
                                 htmlFor="input-email"
@@ -972,26 +1082,27 @@ console.log( mystatement)
                               />
                             </FormGroup>
                           </Col>
-                        </Row>)} {/*  FIN Section 6 */}
-
-
-                      <Row> {/* Section 7 */}
+                        </Row>
+                      )}{" "}
+                      {/*  FIN Section 6 */}
+                      <Row>
+                        {" "}
+                        {/* Section 7 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 7
                           </h6>
                         </Col>
-
                       </Row>
-
-
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow7} >
-                          {!isShown7 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow7}>
+                          {!isShown7 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown7 && (
-                        <Row> {/*  SECTION 7 */}
+                        <Row>
+                          {" "}
+                          {/*  SECTION 7 */}
                           <Col lg="6">
                             <label
                               className="form-control-label"
@@ -1000,7 +1111,10 @@ console.log( mystatement)
                               7. Driver Identity
                             </label>
                             <FormGroup>
-                              <Label className="heading-small" for="first_name_a">
+                              <Label
+                                className="heading-small"
+                                for="first_name_a"
+                              >
                                 First Name
                               </Label>
                               <Input
@@ -1009,12 +1123,17 @@ console.log( mystatement)
                                 id="first_name_a"
                                 maxLength="50"
                                 value={first_name_a}
-                                onChange={(e) => setFirst_name_a(e.target.value)}
+                                onChange={(e) =>
+                                  setFirst_name_a(e.target.value)
+                                }
                                 required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <Label className="heading-small" for="last_name_a">
+                              <Label
+                                className="heading-small"
+                                for="last_name_a"
+                              >
                                 Last Name
                               </Label>
                               <Input
@@ -1042,7 +1161,10 @@ console.log( mystatement)
                               />
                             </FormGroup>
                             <FormGroup>
-                              <Label className="heading-small" for="drivers_license_issue_date_a">
+                              <Label
+                                className="heading-small"
+                                for="drivers_license_issue_date_a"
+                              >
                                 Driver's License Issue Date
                               </Label>
                               <Input
@@ -1050,13 +1172,20 @@ console.log( mystatement)
                                 name="drivers_license_issue_date_a"
                                 id="drivers_license_issue_date_a"
                                 value={drivers_license_issue_date_a}
-                                onChange={(e) => setDrivers_license_issue_date_a(e.target.value)}
+                                onChange={(e) =>
+                                  setDrivers_license_issue_date_a(
+                                    e.target.value
+                                  )
+                                }
                                 required
                               />
                             </FormGroup>
 
                             <FormGroup>
-                              <Label className="heading-small" for="driver_license_a">
+                              <Label
+                                className="heading-small"
+                                for="driver_license_a"
+                              >
                                 Driver's License
                               </Label>
                               <Input
@@ -1066,7 +1195,9 @@ console.log( mystatement)
                                 maxLength="20"
                                 pattern="^[a-zA-Z0-9]+$"
                                 value={driver_license_a}
-                                onChange={(e) => setDriver_license_a(e.target.value)}
+                                onChange={(e) =>
+                                  setDriver_license_a(e.target.value)
+                                }
                                 required
                               />
                             </FormGroup>
@@ -1079,7 +1210,10 @@ console.log( mystatement)
                               7. Driver Identity
                             </label>
                             <FormGroup>
-                              <Label className="heading-small" for="first_name_b">
+                              <Label
+                                className="heading-small"
+                                for="first_name_b"
+                              >
                                 First Name
                               </Label>
                               <Input
@@ -1088,12 +1222,17 @@ console.log( mystatement)
                                 id="first_name_b"
                                 maxLength="50"
                                 value={first_name_b}
-                                onChange={(e) => setFirst_name_b(e.target.value)}
+                                onChange={(e) =>
+                                  setFirst_name_b(e.target.value)
+                                }
                                 required
                               />
                             </FormGroup>
                             <FormGroup>
-                              <Label className="heading-small" for="last_name_b">
+                              <Label
+                                className="heading-small"
+                                for="last_name_b"
+                              >
                                 Last Name
                               </Label>
                               <Input
@@ -1121,7 +1260,10 @@ console.log( mystatement)
                               />
                             </FormGroup>
                             <FormGroup>
-                              <Label className="heading-small" for="drivers_license_issue_date_b">
+                              <Label
+                                className="heading-small"
+                                for="drivers_license_issue_date_b"
+                              >
                                 Driver's License Issue Date
                               </Label>
                               <Input
@@ -1129,13 +1271,20 @@ console.log( mystatement)
                                 name="drivers_license_issue_date_b"
                                 id="drivers_license_issue_date_b"
                                 value={drivers_license_issue_date_b}
-                                onChange={(e) => setDrivers_license_issue_date_b(e.target.value)}
+                                onChange={(e) =>
+                                  setDrivers_license_issue_date_b(
+                                    e.target.value
+                                  )
+                                }
                                 required
                               />
                             </FormGroup>
 
                             <FormGroup>
-                              <Label className="heading-small" for="drivers_identity_b">
+                              <Label
+                                className="heading-small"
+                                for="drivers_identity_b"
+                              >
                                 Driver's License
                               </Label>
                               <Input
@@ -1145,30 +1294,34 @@ console.log( mystatement)
                                 maxLength="20"
                                 pattern="^[a-zA-Z0-9]+$"
                                 value={driver_license_b}
-                                onChange={(e) => setDriver_license_b(e.target.value)}
+                                onChange={(e) =>
+                                  setDriver_license_b(e.target.value)
+                                }
                                 required
                               />
                             </FormGroup>
                           </Col>
-                        </Row>)} {/*  FIN SECTION 7 */}
-
-
-                      <Row> {/* Section 8 */}
+                        </Row>
+                      )}{" "}
+                      {/*  FIN SECTION 7 */}
+                      <Row>
+                        {" "}
+                        {/* Section 8 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 8
                           </h6>
                         </Col>
-
                       </Row>
-
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow8} >
-                          {!isShown8 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow8}>
+                          {!isShown8 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown8 && (
-                        <Row>  {/* SECTION 8 */}
+                        <Row>
+                          {" "}
+                          {/* SECTION 8 */}
                           <Col lg="6">
                             <label
                               className="form-control-label"
@@ -1177,7 +1330,10 @@ console.log( mystatement)
                               8. Insured
                             </label>
                             <FormGroup>
-                              <Label className="heading-small" for="firstname_a">
+                              <Label
+                                className="heading-small"
+                                for="firstname_a"
+                              >
                                 First Name
                               </Label>
                               <Input
@@ -1230,11 +1386,12 @@ console.log( mystatement)
                                 id="phonenumber_a"
                                 type="phonenumber_a"
                                 value={phonenumber_a}
-                                onChange={(e) => setPhonenumber_a(e.target.value)}
+                                onChange={(e) =>
+                                  setPhonenumber_a(e.target.value)
+                                }
                                 required
                               />
                             </FormGroup>
-
                           </Col>
                           <Col lg="6">
                             <label
@@ -1244,7 +1401,10 @@ console.log( mystatement)
                               8. Insured
                             </label>
                             <FormGroup>
-                              <Label className="heading-small" for="firstname_b">
+                              <Label
+                                className="heading-small"
+                                for="firstname_b"
+                              >
                                 First Name
                               </Label>
                               <Input
@@ -1297,33 +1457,34 @@ console.log( mystatement)
                                 id="phonenumber_b"
                                 type="phonenumber_b"
                                 value={phonenumber_b}
-                                onChange={(e) => setPhonenumber_b(e.target.value)}
+                                onChange={(e) =>
+                                  setPhonenumber_b(e.target.value)
+                                }
                                 required
                               />
                             </FormGroup>
-
                           </Col>
-                        </Row>)} {/*  FIN SECTION 8 */}
-
-
-
-                      <Row> {/* Section 9 */}
+                        </Row>
+                      )}{" "}
+                      {/*  FIN SECTION 8 */}
+                      <Row>
+                        {" "}
+                        {/* Section 9 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 9
                           </h6>
                         </Col>
-
                       </Row>
-
-
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow9} >
-                          {!isShown9 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow9}>
+                          {!isShown9 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown9 && (
-                        <Row> {/*  SECTION 9 */}
+                        <Row>
+                          {" "}
+                          {/*  SECTION 9 */}
                           <Col lg="6">
                             <label
                               className="form-control-label"
@@ -1343,7 +1504,10 @@ console.log( mystatement)
                               >
                                 <option value="">Select a brand</option>
                                 {brands.map((brand, index) => (
-                                  <option key={`${brand}-${index}`} value={brand}>
+                                  <option
+                                    key={`${brand}-${index}`}
+                                    value={brand}
+                                  >
                                     {brand}
                                   </option>
                                 ))}
@@ -1361,7 +1525,10 @@ console.log( mystatement)
                               >
                                 <option value="">Select a country</option>
                                 {countries.map((country, index) => (
-                                  <option key={`${country}-${index}`} value={country}>
+                                  <option
+                                    key={`${country}-${index}`}
+                                    value={country}
+                                  >
                                     {country}
                                   </option>
                                 ))}
@@ -1390,8 +1557,6 @@ console.log( mystatement)
                               Direction of Follow
                             </label>
                             <FormGroup>
-
-
                               <label
                                 className="heading-small "
                                 htmlFor="input-email"
@@ -1427,7 +1592,6 @@ console.log( mystatement)
                                 required
                               />
                             </FormGroup>
-
                           </Col>
                           <Col lg="6">
                             <label
@@ -1448,7 +1612,10 @@ console.log( mystatement)
                               >
                                 <option value="">Select a brand</option>
                                 {brands.map((brand, index) => (
-                                  <option key={`${brand}-${index}`} value={brand}>
+                                  <option
+                                    key={`${brand}-${index}`}
+                                    value={brand}
+                                  >
                                     {brand}
                                   </option>
                                 ))}
@@ -1466,7 +1633,10 @@ console.log( mystatement)
                               >
                                 <option value="">Select a country</option>
                                 {countries.map((country, index) => (
-                                  <option key={`${country}-${index}`} value={country}>
+                                  <option
+                                    key={`${country}-${index}`}
+                                    value={country}
+                                  >
                                     {country}
                                   </option>
                                 ))}
@@ -1495,8 +1665,6 @@ console.log( mystatement)
                               Direction of Follow
                             </label>
                             <FormGroup>
-
-
                               <label
                                 className="heading-small "
                                 htmlFor="input-email"
@@ -1532,27 +1700,28 @@ console.log( mystatement)
                                 required
                               />
                             </FormGroup>
-
                           </Col>
-                        </Row>)} {/*  FIN SECTION 9 */}
-
-
-
-                      <Row> {/* Section 10 */}
+                        </Row>
+                      )}{" "}
+                      {/*  FIN SECTION 9 */}
+                      <Row>
+                        {" "}
+                        {/* Section 10 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 10
                           </h6>
                         </Col>
-
                       </Row>
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow10} >
-                          {!isShown10 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow10}>
+                          {!isShown10 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown10 && (
-                        <Row> {/* SECTION 10 */}
+                        <Row>
+                          {" "}
+                          {/* SECTION 10 */}
                           <Col lg="6">
                             <FormGroup>
                               <label
@@ -1569,24 +1738,49 @@ console.log( mystatement)
                                 required
                               >
                                 <option value="Other">Select</option>
-                                <option value="Front Left Fender">Front Left Fender</option>
-                                <option value="Front Right Fender">Front Right Fender</option>
-                                <option value="Rear Left Fender">Rear Left Fender</option>
-                                <option value="Rear Right Fender">Rear Right Fender</option>
-                                <option value="Front Bumper">Front Bumper</option>
+                                <option value="Front Left Fender">
+                                  Front Left Fender
+                                </option>
+                                <option value="Front Right Fender">
+                                  Front Right Fender
+                                </option>
+                                <option value="Rear Left Fender">
+                                  Rear Left Fender
+                                </option>
+                                <option value="Rear Right Fender">
+                                  Rear Right Fender
+                                </option>
+                                <option value="Front Bumper">
+                                  Front Bumper
+                                </option>
                                 <option value="Rear Bumper">Rear Bumper</option>
                                 <option value="Hood">Hood</option>
                                 <option value="Trunk">Trunk</option>
                                 <option value="Roof">Roof</option>
-                                <option value="Front Windshield">Front Windshield</option>
-                                <option value="Rear Windshield">Rear Windshield</option>
-                                <option value="Side Mirror Left">Side Mirror Left</option>
-                                <option value="Side Mirror Right">Side Mirror Right</option>
-                                <option value="Door Front Left">Door Front Left</option>
-                                <option value="Door Front Right">Door Front Right</option>
-                                <option value="Door Rear Left">Door Rear Left</option>
-                                <option value="Door Rear Right">Door Rear Right</option>
-
+                                <option value="Front Windshield">
+                                  Front Windshield
+                                </option>
+                                <option value="Rear Windshield">
+                                  Rear Windshield
+                                </option>
+                                <option value="Side Mirror Left">
+                                  Side Mirror Left
+                                </option>
+                                <option value="Side Mirror Right">
+                                  Side Mirror Right
+                                </option>
+                                <option value="Door Front Left">
+                                  Door Front Left
+                                </option>
+                                <option value="Door Front Right">
+                                  Door Front Right
+                                </option>
+                                <option value="Door Rear Left">
+                                  Door Rear Left
+                                </option>
+                                <option value="Door Rear Right">
+                                  Door Rear Right
+                                </option>
                               </Input>
                             </FormGroup>
                           </Col>
@@ -1606,44 +1800,73 @@ console.log( mystatement)
                                 required
                               >
                                 <option value="Other">Select</option>
-                                <option value="Front Left Fender">Front Left Fender</option>
-                                <option value="Front Right Fender">Front Right Fender</option>
-                                <option value="Rear Left Fender">Rear Left Fender</option>
-                                <option value="Rear Right Fender">Rear Right Fender</option>
-                                <option value="Front Bumper">Front Bumper</option>
+                                <option value="Front Left Fender">
+                                  Front Left Fender
+                                </option>
+                                <option value="Front Right Fender">
+                                  Front Right Fender
+                                </option>
+                                <option value="Rear Left Fender">
+                                  Rear Left Fender
+                                </option>
+                                <option value="Rear Right Fender">
+                                  Rear Right Fender
+                                </option>
+                                <option value="Front Bumper">
+                                  Front Bumper
+                                </option>
                                 <option value="Rear Bumper">Rear Bumper</option>
                                 <option value="Hood">Hood</option>
                                 <option value="Trunk">Trunk</option>
                                 <option value="Roof">Roof</option>
-                                <option value="Front Windshield">Front Windshield</option>
-                                <option value="Rear Windshield">Rear Windshield</option>
-                                <option value="Side Mirror Left">Side Mirror Left</option>
-                                <option value="Side Mirror Right">Side Mirror Right</option>
-                                <option value="Door Front Left">Door Front Left</option>
-                                <option value="Door Front Right">Door Front Right</option>
-                                <option value="Door Rear Left">Door Rear Left</option>
-                                <option value="Door Rear Right">Door Rear Right</option>
-
+                                <option value="Front Windshield">
+                                  Front Windshield
+                                </option>
+                                <option value="Rear Windshield">
+                                  Rear Windshield
+                                </option>
+                                <option value="Side Mirror Left">
+                                  Side Mirror Left
+                                </option>
+                                <option value="Side Mirror Right">
+                                  Side Mirror Right
+                                </option>
+                                <option value="Door Front Left">
+                                  Door Front Left
+                                </option>
+                                <option value="Door Front Right">
+                                  Door Front Right
+                                </option>
+                                <option value="Door Rear Left">
+                                  Door Rear Left
+                                </option>
+                                <option value="Door Rear Right">
+                                  Door Rear Right
+                                </option>
                               </Input>
                             </FormGroup>
                           </Col>
-                        </Row>)} {/* FIN SECTION 10 */}
-
-                      <Row> {/* Section 11 */}
+                        </Row>
+                      )}{" "}
+                      {/* FIN SECTION 10 */}
+                      <Row>
+                        {" "}
+                        {/* Section 11 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 11
                           </h6>
                         </Col>
-
                       </Row>
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow11} >
-                          {!isShown11 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow11}>
+                          {!isShown11 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown11 && (
-                        <Row> {/* SECTION 11 */}
+                        <Row>
+                          {" "}
+                          {/* SECTION 11 */}
                           <Col lg="6">
                             <FormGroup>
                               <label
@@ -1656,16 +1879,26 @@ console.log( mystatement)
                                 name="apparent_damages_a"
                                 type="select"
                                 value={apparent_damages_a}
-                                onChange={(e) => setApparent_damages_a(e.target.value)}
+                                onChange={(e) =>
+                                  setApparent_damages_a(e.target.value)
+                                }
                                 required
                               >
                                 <option value="Scratches">Scratches</option>
                                 <option value="Dents">Dents</option>
                                 <option value="Cracks">Cracks</option>
-                                <option value="Paint Damage">Paint Damage</option>
-                                <option value="Broken Lights">Broken Lights</option>
-                                <option value="Broken Windows">Broken Windows</option>
-                                <option value="Missing Parts">Missing Parts</option>
+                                <option value="Paint Damage">
+                                  Paint Damage
+                                </option>
+                                <option value="Broken Lights">
+                                  Broken Lights
+                                </option>
+                                <option value="Broken Windows">
+                                  Broken Windows
+                                </option>
+                                <option value="Missing Parts">
+                                  Missing Parts
+                                </option>
                               </Input>
                             </FormGroup>
                           </Col>
@@ -1681,21 +1914,32 @@ console.log( mystatement)
                                 name="apparent_damages_b"
                                 type="select"
                                 value={apparent_damages_b}
-                                onChange={(e) => setApparent_damages_b(e.target.value)}
+                                onChange={(e) =>
+                                  setApparent_damages_b(e.target.value)
+                                }
                                 required
                               >
                                 <option value="Scratches">Scratches</option>
                                 <option value="Dents">Dents</option>
                                 <option value="Cracks">Cracks</option>
-                                <option value="Paint Damage">Paint Damage</option>
-                                <option value="Broken Lights">Broken Lights</option>
-                                <option value="Broken Windows">Broken Windows</option>
-                                <option value="Missing Parts">Missing Parts</option>
+                                <option value="Paint Damage">
+                                  Paint Damage
+                                </option>
+                                <option value="Broken Lights">
+                                  Broken Lights
+                                </option>
+                                <option value="Broken Windows">
+                                  Broken Windows
+                                </option>
+                                <option value="Missing Parts">
+                                  Missing Parts
+                                </option>
                               </Input>
                             </FormGroup>
                           </Col>
-
-                        </Row>)} {/* FIN SECTION 11 */}
+                        </Row>
+                      )}{" "}
+                      {/* FIN SECTION 11 */}
                     </div>
                     {/*
                      <h6 className="heading-small text-muted mb-4">
@@ -1703,9 +1947,9 @@ console.log( mystatement)
                       </h6> 
                       */}
                     <div className="pl-lg-4">
-
-
-                      <Row> {/* Section 12 */}
+                      <Row>
+                        {" "}
+                        {/* Section 12 */}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 12
@@ -1713,14 +1957,15 @@ console.log( mystatement)
                         </Col>
                       </Row>
 
-
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow12} >
-                          {!isShown12 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow12}>
+                          {!isShown12 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown12 && (
-                        <Row> {/* SECTION 12 */}
+                        <Row>
+                          {" "}
+                          {/* SECTION 12 */}
                           <Col md="6">
                             <FormGroup>
                               <label
@@ -1733,24 +1978,50 @@ console.log( mystatement)
                                 name="circumstances_a"
                                 type="select"
                                 value={circumstances_a}
-                                onChange={(e) => setCircumstances_a(e.target.value)}
+                                onChange={(e) =>
+                                  setCircumstances_a(e.target.value)
+                                }
                                 required
                               >
-                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner</option>
-                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
+                                <option value="Driving in a normal and careful manner">
+                                  Driving in a normal and careful manner
+                                </option>
+                                <option value="Driving under the influence of drugs or alcohol">
+                                  Driving under the influence of drugs or
+                                  alcohol
+                                </option>
                                 <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
-                                <option value="Distracted driving">Distracted driving</option>
-                                <option value="Driving while fatigued">Driving while fatigued</option>
-                                <option value="Reckless driving">Reckless driving</option>
+                                <option value="Ignoring traffic signals or signs">
+                                  Ignoring traffic signals or signs
+                                </option>
+                                <option value="Distracted driving">
+                                  Distracted driving
+                                </option>
+                                <option value="Driving while fatigued">
+                                  Driving while fatigued
+                                </option>
+                                <option value="Reckless driving">
+                                  Reckless driving
+                                </option>
                                 <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling">Changing lanes without signaling</option>
-                                <option value="Making an illegal turn">Making an illegal turn</option>
-                                <option value="Backing up without looking">Backing up without looking</option>
-                                <option value="Driving in the wrong lane">Driving in the wrong lane</option>
-                                <option value="Driving in a construction zone">Driving in a construction zone</option>
-                                <option value="Driving during inclement weather">Driving during inclement weather</option>
-                                
+                                <option value="Changing lanes without signaling">
+                                  Changing lanes without signaling
+                                </option>
+                                <option value="Making an illegal turn">
+                                  Making an illegal turn
+                                </option>
+                                <option value="Backing up without looking">
+                                  Backing up without looking
+                                </option>
+                                <option value="Driving in the wrong lane">
+                                  Driving in the wrong lane
+                                </option>
+                                <option value="Driving in a construction zone">
+                                  Driving in a construction zone
+                                </option>
+                                <option value="Driving during inclement weather">
+                                  Driving during inclement weather
+                                </option>
                               </Input>
                             </FormGroup>
                           </Col>
@@ -1766,28 +2037,53 @@ console.log( mystatement)
                                 name="circumstances_b"
                                 type="select"
                                 value={circumstances_b}
-                                onChange={(e) => setCircumstances_b(e.target.value)}
+                                onChange={(e) =>
+                                  setCircumstances_b(e.target.value)
+                                }
                                 required
-                                                           >
-                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner</option>
-                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
+                              >
+                                <option value="Driving in a normal and careful manner">
+                                  Driving in a normal and careful manner
+                                </option>
+                                <option value="Driving under the influence of drugs or alcohol">
+                                  Driving under the influence of drugs or
+                                  alcohol
+                                </option>
                                 <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
-                                <option value="Distracted driving">Distracted driving</option>
-                                <option value="Driving while fatigued">Driving while fatigued</option>
-                                <option value="Reckless driving">Reckless driving</option>
+                                <option value="Ignoring traffic signals or signs">
+                                  Ignoring traffic signals or signs
+                                </option>
+                                <option value="Distracted driving">
+                                  Distracted driving
+                                </option>
+                                <option value="Driving while fatigued">
+                                  Driving while fatigued
+                                </option>
+                                <option value="Reckless driving">
+                                  Reckless driving
+                                </option>
                                 <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling">Changing lanes without signaling</option>
-                                <option value="Making an illegal turn">Making an illegal turn</option>
-                                <option value="Backing up without looking">Backing up without looking</option>
-                                <option value="Driving in the wrong lane">Driving in the wrong lane</option>
-                                <option value="Driving in a construction zone">Driving in a construction zone</option>
-                                <option value="Driving during inclement weather">Driving during inclement weather</option>
-                                
+                                <option value="Changing lanes without signaling">
+                                  Changing lanes without signaling
+                                </option>
+                                <option value="Making an illegal turn">
+                                  Making an illegal turn
+                                </option>
+                                <option value="Backing up without looking">
+                                  Backing up without looking
+                                </option>
+                                <option value="Driving in the wrong lane">
+                                  Driving in the wrong lane
+                                </option>
+                                <option value="Driving in a construction zone">
+                                  Driving in a construction zone
+                                </option>
+                                <option value="Driving during inclement weather">
+                                  Driving during inclement weather
+                                </option>
                               </Input>
                             </FormGroup>
                           </Col>
-
                           {/*     "Driving in a normal and careful manner",
                                 "Driving under the influence of drugs or alcohol",
                                 "Speeding",
@@ -1803,25 +2099,30 @@ console.log( mystatement)
                                 "Driving in a construction zone",
                                 "Driving during inclement weather", 
                             */}
-                        </Row>)}{/* FIN SECTION 12 */}
+                        </Row>
+                      )}
+                      {/* FIN SECTION 12 */}
 
-                      <Row> {/* Section 13 + 14 + 14*/}
+                      <Row>
+                        {" "}
+                        {/* Section 13 + 14 + 14*/}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 13 + 14 + 15
                           </h6>
                         </Col>
-
                       </Row>
 
                       <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow13} >
-                          {!isShown13 ? 'Show' : 'Hide'}
+                        <Button color="info" onClick={handleShow13}>
+                          {!isShown13 ? "Show" : "Hide"}
                         </Button>
                       </Col>
                       {isShown13 && (
                         <div>
-                          <Row> {/* SECTION 13  IMAGE */}
+                          <Row>
+                            {" "}
+                            {/* SECTION 13  IMAGE */}
                             <Col lg="12">
                               <FormGroup>
                                 <label
@@ -1830,27 +2131,24 @@ console.log( mystatement)
                                 >
                                   13. Simulation Image Of the Accident
                                 </label>
-                                <InputGroup className="input-group-alternative" >
-                                  
+                                <InputGroup className="input-group-alternative">
                                   <CanvasDraw
-                                  name="accident_croquis"
+                                    name="accident_croquis"
                                     brushRadius={2}
                                     canvasWidth={12000}
                                     canvasHeight={400}
                                     hideGrid={true}
                                     brushColor={"#000000"}
-
                                   />
-
                                 </InputGroup>
                                 {/* <button onClick={(e) => handleClear(e, setAccident_croquis)}>Clear</button> */}
                               </FormGroup>
-
                             </Col>
-                          </Row> {/* FIN SECTION 13  IMAGE */}
-
-
-                          <Row> {/* SECTION 14  Observation */}
+                          </Row>{" "}
+                          {/* FIN SECTION 13  IMAGE */}
+                          <Row>
+                            {" "}
+                            {/* SECTION 14  Observation */}
                             <Col md="6">
                               <FormGroup>
                                 <label
@@ -1891,9 +2189,11 @@ console.log( mystatement)
                                 />
                               </FormGroup>
                             </Col>
-                          </Row> {/* FIN SECTION 14  Observation */}
-
-                          <Row> {/* SECTION 15  Observation */}
+                          </Row>{" "}
+                          {/* FIN SECTION 14  Observation */}
+                          <Row>
+                            {" "}
+                            {/* SECTION 15  Observation */}
                             <Col lg="6">
                               <FormGroup>
                                 <label
@@ -1904,8 +2204,12 @@ console.log( mystatement)
                                 </label>
                                 <InputGroup className="input-group-alternative">
                                   <SignatureCanvas
-                                    penColor='black'
-                                    canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }}
+                                    penColor="black"
+                                    canvasProps={{
+                                      width: 500,
+                                      height: 200,
+                                      className: "sigCanvas",
+                                    }}
                                     ref={setSignature_a}
                                   />
                                 </InputGroup>
@@ -1922,34 +2226,35 @@ console.log( mystatement)
                                 </label>
                                 <InputGroup className="input-group-alternative">
                                   <SignatureCanvas
-                                    penColor='black'
-                                    canvasProps={{ width: 500, height: 200, className: 'sigCanvas' }}
+                                    penColor="black"
+                                    canvasProps={{
+                                      width: 500,
+                                      height: 200,
+                                      className: "sigCanvas",
+                                    }}
                                     ref={setSignature_b}
                                   />
                                 </InputGroup>
                               </FormGroup>
-
                             </Col>
-
-
-                          </Row> {/* FIN SECTION 15  Observation */}
+                          </Row>{" "}
+                          {/* FIN SECTION 15  Observation */}
                         </div>
                       )}
-
 
                       <Row>
                         <Button color="info" type="submit">
                           Submit
                         </Button>
                       </Row>
-
                     </div>
                   </form>
-                </CardBody>)}
+                </CardBody>
+              )}
             </Card>
           </Col>
         </Row>
-      </Container >
+      </Container>
     </>
   );
 };

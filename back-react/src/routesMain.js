@@ -46,7 +46,7 @@ var routesMain = [
       icon: "ni ni-bus-front-12 text-primary",
       component: addcar,
       layout: "/main",
-      showInSidebar: true,
+      showInSidebar: false,
     },
     {
       path: "/addstatement",

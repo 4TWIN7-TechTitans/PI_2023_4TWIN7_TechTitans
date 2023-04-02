@@ -16,7 +16,8 @@
 
 */
 
-import odm from "views/examples/OrdreMissionExpert";
+import OrdreMissionExpert from "views/examples/OrdreMissionExpert";
+import DetailsStatement from "views/examples/DetailsStatement";
 var routesExpert = [
   //TODO : change admin to user view profile
   {
@@ -28,13 +29,21 @@ var routesExpert = [
     showInSidebar: true,
   },
   {
-    path: "/odm",
+    path: "/OrdreMissionExpert",
     name: "Ordre de mission",
     icon: "ni ni-bullet-list-67 text-blue",
-    component: odm,
+    component: OrdreMissionExpert,
     layout: "/expert",
     showInSidebar: true,
   },
+  {
+    path: "/detailsstatement",
+    name: "Details",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: DetailsStatement,
+    layout: "/expert",
+    showInSidebar: true,
+  }
  
 ];
 export default routesExpert;

@@ -36,7 +36,9 @@ function AddNewContract() {
     const fetchUsers = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:5000/all-users");
-        setUsers(response.data.users);
+        console.log(response.data.users);
+        const users = response.data.users.filter((elem)=> elem.role === "Client")
+        setUsers(users);
         setAgencies(
           response.data.users.filter((user) => user.role === "Agence")
         );
@@ -72,6 +74,7 @@ function AddNewContract() {
       const add = await axios.post(
         "http://127.0.0.1:5000/add_contract",
         {
+          "contract_name" : "test",
           start_date,
           end_date,
           id_client,
