@@ -25,6 +25,14 @@ var routesExpert = [
     layout: "/expert",
     showInSidebar: true,
   },
+  {
+    path: "/OrdreMissionExpert",
+    name: "Mission Profile",
+    icon: "ni ni-tv-2 text-primary",
+    component: "OrdreMissionExpert",
+    layout: "/expert",
+    showInSidebar: true,
+  }
  
  
 ];
