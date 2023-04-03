@@ -22,7 +22,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [show2FAform, setShow2FAform] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
-
+  const [ShowBanNotification, setShowBanNotification] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -35,7 +35,7 @@ function Login() {
       console.log(isBanned)
       if (isBanned)
        {
-        alert("You Are Banned.");
+        setShowBanNotification("You Are Banned.");
         return;
       }
     } catch (error) {
@@ -319,6 +319,12 @@ function Login() {
                   Email not verified.
                 </div>
               )}
+              {ShowBanNotification && (
+                <div className="col-12 my-3 alert alert-danger">
+                  Account Banned.
+                </div>
+              )}
+              
 
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
