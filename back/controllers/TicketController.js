@@ -110,3 +110,30 @@ module.exports.get_tickets = async (req, res) => {
       res.status(400).json({ errorp, status: "error" });
     }
   };
+
+
+
+
+  module.exports.update_ticket = async (req, res) => {
+    const ticket=req.body;
+   
+   try {
+       
+    const updateticket = await ticketModel.findByIdAndUpdate(
+      ticket._id,
+      { log: ticket.log,
+      etat:ticket.etat },
+      { new: true } // Returns the updated document
+    );
+    res.status(200).json({ });
+    
+      
+    } catch (err) {
+     
+      const errorp=err.message;
+      res.status(400).json({ errorp, status: "error" });
+    }
+
+   
+  };
+ 

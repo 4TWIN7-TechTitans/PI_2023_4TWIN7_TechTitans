@@ -24,15 +24,21 @@ import { Link } from "react-router-dom";
 const Tickets = () => {
   const [tickets, setTickets] = useState([]);
 
-  const [objet, setObjet] = useState("");
-  const [description, setDescription] = useState("");
+ 
   const [errors, setErrors] = useState({});
   const [showErrorObjet, setShowErrorObjet] = useState(false);
   const [showErroroDescription, setShowErrorDescription] = useState(false);
   const [formvalid, setFormvalid] = useState(true);
   const [ticketadded, setTicketadded] = useState("default");
+  const [objet, setObjet] = useState("");
+  const [description, setDescription] = useState("");
   const [num_ticket, setNum_ticket] = useState("");
-
+  const [date_demande, setDate_demande] = useState("");
+  const [log, setLog] = useState("");
+  const [id_demandeur, setId_demandeur] = useState("");
+  const [id_agence, setId_agence] = useState("");
+  const [etat, setEtat] = useState("");
+  const [ticket_id, setTicket_id] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
 
@@ -159,6 +165,46 @@ const Tickets = () => {
     }
   };
 
+
+
+  const handleupdateticket = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    
+   
+    const log = form.log.value;
+    const etat=etat;
+    const id=ticket_id;
+  
+   
+    try {
+      const updateticket = await axios.post(
+        "http://localhost:5000/ticket/update",
+        {
+         
+          log: log,
+          
+          etat: etat,
+         
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (updateticket.status === 201) {
+        setTicketadded("OK");
+        setIsShownadd_ticket("list");
+      } else {
+        setTicketadded("KO");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+
   const DetailsTickets = async (e, id) => {
     try {
       const response = await axios.get("http://localhost:5000/ticket/");
@@ -169,7 +215,16 @@ const Tickets = () => {
 
       setNum_ticket(ticket[0].number);
       setObjet(ticket[0].objet);
+      setEtat(ticket[0].etat);
+      setTicket_id(ticket[0]._id);
+      setId_demandeur(ticket[0].id_demandeur);
+      var timestamp = Date.parse(ticket[0].date_demande); 
+      var date_dem = new Intl.DateTimeFormat('fr-FR', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(timestamp);
+      setDate_demande(date_dem);
+      setDescription(ticket[0].description);
+      setLog(ticket[0].log);
 
+      
       setTicketadded("");
       setIsShownadd_ticket("modif");
     } catch (error) {
@@ -374,69 +429,69 @@ const Tickets = () => {
 
               {isShownadd_ticket === "modif" && (
                 <CardBody>
-                  <div class="card-profile-stats d-flex justify-content-left ">
+                  <div className="card-profile-stats d-flex justify-content-center ">
                   
                   <div>
-                      <span class="heading ">Ticket </span>
-                      <span class="heading ni ni-support-16"></span>
-                      <span class="description ">N° {num_ticket}</span>
+                      <span className="heading ">Ticket </span>
+                      <span className="heading ni ni-support-16"></span>
+                      <span className="description ">N° {num_ticket}</span>
                     </div>
                     <div>
-                      <span class="heading ">Created by </span>
-                      <span class="heading ni ni-user-run"></span>
-                      <span class="description ">Friends</span>
+                      <span className="heading ">Created by </span>
+                      <span className="heading ni ni-user-run"></span>
+                      <span className="description ">{id_demandeur}</span>
                     </div>
                     <div>
-                      <span class="heading">Date </span>
-                      <span class="heading ni ni-calendar-grid-58"> </span>
-                      <span class="description">Photos</span>
+                      <span className="heading">Date </span>
+                      <span className="heading ni ni-calendar-grid-58"> </span>
+                      <span className="description">{date_demande}</span>
                     </div>
                     <div>
-                      <span class="heading">Etat</span>
-                      <span class="heading ni ni-sound-wave"></span>
+                      <span className="heading">Etat</span>
+                      <span className="heading ni ni-sound-wave"></span>
                       
-                      <span class="description">Comments</span>
+                      <span className="description">{etat}</span>
                     </div>
-                  </div>
+                    <div>
+                      {role!=="Client" && (<Input
+                                name="apparent_damages_a"
+                                type="select"
+                                value={etat}
+                                         >
+                                <option value="a traiter">a traiter</option>
+                                <option value="en cours de traitement">en cours de traitement</option>
+                                <option value="traité">traité</option>
+                                <option value="clos">clos</option>
+                                </Input>)}
+                    
+                    </div>
 
-                  <Form onSubmit={handleSubmitTicket} noValidate>
+                   
+                  </div>
+                  <hr className="my-4"/>
+                  <span class="heading ni ni-ruler-pencil"></span>
+                    <span class="heading"> Description</span>
+                      
+                      <br/>
+                      <span class="description">{description}</span>
+                      <hr className="my-4"/>
+                  <Form onSubmit={handleupdateticket} noValidate>
                     <Row>
                       <Col md="12">
                         <FormGroup></FormGroup>
                       </Col>
+                     
                       <Col md="12">
                         <FormGroup>
-                          <label>Description</label>
-
-                          <Input
-                            type="textarea"
-                            name="description"
-                            rows="10"
-                            id="description"
-                            defaultValue={description}
-                            onChange={(e) => {
-                              validateDescription(e.target.value);
-                              handleDescriptionChange(e);
-                            }}
-                          />
-                          {showErroroDescription && (
-                            <p className="text-danger">
-                              la description du ticket doit avoit 10 caractéres
-                              au min
-                            </p>
-                          )}
-                        </FormGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <FormGroup>
-                          <label>Log</label>
+                        <span class="heading ni ni-single-copy-04"></span>
+                        <span class="heading"> Log</span>
 
                           <Input
                             type="textarea"
                             name="log"
                             rows="10"
                             id="log"
+                            value={log}
                           />
                         </FormGroup>
                       </Col>
@@ -458,9 +513,9 @@ const Tickets = () => {
                         className="my-4"
                         color="primary"
                         type="submit"
-                        disabled={formvalid}
+                        
                       >
-                        Create ticket
+                        Enregistrer
                       </Button>
                     </div>
                   </Form>
