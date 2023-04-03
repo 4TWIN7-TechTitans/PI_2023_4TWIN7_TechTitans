@@ -25,8 +25,9 @@ function ListOfUsers() {
     try {
       const response = await axios.get("http://127.0.0.1:5000/all-users");
       const filteredData = response.data.users.filter(
-        (user) => user.role !== "admin"
+        (user) => user.role === "Agence" || user.role === "Admin" || user.role === "Client"
       );
+
       console.log(filteredData);
       setUsers(filteredData);
     } catch (error) {
