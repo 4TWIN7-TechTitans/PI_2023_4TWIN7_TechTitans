@@ -127,15 +127,21 @@ function ListofStatement() {
                 </tbody>
                 {paginatedStatements.map((statement) => {
                   console.log(statement); // Add this line to log the statements object
+                  let statusText = "";
                   let color = "orange";
                   switch (statement.case_state) {
                     case "treated":
-                      color = "green";
+                      statusText = "Treated";
+                      color = "success";
                       break;
                     case "closed":
-                      color = "red";
+                      statusText = "Closed";
+                      color = "warning";
                       break;
                     default:
+                      statusText = "Waiting"; 
+                      color = "danger";
+
                       break;
                   }
                   return (
@@ -143,7 +149,9 @@ function ListofStatement() {
                       <td>{statement.date}</td>
                       <td>{statement.vehicule_a.contractNumber}</td>
                       <td>
-                        <FaCircle style={{ color: color }} />
+                      <Button color={color} disabled>
+    {statusText}
+  </Button>
                       </td>
                       <td>
                       <div className="d-flex">
