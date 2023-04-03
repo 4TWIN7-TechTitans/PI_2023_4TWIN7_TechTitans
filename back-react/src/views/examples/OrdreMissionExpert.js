@@ -114,7 +114,7 @@ function OrdreMissionExpert() {
                         <td>
                           <FaCircle style={{ color: color }} />
                         </td>
-                        <td> <Button href={"detailsstatement?id=" + statement._id}   > Details</Button> </td>
+                        <td> <Button href={"/detailsstatement?id=" + statement._id}   > Details</Button> </td>
                       </tr>
                     );
                   })}

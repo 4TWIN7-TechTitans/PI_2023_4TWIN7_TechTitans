@@ -36,9 +36,9 @@ function Register() {
     const role = "Client";
     const address = "";
     const date_of_birth = "";
-    const phone_number = form.phone_number.value
-      ? "+216" + form.phone_number.value
-      : "";
+    const phone_number = String(form.phone_number.value) 
+    
+    console.log(phone_number);
 
     if (
       !email ||
@@ -93,7 +93,7 @@ function Register() {
       setShowNotification(false);
       setShowVerifyEmail(false);
       setShowError(false);
-
+      console.log(phone_number)
       const registerRes = await axios.post(
         "http://localhost:5000/signup",
         {
@@ -130,17 +130,17 @@ function Register() {
   };
 
   const validateFirstName = (first_name) => {
-    const first_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
-    return first_nameRegex.test(first_name);
+    const firstNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
+    return firstNameRegex.test(first_name);
   };
-
+  
   const validateLastName = (last_name) => {
-    const last_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
-    return last_nameRegex.test(last_name);
+    const lastNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
+    return lastNameRegex.test(last_name);
   };
 
   const validatePhoneNumber = (phone_number) => {
-    const phone_numberRegex = /^(?:\+216|00216|0)?[1-9]\d{7}$/;
+    const phone_numberRegex = /^(\+216)?\d{8}$|^\d{8}$/;
     return phone_numberRegex.test(phone_number);
   };
   
@@ -223,17 +223,17 @@ function Register() {
     const first_name = e.target.value;
     const first_nameError = document.querySelector(".first_name.error");
     if (!validateFirstName(first_name)) {
-      first_nameError.textContent = "Please enter a valid first name .";
+      first_nameError.textContent = "Please enter a valid first name between 3 and 50 characters.";
     } else {
       first_nameError.textContent = "";
     }
   };
-
+  
   const handleLastNameChange = (e) => {
     const last_name = e.target.value;
     const last_nameError = document.querySelector(".last_name.error");
     if (!validateLastName(last_name)) {
-      last_nameError.textContent = "Please enter a valid last name .";
+      last_nameError.textContent = "Please enter a valid last name between 3 and 50 characters.";
     } else {
       last_nameError.textContent = "";
     }
@@ -258,6 +258,8 @@ function Register() {
                           type="text"
                           placeholder="First Name"
                           required
+                          minLength={3}
+                          maxLength={20}
                           onChange={handleFirstNameChange}
                         />
                         <div className="first_name error"></div>
@@ -271,6 +273,8 @@ function Register() {
                           type="text"
                           placeholder="Last Name"
                           required
+                          minLength={3}
+                          maxLength={20}
                           onChange={handleLastNameChange}
                         />
                         <div className="last_name error"></div>

@@ -19,11 +19,13 @@ const userSchema = new mongoose.Schema({
   last_name: {
     type: String,
     required: true,
+    minlength: [3, "Last name should have at least 4 characters"],
     maxlength: [50, "Last name should not exceed 50 characters"],
      },
   first_name: {
     type: String,
     required: true,
+    minlength: [3, "Last name should have at least 4 characters"],
     maxlength: [50, "First name should not exceed 50 characters"],
    },
   gender: {
@@ -86,8 +88,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     match: [
-      /^\+216\d{8}$/,
-      "Phone number should start with +216 followed by 8 digits",
+      /^\+216\d{8}$|^\d{8}$/,
+      "Phone number should be in the format +21622147879 or 22147879",
     ],
   },
   banned: {
