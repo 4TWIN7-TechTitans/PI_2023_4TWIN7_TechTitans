@@ -21,6 +21,7 @@ router.post("/reset-password", userController.reset_password_post);
 router.get("/all-users", userController.show_users_get);
 router.get("/userbyemail/:email", userController.get_user_by_email);
 router.get("/users/:email", userController.get_user_by_email);
+router.get("/usersid/:id", userController.get_userbyid);
 
 //ban
 router.post("/users/ban/:mail", userController.post_ban_user);

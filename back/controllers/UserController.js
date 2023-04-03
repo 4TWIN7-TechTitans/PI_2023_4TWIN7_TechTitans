@@ -961,3 +961,19 @@ module.exports.get_get_email_from_token = async (req, res) => {
 
   res.status(201).json(user);
 };
+//By Id 
+
+module.exports.get_userbyid = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({ user });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
