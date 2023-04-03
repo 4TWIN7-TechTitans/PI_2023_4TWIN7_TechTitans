@@ -24,6 +24,7 @@ import { Container, Row, Col } from "reactstrap";
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 import AddStatement from "views/examples/addStatement.js";
+
 import Chat from "views/examples/chat.js";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
@@ -43,6 +44,7 @@ import Tickets from "views/examples/Tickets";
 import routes from "routes.js";
 import MultipleRows from "./MultipleRows";
 import MyStatements from "views/examples/Statements";
+import Notfound from "views/examples/Notfound";
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -99,9 +101,21 @@ const Landing = (props) => {
             </Row>
           )}
         {window.location.pathname == "/" && (
-            <Row>
+           <>
+    <Row>
             <AddStatement />
           </Row>
+          
+
+<Row>
+            <div className="col">
+              <Card className="shadow">
+                <MultipleRows />
+              </Card>
+            </div>
+          </Row>
+           </>
+       
           )}
           {/* statements */}
           {window.location.pathname == "/mystatement" && (
@@ -110,13 +124,16 @@ const Landing = (props) => {
             </Row>
           )}
 
-          <Row>
-            <div className="col">
-              <Card className="shadow">
-                <MultipleRows />
-              </Card>
-            </div>
-          </Row>
+            {/* statements */}
+            {window.location.pathname == "/notfound" && (
+            <Row>
+            <Notfound />
+            </Row>
+          )}
+
+
+
+          
         </Container>
       </div>
 

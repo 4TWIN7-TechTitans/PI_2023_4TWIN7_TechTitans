@@ -42,10 +42,21 @@ import {
   Media,
 } from "reactstrap";
 import axios from "axios";
-const Role=getCookie('role');
-const nom="";
-const prenom="";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+
 const AdminNavbar = () => {
+  const [role, setRole] = useState("");
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+
+  useEffect(() => {
+    setNom(decodeURI(getCookie("lastname")));
+    setPrenom(decodeURI(getCookie("firstname")));
+    setRole(decodeURI(getCookie("role")));
+    console.log(role);
+   
+  }, [nom, prenom, role]);
   return (
     <>
       <Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">
@@ -91,7 +102,7 @@ const AdminNavbar = () => {
                   <span className="nav-link-inner--text">Home</span>
                 </NavLink>
               </NavItem>
-              {!Role.length>0 ? 
+              {!role.length>0 ? 
               <>
               <NavItem>
                 <NavLink
@@ -117,7 +128,7 @@ const AdminNavbar = () => {
             </Nav>
           </UncontrolledCollapse>
 
-          {Role.length>0 ? 
+          {role.length>0 ? 
           <UncontrolledDropdown nav>
           <DropdownToggle className="pr-0" nav>
             <Media className="align-items-center">
@@ -168,6 +179,9 @@ const AdminNavbar = () => {
           
         </Container>
       </Navbar>
+      {role==="Admin" && (<Redirect  to="/notfound" />)}
+      {role==="Agence" && (<Redirect  to="/notfound" />)}
+      {role==="Expert" && (<Redirect  to="/notfound" />)}
     </>
   );
 };

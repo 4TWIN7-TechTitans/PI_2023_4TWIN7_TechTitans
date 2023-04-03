@@ -35,6 +35,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 const cookie = require("cookie");
 
 const AdminNavbar = (props) => {
@@ -42,7 +43,7 @@ const AdminNavbar = (props) => {
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("");
 
-  
+ 
   const handleLogout = async () => {
     try {
       const response = await axios.get("http://localhost:5000/logout", { responseType: "text" });
@@ -67,11 +68,8 @@ const AdminNavbar = (props) => {
     setNom(decodeURI(getCookie("lastname")));
     setPrenom(decodeURI(getCookie("firstname")));
     setRole(decodeURI(getCookie("role")));
-    if (nom === "") {
-      setNom("test");
-      setPrenom("test");
-      setRole("Client");
-    }
+    console.log(role);
+   
   }, [nom, prenom, role]);
 
   return (
@@ -129,6 +127,10 @@ const AdminNavbar = (props) => {
           </Nav>
         </Container>
       </Navbar>
+      
+      <Redirect  from="/admin" to="/admin/index" />
+      {role==="Client" && (<Redirect  to="/notfound" />)}
+      
     </>
   );
 };
