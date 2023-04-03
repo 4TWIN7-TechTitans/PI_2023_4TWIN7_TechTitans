@@ -390,8 +390,6 @@ function AddNew() {
                       <FormGroup>
                         <label>Role</label>
                         <Input name="role" type="select" required>
-                          <option value="Admin">Admin</option>
-                          <option value="Expert">Expert</option>
                           <option value="Agence">Agence</option>
                         </Input>
                       </FormGroup>
