@@ -44,19 +44,25 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 const AdminNavbar = () => {
   const [role, setRole] = useState("");
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
-
+  const location = useLocation();
   useEffect(() => {
+    
     setNom(decodeURI(getCookie("lastname")));
     setPrenom(decodeURI(getCookie("firstname")));
     setRole(decodeURI(getCookie("role")));
+    if((role==="Admin" || role==="Agence" || role==="Expert") && window.location.pathname !== "/notfound" )
+    {
+        window.location.replace("http://localhost:3000/notfound");
+    }
     console.log(role);
    
-  }, [nom, prenom, role]);
+  }, [nom, prenom, role,location]);
   return (
     <>
       <Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">
@@ -92,16 +98,27 @@ const AdminNavbar = () => {
             </div>
             <Nav className="ml-auto" navbar>
              
-            <NavItem>
-                <NavLink
+            
+            {(role==="Admin" || role==="Agence" || role==="Expert")  ? ( <NavItem> <NavLink
                   className="nav-link-icon"
-                  to="/"
+                  to="/admin/index"
                   tag={Link}
                 >
                   <i className="ni ni-map-big" />
                   <span className="nav-link-inner--text">Home</span>
                 </NavLink>
-              </NavItem>
+              </NavItem>):
+              <NavItem> <NavLink
+              className="nav-link-icon"
+              to="/"
+              tag={Link}
+            >
+              <i className="ni ni-map-big" />
+              <span className="nav-link-inner--text">Home</span>
+            </NavLink>
+          </NavItem>
+            }
+              
               {!role.length>0 ? 
               <>
               <NavItem>
@@ -127,9 +144,10 @@ const AdminNavbar = () => {
 
             </Nav>
           </UncontrolledCollapse>
-
-          {role.length>0 ? 
-          <UncontrolledDropdown nav>
+              
+          {role.length>0 && (<>
+          
+            {role==="Client" && (    <UncontrolledDropdown nav>
           <DropdownToggle className="pr-0" nav>
             <Media className="align-items-center">
               <span className="avatar avatar-sm rounded-circle">
@@ -174,8 +192,10 @@ const AdminNavbar = () => {
               <span>Logout</span>
             </DropdownItem>
           </DropdownMenu>
-        </UncontrolledDropdown>
-          : ''}
+        </UncontrolledDropdown>)}
+          </>)
+      
+          }
           
         </Container>
       </Navbar>
