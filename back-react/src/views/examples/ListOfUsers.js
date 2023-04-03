@@ -71,9 +71,9 @@ function ListOfUsers() {
         );
     
         console.log(response);
+        fetchData();
+        user.banned = !user.banned;
         if (response.data === true) {
-          user.banned = !user.banned;
-          fetchData();
         }
     } catch (error) {
       console.log(error);
