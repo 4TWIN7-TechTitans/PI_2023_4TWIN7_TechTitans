@@ -81,6 +81,7 @@ const AddStatement = () => {
   const [driver_license_b, setDriver_license_b] = useState("");
   const [drivers_identity_b, setDriver_identity_b] = useState("");
   const [insured_a, setInsured_a] = useState("");
+  
   const [firstname_a, setFirstName_a] = useState("");
   const [firstname_b, setFirstName_b] = useState("");
 
@@ -132,6 +133,12 @@ const AddStatement = () => {
   const [users, setUsers] = useState([]);
   const [contractNumber_a, setContractNumber_a] = useState([]);
   const [contractNumber_b, setContractNumber_b] = useState([]);
+  const [case_state, setCase_state] = useState("waiting");
+
+  const [hasAccount, setHasAccount] = useState(true);
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [email, setEmail] = useState("");
 
   const brands = [
     "Toyota",
@@ -364,9 +371,7 @@ const AddStatement = () => {
     return b ? b.pop() : "";
   }
 
-  useEffect(() => {
-    //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
-  }, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -414,6 +419,7 @@ const AddStatement = () => {
     };
 
     const insured_a = {
+      
       firstname: form.firstname_a.value,
       lastname: form.lastname_a.value,
       phonenumber: form.phonenumber_a.value,
@@ -457,6 +463,7 @@ const AddStatement = () => {
     const notes_b = form.notes_b.value;
     const signature_a = "";
     const signature_b = "";
+    const verified = true;
 
     //console.log( notes_a)
 
@@ -521,6 +528,7 @@ const AddStatement = () => {
       notes_b: notes_b,
       signature_a: signature_a,
       signature_b: signature_b,
+      case_state: "waiting",
     };
     console.log(mystatement);
 
@@ -528,19 +536,41 @@ const AddStatement = () => {
 
     if (!date || !location || !injured || !material_damage || !witness || !vehicule_a.assureBy || !vehicule_a.agency_a
       || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date
-      || !vehicule_a.contractNumber || !vehicule_b.assureBy || !vehicule_b.agency_b || !vehicule_b.contractValidity
-      || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b
-        .contractNumber || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address
-      || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license || !drivers_identity_b.first_name
+      || !vehicule_a.contractNumber
+
+      || !vehicule_b.assureBy || !vehicule_b.agency || !vehicule_b.contractValidity
+      || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b.contractNumber
+
+      || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address
+      || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license 
+
+      || !drivers_identity_b.first_name
       || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date
-      || !drivers_identity_b.driver_license || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber
-      || !insured_a.addr || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
+      || !drivers_identity_b.driver_license 
+
+      || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr 
+
+      || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
+
       || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country
-      || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to || !vehicule_identity_b.brand || !vehicule_identity_b.type
+      || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to 
+      
+      || !vehicule_identity_b.brand || !vehicule_identity_b.type
       || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
-      || !hits_a.possible_place_a || !hits_b.possible_place_b   || !apparent_damages_a || !apparent_damages_a.damage_direction
-      || !apparent_damages_b.damage_direction || !circumstances_a || !circumstances_b || !accident_croquis || !notes_a || !notes_b
-      || !signature_a || !signature_b) {
+
+      || !hits_a || !hits_b
+      
+      || !apparent_damages_a || !apparent_damages_b 
+      
+      || !circumstances_a || !circumstances_b 
+      
+      || !accident_croquis
+      
+      || !notes_a  || !notes_b
+
+      || !signature_a || !signature_b
+      
+      ) {
       setShowNotification(false);
       setErrors({});
       setShowError(true);
@@ -549,9 +579,47 @@ const AddStatement = () => {
         message: "Please fill all the fields",
       });
       return;
+    }*/
+
+    //user haven't an connected
+    const user = users.find((user) => user.role === "Client");
+
+
+    if (!user || !user.password || !user.email) {
+      try {
+        const registerRes = await axios.post(
+          "http://localhost:5000/add",
+          {
+            email: email,
+            password: password,
+            last_name: lastname_a,
+            first_name: firstname_b,
+            role: "Client",
+            verified: "true",
+            phone_number: phonenumber_a,
+            address:addr_a,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (registerRes.status === 201) {
+          setShowNotification(false);
+          setErrors({});
+          setShowError(false);
+        } else {
+          setShowNotification(false);
+          setErrors({ ...errors, message: "Signup failed" });
+          setShowError(true);
+          return;
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
 
-*/
+
     try {
       const add = await axios.post(
         "http://127.0.0.1:5000/addstatement",
@@ -616,6 +684,7 @@ const AddStatement = () => {
           notes_b: notes_b,
           signature_a: signature_a,
           signature_b: signature_b,
+          case_state: "waiting",
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -826,6 +895,7 @@ const AddStatement = () => {
                                 value={injured}
                                 onChange={(e) => setInjured(e.target.value)}
                               >
+                                <option value="">Select</option>
                                 <option value="yes">Yes</option>
                                 <option value="No">No</option>
                               </Input>
@@ -849,6 +919,7 @@ const AddStatement = () => {
                                   setMaterial_damage(e.target.value)
                                 }
                               >
+                                <option value="">Select</option>
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
                               </Input>
@@ -916,6 +987,7 @@ const AddStatement = () => {
                                 value={assureBy_a}
                                 onChange={(e) => setAssureBy_a(e.target.value)}
                               >
+                                <option value="">Select</option>
                                 {users.map((user) => (
                                   <option key={user._id} value={user._id}>
                                     {user.first_name}
@@ -1884,6 +1956,7 @@ const AddStatement = () => {
                                 }
                                 required
                               >
+                                <option value="">Select</option>
                                 <option value="Scratches">Scratches</option>
                                 <option value="Dents">Dents</option>
                                 <option value="Cracks">Cracks</option>
@@ -1919,6 +1992,7 @@ const AddStatement = () => {
                                 }
                                 required
                               >
+                                <option value="">Select</option>
                                 <option value="Scratches">Scratches</option>
                                 <option value="Dents">Dents</option>
                                 <option value="Cracks">Cracks</option>
@@ -1983,6 +2057,7 @@ const AddStatement = () => {
                                 }
                                 required
                               >
+                                <option value="">Select</option>
                                 <option value="Driving in a normal and careful manner">
                                   Driving in a normal and careful manner
                                 </option>
@@ -2042,6 +2117,7 @@ const AddStatement = () => {
                                 }
                                 required
                               >
+                                <option value="">Select</option>
                                 <option value="Driving in a normal and careful manner">
                                   Driving in a normal and careful manner
                                 </option>
@@ -2243,11 +2319,59 @@ const AddStatement = () => {
                       )}
 
                       <Row>
+                      </Row>
+                      {/* partie suivant : */}
+                      <div className="form-group">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={!hasAccount}
+                            onChange={() => setHasAccount(!hasAccount)}
+                          />
+                          {" "}
+                          Create Account for Client
+                        </label>
+                      </div>
+                      {!hasAccount && (
+                        <div className="form-group">
+                          <label>Password</label>
+                          <input
+                            type="password"
+                            name="password"
+                            className="form-control"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+
+                          <label>Email</label>
+                          <input
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            placeholder="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </div>
+
+                      )}
+                      <div className="text-center">
+
                         <Button color="info" type="submit">
                           Submit
                         </Button>
-                      </Row>
+                      </div>
+
+
+
+
+
                     </div>
+
+
+
+
                   </form>
                 </CardBody>
               )}
