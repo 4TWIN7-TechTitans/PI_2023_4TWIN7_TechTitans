@@ -152,6 +152,12 @@ const AdminNavbar = () => {
             </DropdownItem>
             <DropdownItem divider />
 
+            <DropdownItem to="/mystatement" tag={Link}>
+              <i className="ni ni-single-copy-04" />
+              <span>My statements</span>
+            </DropdownItem>
+            <DropdownItem divider />
+
             <DropdownItem href="/" onClick={handleLogout}>
               <i className="ni ni-user-run" />
               <span>Logout</span>

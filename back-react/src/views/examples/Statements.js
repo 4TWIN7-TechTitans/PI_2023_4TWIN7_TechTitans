@@ -18,11 +18,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaCircle } from "react-icons/fa";
 
-function ListofStatement() {
+function MyStatements() {
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedExpert, setSelectedExpert] = useState("");
-  const [experts, setExperts] = useState([])
+
   const [notification, setNotification] = useState("");
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
@@ -31,11 +30,8 @@ function ListofStatement() {
     try {
       const response = await axios.get("http://127.0.0.1:5000/getstatements");
       const filteredData = response.data.statements.filter(
-        (statements) => statements.role !== "agency"
+        (statements) => statements.role !== "Client"
       );
-      const expertsResponse = await axios.get("http://127.0.0.1:5000/all-experts");
-
-      setExperts(expertsResponse.data.experts);
       console.log(filteredData);
       setStatements(filteredData);
     } catch (error) {
@@ -62,41 +58,8 @@ function ListofStatement() {
   const handlePageClick = (page) => {
     setCurrentPage(page);
   };
-  
-  const handleAssignExpert = async (e, statement , selectedExpert) => {
-    e.preventDefault();
-    
-    try {
-      
-      // const expertsResponse = await axios.get("http://127.0.0.1:5000/all-experts");
-      
-      // const expertObj = expertsResponse.data.experts.find((elem) => elem.email === selectedExpert);
 
-      // console.log(expertObj);
-      // if (!expertObj) {
-      //   throw new Error("Expert not found");
-      // }
-  
-      const assignResponse = await axios.post(
-        `http://127.0.0.1:5000/assign_statements/${statement._id}/assign`,
-        { email: selectedExpert }
-      );
-  
-      console.log(assignResponse);
-  
-      if (assignResponse.status === 200) {
-        statement.assign = !statement.assign;
-        fetchData();
-      } else {
-        throw new Error(assignResponse.data.message);
-      }
-    } catch (error) {
-      console.log(error.message);
-      // show error message to the user
-    }
-    showNotification(`Statement ${statement._id} has been assigned to ${selectedExpert}`);
 
-  };
 
   const paginatedStatements = statements.slice(
     (currentPage - 1) * pageSize,
@@ -107,7 +70,7 @@ function ListofStatement() {
 
   return (
     <>
-      <Header />
+
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -123,6 +86,8 @@ function ListofStatement() {
                 <tbody>
                   <th scope="col">Date</th>
                   <th scope="col">ContractNumber</th>
+                  <th scope="col">First Name </th>
+                  <th scope="col">Last Name </th>
                   <th scope="col">Etat</th>
                 </tbody>
                 {paginatedStatements.map((statement) => {
@@ -142,32 +107,12 @@ function ListofStatement() {
                     <tr key={statement._id}>
                       <td>{statement.date}</td>
                       <td>{statement.vehicule_a.contractNumber}</td>
+                      <td>{statement.insured_a.firstname}</td>
+                      <td>{statement.insured_a.lastname}</td>
                       <td>
                         <FaCircle style={{ color: color }} />
                       </td>
-                      <td>
-                      <div className="d-flex">
-                        <select
-                          className="form-control"
-                          onChange={(e) => setSelectedExpert(e.target.value)}
-                        >
-                          <option value="">Select expert</option>
-                          {experts.map((expert) => (
-                            <option value={expert.email} key={expert._id}>
-                              {expert.email}
-                            </option>
-                          ))}
-                        </select>
-                        <button
-                          className="btn btn-primary ml-2"
-                          onClick={(e) => handleAssignExpert(e, statement , selectedExpert)}
-                          
-                        >
-      
-                          Assign
-                        </button>
-                      </div>
-                    </td>
+
                     </tr>
 
                   );
@@ -175,8 +120,8 @@ function ListofStatement() {
 
               </Table>
               {notification && (
-  <div className="alert alert-success">{notification}</div>
-)}
+                <div className="alert alert-success">{notification}</div>
+              )}
 
               <CardFooter className="py-4">
                 <nav aria-label="...">
@@ -220,4 +165,4 @@ function ListofStatement() {
   );
 }
 
-export default ListofStatement;
+export default MyStatements;
