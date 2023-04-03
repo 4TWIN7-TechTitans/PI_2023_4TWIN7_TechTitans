@@ -28,7 +28,7 @@ const Header = () => {
             {/* Card stats */}
             <Row>
               <Col  className="center m-3 text-uppercase fs-1" lg="12" xl="3">
-<h1 >Welcome To Assurini</h1>
+<center><h1 >Welcome To Assurini</h1></center>
 
               </Col>
             </Row>
