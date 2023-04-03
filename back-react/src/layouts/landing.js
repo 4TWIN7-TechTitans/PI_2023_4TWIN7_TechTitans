@@ -42,6 +42,7 @@ import {
 import Tickets from "views/examples/Tickets";
 import routes from "routes.js";
 import MultipleRows from "./MultipleRows";
+import MyStatements from "views/examples/Statements";
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -102,7 +103,12 @@ const Landing = (props) => {
             <AddStatement />
           </Row>
           )}
-
+          {/* statements */}
+          {window.location.pathname == "/mystatement" && (
+            <Row>
+              <MyStatements />
+            </Row>
+          )}
 
           <Row>
             <div className="col">
