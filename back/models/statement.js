@@ -710,7 +710,7 @@ const statementSchema = new mongoose.Schema({
   case_state: {
     type: String,
 
-    enum: ["waiting", "treated", "closed"],
+    enum: ["waiting", "treated", "inProgress", "closed"],
   },
 
   assign_to_expert: {
