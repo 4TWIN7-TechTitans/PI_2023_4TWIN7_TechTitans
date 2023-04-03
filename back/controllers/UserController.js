@@ -1443,3 +1443,58 @@ module.exports.get_userbyid = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+//get Agence By Email
+module.exports.get_agence_by_email = async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const agence = await userModel.findOne({ email: email, role: "Agence" });
+
+    if (!agence) {
+      return res.status(404).json({
+        message: "Agence not found",
+        status: "error",
+      });
+    }
+
+    // remove sensitive information from the response
+    delete agence.password;
+
+    // return agence if found
+    return res.status(200).json({
+      agence: agence,
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
+// Get All Agence
+module.exports.get_all_agences = async (req, res) => {
+  try {
+    const agences = await userModel.find({ role: "Agence" });
+
+    // remove sensitive information from the response
+    const sanitizedAgences = agences.map((agence) => {
+      const { _id, first_name, email, phone, address, phone_number } = agence;
+      return { _id, first_name, email, phone, address , phone_number};
+    });
+
+    // return agences if found
+    return res.status(200).json({
+      agences: sanitizedAgences,
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
+

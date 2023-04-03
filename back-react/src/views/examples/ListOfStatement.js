@@ -22,7 +22,7 @@ function ListofStatement() {
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedExpert, setSelectedExpert] = useState("");
-  const [experts, setExperts] = useState([])
+  const [experts, setExperts] = useState([]);
   const [notification, setNotification] = useState("");
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
@@ -33,7 +33,9 @@ function ListofStatement() {
       const filteredData = response.data.statements.filter(
         (statements) => statements.role !== "agency"
       );
-      const expertsResponse = await axios.get("http://127.0.0.1:5000/all-experts");
+      const expertsResponse = await axios.get(
+        "http://127.0.0.1:5000/all-experts"
+      );
 
       setExperts(expertsResponse.data.experts);
       console.log(filteredData);
@@ -62,28 +64,27 @@ function ListofStatement() {
   const handlePageClick = (page) => {
     setCurrentPage(page);
   };
-  
-  const handleAssignExpert = async (e, statement , selectedExpert) => {
+
+  const handleAssignExpert = async (e, statement, selectedExpert) => {
     e.preventDefault();
-    
+
     try {
-      
       // const expertsResponse = await axios.get("http://127.0.0.1:5000/all-experts");
-      
+
       // const expertObj = expertsResponse.data.experts.find((elem) => elem.email === selectedExpert);
 
       // console.log(expertObj);
       // if (!expertObj) {
       //   throw new Error("Expert not found");
       // }
-  
+
       const assignResponse = await axios.post(
         `http://127.0.0.1:5000/assign_statements/${statement._id}/assign`,
         { email: selectedExpert }
       );
-  
+
       console.log(assignResponse);
-  
+
       if (assignResponse.status === 200) {
         statement.assign = !statement.assign;
         fetchData();
@@ -94,16 +95,15 @@ function ListofStatement() {
       console.log(error.message);
       // show error message to the user
     }
-    showNotification(`Statement ${statement._id} has been assigned to ${selectedExpert}`);
-
+    showNotification(
+      `Statement ${statement._id} has been assigned to ${selectedExpert}`
+    );
   };
 
   const paginatedStatements = statements.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
-
-
 
   return (
     <>
@@ -124,6 +124,8 @@ function ListofStatement() {
                   <th scope="col">Date</th>
                   <th scope="col">ContractNumber</th>
                   <th scope="col">Etat</th>
+                  <th scope="col">Assign To Expert</th>
+                  
                 </tbody>
                 {paginatedStatements.map((statement) => {
                   console.log(statement); // Add this line to log the statements object
@@ -134,12 +136,16 @@ function ListofStatement() {
                       statusText = "Treated";
                       color = "success";
                       break;
+                    case "inProgress":
+                      statusText = "In Progress";
+                      color = "info";
+                      break;
                     case "closed":
                       statusText = "Closed";
                       color = "warning";
                       break;
                     default:
-                      statusText = "Waiting"; 
+                      statusText = "Waiting";
                       color = "danger";
 
                       break;
@@ -149,42 +155,40 @@ function ListofStatement() {
                       <td>{statement.date}</td>
                       <td>{statement.vehicule_a.contractNumber}</td>
                       <td>
-                      <Button color={color} disabled>
-    {statusText}
-  </Button>
+                        <Button color={color} disabled>
+                          {statusText}
+                        </Button>
                       </td>
                       <td>
-                      <div className="d-flex">
-                        <select
-                          className="form-control"
-                          onChange={(e) => setSelectedExpert(e.target.value)}
-                        >
-                          <option value="">Select expert</option>
-                          {experts.map((expert) => (
-                            <option value={expert.email} key={expert._id}>
-                              {expert.email}
-                            </option>
-                          ))}
-                        </select>
-                        <button
-                          className="btn btn-primary ml-2"
-                          onClick={(e) => handleAssignExpert(e, statement , selectedExpert)}
-                          
-                        >
-      
-                          Assign
-                        </button>
-                      </div>
-                    </td>
+                        <div className="d-flex">
+                          <select
+                            className="form-control"
+                            onChange={(e) => setSelectedExpert(e.target.value)}
+                          >
+                            <option value="">Select expert</option>
+                            {experts.map((expert) => (
+                              <option value={expert.email} key={expert._id}>
+                                {expert.email}
+                              </option>
+                            ))}
+                          </select>
+                          <button
+                            className="btn btn-primary ml-2"
+                            onClick={(e) =>
+                              handleAssignExpert(e, statement, selectedExpert)
+                            }
+                          >
+                            Assign
+                          </button>
+                        </div>
+                      </td>
                     </tr>
-
                   );
                 })}
-
               </Table>
               {notification && (
-  <div className="alert alert-success">{notification}</div>
-)}
+                <div className="alert alert-success">{notification}</div>
+              )}
 
               <CardFooter className="py-4">
                 <nav aria-label="...">

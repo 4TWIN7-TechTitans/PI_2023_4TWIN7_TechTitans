@@ -34,5 +34,6 @@ router.get("/getmailfromtoken", userController.get_get_email_from_token);
 
 router.get("/all-experts", userController.show_experts_get);
 
+router.get("/getallagences", userController.get_all_agences);
 
 module.exports = router;
