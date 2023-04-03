@@ -92,15 +92,20 @@ function MyStatements() {
                 </tbody>
                 {paginatedStatements.map((statement) => {
                   console.log(statement); // Add this line to log the statements object
+                  let statusText = "";
                   let color = "orange";
                   switch (statement.case_state) {
                     case "treated":
-                      color = "green";
+                      statusText = "Treated";
+                      color = "success";
                       break;
                     case "closed":
-                      color = "red";
+                      statusText = "Closed";
+                      color = "warning";
                       break;
                     default:
+                      statusText = "Waiting"; 
+                      color = "danger";
                       break;
                   }
                   return (
