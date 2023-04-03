@@ -128,7 +128,7 @@ const AdminNavbar = (props) => {
         </Container>
       </Navbar>
       
-      <Redirect  from="/admin" to="/admin/index" />
+      
       {role==="Client" && (<Redirect  to="/notfound" />)}
       
     </>
