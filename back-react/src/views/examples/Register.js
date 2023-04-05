@@ -36,8 +36,8 @@ function Register() {
     const role = "Client";
     const address = "";
     const date_of_birth = "";
-    const phone_number = String(form.phone_number.value) 
-    
+    const phone_number = String(form.phone_number.value);
+
     console.log(phone_number);
 
     if (
@@ -76,6 +76,11 @@ function Register() {
       return;
     }
 
+    if (!validateFirstName(first_name) || !validateLastName(last_name)) {
+      setShowError(true);
+      return;
+    }
+
     try {
       // Check if email is already in use
       const checkEmailRes = await checkEmail(email);
@@ -93,7 +98,7 @@ function Register() {
       setShowNotification(false);
       setShowVerifyEmail(false);
       setShowError(false);
-      console.log(phone_number)
+      console.log(phone_number);
       const registerRes = await axios.post(
         "http://localhost:5000/signup",
         {
@@ -133,7 +138,7 @@ function Register() {
     const firstNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
     return firstNameRegex.test(first_name);
   };
-  
+
   const validateLastName = (last_name) => {
     const lastNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
     return lastNameRegex.test(last_name);
@@ -143,12 +148,13 @@ function Register() {
     const phone_numberRegex = /^(\+216)?\d{8}$|^\d{8}$/;
     return phone_numberRegex.test(phone_number);
   };
-  
+
   const handlePhoneNumberChange = (e) => {
     const phone_number = e.target.value;
     const phone_numberError = document.querySelector(".phone_number.error");
     if (!validatePhoneNumber(phone_number)) {
-      phone_numberError.textContent = "Please enter a valid Tunisian phone number";
+      phone_numberError.textContent =
+        "Please enter a valid Tunisian phone number";
     } else {
       phone_numberError.textContent = "Phone number is correct";
     }
@@ -223,17 +229,19 @@ function Register() {
     const first_name = e.target.value;
     const first_nameError = document.querySelector(".first_name.error");
     if (!validateFirstName(first_name)) {
-      first_nameError.textContent = "Please enter a valid first name between 3 and 50 characters.";
+      first_nameError.textContent =
+        "Please enter a valid first name between 3 and 50 characters.";
     } else {
       first_nameError.textContent = "";
     }
   };
-  
+
   const handleLastNameChange = (e) => {
     const last_name = e.target.value;
     const last_nameError = document.querySelector(".last_name.error");
     if (!validateLastName(last_name)) {
-      last_nameError.textContent = "Please enter a valid last name between 3 and 50 characters.";
+      last_nameError.textContent =
+        "Please enter a valid last name between 3 and 50 characters.";
     } else {
       last_nameError.textContent = "";
     }
@@ -242,7 +250,7 @@ function Register() {
     <>
       <div className="content">
         <Row>
-          <Col md="8" className="mx-auto">
+          <Col md="12" className="mx-auto">
             <Card className="card-user">
               <CardHeader>
                 <h5 className="title">Register</h5>
