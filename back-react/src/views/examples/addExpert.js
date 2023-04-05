@@ -30,12 +30,19 @@ function AddExpert() {
     return b ? b.pop() : "";
   }
 
-  useEffect(() => {
-    //if (getCookie("role") !== "admin") window.location.href = "/auth/login";
-  }, []);
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const jwt = getCookie("jwt");
+    const id_agence = (
+      await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+    ).data._id;
+
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
@@ -44,8 +51,7 @@ function AddExpert() {
     const first_name = form.first_name.value;
     const role = "Expert";
     const verified = true;
-    const phone_number = String(form.phone_number.value) 
-
+    const phone_number = String(form.phone_number.value);
 
     if (
       !email ||
@@ -98,6 +104,7 @@ function AddExpert() {
           role,
           verif1,
           phone_number,
+          id_agence,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -147,7 +154,6 @@ function AddExpert() {
     return last_nameRegex.test(last_name);
   };
 
-  
   const handleEmailChange = (e) => {
     const email = e.target.value;
     const emailError = document.querySelector(".email.error");
@@ -217,12 +223,13 @@ function AddExpert() {
     const phone_numberRegex = /^(\+216)?\d{8}$|^\d{8}$/;
     return phone_numberRegex.test(phone_number);
   };
-  
+
   const handlePhoneNumberChange = (e) => {
     const phone_number = e.target.value;
     const phone_numberError = document.querySelector(".phone_number.error");
     if (!validatePhoneNumber(phone_number)) {
-      phone_numberError.textContent = "Please enter a valid Tunisian phone number";
+      phone_numberError.textContent =
+        "Please enter a valid Tunisian phone number";
     } else {
       phone_numberError.textContent = "Phone number is correct";
     }
