@@ -484,7 +484,7 @@ const Tickets = () => {
                       <Col md="12">
                         <FormGroup>
                         <span class="heading ni ni-single-copy-04"></span>
-                        <span class="heading"> Log</span>
+                        <span class="heading">Suivi</span>
 
                           <Input
                             type="textarea"
