@@ -18,7 +18,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 function ListOfAgency() {
-  const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [agencies, setAgencies] = useState([]);
 
@@ -26,39 +25,24 @@ function ListOfAgency() {
     const fetchUsers = async () => {
       try {
         const response = await axios.get("http://localhost:5000/getallagences");
-        console.log(response.data);
-        if (response.data && response.data.users) {
-          const users = response.data.users.filter((elem) => elem.role === "Admin");
-          console.log(users);
-          setUsers(users);
-          setAgencies(response.data.users.filter((user) => user.role === "Agence"));
-        }
+        setAgencies(response.data.agences);
       } catch (err) {
         console.log(err);
       }
     };
-  
+
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    /*
-        if (getCookie("role") !== "admin") window.location.href = "/auth/login";*/
-  }, []);
-
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
-
   const pageSize = 5;
-  const pageCount = Math.ceil(users.length / pageSize);
+  const pageCount = Math.ceil(agencies.length / pageSize);
   const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
 
   const handlePageClick = (page) => {
     setCurrentPage(page);
   };
 
-  const paginatedUsers = users.slice(
+  const paginatedUsers = agencies.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
@@ -77,22 +61,21 @@ function ListOfAgency() {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Name Of Agency</th>
+                    <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Adress</th>
+                    <th scope="col">Address</th>
                     <th scope="col">Contact Number</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedUsers.map((user) => (
-                    <tr key={users._id}>
-                      <td>
-                       {user.first_name}
-                      </td>
-                      <td>{user.Adress}</td>
+                    <tr key={user._id}>
+                      <td>{user.first_name}</td>
+                      <td>{user.email}</td>
+                      <td>{user.address}</td>
                       <td>
                         <Badge color="primary" className="badge-dot mr-4">
-                          {user.Contact}
+                          {user.phone_number}
                         </Badge>
                       </td>
                     </tr>
