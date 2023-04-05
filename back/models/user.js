@@ -95,6 +95,10 @@ const userSchema = new mongoose.Schema({
   banned: {
     type: Boolean,
   },
+  id_agence:{
+    type: String,
+    required : false
+  }
 });
 
 // fire a function before doc saved to db
