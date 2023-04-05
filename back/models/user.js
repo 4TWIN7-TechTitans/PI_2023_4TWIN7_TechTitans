@@ -98,6 +98,10 @@ const userSchema = new mongoose.Schema({
   id_agence:{
     type: String,
     required : false
+  },
+  decesion: {
+    type: Boolean,
+    required : false
   }
 });
 

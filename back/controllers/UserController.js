@@ -1498,3 +1498,27 @@ module.exports.get_all_agences = async (req, res) => {
   }
 };
 
+// Get All Experts 
+module.exports.get_all_experts = async (req, res) => {
+  try {
+    const experts = await userModel.find({ role: "Expert" });
+
+    // remove sensitive information from the response
+    const sanitizedExperts = experts.map((expert) => {
+      const { _id, first_name, email, phone, address, phone_number } = expert;
+      return { _id, first_name, email, phone, address , phone_number};
+    });
+
+    // return experts if found
+    return res.status(200).json({
+      experts: sanitizedExperts,
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};

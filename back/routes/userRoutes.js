@@ -36,4 +36,7 @@ router.get("/all-experts", userController.show_experts_get);
 
 router.get("/getallagences", userController.get_all_agences);
 
+router.get("/getallexperts", userController.get_all_experts);
+
+
 module.exports = router;

@@ -43,7 +43,8 @@ var routesExpert = [
     component: DetailsStatement,
     layout: "/expert",
     showInSidebar: true,
-  }
+  },
+
  
 ];
 export default routesExpert;
