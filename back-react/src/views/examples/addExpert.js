@@ -110,7 +110,6 @@ function AddExpert() {
         setShowVerifyEmail(true);
         setErrors({});
         setShowError(false);
-        window.location.replace("http://localhost:3000/admin/listofusers");
       } else {
         setShowNotification(false);
         setShowVerifyEmail(false);
@@ -385,8 +384,6 @@ function AddExpert() {
                   <Button className="btn-fill" color="primary" type="submit">
                     Add
                   </Button>
-
-                  <Button href="/admin/listofusers">Back</Button>
                 </Form>
                 {showNotification && (
                   <div className="alert alert-success mt-3" role="alert">
