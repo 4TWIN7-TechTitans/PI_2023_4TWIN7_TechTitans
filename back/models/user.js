@@ -99,7 +99,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required : false
   },
-  decesion: {
+  decision: {
     type: Boolean,
     required : false
   }
