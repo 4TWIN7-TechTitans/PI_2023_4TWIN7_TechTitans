@@ -289,12 +289,7 @@ function Login() {
                   id=" customCheckLogin"
                   type="checkbox"
                 />
-                <label
-                  className="custom-control-label"
-                  htmlFor=" customCheckLogin"
-                >
-                  <span className="text-muted">Remember me</span>
-                </label>
+                
               </div>
               {showNotification && (
                 <div className="col-12 my-3 alert alert-success">
