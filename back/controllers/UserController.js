@@ -593,7 +593,6 @@ module.exports.add_post = async (req, res) => {
   }
 };
 
-
 // Verify email
 module.exports.verify_email_get = async (req, res) => {
   const { token } = req.params;
@@ -616,7 +615,7 @@ module.exports.verify_email_get = async (req, res) => {
     user.verified = true;
     user.verificationToken = null;
     console.log(user);
-    await userModel.findByIdAndUpdate(decodedToken.id, { verified: 'true' });
+    await userModel.findByIdAndUpdate(decodedToken.id, { verified: "true" });
     //success so we can login
     res.redirect("http://localhost:3000/auth/login");
   } catch (err) {
@@ -991,7 +990,7 @@ module.exports.show_users_get = async (req, res) => {
 // Show Expert
 module.exports.show_experts_get = async (req, res) => {
   try {
-    const experts = await userModel.find({ role: 'Expert' });
+    const experts = await userModel.find({ role: "Expert" });
     res.status(200).json({
       experts,
       message: "All experts retrieved successfully",
@@ -1005,8 +1004,6 @@ module.exports.show_experts_get = async (req, res) => {
     });
   }
 };
-
-
 
 //Get user by email
 module.exports.get_user_by_email = async (req, res) => {
@@ -1336,7 +1333,6 @@ module.exports.post_ban_user = async (req, res) => {
         ],
       };
 
-
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
@@ -1350,7 +1346,6 @@ module.exports.post_ban_user = async (req, res) => {
         status: "success",
       });
     } else {
-
       res.status(200).json(updatedUser.banned);
     }
   } catch (err) {
@@ -1427,7 +1422,7 @@ module.exports.get_get_email_from_token = async (req, res) => {
 
   res.status(201).json(user);
 };
-//By Id 
+//By Id
 
 module.exports.get_userbyid = async (req, res) => {
   try {
@@ -1481,7 +1476,7 @@ module.exports.get_all_agences = async (req, res) => {
     // remove sensitive information from the response
     const sanitizedAgences = agences.map((agence) => {
       const { _id, first_name, email, phone, address, phone_number } = agence;
-      return { _id, first_name, email, phone, address , phone_number};
+      return { _id, first_name, email, phone, address, phone_number };
     });
 
     // return agences if found
@@ -1498,15 +1493,31 @@ module.exports.get_all_agences = async (req, res) => {
   }
 };
 
-// Get All Experts 
+// Get All Experts
 module.exports.get_all_experts = async (req, res) => {
   try {
     const experts = await userModel.find({ role: "Expert" });
 
     // remove sensitive information from the response
     const sanitizedExperts = experts.map((expert) => {
-      const { _id, first_name, email, phone, address, phone_number } = expert;
-      return { _id, first_name, email, phone, address , phone_number};
+      const {
+        _id,
+        first_name,
+        email,
+        phone,
+        address,
+        phone_number,
+        id_agence,
+      } = expert;
+      return {
+        _id,
+        first_name,
+        email,
+        phone,
+        address,
+        phone_number,
+        id_agence,
+      };
     });
 
     // return experts if found
