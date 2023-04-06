@@ -7,6 +7,7 @@ import {
   PaginationItem,
   PaginationLink,
   Table,
+  Col,
   Container,
   Row,
   Button,
@@ -25,6 +26,7 @@ function MyStatements() {
   const [notification, setNotification] = useState("");
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
+  const [sortOrderByDate, setSortOrderByDate] = useState("asc");
 
   const fetchData = async () => {
     try {
@@ -66,7 +68,15 @@ function MyStatements() {
     currentPage * pageSize
   );
 
-
+  useEffect(() => {
+    let sortedStatements = [...statements];
+    if (sortOrderByDate === "asc") {
+      sortedStatements.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else {
+      sortedStatements.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+    setStatements(sortedStatements);
+  }, [sortOrderByDate]);
 
   return (
     <>
@@ -77,11 +87,22 @@ function MyStatements() {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">My Statemnts</h3>
+                <Row>
+                  <Col lg="8">
+                    <h3 className="mb-0">My Statements</h3>
+                  </Col>
+                  <Col lg="3">
+                    <Button color="dark" onClick={() => setSortOrderByDate(sortOrderByDate === "asc" ? "desc" : "asc")}>
+                      Sort Date
+                    </Button>
+                  </Col>
+                </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
-                  <tr></tr>
+
+                
+
                 </thead>
                 <tbody>
                   <th scope="col">Date</th>
@@ -99,13 +120,18 @@ function MyStatements() {
                       statusText = "Treated";
                       color = "success";
                       break;
+                    case "inProgress":
+                      statusText = "In Progress";
+                      color = "info";
+                      break;
                     case "closed":
                       statusText = "Closed";
                       color = "warning";
                       break;
                     default:
-                      statusText = "Waiting"; 
+                      statusText = "Waiting";
                       color = "danger";
+
                       break;
                   }
                   return (
@@ -115,7 +141,9 @@ function MyStatements() {
                       <td>{statement.insured_a.firstname}</td>
                       <td>{statement.insured_a.lastname}</td>
                       <td>
-                        <FaCircle style={{ color: color }} />
+                        <Button color={color} disabled>
+                          {statusText}
+                        </Button>
                       </td>
 
                     </tr>
