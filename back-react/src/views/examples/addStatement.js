@@ -81,7 +81,7 @@ const AddStatement = () => {
   const [driver_license_b, setDriver_license_b] = useState("");
   const [drivers_identity_b, setDriver_identity_b] = useState("");
   const [insured_a, setInsured_a] = useState("");
-  
+
   const [firstname_a, setFirstName_a] = useState("");
   const [firstname_b, setFirstName_b] = useState("");
 
@@ -139,7 +139,8 @@ const AddStatement = () => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [email, setEmail] = useState("");
-
+  //statement by steps
+  const [section, setSection] = useState(1);
   const brands = [
     "Toyota",
     "Honda",
@@ -419,7 +420,7 @@ const AddStatement = () => {
     };
 
     const insured_a = {
-      
+
       firstname: form.firstname_a.value,
       lastname: form.lastname_a.value,
       phonenumber: form.phonenumber_a.value,
@@ -597,7 +598,7 @@ const AddStatement = () => {
             role: "Client",
             verified: "true",
             phone_number: phonenumber_a,
-            address:addr_a,
+            address: addr_a,
           },
           {
             headers: { "Content-Type": "application/json" },
@@ -795,6 +796,16 @@ const AddStatement = () => {
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
+  //hanle statement by steps :
+  const handleNext = (e) => {
+    e.preventDefault();
+    setSection(section + 1);
+  };
+
+  const handlePrev = (e) => {
+    e.preventDefault();
+    setSection(section - 1);
+  };
   return (
     <>
       {/*<UserHeader /> */}
@@ -822,21 +833,18 @@ const AddStatement = () => {
                       set all the infromations related to the accident please
                     </h6>
                     <div className="pl-lg-4">
-                      <Row>
-                        {" "}
-                        {/* Section 1 + 2 + 3 + 4 + 5 */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 1 + 2 + 3 + 4 + 5
-                          </h6>
-                        </Col>
-                      </Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow1}>
-                          {!isShown1 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown1 && (
+                      {/* 1 + 2 + 3 + 4 + 5 */}
+                      <div style={{ display: section === 1 ? "block" : "none" }}>
+                        <Row>
+                          {" "}
+                          {/* Section 1 + 2 + 3 + 4 + 5 */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 1 + 2 + 3 + 4 + 5
+                            </h6>
+                          </Col>
+                        </Row>
+
                         <Row>
                           {" "}
                           {/* SECTION 1 + 2 + 3 + 4 + 5 */}
@@ -936,35 +944,40 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                      )}{" "}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/* FIN  1 + 2 + 3 + 4 + 5 */}
-                      <Row>
-                        {" "}
-                        {/* VEHICULE A VS B */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            VEHICULE A
-                          </h6>
-                        </Col>
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            VEHICULE B
-                          </h6>
-                        </Col>
-                        <Col lg="12">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 6
-                          </h6>
-                        </Col>
-                      </Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow6}>
-                          {!isShown6 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown6 && (
+
+                      {/*  Section 6 */}
+                      <div style={{ display: section === 2 ? "block" : "none" }}>
                         <Row>
                           {" "}
+                          {/* VEHICULE A VS B */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE A
+                            </h6>
+                          </Col>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE B
+                            </h6>
+                          </Col>
+                          <Col lg="12">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 6
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
                           {/* SECTION 6 */}
                           <Col lg="6">
                             <label
@@ -1155,25 +1168,54 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                      )}{" "}
+
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/*  FIN Section 6 */}
-                      <Row>
-                        {" "}
-                        {/* Section 7 */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 7
-                          </h6>
-                        </Col>
-                      </Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow7}>
-                          {!isShown7 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown7 && (
+
+                      {/* Section 7 */}
+                      <div style={{ display: section === 3 ? "block" : "none" }}>
                         <Row>
-                          {" "}
+
+                          {/* VEHICULE A VS B */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE A
+                            </h6>
+                          </Col>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE B
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 7
+                            </h6>
+                          </Col>
+                        </Row>
+
+                        <Row>
                           {/*  SECTION 7 */}
                           <Col lg="6">
                             <label
@@ -1374,25 +1416,56 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                      )}{" "}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/*  FIN SECTION 7 */}
-                      <Row>
-                        {" "}
-                        {/* Section 8 */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 8
-                          </h6>
-                        </Col>
-                      </Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow8}>
-                          {!isShown8 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown8 && (
+
+                      {/*  SECTION 8 */}
+                      <div style={{ display: section === 4 ? "block" : "none" }}>
                         <Row>
-                          {" "}
+
+                          {/* VEHICULE A VS B */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE A
+                            </h6>
+                          </Col>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE B
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
+
+                          {/* Section 8 */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 8
+                            </h6>
+                          </Col>
+                        </Row>
+
+                        <Row>
+
                           {/* SECTION 8 */}
                           <Col lg="6">
                             <label
@@ -1537,25 +1610,54 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                      )}{" "}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/*  FIN SECTION 8 */}
-                      <Row>
-                        {" "}
-                        {/* Section 9 */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 9
-                          </h6>
-                        </Col>
-                      </Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow9}>
-                          {!isShown9 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown9 && (
+
+                      {/*  SECTION 9 */}
+                      <div style={{ display: section === 5 ? "block" : "none" }}>
                         <Row>
-                          {" "}
+
+                          {/* VEHICULE A VS B */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE A
+                            </h6>
+                          </Col>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE B
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
+                          {/* Section 9 */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 9
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
+
                           {/*  SECTION 9 */}
                           <Col lg="6">
                             <label
@@ -1774,25 +1876,51 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                      )}{" "}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/*  FIN SECTION 9 */}
-                      <Row>
-                        {" "}
-                        {/* Section 10 */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 10
-                          </h6>
-                        </Col>
-                      </Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow10}>
-                          {!isShown10 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown10 && (
+
+                      {/* Section 10 */}
+                      <div style={{ display: section === 6 ? "block" : "none" }}>
                         <Row>
-                          {" "}
+                          {/* VEHICULE A VS B */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE A
+                            </h6>
+                          </Col>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE B
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 10
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
                           {/* SECTION 10 */}
                           <Col lg="6">
                             <FormGroup>
@@ -1919,25 +2047,53 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                      )}{" "}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/* FIN SECTION 10 */}
-                      <Row>
-                        {" "}
-                        {/* Section 11 */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 11
-                          </h6>
-                        </Col>
-                      </Row>
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow11}>
-                          {!isShown11 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown11 && (
+
+                      {/* Section 11 */}
+                      <div style={{ display: section === 7 ? "block" : "none" }}>
+
                         <Row>
-                          {" "}
+
+                          {/* VEHICULE A VS B */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE A
+                            </h6>
+                          </Col>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE B
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 11
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
                           {/* SECTION 11 */}
                           <Col lg="6">
                             <FormGroup>
@@ -2012,34 +2168,54 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                      )}{" "}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/* FIN SECTION 11 */}
                     </div>
-                    {/*
-                     <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                      </h6> 
-                      */}
-                    <div className="pl-lg-4">
-                      <Row>
-                        {" "}
-                        {/* Section 12 */}
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 12
-                          </h6>
-                        </Col>
-                      </Row>
 
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow12}>
-                          {!isShown12 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown12 && (
+                    <div className="pl-lg-4">
+                      {/* SECTION 12 */}
+                      <div style={{ display: section === 8 ? "block" : "none" }}>
                         <Row>
-                          {" "}
-                          {/* SECTION 12 */}
+                          {/* VEHICULE A VS B */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE A
+                            </h6>
+                          </Col>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              VEHICULE B
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
+                          {/* Section 12 */}
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 12
+                            </h6>
+                          </Col>
+                        </Row>
+                        <Row>
                           <Col md="6">
                             <FormGroup>
                               <label
@@ -2176,28 +2352,39 @@ const AddStatement = () => {
                                 "Driving during inclement weather", 
                             */}
                         </Row>
-                      )}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
                       {/* FIN SECTION 12 */}
 
+                      {/* Section 13 + 14 + 14*/}
+                      <div style={{ display: section === 8 ? "block" : "none" }}>
                       <Row>
-                        {" "}
-                        {/* Section 13 + 14 + 14*/}
                         <Col lg="6">
                           <h6 className="heading-small text-muted mb-4">
                             Section 13 + 14 + 15
                           </h6>
                         </Col>
                       </Row>
-
-                      <Col className="text-right" xs="12">
-                        <Button color="info" onClick={handleShow13}>
-                          {!isShown13 ? "Show" : "Hide"}
-                        </Button>
-                      </Col>
-                      {isShown13 && (
                         <div>
                           <Row>
-                            {" "}
                             {/* SECTION 13  IMAGE */}
                             <Col lg="12">
                               <FormGroup>
@@ -2220,10 +2407,9 @@ const AddStatement = () => {
                                 {/* <button onClick={(e) => handleClear(e, setAccident_croquis)}>Clear</button> */}
                               </FormGroup>
                             </Col>
-                          </Row>{" "}
+                          </Row>
                           {/* FIN SECTION 13  IMAGE */}
                           <Row>
-                            {" "}
                             {/* SECTION 14  Observation */}
                             <Col md="6">
                               <FormGroup>
@@ -2265,10 +2451,9 @@ const AddStatement = () => {
                                 />
                               </FormGroup>
                             </Col>
-                          </Row>{" "}
+                          </Row>
                           {/* FIN SECTION 14  Observation */}
                           <Row>
-                            {" "}
                             {/* SECTION 15  Observation */}
                             <Col lg="6">
                               <FormGroup>
@@ -2313,10 +2498,29 @@ const AddStatement = () => {
                                 </InputGroup>
                               </FormGroup>
                             </Col>
-                          </Row>{" "}
+                          </Row>
                           {/* FIN SECTION 15  Observation */}
                         </div>
-                      )}
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                          <Button
+                            color="secondary"
+                            type="button"
+                            onClick={handlePrev}
+                          >
+                            Previous
+                          </Button>
+                        </FormGroup>
+                      </div>
 
                       <Row>
                       </Row>
