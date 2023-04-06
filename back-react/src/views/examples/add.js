@@ -389,9 +389,13 @@ function AddNew() {
                     <Col md="12">
                       <FormGroup>
                         <label>Role</label>
-                        <Input name="role" type="select" required>
-                          <option value="Agence">Agence</option>
-                        </Input>
+                        <Input
+                        type="text"
+                        id="role"
+                        name="role"
+                        value="Agence"
+                        
+                      />
                       </FormGroup>
                     </Col>
                   </Row>

@@ -88,12 +88,12 @@ function MyStatements() {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <Row>
-                  <Col lg="8">
+                  <Col lg="10">
                     <h3 className="mb-0">My Statements</h3>
                   </Col>
-                  <Col lg="3">
+                  <Col lg="2">
                     <Button color="dark" onClick={() => setSortOrderByDate(sortOrderByDate === "asc" ? "desc" : "asc")}>
-                      Sort Date
+                      Sort By Date
                     </Button>
                   </Col>
                 </Row>
