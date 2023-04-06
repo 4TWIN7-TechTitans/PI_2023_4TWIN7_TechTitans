@@ -26,6 +26,8 @@ function ListofStatement() {
   const [notification, setNotification] = useState("");
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
+  const [assignedStatementId, setAssignedStatementId] = useState("");
+
 
   const fetchData = async () => {
     try {
@@ -173,13 +175,14 @@ function ListofStatement() {
                             ))}
                           </select>
                           <button
-                            className="btn btn-primary ml-2"
-                            onClick={(e) =>
-                              handleAssignExpert(e, statement, selectedExpert)
-                            }
-                          >
-                            Assign
-                          </button>
+                      className="btn btn-primary ml-2"
+                      onClick={(e) =>
+                        handleAssignExpert(e, statement, selectedExpert)
+                      }
+                      disabled={statement.case_state === "closed"}
+                    >
+                      Assign
+                    </button>
                         </div>
                       </td>
                     </tr>
