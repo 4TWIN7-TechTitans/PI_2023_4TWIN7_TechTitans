@@ -18,7 +18,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaCircle } from "react-icons/fa";
 
-function ListofStatement() {
+function OdmAgence() {
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedExpert, setSelectedExpert] = useState("");
@@ -27,7 +27,6 @@ function ListofStatement() {
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
   const [assignedStatementId, setAssignedStatementId] = useState("");
-
 
   const fetchData = async () => {
     try {
@@ -52,6 +51,18 @@ function ListofStatement() {
   }, []);
 
   useEffect(() => {
+    const getAssignedStatementId = () => {
+      const id = localStorage.getItem("assignedStatementId");
+      if (id) {
+        setAssignedStatementId(id);
+      }
+    };
+
+    fetchData();
+    getAssignedStatementId();
+  }, []);
+
+  useEffect(() => {
     console.log(statements);
   }, [statements]);
 
@@ -71,14 +82,11 @@ function ListofStatement() {
     e.preventDefault();
 
     try {
-      // const expertsResponse = await axios.get("http://127.0.0.1:5000/all-experts");
-
-      // const expertObj = expertsResponse.data.experts.find((elem) => elem.email === selectedExpert);
-
-      // console.log(expertObj);
-      // if (!expertObj) {
-      //   throw new Error("Expert not found");
-      // }
+      // check if statement is already assigned
+      if (statement.assign) {
+        showNotification(`Statement ${statement._id} is already assigned`);
+        return;
+      }
 
       const assignResponse = await axios.post(
         `http://127.0.0.1:5000/assign_statements/${statement._id}/assign`,
@@ -88,7 +96,9 @@ function ListofStatement() {
       console.log(assignResponse);
 
       if (assignResponse.status === 200) {
-        statement.assign = !statement.assign;
+        statement.assign = true;
+        setAssignedStatementId(statement._id);
+        localStorage.setItem("assignedStatementId", statement._id); // save to local storage or cookies
         fetchData();
       } else {
         throw new Error(assignResponse.data.message);
@@ -127,7 +137,6 @@ function ListofStatement() {
                   <th scope="col">ContractNumber</th>
                   <th scope="col">Etat</th>
                   <th scope="col">Assign To Expert</th>
-                  
                 </tbody>
                 {paginatedStatements.map((statement) => {
                   console.log(statement); // Add this line to log the statements object
@@ -175,14 +184,18 @@ function ListofStatement() {
                             ))}
                           </select>
                           <button
-                      className="btn btn-primary ml-2"
-                      onClick={(e) =>
-                        handleAssignExpert(e, statement, selectedExpert)
-                      }
-                      disabled={statement.case_state === "closed"}
-                    >
-                      Assign
-                    </button>
+                            className="btn btn-primary ml-2"
+                            onClick={(e) =>
+                              handleAssignExpert(e, statement, selectedExpert)
+                            }
+                            disabled={
+                              statement.case_state === "closed" ||
+                              statement.assign ||
+                              assignedStatementId === statement._id
+                            }
+                          >
+                            Assign
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -235,4 +248,4 @@ function ListofStatement() {
   );
 }
 
-export default ListofStatement;
+export default OdmAgence;

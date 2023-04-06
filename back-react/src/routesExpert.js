@@ -18,6 +18,7 @@
 
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert";
 import DetailsStatement from "views/examples/DetailsStatement";
+import MyStatusExpert from "views/examples/MyStatusExpert";
 var routesExpert = [
   //TODO : change admin to user view profile
   {
@@ -42,8 +43,17 @@ var routesExpert = [
     icon: "ni ni-bullet-list-67 text-blue",
     component: DetailsStatement,
     layout: "/expert",
+    showInSidebar: false,
+  },
+  {
+    path: "/mystatus",
+    name: "My Status",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: MyStatusExpert,
+    layout: "/expert",
     showInSidebar: true,
   },
+
 
  
 ];

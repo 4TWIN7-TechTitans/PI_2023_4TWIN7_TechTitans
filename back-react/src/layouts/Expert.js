@@ -10,6 +10,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 import routesExpert from "routesExpert.js";
 import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
+import DetailsStatement from "views/examples/DetailsStatement";
 const Expert = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();

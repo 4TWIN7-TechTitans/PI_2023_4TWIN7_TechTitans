@@ -86,6 +86,9 @@ function OrdreMissionExpert() {
                     <th scope="col">Date</th>
                     <th scope="col">vehicule Identity A</th>
                     <th scope="col">Vehicule Identity B</th>
+                    <th scope="col">Circumstances Mr A </th>
+                    <th scope="col">Circumstances Mr B </th>
+
                     <th> Status </th>
                     <th> Action </th>
                   </tr>
@@ -109,12 +112,13 @@ function OrdreMissionExpert() {
                         <td>{statement._id}</td> 
                         <td>{statement.date}</td>
                         <td>{statement.vehicule_identity_a.matriculation}</td>
-                        <td>{statement.vehicule_identity_b.matriculation}</td>
-
+                        <td>{statement.vehicule_identity_b.matriculation}</td>  
+                        <td>{statement.circumstances_a}</td>
+                        <td>{statement.circumstances_b}</td>
                         <td>
                           <FaCircle style={{ color: color }} />
                         </td>
-                        <td> <Button href={"/detailsstatement?id=" + statement._id}   > Details</Button> </td>
+                        <td> <Button href={"/expert/detailsstatement?id=" + statement._id}   > Details</Button> </td>
                       </tr>
                     );
                   })}
