@@ -190,8 +190,7 @@ function OdmAgence() {
                             }
                             disabled={
                               statement.case_state === "closed" ||
-                              statement.assign ||
-                              assignedStatementId === statement._id
+                              statement.assign_to_expert !== undefined
                             }
                           >
                             Assign
