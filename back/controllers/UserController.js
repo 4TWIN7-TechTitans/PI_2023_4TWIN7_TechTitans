@@ -1775,6 +1775,7 @@ module.exports.get_all_experts = async (req, res) => {
 // Function to set availability of expert
 module.exports.updateAvailability = async (req, res) => {
   const { email } = req.params;
+  const is_available = req.body.is_available;
 
   try {
     // Find the user by email and check if they have the "Expert" role
@@ -1786,11 +1787,11 @@ module.exports.updateAvailability = async (req, res) => {
       });
     }
 
-    user.is_available = !user.is_available;
+    user.is_available = is_available;
     await user.save();
 
     return res.status(200).json({
-      message: "The Expert is available ",
+      message: "Expert availability updated successfully",
       status: "success",
     });
   } catch (error) {

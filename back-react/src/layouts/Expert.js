@@ -11,6 +11,7 @@ import routesExpert from "routesExpert.js";
 import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
 import DetailsStatement from "views/examples/DetailsStatement";
+import MyStatusExpert from "views/examples/MyStatusExpert";
 const Expert = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -86,7 +87,7 @@ const Expert = (props) => {
           
          
         </Switch>
-        <OrdreMissionExpert/>
+        <MyStatusExpert/>
         <Container fluid>
          
          
