@@ -1,6 +1,7 @@
 const userModel = require("../models/user");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 require("dotenv").config();
 
 const client = require("twilio")(
@@ -833,9 +834,13 @@ module.exports.forgot_password_post = async (req, res) => {
       throw Error("User with that email address does not exist");
     }
 
-    const resetToken = createToken(user._id);
-    user.resetToken = resetToken;
-    await user.save();
+    const random = crypto.randomBytes(20).toString("hex");
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      user._id,
+      { reset_token: random },
+      { new: true } // Returns the updated document
+    );
 
     // send password reset email
     const transporter = nodemailer.createTransport({
@@ -848,12 +853,12 @@ module.exports.forgot_password_post = async (req, res) => {
 
     const mailOptions = {
       from: "fadwa.berrich@esprit.tn",
-      to: email,
+      to: "mahmoud.cheikh@esprit.tn",
       subject: "Reset your password",
       html: `
         <h2>Reset your password</h2>
         <p>Please click on the link below to reset your password:</p>
-        <a href="http://localhost:5000/reset-password/${resetToken}">Reset Password</a>  
+        <a href="http://localhost:3000/auth/resetpwd?token=${random}&email=${email}">Reset Password</a>  
       `,
     };
 
@@ -897,26 +902,22 @@ module.exports.reset_password_get = async (req, res) => {
 
 // Reset password
 module.exports.reset_password_post = async (req, res) => {
-  const { token, password } = req.body;
+  const { token, password, email } = req.body;
 
   try {
-    const decodedToken = jwt.verify(token, "assurini secret");
-
-    // find user by id and resetToken
-    const user = await userModel.findOne({
-      _id: decodedToken.id,
-      resetToken: token,
-      resetTokenExpires: { $gt: Date.now() },
-    });
+    const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(400).send("Invalid reset token or token expired");
+      return res.status(400).send("user not found");
+    }
+
+    if (user.reset_token !== token) {
+      return res.status(400).send("Invalid token");
     }
 
     // update user password and resetToken
     user.password = password;
-    user.resetToken = null;
-    user.resetTokenExpires = null;
+    user.reset_token = "";
     await user.save();
 
     res.status(200).json({
@@ -1583,7 +1584,6 @@ module.exports.post_ban_user = async (req, res) => {
         message: "unBan Alert",
         status: "success",
       });
-
     }
   } catch (err) {
     res.status(400).json(err.message);
@@ -1770,7 +1770,6 @@ module.exports.get_all_experts = async (req, res) => {
     });
   }
 };
- 
 
 // Function to set availability of expert
 module.exports.updateAvailability = async (req, res) => {
