@@ -111,6 +111,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  statements_number: {
+    type: Number,
+    required: false,
+  },
 });
 
 // fire a function before doc saved to db

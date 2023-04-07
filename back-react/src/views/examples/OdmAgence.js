@@ -37,8 +37,10 @@ function OdmAgence() {
       const expertsResponse = await axios.get(
         "http://127.0.0.1:5000/all-experts"
       );
-
-      setExperts(expertsResponse.data.experts);
+      const filteredExperts = expertsResponse.data.experts.filter(
+        (elem) => elem.statements_number < 3
+      );
+      setExperts(filteredExperts);
       console.log(filteredData);
       setStatements(filteredData);
     } catch (error) {

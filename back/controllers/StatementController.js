@@ -37,7 +37,11 @@ module.exports.check_statement = async (req, res) => {
       if (!expert) {
         return res.status(404).json({ message: "Expert not found" });
       }
-  
+      if(!expert.statements_number){
+        expert.statements_number = 0;
+      }
+      expert.statements_number += 1;
+      await UserModel.findByIdAndUpdate(expert._id, expert);
       // Assign statement to expert
       const statement = await StatementModel.findOneAndUpdate(
         { _id: req.params.id },

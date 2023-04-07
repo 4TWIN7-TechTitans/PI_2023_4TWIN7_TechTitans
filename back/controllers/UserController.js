@@ -320,6 +320,7 @@ module.exports.post_signup = async (req, res) => {
       token: "",
       two_factor_auth_code: "",
       banned: "false",
+      statements_number: 0,
     });
 
     const verificationToken = createToken(user._id);
@@ -360,6 +361,7 @@ module.exports.add_post = async (req, res) => {
     const user = await userModel.create({
       ...req.body,
       verified: "true",
+      statements_number: 0,
     });
     if (user) {
       const transporter = nodemailer.createTransport({
