@@ -38,5 +38,7 @@ router.get("/getallagences", userController.get_all_agences);
 
 router.get("/getallexperts", userController.get_all_experts);
 
+router.post("/updateAvailability/:email", userController.updateAvailability);
+
 
 module.exports = router;

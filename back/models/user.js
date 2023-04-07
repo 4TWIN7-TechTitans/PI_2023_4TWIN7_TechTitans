@@ -102,7 +102,11 @@ const userSchema = new mongoose.Schema({
   decision: {
     type: Boolean,
     required : false
-  }
+  },
+  is_available: {
+    type: Boolean,
+    required: false,
+    },
 });
 
 // fire a function before doc saved to db

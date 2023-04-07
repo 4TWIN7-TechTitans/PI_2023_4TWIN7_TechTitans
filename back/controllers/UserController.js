@@ -1770,3 +1770,34 @@ module.exports.get_all_experts = async (req, res) => {
     });
   }
 };
+ 
+
+// Function to set availability of expert
+module.exports.updateAvailability = async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    // Find the user by email and check if they have the "Expert" role
+    const user = await userModel.findOne({ email: email });
+    if (!user || user.role !== "Expert") {
+      return res.status(404).json({
+        message: "User not found or not an expert",
+        status: "error",
+      });
+    }
+
+    user.is_available = !user.is_available;
+    await user.save();
+
+    return res.status(200).json({
+      message: "The Expert is available ",
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
