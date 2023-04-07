@@ -318,7 +318,6 @@ module.exports.post_signup = async (req, res) => {
       image: "",
       id: "",
       token: "",
-      two_factor_auth: "none",
       two_factor_auth_code: "",
       banned: "false",
     });
