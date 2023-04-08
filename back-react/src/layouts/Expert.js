@@ -12,6 +12,7 @@ import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
 import DetailsStatement from "views/examples/DetailsStatement";
 import MyStatusExpert from "views/examples/MyStatusExpert";
+import Header from "components/Headers/Header.js";
 const Expert = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -87,7 +88,10 @@ const Expert = (props) => {
           
          
         </Switch>
-        <MyStatusExpert/>
+       {window.location.pathname === "/expert/OrdreMissionExpert"  && (<OrdreMissionExpert/>)}
+       {window.location.pathname === "/expert/mystatus"  && (<><Header/><MyStatusExpert/></>)}
+      
+        
         <Container fluid>
          
          
