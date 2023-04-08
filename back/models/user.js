@@ -21,13 +21,13 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: [3, "Last name should have at least 4 characters"],
     maxlength: [50, "Last name should not exceed 50 characters"],
-     },
+  },
   first_name: {
     type: String,
     required: true,
     minlength: [3, "Last name should have at least 4 characters"],
     maxlength: [50, "First name should not exceed 50 characters"],
-   },
+  },
   gender: {
     type: String,
     required: false,
@@ -95,14 +95,26 @@ const userSchema = new mongoose.Schema({
   banned: {
     type: Boolean,
   },
-  id_agence:{
+  id_agence: {
     type: String,
-    required : false
+    required: false,
   },
   decision: {
     type: Boolean,
-    required : false
-  }
+    required: false,
+  },
+  is_available: {
+    type: Boolean,
+    required: false,
+  },
+  reset_token: {
+    type: String,
+    required: false,
+  },
+  statements_number: {
+    type: Number,
+    required: false,
+  },
 });
 
 // fire a function before doc saved to db

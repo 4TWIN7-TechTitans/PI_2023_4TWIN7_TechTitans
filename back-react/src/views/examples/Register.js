@@ -11,6 +11,7 @@ import {
   InputGroup,
   Row,
   Col,
+  Label,
 } from "reactstrap";
 import { checkEmail } from "../services/api";
 import axios from "axios";
@@ -37,6 +38,9 @@ function Register() {
     const address = "";
     const date_of_birth = "";
     const phone_number = String(form.phone_number.value);
+    const  two_factor_auth = form.tfa.checked  ? "sms" : "none";
+    
+    console.log(two_factor_auth);
 
     console.log(phone_number);
 
@@ -110,6 +114,7 @@ function Register() {
           phone_number,
           date_of_birth,
           address,
+          two_factor_auth,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -360,6 +365,10 @@ function Register() {
                       </FormGroup>
                     </Col>
                   </Row>
+                  <FormGroup check inline>
+                    <Input type="checkbox" name="tfa" />
+                    <Label check>Enable two factor auth</Label>
+                  </FormGroup>
                   <FormGroup>
                     <label className="phone_number">
                       Phone number (+216){" "}

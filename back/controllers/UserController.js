@@ -1,6 +1,7 @@
 const userModel = require("../models/user");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 require("dotenv").config();
 
 const client = require("twilio")(
@@ -317,9 +318,9 @@ module.exports.post_signup = async (req, res) => {
       image: "",
       id: "",
       token: "",
-      two_factor_auth: "none",
       two_factor_auth_code: "",
       banned: "false",
+      statements_number: 0,
     });
 
     const verificationToken = createToken(user._id);
@@ -360,6 +361,7 @@ module.exports.add_post = async (req, res) => {
     const user = await userModel.create({
       ...req.body,
       verified: "true",
+      statements_number: 0,
     });
     if (user) {
       const transporter = nodemailer.createTransport({
@@ -833,9 +835,13 @@ module.exports.forgot_password_post = async (req, res) => {
       throw Error("User with that email address does not exist");
     }
 
-    const resetToken = createToken(user._id);
-    user.resetToken = resetToken;
-    await user.save();
+    const random = crypto.randomBytes(20).toString("hex");
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      user._id,
+      { reset_token: random },
+      { new: true } // Returns the updated document
+    );
 
     // send password reset email
     const transporter = nodemailer.createTransport({
@@ -848,12 +854,12 @@ module.exports.forgot_password_post = async (req, res) => {
 
     const mailOptions = {
       from: "fadwa.berrich@esprit.tn",
-      to: email,
+      to: "mahmoud.cheikh@esprit.tn",
       subject: "Reset your password",
       html: `
         <h2>Reset your password</h2>
         <p>Please click on the link below to reset your password:</p>
-        <a href="http://localhost:5000/reset-password/${resetToken}">Reset Password</a>  
+        <a href="http://localhost:3000/auth/resetpwd?token=${random}&email=${email}">Reset Password</a>  
       `,
     };
 
@@ -897,26 +903,22 @@ module.exports.reset_password_get = async (req, res) => {
 
 // Reset password
 module.exports.reset_password_post = async (req, res) => {
-  const { token, password } = req.body;
+  const { token, password, email } = req.body;
 
   try {
-    const decodedToken = jwt.verify(token, "assurini secret");
-
-    // find user by id and resetToken
-    const user = await userModel.findOne({
-      _id: decodedToken.id,
-      resetToken: token,
-      resetTokenExpires: { $gt: Date.now() },
-    });
+    const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(400).send("Invalid reset token or token expired");
+      return res.status(400).send("user not found");
+    }
+
+    if (user.reset_token !== token) {
+      return res.status(400).send("Invalid token");
     }
 
     // update user password and resetToken
     user.password = password;
-    user.resetToken = null;
-    user.resetTokenExpires = null;
+    user.reset_token = "";
     await user.save();
 
     res.status(200).json({
@@ -1583,7 +1585,6 @@ module.exports.post_ban_user = async (req, res) => {
         message: "unBan Alert",
         status: "success",
       });
-
     }
   } catch (err) {
     res.status(400).json(err.message);
@@ -1760,6 +1761,37 @@ module.exports.get_all_experts = async (req, res) => {
     // return experts if found
     return res.status(200).json({
       experts: sanitizedExperts,
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
+
+// Function to set availability of expert
+module.exports.updateAvailability = async (req, res) => {
+  const { email } = req.params;
+  const is_available = req.body.is_available;
+
+  try {
+    // Find the user by email and check if they have the "Expert" role
+    const user = await userModel.findOne({ email: email });
+    if (!user || user.role !== "Expert") {
+      return res.status(404).json({
+        message: "User not found or not an expert",
+        status: "error",
+      });
+    }
+
+    user.is_available = is_available;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Expert availability updated successfully",
       status: "success",
     });
   } catch (error) {
