@@ -66,8 +66,7 @@ import {
             <Card className="card-profile shadow">
               <Row className="justify-content-center">
               
-              <h3 className="mb-0">Details Missions Order Expertise</h3>
-
+              <h3 className="mb-0">Examine claim</h3>
             
               <CardBody className="pt-0 pt-md-4">
                 <Row>
