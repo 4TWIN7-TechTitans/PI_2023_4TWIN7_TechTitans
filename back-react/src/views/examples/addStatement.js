@@ -35,14 +35,14 @@ import {
 } from "reactstrap";
 import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
+import { toast } from "react-toastify";
 // core components
-import UserHeader from "components/Headers/UserHeader.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import ReactDatetime from "react-datetime";
-import moment from "moment";
-
 const AddStatement = () => {
+
+
+
   const [date, setDate] = useState("");
   const [location, setLocation] = useState();
   const [injured, setInjured] = useState("");
@@ -95,7 +95,8 @@ const AddStatement = () => {
   const [brand_a, setBrand_a] = useState("");
   const [brand_b, setBrand_b] = useState("");
 
-  const [type, setType] = useState("");
+  const [type_a, setType_a] = useState("");
+  const [type_b, setType_b] = useState("");
   const [matriculation_a, setMatriculation_a] = useState("");
   const [matriculation_b, setMatriculation_b] = useState("");
   const [country_a, setCountry_a] = useState("");
@@ -112,6 +113,7 @@ const AddStatement = () => {
 
   const [circumstances_a, setCircumstances_a] = useState("");
   const [circumstances_b, setCircumstances_b] = useState("");
+  const canvasRef = useRef(null);
   const [accident_croquis, setAccident_croquis] = useState("");
   const [notes_a, setNotes_a] = useState("");
   const [notes_b, setNotes_b] = useState("");
@@ -141,231 +143,16 @@ const AddStatement = () => {
   const [email, setEmail] = useState("");
   //statement by steps
   const [section, setSection] = useState(1);
-  const brands = [
-    "Toyota",
-    "Honda",
-    "Ford",
-    "Chevrolet",
-    "Nissan",
-    "Audi",
-    "Isuzu",
-    "BMW",
-    "Golf",
-    "Tesla",
-    "Chevrolet",
-    "Hyundai",
-    "Infiniti",
-    "Volkswagen",
-    "Volvo",
-    "Alfa Romeo",
-    "Mitsubishi",
-  ];
-  const countries = [
-    "Tunisia",
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "Andorra",
-    "Angola",
-    "Antigua and Barbuda",
-    "Argentina",
-    "Armenia",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "Bahamas",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bhutan",
-    "Bolivia",
-    "Bosnia and Herzegovina",
-    "Botswana",
-    "Brazil",
-    "Brunei",
-    "Bulgaria",
-    "Burkina Faso",
-    "Burundi",
-    "Côte d'Ivoire",
-    "Cabo Verde",
-    "Cambodia",
-    "Cameroon",
-    "Canada",
-    "Central African Republic",
-    "Chad",
-    "Chile",
-    "China",
-    "Colombia",
-    "Comoros",
-    "Congo",
-    "Costa Rica",
-    "Croatia",
-    "Cuba",
-    "Cyprus",
-    "Czech Republic",
-    "Democratic Republic of the Congo",
-    "Denmark",
-    "Djibouti",
-    "Dominica",
-    "Dominican Republic",
-    "Ecuador",
-    "Egypt",
-    "El Salvador",
-    "Equatorial Guinea",
-    "Eritrea",
-    "Estonia",
-    "Eswatini",
-    "Ethiopia",
-    "Fiji",
-    "Finland",
-    "France",
-    "Gabon",
-    "Gambia",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Greece",
-    "Grenada",
-    "Guatemala",
-    "Guinea",
-    "Guinea-Bissau",
-    "Guyana",
-    "Haiti",
-    "Honduras",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iran",
-    "Iraq",
-    "Ireland",
-    "Israel",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kiribati",
-    "Kuwait",
-    "Kyrgyzstan",
-    "Laos",
-    "Latvia",
-    "Lebanon",
-    "Lesotho",
-    "Liberia",
-    "Libya",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Madagascar",
-    "Malawi",
-    "Malaysia",
-    "Maldives",
-    "Mali",
-    "Malta",
-    "Marshall Islands",
-    "Mauritania",
-    "Mauritius",
-    "Mexico",
-    "Micronesia",
-    "Moldova",
-    "Monaco",
-    "Mongolia",
-    "Montenegro",
-    "Morocco",
-    "Mozambique",
-    "Myanmar",
-    "Namibia",
-    "Nauru",
-    "Nepal",
-    "Netherlands",
-    "New Zealand",
-    "Nicaragua",
-    "Niger",
-    "Nigeria",
-    "North Korea",
-    "North Macedonia",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Palau",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines",
-    "Poland",
-    "Portugal",
-    "Qatar",
-    "Romania",
-    "Russia",
-    "Rwanda",
-    "Saint Kitts and Nevis",
-    "Saint Lucia",
-    "Saint Vincent and the Grenadines",
-    "Samoa",
-    "San Marino",
-    "Sao Tome and Principe",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Seychelles",
-    "Sierra Leone",
-    "Singapore",
-    "Slovakia",
-  ];
+  const brands = ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "Audi", "Isuzu", "BMW", "Golf", "Tesla", "Chevrolet", "Hyundai", "Infiniti", "Volkswagen", "Volvo", "Alfa Romeo", "Mitsubishi",];
+  const countries = ["Tunisia", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"]
 
-  const possibleplaces = [
-    "Front Left Fender",
-    "Front Right Fender",
-    "Rear Left Fender",
-    "Rear Right Fender",
-    "Front Bumper",
-    "Rear Bumper",
-    "Hood",
-    "Trunk",
-    "Roof",
-    "Front Windshield",
-    "Rear Windshield",
-    "Side Mirrors",
-    "Doors",
-    "Other",
-  ];
+  const possibleplaces = ["Front Left Fender", "Front Right Fender", "Rear Left Fender", "Rear Right Fender", "Front Bumper", "Rear Bumper", "Hood", "Trunk", "Roof", "Front Windshield", "Rear Windshield", "Side Mirrors", "Doors", "Other",];
 
   const hitdirections = ["Front", "Back", "Left", "Right"];
-  const dmgeplaces = [
-    "Scratches",
-    "Dents",
-    "Cracks",
-    "Paint Damage",
-    "Broken Lights",
-    "Broken Windows",
-    "Missing Parts",
-    "Other",
-  ];
+  const dmgeplaces = ["Scratches", "Dents", "Cracks", "Paint Damage", "Broken Lights", "Broken Windows", "Missing Parts", "Other",];
   const dmgdirections = ["Front", "Back", "Left", "Right"];
-  const circumstance = [
-    "Driving in a normal and careful manner",
-    "Driving under the influence of drugs or alcohol",
-    "Speeding",
-    "Ignoring traffic signals or signs",
-    "Distracted driving",
-    "Driving while fatigued",
-    "Reckless driving",
-    "Tailgating",
-    "Changing lanes without signaling",
-    "Making an illegal turn",
-    "Backing up without looking",
-    "Driving in the wrong lane",
-    "Driving in a construction zone",
-    "Driving during inclement weather",
-    "Other",
-  ];
+  const circumstance = ["Driving in a normal and careful manner", "Driving under the influence of drugs or alcohol", "Speeding", "Ignoring traffic signals or signs", "Distracted driving", "Driving while fatigued", "Reckless driving", "Tailgating", "Changing lanes without signaling", "Making an illegal turn", "Backing up without looking", "Driving in the wrong lane", "Driving in a construction zone", "Driving during inclement weather", "Other",];
+  const types= ["Car", "Truck", "MotoCycle"]  ;
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -374,7 +161,9 @@ const AddStatement = () => {
 
 
 
+ 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     const form = e.target;
     const date = form.date.value;
@@ -436,7 +225,7 @@ const AddStatement = () => {
 
     const vehicule_identity_a = {
       brand: form.brand_a.value,
-      type: "",
+      type: form.type_a.value,
       matriculation: form.matriculation_a.value,
       country: form.country_a.value,
       coming_from: form.coming_from_a.value,
@@ -444,7 +233,7 @@ const AddStatement = () => {
     };
     const vehicule_identity_b = {
       brand: form.brand_b.value,
-      type: "",
+      type: form.type_b.value,
       matriculation: form.matriculation_b.value,
       country: form.country_b.value,
       coming_from: form.coming_from_b.value,
@@ -459,14 +248,29 @@ const AddStatement = () => {
     const apparent_damages_b = form.apparent_damages_b.value;
     const circumstances_a = form.circumstances_a.value;
     const circumstances_b = form.circumstances_b.value;
-    const accident_croquis = "";
+    const accident_croquis = form.accident_croquis;
     const notes_a = form.notes_a.value;
     const notes_b = form.notes_b.value;
-    const signature_a = "";
-    const signature_b = "";
+    const signature_a = "form.signature_a";
+    const signature_b = "form.signature_b";
     const verified = true;
 
     //console.log( notes_a)
+   //debut image
+
+    
+   const canvas = canvasRef.current;
+   const image = canvas.canvasContainer.children[1].toDataURL("image/png", 1.0);
+   const formData = new FormData();
+   formData.append("file", image);
+   formData.append("upload_preset", "cbqa7u7w");
+ 
+ const cloudinaryRes = await axios.post(
+   "https://api.cloudinary.com/v1_1/dczz1wjxm/image/upload",
+   formData
+ );
+   console.log(cloudinaryRes.data.secure_url);
+ //fin image
 
     const mystatement = {
       date: date,
@@ -478,32 +282,32 @@ const AddStatement = () => {
         first_name: drivers_identity_a.first_name,
         last_name: drivers_identity_a.last_name,
         address: drivers_identity_a.address,
-        drivers_license_issue_date:
-          drivers_identity_a.drivers_license_issue_date,
+        drivers_license_issue_date:drivers_identity_a.drivers_license_issue_date,
+        driver_license: drivers_identity_a.driver_license,
       },
 
       drivers_identity_b: {
         first_name: drivers_identity_b.first_name,
         last_name: drivers_identity_b.last_name,
         address: drivers_identity_b.address,
-        drivers_license_issue_date:
-          drivers_identity_b.drivers_license_issue_date,
+        drivers_license_issue_date: drivers_identity_b.drivers_license_issue_date,
+        driver_license_b: drivers_identity_b.driver_license,
       },
       insured_a: {
         firstname: insured_a.firstname,
         lastname: insured_a.lastname,
         phonenumber: insured_a.phonenumber,
-        address: insured_a.address,
+        addr: insured_a.addr,
       },
       insured_b: {
         firstname: insured_b.firstname,
         lastname: insured_b.lastname,
         phonenumber: insured_b.phonenumber,
-        address: insured_b.address,
+        addr: insured_b.addr,
       },
       vehicule_identity_a: {
         brand: vehicule_identity_a.brand,
-        type: "Truck",
+        type: vehicule_identity_a.type,
         matriculation: vehicule_identity_a.matriculation,
         country: vehicule_identity_a.country,
         coming_from: vehicule_identity_a.coming_from,
@@ -511,11 +315,30 @@ const AddStatement = () => {
       },
       vehicule_identity_b: {
         brand: vehicule_identity_b.brand,
-        type: "Truck",
+        type: vehicule_identity_b.type,
         matriculation: vehicule_identity_b.matriculation,
         country: vehicule_identity_b.country,
         coming_from: vehicule_identity_b.coming_from,
         going_to: vehicule_identity_b.going_to,
+      },
+       vehicule_a :{
+        assureBy: assureBy_a,
+        contractNumber: contractNumber_a,
+        agency: agency_a,
+        contractValidity: {
+          start_date: start_date_a,
+          end_date: end_date_a,
+        },
+      },
+  
+       vehicule_b :{
+        assureBy: assureBy_b,
+        contractNumber: contractNumber_b,
+        agency: agency_b,
+        contractValidity: {
+          start_date: start_date_b,
+          end_date: end_date_b,
+        },
       },
       hits_a: hits_a,
       hits_b: hits_b,
@@ -524,7 +347,7 @@ const AddStatement = () => {
       apparent_damages_b: apparent_damages_b,
       circumstances_a: circumstances_a,
       circumstances_b: circumstances_b,
-      accident_croquis: "Hello",
+      accident_croquis: cloudinaryRes.data.secure_url,
       notes_a: notes_a,
       notes_b: notes_b,
       signature_a: signature_a,
@@ -532,7 +355,7 @@ const AddStatement = () => {
       case_state: "waiting",
     };
     console.log(mystatement);
-
+ 
     /*
 
     if (!date || !location || !injured || !material_damage || !witness || !vehicule_a.assureBy || !vehicule_a.agency_a
@@ -582,43 +405,43 @@ const AddStatement = () => {
       return;
     }*/
 
-    //user haven't an connected
+    //user haven't an account connected
     const user = users.find((user) => user.role === "Client");
 
 
-    if (!user || !user.password || !user.email) {
-      try {
-        const registerRes = await axios.post(
-          "http://localhost:5000/add",
-          {
-            email: email,
-            password: password,
-            last_name: lastname_a,
-            first_name: firstname_b,
-            role: "Client",
-            verified: "true",
-            phone_number: phonenumber_a,
-            address: addr_a,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+    // if (!user || !user.password || !user.email) {
+    //   try {
+    //     const registerRes = await axios.post(
+    //       "http://localhost:5000/add",
+    //       {
+    //         email: email,
+    //         password: password,
+    //         last_name: lastname_a,
+    //         first_name: firstname_b,
+    //         role: "Client",
+    //         verified: "true",
+    //         phone_number: phonenumber_a,
+    //         address: addr_a,
+    //       },
+    //       {
+    //         headers: { "Content-Type": "application/json" },
+    //       }
+    //     );
 
-        if (registerRes.status === 201) {
-          setShowNotification(false);
-          setErrors({});
-          setShowError(false);
-        } else {
-          setShowNotification(false);
-          setErrors({ ...errors, message: "Signup failed" });
-          setShowError(true);
-          return;
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
+    //     if (registerRes.status === 201) {
+    //       setShowNotification(false);
+    //       setErrors({});
+    //       setShowError(false);
+    //     } else {
+    //       setShowNotification(false);
+    //       setErrors({ ...errors, message: "Signup failed" });
+    //       setShowError(true);
+    //       return;
+    //     }
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
 
 
     try {
@@ -634,32 +457,32 @@ const AddStatement = () => {
             first_name: drivers_identity_a.first_name,
             last_name: drivers_identity_a.last_name,
             address: drivers_identity_a.address,
-            drivers_license_issue_date:
-              drivers_identity_a.drivers_license_issue_date,
+            drivers_license_issue_date:drivers_identity_a.drivers_license_issue_date,
+            driver_license: drivers_identity_a.driver_license,
           },
-
+    
           drivers_identity_b: {
             first_name: drivers_identity_b.first_name,
             last_name: drivers_identity_b.last_name,
             address: drivers_identity_b.address,
-            drivers_license_issue_date:
-              drivers_identity_b.drivers_license_issue_date,
+            drivers_license_issue_date: drivers_identity_b.drivers_license_issue_date,
+            driver_license_b: drivers_identity_b.driver_license,
           },
           insured_a: {
             firstname: insured_a.firstname,
             lastname: insured_a.lastname,
             phonenumber: insured_a.phonenumber,
-            address: insured_a.address,
+            addr: insured_a.addr,
           },
           insured_b: {
             firstname: insured_b.firstname,
             lastname: insured_b.lastname,
             phonenumber: insured_b.phonenumber,
-            address: insured_b.address,
+            addr: insured_b.addr,
           },
           vehicule_identity_a: {
             brand: vehicule_identity_a.brand,
-            type: "Truck",
+            type: vehicule_identity_a.type,
             matriculation: vehicule_identity_a.matriculation,
             country: vehicule_identity_a.country,
             coming_from: vehicule_identity_a.coming_from,
@@ -667,11 +490,30 @@ const AddStatement = () => {
           },
           vehicule_identity_b: {
             brand: vehicule_identity_b.brand,
-            type: "Truck",
+            type: vehicule_identity_a.type,
             matriculation: vehicule_identity_b.matriculation,
             country: vehicule_identity_b.country,
             coming_from: vehicule_identity_b.coming_from,
             going_to: vehicule_identity_b.going_to,
+          },
+          vehicule_a :{
+            assureBy: assureBy_a,
+            contractNumber: contractNumber_a,
+            agency: agency_a,
+            contractValidity: {
+              start_date: start_date_a,
+              end_date: end_date_a,
+            },
+          },
+      
+           vehicule_b :{
+            assureBy: assureBy_b,
+            contractNumber: contractNumber_b,
+            agency: agency_b,
+            contractValidity: {
+              start_date: start_date_b,
+              end_date: end_date_b,
+            },
           },
           hits_a: hits_a,
           hits_b: hits_b,
@@ -680,7 +522,7 @@ const AddStatement = () => {
           apparent_damages_b: apparent_damages_b,
           circumstances_a: circumstances_a,
           circumstances_b: circumstances_a,
-          accident_croquis: "Hello",
+          accident_croquis: cloudinaryRes.data.secure_url,
           notes_a: notes_a,
           notes_b: notes_b,
           signature_a: signature_a,
@@ -695,14 +537,25 @@ const AddStatement = () => {
         setShowNotification(true);
         setErrors({});
         setShowError(false);
-      } else {
+        canvasRef.clear();
+        toast.success("Statement created successfully");
+      } else if(add.status===400){
         setShowNotification(false);
         setErrors({ ...errors, message: "Statement adding failed" });
         setShowError(true);
+        toast.error("Error creating statement");
       }
     } catch (error) {
       console.log(error);
     }
+
+
+    //debut image
+
+    
+
+
+  //fin image
   };
 
   useEffect(() => {
@@ -723,79 +576,15 @@ const AddStatement = () => {
 
   const handleClick = (event) => {
     // 👇️ toggle shown state
-    setIsShown((current) => !current);
+    setIsShown((a) => !a);
 
     // 👇️ or simply set it to true
-    // setIsShown(true);
+
   };
 
-  //hundle show to the 1+2+3+4+5 section
-  const [isShown1, setIsShown1] = useState(true);
-  const handleShow1 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown1((current) => !current);
-  };
-
-  //hundle show to the 6 section
-  const [isShown6, setIsShown6] = useState(true);
-  const handleShow6 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown6((current) => !current);
-  };
-
-  //hundle show to the 7 section
-  const [isShown7, setIsShown7] = useState(true);
-  const handleShow7 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown7((current) => !current);
-  };
-
-  //hundle show to the 8 section
-  const [isShown8, setIsShown8] = useState(true);
-  const handleShow8 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown8((current) => !current);
-  };
-
-  //hundle show to the 9 section
-  const [isShown9, setIsShown9] = useState(true);
-  const handleShow9 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown9((current) => !current);
-  };
-
-  //hundle show to the 10 section
-  const [isShown10, setIsShown10] = useState(true);
-  const handleShow10 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown10((current) => !current);
-  };
-
-  //hundle show to the 11 section
-  const [isShown11, setIsShown11] = useState(true);
-  const handleShow11 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown11((current) => !current);
-  };
-
-  //hundle show to the 12 section
-  const [isShown12, setIsShown12] = useState(true);
-  const handleShow12 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown12((current) => !current);
-  };
-  //hundle show to the 13 section
-  const [isShown13, setIsShown13] = useState(true);
-  const handleShow13 = (event) => {
-    // 👇️ toggle shown state
-    setIsShown13((current) => !current);
-  };
 
   const today = new Date().toISOString().substr(0, 10);
 
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
-  };
   //hanle statement by steps :
   const handleNext = (e) => {
     e.preventDefault();
@@ -805,6 +594,13 @@ const AddStatement = () => {
   const handlePrev = (e) => {
     e.preventDefault();
     setSection(section - 1);
+  };
+
+
+
+
+  const handleUndo = () => {
+    canvasRef.current.undo();
   };
   return (
     <>
@@ -833,10 +629,10 @@ const AddStatement = () => {
                       set all the infromations related to the accident please
                     </h6>
                     <div className="pl-lg-4">
+                      {""}
                       {/* 1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 1 ? "block" : "none" }}>
                         <Row>
-                          {" "}
                           {/* Section 1 + 2 + 3 + 4 + 5 */}
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
@@ -846,7 +642,6 @@ const AddStatement = () => {
                         </Row>
 
                         <Row>
-                          {" "}
                           {/* SECTION 1 + 2 + 3 + 4 + 5 */}
                           <Col lg="3">
                             <FormGroup>
@@ -944,15 +739,17 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
+                        <Col align="center">
+                          <FormGroup>
+                            <Button
+                              color="primary"
+                              type="button"
+                              onClick={handleNext}
+                            >
+                              Next
+                            </Button>
+                          </FormGroup>
+                        </Col>
                       </div>
                       {/* FIN  1 + 2 + 3 + 4 + 5 */}
 
@@ -1168,33 +965,37 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="secondary"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
 
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
-
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
+                        </Row>
                       </div>
                       {/*  FIN Section 6 */}
 
                       {/* Section 7 */}
                       <div style={{ display: section === 3 ? "block" : "none" }}>
                         <Row>
-
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
@@ -1416,25 +1217,31 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="secondary"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
 
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
+                        </Row>
                       </div>
                       {/*  FIN SECTION 7 */}
 
@@ -1610,25 +1417,31 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="secondary"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
 
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
+                        </Row>
                       </div>
                       {/*  FIN SECTION 8 */}
 
@@ -1724,6 +1537,27 @@ const AddStatement = () => {
 
                               <div className="matriculation_a error"></div>
                             </FormGroup>
+                            <FormGroup>
+                              <label>Type</label>
+                              <Input
+                                type="select"
+                                name="type"
+                                id="type_a"
+                                value={type_a}
+                                onChange={(e) => setType_a(e.target.value)}
+                                required
+                              >
+                                <option value="">Select a vehicule type</option>
+                                {types.map((type, index) => (
+                                  <option
+                                    key={`${type}-${index}`}
+                                    value={type}
+                                  >
+                                    {type}
+                                  </option>
+                                ))}
+                              </Input>
+                              </FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -1832,6 +1666,27 @@ const AddStatement = () => {
 
                               <div className="matriculation_a error"></div>
                             </FormGroup>
+                            <FormGroup>
+                              <label>Type</label>
+                              <Input
+                                type="select"
+                                name="type"
+                                id="type_b"
+                                value={type_b}
+                                onChange={(e) => setType_b(e.target.value)}
+                                required
+                              >
+                                <option value="">Select a vehicule type</option>
+                                {types.map((type, index) => (
+                                  <option
+                                    key={`${type}-${index}`}
+                                    value={type}
+                                  >
+                                    {type}
+                                  </option>
+                                ))}
+                              </Input>
+                              </FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -1876,25 +1731,31 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="secondary"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
 
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
+                        </Row>
                       </div>
                       {/*  FIN SECTION 9 */}
 
@@ -1938,49 +1799,23 @@ const AddStatement = () => {
                                 required
                               >
                                 <option value="Other">Select</option>
-                                <option value="Front Left Fender">
-                                  Front Left Fender
-                                </option>
-                                <option value="Front Right Fender">
-                                  Front Right Fender
-                                </option>
-                                <option value="Rear Left Fender">
-                                  Rear Left Fender
-                                </option>
-                                <option value="Rear Right Fender">
-                                  Rear Right Fender
-                                </option>
-                                <option value="Front Bumper">
-                                  Front Bumper
-                                </option>
+                                <option value="Front Left Fender"> Front Left Fender</option>
+                                <option value="Front Right Fender"> Front Right Fender</option>
+                                <option value="Rear Left Fender">Rear Left Fender</option>
+                                <option value="Rear Right Fender">Rear Right Fender</option>
+                                <option value="Front Bumper"> Front Bumper</option>
                                 <option value="Rear Bumper">Rear Bumper</option>
                                 <option value="Hood">Hood</option>
                                 <option value="Trunk">Trunk</option>
                                 <option value="Roof">Roof</option>
-                                <option value="Front Windshield">
-                                  Front Windshield
-                                </option>
-                                <option value="Rear Windshield">
-                                  Rear Windshield
-                                </option>
-                                <option value="Side Mirror Left">
-                                  Side Mirror Left
-                                </option>
-                                <option value="Side Mirror Right">
-                                  Side Mirror Right
-                                </option>
-                                <option value="Door Front Left">
-                                  Door Front Left
-                                </option>
-                                <option value="Door Front Right">
-                                  Door Front Right
-                                </option>
-                                <option value="Door Rear Left">
-                                  Door Rear Left
-                                </option>
-                                <option value="Door Rear Right">
-                                  Door Rear Right
-                                </option>
+                                <option value="Front Windshield">Front Windshield</option>
+                                <option value="Rear Windshield">Rear Windshield</option>
+                                <option value="Side Mirror Left">Side Mirror Left</option>
+                                <option value="Side Mirror Right">Side Mirror Right</option>
+                                <option value="Door Front Left">Door Front Left</option>
+                                <option value="Door Front Right">Door Front Right</option>
+                                <option value="Door Rear Left">Door Rear Left</option>
+                                <option value="Door Rear Right">Door Rear Right</option>
                               </Input>
                             </FormGroup>
                           </Col>
@@ -1998,74 +1833,53 @@ const AddStatement = () => {
                                 value={hits_b}
                                 onChange={(e) => setHits_b(e.target.value)}
                                 required
-                              >
-                                <option value="Other">Select</option>
-                                <option value="Front Left Fender">
-                                  Front Left Fender
-                                </option>
-                                <option value="Front Right Fender">
-                                  Front Right Fender
-                                </option>
-                                <option value="Rear Left Fender">
-                                  Rear Left Fender
-                                </option>
-                                <option value="Rear Right Fender">
-                                  Rear Right Fender
-                                </option>
-                                <option value="Front Bumper">
-                                  Front Bumper
-                                </option>
+                              >                              <option value="Other">Select</option>
+                                <option value="Front Left Fender"> Front Left Fender</option>
+                                <option value="Front Right Fender"> Front Right Fender</option>
+                                <option value="Rear Left Fender">Rear Left Fender</option>
+                                <option value="Rear Right Fender">Rear Right Fender</option>
+                                <option value="Front Bumper"> Front Bumper</option>
                                 <option value="Rear Bumper">Rear Bumper</option>
                                 <option value="Hood">Hood</option>
                                 <option value="Trunk">Trunk</option>
                                 <option value="Roof">Roof</option>
-                                <option value="Front Windshield">
-                                  Front Windshield
-                                </option>
-                                <option value="Rear Windshield">
-                                  Rear Windshield
-                                </option>
-                                <option value="Side Mirror Left">
-                                  Side Mirror Left
-                                </option>
-                                <option value="Side Mirror Right">
-                                  Side Mirror Right
-                                </option>
-                                <option value="Door Front Left">
-                                  Door Front Left
-                                </option>
-                                <option value="Door Front Right">
-                                  Door Front Right
-                                </option>
-                                <option value="Door Rear Left">
-                                  Door Rear Left
-                                </option>
-                                <option value="Door Rear Right">
-                                  Door Rear Right
-                                </option>
+                                <option value="Front Windshield">Front Windshield</option>
+                                <option value="Rear Windshield">Rear Windshield</option>
+                                <option value="Side Mirror Left">Side Mirror Left</option>
+                                <option value="Side Mirror Right">Side Mirror Right</option>
+                                <option value="Door Front Left">Door Front Left</option>
+                                <option value="Door Front Right">Door Front Right</option>
+                                <option value="Door Rear Left">Door Rear Left</option>
+                                <option value="Door Rear Right">Door Rear Right</option>
                               </Input>
                             </FormGroup>
                           </Col>
                         </Row>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="secondary"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
 
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
+                        </Row>
                       </div>
                       {/* FIN SECTION 10 */}
 
@@ -2168,45 +1982,12 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
 
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
-                      </div>
-                      {/* FIN SECTION 11 */}
-                    </div>
+                        {/* FIN SECTION 11 */}
 
-                    <div className="pl-lg-4">
-                      {/* SECTION 12 */}
-                      <div style={{ display: section === 8 ? "block" : "none" }}>
-                        <Row>
-                          {/* VEHICULE A VS B */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE A
-                            </h6>
-                          </Col>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
+
+
+                        {/* SECTION 12 */}
                         <Row>
                           {/* Section 12 */}
                           <Col lg="6">
@@ -2234,45 +2015,20 @@ const AddStatement = () => {
                                 required
                               >
                                 <option value="">Select</option>
-                                <option value="Driving in a normal and careful manner">
-                                  Driving in a normal and careful manner
-                                </option>
-                                <option value="Driving under the influence of drugs or alcohol">
-                                  Driving under the influence of drugs or
-                                  alcohol
-                                </option>
+                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner </option>
+                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
                                 <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">
-                                  Ignoring traffic signals or signs
-                                </option>
-                                <option value="Distracted driving">
-                                  Distracted driving
-                                </option>
-                                <option value="Driving while fatigued">
-                                  Driving while fatigued
-                                </option>
-                                <option value="Reckless driving">
-                                  Reckless driving
-                                </option>
+                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
+                                <option value="Distracted driving">Distracted driving</option>
+                                <option value="Driving while fatigued">Driving while fatigued</option>
+                                <option value="Reckless driving">Reckless driving</option>
                                 <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling">
-                                  Changing lanes without signaling
-                                </option>
-                                <option value="Making an illegal turn">
-                                  Making an illegal turn
-                                </option>
-                                <option value="Backing up without looking">
-                                  Backing up without looking
-                                </option>
-                                <option value="Driving in the wrong lane">
-                                  Driving in the wrong lane
-                                </option>
-                                <option value="Driving in a construction zone">
-                                  Driving in a construction zone
-                                </option>
-                                <option value="Driving during inclement weather">
-                                  Driving during inclement weather
-                                </option>
+                                <option value="Changing lanes without signaling"> Changing lanes without signaling</option>
+                                <option value="Making an illegal turn"> Making an illegal turn</option>
+                                <option value="Backing up without looking"> Backing up without looking </option>
+                                <option value="Driving in the wrong lane">Driving in the wrong lane </option>
+                                <option value="Driving in a construction zone">Driving in a construction zone</option>
+                                <option value="Driving during inclement weather"> Driving during inclement weather</option>
                               </Input>
                             </FormGroup>
                           </Col>
@@ -2294,237 +2050,215 @@ const AddStatement = () => {
                                 required
                               >
                                 <option value="">Select</option>
-                                <option value="Driving in a normal and careful manner">
-                                  Driving in a normal and careful manner
-                                </option>
-                                <option value="Driving under the influence of drugs or alcohol">
-                                  Driving under the influence of drugs or
-                                  alcohol
-                                </option>
+                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner </option>
+                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
                                 <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">
-                                  Ignoring traffic signals or signs
-                                </option>
-                                <option value="Distracted driving">
-                                  Distracted driving
-                                </option>
-                                <option value="Driving while fatigued">
-                                  Driving while fatigued
-                                </option>
-                                <option value="Reckless driving">
-                                  Reckless driving
-                                </option>
+                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
+                                <option value="Distracted driving">Distracted driving</option>
+                                <option value="Driving while fatigued">Driving while fatigued</option>
+                                <option value="Reckless driving">Reckless driving</option>
                                 <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling">
-                                  Changing lanes without signaling
-                                </option>
-                                <option value="Making an illegal turn">
-                                  Making an illegal turn
-                                </option>
-                                <option value="Backing up without looking">
-                                  Backing up without looking
-                                </option>
-                                <option value="Driving in the wrong lane">
-                                  Driving in the wrong lane
-                                </option>
-                                <option value="Driving in a construction zone">
-                                  Driving in a construction zone
-                                </option>
-                                <option value="Driving during inclement weather">
-                                  Driving during inclement weather
-                                </option>
+                                <option value="Changing lanes without signaling"> Changing lanes without signaling</option>
+                                <option value="Making an illegal turn"> Making an illegal turn</option>
+                                <option value="Backing up without looking"> Backing up without looking </option>
+                                <option value="Driving in the wrong lane">Driving in the wrong lane </option>
+                                <option value="Driving in a construction zone">Driving in a construction zone</option>
+                                <option value="Driving during inclement weather"> Driving during inclement weather</option>
                               </Input>
                             </FormGroup>
                           </Col>
-                          {/*     "Driving in a normal and careful manner",
-                                "Driving under the influence of drugs or alcohol",
-                                "Speeding",
-                                "Ignoring traffic signals or signs",
-                                "Distracted driving",
-                                "Driving while fatigued",
-                                "Reckless driving",
-                                "Tailgating",
-                                "Changing lanes without signaling",
-                                "Making an illegal turn",
-                                "Backing up without looking",
-                                "Driving in the wrong lane",
-                                "Driving in a construction zone",
-                                "Driving during inclement weather", 
-                            */}
                         </Row>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="secondary"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
 
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
+                        </Row>
                       </div>
                       {/* FIN SECTION 12 */}
 
                       {/* Section 13 + 14 + 14*/}
                       <div style={{ display: section === 8 ? "block" : "none" }}>
-                      <Row>
-                        <Col lg="6">
-                          <h6 className="heading-small text-muted mb-4">
-                            Section 13 + 14 + 15
-                          </h6>
-                        </Col>
-                      </Row>
-                        <div>
-                          <Row>
-                            {/* SECTION 13  IMAGE */}
-                            <Col lg="12">
-                              <FormGroup>
-                                <label
-                                  className="form-control-label"
-                                  htmlFor="input-address"
-                                >
-                                  13. Simulation Image Of the Accident
-                                </label>
-                                <InputGroup className="input-group-alternative">
-                                  <CanvasDraw
-                                    name="accident_croquis"
-                                    brushRadius={2}
-                                    canvasWidth={12000}
-                                    canvasHeight={400}
-                                    hideGrid={true}
-                                    brushColor={"#000000"}
-                                  />
-                                </InputGroup>
-                                {/* <button onClick={(e) => handleClear(e, setAccident_croquis)}>Clear</button> */}
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          {/* FIN SECTION 13  IMAGE */}
-                          <Row>
-                            {/* SECTION 14  Observation */}
-                            <Col md="6">
-                              <FormGroup>
-                                <label
-                                  className="form-control-label"
-                                  htmlFor="input-address"
-                                >
-                                  14. Observations
-                                </label>
-                                <Input
-                                  type="text"
-                                  name="notes_a"
-                                  id="notes_a"
-                                  value={notes_a}
-                                  onChange={(e) => {
-                                    setNotes_a(e.target.value);
-                                  }}
-                                  required
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col md="6">
-                              <FormGroup>
-                                <label
-                                  className="form-control-label"
-                                  htmlFor="input-address"
-                                >
-                                  14. Observations
-                                </label>
-                                <Input
-                                  type="text"
-                                  name="notes_b"
-                                  id="notes_b"
-                                  value={notes_b}
-                                  onChange={(e) => {
-                                    setNotes_b(e.target.value);
-                                  }}
-                                  required
-                                />
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          {/* FIN SECTION 14  Observation */}
-                          <Row>
-                            {/* SECTION 15  Observation */}
-                            <Col lg="6">
-                              <FormGroup>
-                                <label
-                                  className="form-control-label"
-                                  htmlFor="input-address"
-                                >
-                                  15. Signature of A
-                                </label>
-                                <InputGroup className="input-group-alternative">
-                                  <SignatureCanvas
-                                    penColor="black"
-                                    canvasProps={{
-                                      width: 500,
-                                      height: 200,
-                                      className: "sigCanvas",
-                                    }}
-                                    ref={setSignature_a}
-                                  />
-                                </InputGroup>
-                              </FormGroup>
-                            </Col>
-                            <Col lg="6">
-                              <FormGroup>
-                                <label
-                                  className="form-control-label"
-                                  htmlFor="input-address"
-                                  color="text-primary"
-                                >
-                                  15. Signature of B
-                                </label>
-                                <InputGroup className="input-group-alternative">
-                                  <SignatureCanvas
-                                    penColor="black"
-                                    canvasProps={{
-                                      width: 500,
-                                      height: 200,
-                                      className: "sigCanvas",
-                                    }}
-                                    ref={setSignature_b}
-                                  />
-                                </InputGroup>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          {/* FIN SECTION 15  Observation */}
-                        </div>
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col lg="6">
+                            <h6 className="heading-small text-muted mb-4">
+                              Section 13 + 14 + 15
+                            </h6>
+                          </Col>
+                        </Row>
 
-                        <FormGroup>
-                          <Button
-                            color="secondary"
-                            type="button"
-                            onClick={handlePrev}
-                          >
-                            Previous
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          {/* SECTION 13  IMAGE */}
+                          <Col lg="12">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                              >
+                                13. Simulation Image Of the Accident
+                              </label>
+                              <InputGroup className="input-group-alternative" >
+                                <CanvasDraw
+                                  enctype="multipart/form-data"
+                                    
+                                    name="accident_croquis" 
+                                 
+                                  brushRadius={2}
+                                  canvasWidth={12000}
+                                  canvasHeight={400}
+                                  brushColor={"#000000"}
+                                  ref={canvasRef}
+                                  value={accident_croquis}
+                                   />
+
+                                <Button className="btn btn-warning" onClick={handleUndo}>Undo</Button>
+                              </InputGroup>
+                              {/* <button onClick={(e) => handleClear(e, setAccident_croquis)}>Clear</button> */}
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        {/* FIN SECTION 13  IMAGE */}
+                        <Row>
+                          {/* SECTION 14  Observation */}
+                          <Col md="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                              >
+                                14. Observations
+                              </label>
+                              <Input
+                                type="text"
+                                name="notes_a"
+                                id="notes_a"
+                                value={notes_a}
+                                onChange={(e) => {
+                                  setNotes_a(e.target.value);
+                                }}
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                              >
+                                14. Observations
+                              </label>
+                              <Input
+                                type="text"
+                                name="notes_b"
+                                id="notes_b"
+                                value={notes_b}
+                                onChange={(e) => {
+                                  setNotes_b(e.target.value);
+                                }}
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        {/* FIN SECTION 14  Observation */}
+                        <Row>
+                          {/* SECTION 15  Observation */}
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                              >
+                                15. Signature of A
+                              </label>
+                              <InputGroup className="input-group-alternative">
+                                <SignatureCanvas
+                                  penColor="black"
+                                  canvasProps={{
+                                    width: 500,
+                                    height: 200,
+                                    className: "sigCanvas",
+                                  }}
+                                  ref={setSignature_a}
+                                />
+                              </InputGroup>
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-address"
+                                color="text-primary"
+                              >
+                                15. Signature of B
+                              </label>
+                              <InputGroup className="input-group-alternative">
+                                <SignatureCanvas
+                                  penColor="black"
+                                  canvasProps={{
+                                    width: 500,
+                                    height: 200,
+                                    className: "sigCanvas",
+                                  }}
+                                  ref={setSignature_b}
+                                />
+                              </InputGroup>
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        {/* FIN SECTION 15  Observation */}
+
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="secondary"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
+
+                        </Row>
                       </div>
 
                       <Row>
                       </Row>
-                      {/* partie suivant : */}
+                      {/* partie suivant :
                       <div className="form-group">
                         <label>
                           <input
@@ -2559,7 +2293,7 @@ const AddStatement = () => {
                           />
                         </div>
 
-                      )}
+                      )} */}
                       <div className="text-center">
 
                         <Button color="info" type="submit">
@@ -2567,15 +2301,7 @@ const AddStatement = () => {
                         </Button>
                       </div>
 
-
-
-
-
                     </div>
-
-
-
-
                   </form>
                 </CardBody>
               )}

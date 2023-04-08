@@ -1,6 +1,46 @@
 const StatementModel = require("../models/statement");
 const UserModel = require("../models/user");
 require("dotenv").config();
+const cloudinary = require('cloudinary').v2;
+
+
+// configure cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  folder:process.env.FOLDER,
+  format:process.env.FORMAT,
+  Upload_presets: process.env.UPLOAD_PRESTE,
+});
+
+
+module.exports.add_statement_post = async (req, res) => {
+  try {
+    const {accident_croquis} = req.body;
+
+    // upload image to cloudinary
+    const result = await cloudinary.uploader.upload(accident_croquis);
+
+    // save statement to database
+    const statement = await StatementModel.create({
+      ...req.body,
+      accident_croquis: result.secure_url,
+    });
+
+    res.status(201).json({
+      message: "Statement created successfully",
+      statement,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(400).json({ message: "Duplicate key error" });
+    } else {
+      res.status(400).json({ message: "Error creating statement", error });
+    }
+  }
+};
+
 
 module.exports.check_statement = async (req, res) => {
     try {
@@ -15,20 +55,7 @@ module.exports.check_statement = async (req, res) => {
     }
   };
 
-  module.exports.add_statement_post = async (req, res) => {
-    try {
-      const statement = await StatementModel.create({
-        ...req.body,
-      });
-      res.status(201).json({ message: "statement created successfully", statement });
-    } catch (error) {
-      if (error.code === 11000) {
-        res.status(400).json({ message: "Duplicate key error" });
-      } else {
-        res.status(400).json({ message: "Error creating statement", error });
-      }
-    }
-  };
+
 
   module.exports.assign_statement_post = async (req, res) => {
     try {
@@ -110,3 +137,4 @@ module.exports.check_statement = async (req, res) => {
       res.status(500).json({ message: "Error retrieving statement", error });
     }
   };
+
