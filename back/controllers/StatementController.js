@@ -10,22 +10,29 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
   folder:process.env.FOLDER,
+  folder:process.env.FOLDER1,
   format:process.env.FORMAT,
-  Upload_presets: process.env.UPLOAD_PRESTE,
+  Upload_presets: process.env.UPLOAD_PRESTE_croquis,
+  Upload_presets: process.env.UPLOAD_PRESTE_signatures_a,
+  Upload_presets: process.env.UPLOAD_PRESTE_signatures_b,
 });
 
 
 module.exports.add_statement_post = async (req, res) => {
   try {
-    const {accident_croquis} = req.body;
+    // const {accident_croquis} = req.body;
 
-    // upload image to cloudinary
-    const result = await cloudinary.uploader.upload(accident_croquis);
+    // // upload image to cloudinary
+    // const result = await cloudinary.uploader.upload(accident_croquis);
 
-    // save statement to database
+ 
+
+
+
+    // save st  atement to database
     const statement = await StatementModel.create({
       ...req.body,
-      accident_croquis: result.secure_url,
+
     });
 
     res.status(201).json({
