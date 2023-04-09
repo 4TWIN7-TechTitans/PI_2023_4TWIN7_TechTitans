@@ -110,9 +110,10 @@ function MyStatements() {
                   <th scope="col">ContractNumber</th>
                   <th scope="col">First Name </th>
                   <th scope="col">Last Name </th>
-                  <th scope="col">Etat</th>
                   <th scope="col">my signature </th>
                   <th scope="col">signature of B </th>
+                  <th scope="col">Etat</th>
+
 
                 </tbody>
                 {paginatedStatements.map((statement) => {
@@ -145,14 +146,14 @@ function MyStatements() {
                       <td>{statement.vehicule_a.contractNumber}</td>
                       <td>{statement.insured_a.firstname}</td>
                       <td>{statement.insured_a.lastname}</td>
- 
+                      <td><img src={statement.signature_a} alt="signature a" /></td>
+                      <td><img src={statement.signature_b} alt="signature b" /></td>
                       <td>
                         <Button color={color} disabled>
                           {statusText}
                         </Button>
                       </td>
-                      <td><img src={statement.signature_a} alt="sig a" /></td>
-                      <td><img src={statement.signature_b} alt="sig b" /></td>
+
                     </tr>
 
                   );
