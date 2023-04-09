@@ -11,7 +11,6 @@ import routesExpert from "routesExpert.js";
 import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
 import DetailsStatement from "views/examples/DetailsStatement";
-import MyStatusExpert from "views/examples/MyStatusExpert";
 import Header from "components/Headers/Header.js";
 const Expert = (props) => {
   const mainContent = React.useRef(null);
