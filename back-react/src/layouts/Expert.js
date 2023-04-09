@@ -89,7 +89,7 @@ const Expert = (props) => {
          
         </Switch>
        {window.location.pathname === "/expert/OrdreMissionExpert"  && (<OrdreMissionExpert/>)}
-       {window.location.pathname === "/expert/mystatus"  && (<><Header/><MyStatusExpert/></>)}
+       {/* {window.location.pathname === "/expert/mystatus"  && (<><Header/><MyStatusExpert/></>)} */}
       
         
         <Container fluid>
