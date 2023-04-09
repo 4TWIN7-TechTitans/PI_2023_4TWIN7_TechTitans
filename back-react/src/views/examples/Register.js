@@ -59,7 +59,7 @@ function Register() {
       setShowError(true);
       setErrors({
         ...errors,
-        message: "Please fill in at least one field except phone number",
+        message: "Please fill in all the fields below",
       });
       return;
     }
