@@ -12,15 +12,16 @@ import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
 import DetailsStatement from "views/examples/DetailsStatement";
 import Header from "components/Headers/Header.js";
+
 const Expert = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
- 
+  const [statements, setStatements] = useState([]);
+
   const filteredRoutes = routesExpert.filter((route) => {
     return route.showInSidebar;
   });
- 
-  
+
   const [role, setRole] = useState("");
 
   React.useEffect(() => {
@@ -34,7 +35,6 @@ const Expert = (props) => {
     setRole(getCookie("role"))
 
   }, []);
-
 
   const getRoutes = (routesExpert) => {
     return routesExpert.map((prop, key) => {
@@ -64,6 +64,10 @@ const Expert = (props) => {
     return "Brand";
   };
 
+  // Get statement ID from URL
+  const params = new URLSearchParams(location.search);
+  const statementId = params.get("id");
+
   return (
     <>
      <SidebarExpert
@@ -84,24 +88,24 @@ const Expert = (props) => {
        
         <Switch>
           {getRoutes(routesExpert)}
-          
-         
         </Switch>
-       {window.location.pathname === "/expert/OrdreMissionExpert"  && (<OrdreMissionExpert/>)}
-       {/* {window.location.pathname === "/expert/mystatus"  && (<><Header/><MyStatusExpert/></>)} */}
-      
+        
+        {window.location.pathname === "/expert/OrdreMissionExpert" && (<OrdreMissionExpert/>)}
+        
+        {/* Render DetailsStatement if statementId is defined */}
+        {statementId && <DetailsStatement id={statementId} />}
         
         <Container fluid>
-         
-         
           
         </Container>
       </div>
     </>
   );
 };
+
 function getCookie(key) {
   var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
   return b ? b.pop() : "";
 }
+
 export default Expert;
