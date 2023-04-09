@@ -35,7 +35,8 @@ import {
 } from "reactstrap";
 import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // core components
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -114,6 +115,8 @@ const AddStatement = () => {
   const [circumstances_a, setCircumstances_a] = useState("");
   const [circumstances_b, setCircumstances_b] = useState("");
   const canvasRef = useRef(null);
+  const canvasRef_a = useRef(null);
+  const canvasRef_b = useRef(null);
   const [accident_croquis, setAccident_croquis] = useState("");
   const [notes_a, setNotes_a] = useState("");
   const [notes_b, setNotes_b] = useState("");
@@ -151,8 +154,8 @@ const AddStatement = () => {
   const hitdirections = ["Front", "Back", "Left", "Right"];
   const dmgeplaces = ["Scratches", "Dents", "Cracks", "Paint Damage", "Broken Lights", "Broken Windows", "Missing Parts", "Other",];
   const dmgdirections = ["Front", "Back", "Left", "Right"];
-  const circumstance = ["Driving in a normal and careful manner", "Driving under the influence of drugs or alcohol", "Speeding", "Ignoring traffic signals or signs", "Distracted driving", "Driving while fatigued", "Reckless driving", "Tailgating", "Changing lanes without signaling", "Making an illegal turn", "Backing up without looking", "Driving in the wrong lane", "Driving in a construction zone", "Driving during inclement weather", "Other",];
-  const types= ["Car", "Truck", "MotoCycle"]  ;
+  const Circumstances = ["Driving in a normal and careful manner", "Driving under the influence of drugs or alcohol", "Speeding", "Ignoring traffic signals or signs", "Distracted driving", "Driving while fatigued", "Reckless driving", "Tailgating", "Changing lanes without signaling", "Making an illegal turn", "Backing up without looking", "Driving in the wrong lane", "Driving in a construction zone", "Driving during inclement weather", "Other",];
+  const types = ["Car", "Truck", "MotoCycle"];
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -161,9 +164,9 @@ const AddStatement = () => {
 
 
 
- 
+
   const handleSubmit = async (e) => {
-    
+
     e.preventDefault();
     const form = e.target;
     const date = form.date.value;
@@ -251,26 +254,57 @@ const AddStatement = () => {
     const accident_croquis = form.accident_croquis;
     const notes_a = form.notes_a.value;
     const notes_b = form.notes_b.value;
-    const signature_a = "form.signature_a";
-    const signature_b = "form.signature_b";
+    const signature_a = form.signature_a;
+    const signature_b = form.signature_b;
     const verified = true;
 
     //console.log( notes_a)
-   //debut image
+    //debut image
+    // Get the canvas elements
+    const canvas = canvasRef.current;
+    const canvas_a = canvasRef_a.current;
+    const canvas_b = canvasRef_b.current;
 
-    
-   const canvas = canvasRef.current;
-   const image = canvas.canvasContainer.children[1].toDataURL("image/png", 1.0);
-   const formData = new FormData();
-   formData.append("file", image);
-   formData.append("upload_preset", "cbqa7u7w");
- 
- const cloudinaryRes = await axios.post(
-   "https://api.cloudinary.com/v1_1/dczz1wjxm/image/upload",
-   formData
- );
-   console.log(cloudinaryRes.data.secure_url);
- //fin image
+    // Convert the canvas elements to data URLs
+    const image = canvas.canvasContainer.children[1].toDataURL("image/jpg", 1.0);
+    const image_a = canvas_a.toDataURL("image/jpg");
+    const image_b = canvas_b.toDataURL("image/jpg");
+
+    // Upload accident_croquis
+    const croquisFormData = new FormData();
+    croquisFormData.append("file", image);
+    croquisFormData.append("upload_preset", "cbqa7u7w");
+
+    const croquisRes = await axios.post(
+      "https://api.cloudinary.com/v1_1/dczz1wjxm/image/upload",
+      croquisFormData,
+    );
+    console.log(croquisRes.data.secure_url);
+
+    // Upload signature_a
+    const signatureAFormData = new FormData();
+    signatureAFormData.append("file", image_a);
+    signatureAFormData.append("upload_preset", "jfekkbgv");
+
+    const signatureARes = await axios.post(
+      "https://api.cloudinary.com/v1_1/dczz1wjxm/image/upload",
+      signatureAFormData,
+      
+    );
+    console.log(signatureARes.data.secure_url);
+
+    // Upload signature_b
+    const signatureBFormData = new FormData();
+    signatureBFormData.append("file", image_b);
+    signatureBFormData.append("upload_preset", "nkdc6ntg");
+
+    const signatureBRes = await axios.post(
+      "https://api.cloudinary.com/v1_1/dczz1wjxm/image/upload",
+      signatureBFormData,
+
+    );
+    console.log(signatureBRes.data.secure_url);
+    //fin image
 
     const mystatement = {
       date: date,
@@ -282,7 +316,7 @@ const AddStatement = () => {
         first_name: drivers_identity_a.first_name,
         last_name: drivers_identity_a.last_name,
         address: drivers_identity_a.address,
-        drivers_license_issue_date:drivers_identity_a.drivers_license_issue_date,
+        drivers_license_issue_date: drivers_identity_a.drivers_license_issue_date,
         driver_license: drivers_identity_a.driver_license,
       },
 
@@ -321,7 +355,7 @@ const AddStatement = () => {
         coming_from: vehicule_identity_b.coming_from,
         going_to: vehicule_identity_b.going_to,
       },
-       vehicule_a :{
+      vehicule_a: {
         assureBy: assureBy_a,
         contractNumber: contractNumber_a,
         agency: agency_a,
@@ -330,8 +364,8 @@ const AddStatement = () => {
           end_date: end_date_a,
         },
       },
-  
-       vehicule_b :{
+
+      vehicule_b: {
         assureBy: assureBy_b,
         contractNumber: contractNumber_b,
         agency: agency_b,
@@ -347,101 +381,58 @@ const AddStatement = () => {
       apparent_damages_b: apparent_damages_b,
       circumstances_a: circumstances_a,
       circumstances_b: circumstances_b,
-      accident_croquis: cloudinaryRes.data.secure_url,
+      accident_croquis: croquisRes.data.secure_url,
       notes_a: notes_a,
       notes_b: notes_b,
-      signature_a: signature_a,
-      signature_b: signature_b,
+      signature_a: signatureARes.data.secure_url,
+      signature_b: signatureBRes.data.secure_url,
       case_state: "waiting",
     };
     console.log(mystatement);
- 
-    /*
 
-    if (!date || !location || !injured || !material_damage || !witness || !vehicule_a.assureBy || !vehicule_a.agency_a
-      || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date
-      || !vehicule_a.contractNumber
 
-      || !vehicule_b.assureBy || !vehicule_b.agency || !vehicule_b.contractValidity
-      || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b.contractNumber
 
-      || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address
-      || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license 
-
-      || !drivers_identity_b.first_name
-      || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date
-      || !drivers_identity_b.driver_license 
-
-      || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr 
-
-      || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
-
-      || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country
-      || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to 
-      
-      || !vehicule_identity_b.brand || !vehicule_identity_b.type
-      || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
-
-      || !hits_a || !hits_b
-      
-      || !apparent_damages_a || !apparent_damages_b 
-      
-      || !circumstances_a || !circumstances_b 
-      
-      || !accident_croquis
-      
-      || !notes_a  || !notes_b
-
-      || !signature_a || !signature_b
-      
+    /* if (!date || !location || !injured || !material_damage 
+  
+        || !vehicule_a.assureBy || !vehicule_a.agency || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date || !vehicule_a.contractNumber
+  
+        || !vehicule_b.assureBy || !vehicule_b.agency || !vehicule_b.contractValidity || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b.contractNumber
+  
+        || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license
+  
+        || !drivers_identity_b.first_name || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date || !drivers_identity_b.driver_license
+  
+        || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr
+  
+        || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
+  
+        || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to
+  
+        || !vehicule_identity_b.brand || !vehicule_identity_b.type || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
+  
+        || !hits_a || !hits_b
+  
+        || !apparent_damages_a || !apparent_damages_b
+  
+        || !circumstances_a || !circumstances_b
+  
+        || !accident_croquis
+  
+        || !notes_a || !notes_b
+  
       ) {
-      setShowNotification(false);
-      setErrors({});
-      setShowError(true);
-      setErrors({
-        ...errors,
-        message: "Please fill all the fields",
-      });
-      return;
-    }*/
+        setShowNotification(false);
+        setErrors({});
+        setShowError(true);
+        setErrors({
+          ...errors,
+          message: "Please fill all the fields",
+        });
+        return;
+      }*/
 
     //user haven't an account connected
     const user = users.find((user) => user.role === "Client");
-
-
-    // if (!user || !user.password || !user.email) {
-    //   try {
-    //     const registerRes = await axios.post(
-    //       "http://localhost:5000/add",
-    //       {
-    //         email: email,
-    //         password: password,
-    //         last_name: lastname_a,
-    //         first_name: firstname_b,
-    //         role: "Client",
-    //         verified: "true",
-    //         phone_number: phonenumber_a,
-    //         address: addr_a,
-    //       },
-    //       {
-    //         headers: { "Content-Type": "application/json" },
-    //       }
-    //     );
-
-    //     if (registerRes.status === 201) {
-    //       setShowNotification(false);
-    //       setErrors({});
-    //       setShowError(false);
-    //     } else {
-    //       setShowNotification(false);
-    //       setErrors({ ...errors, message: "Signup failed" });
-    //       setShowError(true);
-    //       return;
-    //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }
 
 
     try {
@@ -457,10 +448,10 @@ const AddStatement = () => {
             first_name: drivers_identity_a.first_name,
             last_name: drivers_identity_a.last_name,
             address: drivers_identity_a.address,
-            drivers_license_issue_date:drivers_identity_a.drivers_license_issue_date,
+            drivers_license_issue_date: drivers_identity_a.drivers_license_issue_date,
             driver_license: drivers_identity_a.driver_license,
           },
-    
+
           drivers_identity_b: {
             first_name: drivers_identity_b.first_name,
             last_name: drivers_identity_b.last_name,
@@ -496,7 +487,7 @@ const AddStatement = () => {
             coming_from: vehicule_identity_b.coming_from,
             going_to: vehicule_identity_b.going_to,
           },
-          vehicule_a :{
+          vehicule_a: {
             assureBy: assureBy_a,
             contractNumber: contractNumber_a,
             agency: agency_a,
@@ -505,8 +496,8 @@ const AddStatement = () => {
               end_date: end_date_a,
             },
           },
-      
-           vehicule_b :{
+
+          vehicule_b: {
             assureBy: assureBy_b,
             contractNumber: contractNumber_b,
             agency: agency_b,
@@ -522,11 +513,11 @@ const AddStatement = () => {
           apparent_damages_b: apparent_damages_b,
           circumstances_a: circumstances_a,
           circumstances_b: circumstances_a,
-          accident_croquis: cloudinaryRes.data.secure_url,
+          accident_croquis: croquisRes.data.secure_url,
           notes_a: notes_a,
           notes_b: notes_b,
-          signature_a: signature_a,
-          signature_b: signature_b,
+          signature_a: signatureARes.data.secure_url,
+          signature_b: signatureBRes.data.secure_url,
           case_state: "waiting",
         },
         {
@@ -537,9 +528,9 @@ const AddStatement = () => {
         setShowNotification(true);
         setErrors({});
         setShowError(false);
-        canvasRef.clear();
+
         toast.success("Statement created successfully");
-      } else if(add.status===400){
+      } else {
         setShowNotification(false);
         setErrors({ ...errors, message: "Statement adding failed" });
         setShowError(true);
@@ -550,12 +541,6 @@ const AddStatement = () => {
     }
 
 
-    //debut image
-
-    
-
-
-  //fin image
   };
 
   useEffect(() => {
@@ -602,6 +587,9 @@ const AddStatement = () => {
   const handleUndo = () => {
     canvasRef.current.undo();
   };
+  //validators and handle :
+
+
   return (
     <>
       {/*<UserHeader /> */}
@@ -622,6 +610,7 @@ const AddStatement = () => {
                   </Col>
                 </Row>
               </CardHeader>
+
               {isShown && (
                 <CardBody>
                   <form onSubmit={handleSubmit} noValidate>
@@ -629,7 +618,7 @@ const AddStatement = () => {
                       set all the infromations related to the accident please
                     </h6>
                     <div className="pl-lg-4">
-                      {""}
+
                       {/* 1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 1 ? "block" : "none" }}>
                         <Row>
@@ -756,7 +745,6 @@ const AddStatement = () => {
                       {/*  Section 6 */}
                       <div style={{ display: section === 2 ? "block" : "none" }}>
                         <Row>
-                          {" "}
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
@@ -1557,7 +1545,7 @@ const AddStatement = () => {
                                   </option>
                                 ))}
                               </Input>
-                              </FormGroup>
+                            </FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -1686,7 +1674,7 @@ const AddStatement = () => {
                                   </option>
                                 ))}
                               </Input>
-                              </FormGroup>
+                            </FormGroup>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -2119,16 +2107,16 @@ const AddStatement = () => {
                               <InputGroup className="input-group-alternative" >
                                 <CanvasDraw
                                   enctype="multipart/form-data"
-                                    
-                                    name="accident_croquis" 
-                                 
+
+                                  name="accident_croquis"
+
                                   brushRadius={2}
                                   canvasWidth={12000}
                                   canvasHeight={400}
                                   brushColor={"#000000"}
                                   ref={canvasRef}
                                   value={accident_croquis}
-                                   />
+                                />
 
                                 <Button className="btn btn-warning" onClick={handleUndo}>Undo</Button>
                               </InputGroup>
@@ -2194,12 +2182,14 @@ const AddStatement = () => {
                               <InputGroup className="input-group-alternative">
                                 <SignatureCanvas
                                   penColor="black"
+                                  name="signature_a"
                                   canvasProps={{
                                     width: 500,
                                     height: 200,
                                     className: "sigCanvas",
                                   }}
-                                  ref={setSignature_a}
+                                  ref={canvasRef_a}
+                                  value={signature_a}
                                 />
                               </InputGroup>
                             </FormGroup>
@@ -2216,12 +2206,14 @@ const AddStatement = () => {
                               <InputGroup className="input-group-alternative">
                                 <SignatureCanvas
                                   penColor="black"
+                                  name="signature_b"
                                   canvasProps={{
                                     width: 500,
                                     height: 200,
                                     className: "sigCanvas",
                                   }}
-                                  ref={setSignature_b}
+                                  ref={canvasRef_b}
+                                  value={signature_b}
                                 />
                               </InputGroup>
                             </FormGroup>
@@ -2254,6 +2246,7 @@ const AddStatement = () => {
                           </Col>
 
                         </Row>
+
                       </div>
 
                       <Row>
@@ -2302,9 +2295,22 @@ const AddStatement = () => {
                       </div>
 
                     </div>
+
                   </form>
+                  {showNotification && (
+                    <div className="alert alert-success mt-3" role="alert">
+                      Statement created successfully
+                    </div>
+                  )}
+
+                  {showError && (
+                    <div className="col-12 my-3 alert alert-danger">
+                      Invalid fields , Please Recheck !
+                    </div>
+                  )}
                 </CardBody>
               )}
+
             </Card>
           </Col>
         </Row>

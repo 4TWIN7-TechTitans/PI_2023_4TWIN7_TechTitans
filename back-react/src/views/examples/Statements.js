@@ -106,10 +106,15 @@ function MyStatements() {
                 </thead>
                 <tbody>
                   <th scope="col">Date</th>
+                  <th>Croquis</th>
                   <th scope="col">ContractNumber</th>
                   <th scope="col">First Name </th>
                   <th scope="col">Last Name </th>
+                  <th scope="col">my signature </th>
+                  <th scope="col">signature of B </th>
                   <th scope="col">Etat</th>
+
+
                 </tbody>
                 {paginatedStatements.map((statement) => {
                   console.log(statement); // Add this line to log the statements object
@@ -137,9 +142,12 @@ function MyStatements() {
                   return (
                     <tr key={statement._id}>
                       <td>{statement.date}</td>
+                      <td><img src={statement.accident_croquis} alt="Accident Croquis" /></td>
                       <td>{statement.vehicule_a.contractNumber}</td>
                       <td>{statement.insured_a.firstname}</td>
                       <td>{statement.insured_a.lastname}</td>
+                      <td><img src={statement.signature_a} alt="signature a" /></td>
+                      <td><img src={statement.signature_b} alt="signature b" /></td>
                       <td>
                         <Button color={color} disabled>
                           {statusText}
