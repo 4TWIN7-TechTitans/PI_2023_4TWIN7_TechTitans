@@ -71,18 +71,7 @@ const AdminNavbar = (props) => {
     console.log(role);
    
   }, [nom, prenom, role]);
-  const avatarSources = [
-    "image1.jpg",
-    "image2.jpg",
-    "image3.png",
-    "image4.png",
-    "image5.png",
-    "image6.png",
-    "image7.png",
-    "image8.png",
-    "image9.png",
-  ];
-  const randomAvatarSource = avatarSources[Math.floor(Math.random() * avatarSources.length)];
+
 
   return (
     <>
@@ -102,7 +91,7 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="avatar"
-                      src={require("../../assets/img/theme/"+randomAvatarSource)}
+                      src={require("../../assets/img/theme/image6.png")}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">

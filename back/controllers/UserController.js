@@ -3,6 +3,16 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 require("dotenv").config();
+const cloudinary = require('cloudinary').v2;
+
+
+// configure cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+
+});
 
 const client = require("twilio")(
   process.env.ACCOUNT_SID,
@@ -293,7 +303,18 @@ const sendVerifMail = async (mail, code) => {
   const info = await transporter.sendMail(mailOptions);
   console.log("Email sent: " + info.response);
 };
+//avatar
+const selectRandomAvatar = async () => {
+  const { resources } = await cloudinary.search
+    .expression('folder:avatars')
+    .sort_by('public_id', 'desc')
+    .execute();
 
+  const randomIndex = Math.floor(Math.random() * resources.length);
+  const avatar = resources[randomIndex];
+
+  return avatar.secure_url;
+};
 module.exports.post_signup = async (req, res) => {
   /*  #swagger.parameters['parameter_name'] = {
       in: 'body',
@@ -312,10 +333,11 @@ module.exports.post_signup = async (req, res) => {
   } */
 
   try {
+    const avatar = await selectRandomAvatar();
     const user = await userModel.create({
       ...req.body,
       googleId: "",
-      image: "",
+      image: avatar,
       id: "",
       token: "",
       two_factor_auth_code: "",
