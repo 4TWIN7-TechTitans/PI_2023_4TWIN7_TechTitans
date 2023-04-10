@@ -13,6 +13,7 @@ router.get('/getstatements', statementController.get_all_statements);
 router.post('/assign_statements/:id/assign', statementController.assign_statement_post);
 router.get('/statementbyexpertemail/:email', statementController.getStatementByExpertEmail);
 router.get('/get_specificstatement/:id', statementController.get_specific_statement);
+router.post('/setdecision/', statementController.post_decision);
 
 
 

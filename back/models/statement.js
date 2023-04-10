@@ -723,6 +723,11 @@ const statementSchema = new mongoose.Schema({
     required: false,
     ref: "Expert",
   },
+  decision: {
+    type: String,
+    required: false,
+    enum: ["a", "b"],
+  },
 });
 
 const Statement = mongoose.model("Statement", statementSchema);
