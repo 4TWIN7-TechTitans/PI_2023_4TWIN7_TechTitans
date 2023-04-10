@@ -17,6 +17,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaCircle } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function OdmAgence() {
   const [statements, setStatements] = useState([]);
@@ -28,6 +30,8 @@ function OdmAgence() {
   const [showError, setShowError] = useState(false);
   const [assignedStatementId, setAssignedStatementId] = useState("");
 
+
+  let notificationShown = false; 
   const fetchData = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:5000/getstatements");
@@ -37,9 +41,17 @@ function OdmAgence() {
       const expertsResponse = await axios.get(
         "http://127.0.0.1:5000/all-experts"
       );
-      const filteredExperts = expertsResponse.data.experts.filter(
-        (elem) => elem.statements_number < 3
-      );
+      const filteredExperts = expertsResponse.data.experts.filter((elem) => {
+        if (elem.statements_number >= 3 && !notificationShown) {
+          // Show a notification message using toast
+          toast.error("You cannot assign more than 3 statements to an expert.");
+          notificationShown = true; // update flag variable
+          return false;
+        } else {
+          return true;
+        }
+      });
+      
       setExperts(filteredExperts);
       console.log(filteredData);
       setStatements(filteredData);
@@ -121,6 +133,8 @@ function OdmAgence() {
 
   return (
     <>
+        <ToastContainer />
+
       <Header />
       {/* Page content */}
       <Container className="mt--7" fluid>
