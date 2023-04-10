@@ -192,6 +192,8 @@ function OdmAgence() {
                             }
                             disabled={
                               statement.case_state === "closed" ||
+                              statement.case_state === "treated" ||
+                              statement.case_state === "inProgress" ||
                               statement.assign_to_expert !== undefined
                             }
                           >

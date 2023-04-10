@@ -95,17 +95,27 @@ function OrdreMissionExpert() {
                 </thead>
                 <tbody>
                   {paginatedStatements.map((statement) => {
-                    let color = "orange";
-                    switch (statement.case_state) {
-                      case "treated":
-                        color = "green";
-                        break;
-                      case "closed":
-                        color = "red";
-                        break;
-                      default:
-                        break;
-                    }
+                     let statusText = "";
+                     let color = "orange";
+                     switch (statement.case_state) {
+                       case "treated":
+                         statusText = "Treated";
+                         color = "success";
+                         break;
+                       case "inProgress":
+                         statusText = "In Progress";
+                         color = "info";
+                         break;
+                       case "closed":
+                         statusText = "Closed";
+                         color = "warning";
+                         break;
+                       default:
+                         statusText = "Waiting";
+                         color = "danger";
+   
+                         break;
+                     }
                     return (
                       <tr key={statement._id} className={color}>
                         {console.log(statement)}
@@ -116,7 +126,7 @@ function OrdreMissionExpert() {
                         <td>{statement.circumstances_a}</td>
                         <td>{statement.circumstances_b}</td>
                         <td>
-                          <FaCircle style={{ color: color }} />
+                        <Button color={color} disabled>{statusText}</Button>
                         </td>
                         <td> <Button href={"/expert/detailsstatement?id=" + statement._id}   > Details</Button> </td>
                       </tr>
