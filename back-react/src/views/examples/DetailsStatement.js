@@ -119,6 +119,8 @@ function DetailsStatement() {
 
   return (
     <>
+          <Header />
+
            <ToastContainer /> 
       <Container className="mt--10" fluid>
         <Row>
