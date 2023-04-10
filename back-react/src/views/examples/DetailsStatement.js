@@ -38,6 +38,9 @@ function DetailsStatement() {
   const [Experts, setExperts] = useState([]);
   const [signature_a, setsignature_a] = useState("");
   const [signature_b, setsignature_b] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+
+
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -104,6 +107,7 @@ function DetailsStatement() {
     e.preventDefault();
     const search = window.location.search;
     const id_statement = new URLSearchParams(search).get("id");
+    setIsDisabled(true); 
 
     const result = await axios.post("http://localhost:5000/setdecision", {
       statementId: id_statement,
@@ -187,12 +191,14 @@ function DetailsStatement() {
                   <Button
                     type="Button" 
                     onClick={(e) => handleStatement("a", e)}
+                    disabled={isDisabled}
                   >
                     Decider pour {driverIdentityA}
                   </Button>
                   <Button
                     type="Button"
                     onClick={(e) => handleStatement("b", e)}
+                    disabled={isDisabled}
                   >
                     Decider pour {driverIdentityB}
                   </Button>
