@@ -23,6 +23,16 @@ import { FaCircle } from "react-icons/fa";
 function DetailsStatement() {
   const [driverIdentityA, setdriverIdentityA] = useState("");
   const [driverIdentityB, setdriverIdentityB] = useState("");
+  const [driver_license_a ,  setdriver_license_a] = useState("");
+  const [driver_license_b ,  setdriver_license_b] = useState("");
+  const [hits_a , sethits_a] = useState("");
+  const [hits_b , sethits_b] = useState("");
+  const [circumstances_a , setcircumstances_a] = useState("");
+  const [circumstances_b , setcircumstances_b] = useState("");
+  const [location , setlocation] = useState("");
+  const [date , setDate]=useState("");
+  const [showNotification, setShowNotification] = useState(false);
+
 
   useEffect(() => {
     const search = window.location.search;
@@ -34,6 +44,14 @@ function DetailsStatement() {
       console.log(statement);
       setdriverIdentityA(statement.drivers_identity_a.first_name);
       setdriverIdentityB(statement.drivers_identity_b.first_name);
+      setdriver_license_a(statement.drivers_identity_a.driver_license);
+      setdriver_license_b(statement.drivers_identity_b.driver_license);
+      sethits_a(statement.hits_a);
+      sethits_b(statement.hits_b);
+      setcircumstances_a(statement.circumstances_a);
+      setcircumstances_b(statement.circumstances_b);
+      setlocation(statement.location);
+      setDate(statement.date);
       console.log(driverIdentityA);
       console.log(driverIdentityB);
     }
@@ -66,20 +84,33 @@ function DetailsStatement() {
                   <div className="text-center">
                     <div className="h5 font-weight-300">
                       <span className="font-weight-light">
-                        {driverIdentityA}
+                       Driver A :  {driverIdentityA} ||  Driver B : {driverIdentityB}
                       </span>
                     </div>
                     <div className="h5 font-weight-300">
-                      <i className="ni location_pin mr-2" />
+                      <span className="font-weight-light">
+                       License A :  {driver_license_a} ||   License B : {driver_license_b}
+                      </span>
                     </div>
                     <div className="h5 font-weight-300">
-                      <i className="ni location_pin mr-2" />
+                      <span className="font-weight-light">
+                      Place Of Damage For A :  {hits_a} ||  Place Of Damage For B : {hits_b}
+                      </span>
                     </div>
-                    <div className="h5 mt-4">
-                      <i className="ni business_briefcase-24 mr-2" />
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                      Circumstances A : {circumstances_a}     ||  Circumstances B : {circumstances_b}
+                      </span>
                     </div>
-                    <div className="h5 mt-4">
-                      <i className="ni business_briefcase-24 mr-2" />
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                       Location of The Accident :  {location} 
+                      </span>
+                    </div>
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                       Date of The Accident :  {date} 
+                      </span>
                     </div>
                     <hr className="my-4" />
                     <div>
@@ -104,13 +135,13 @@ function DetailsStatement() {
                     type="Button"
                     onClick={(e) => handleStatement("a", e)}
                   >
-                    Decider pour a
+                    Decider pour {driverIdentityA}
                   </Button>
                   <Button
                     type="Button"
                     onClick={(e) => handleStatement("b", e)}
                   >
-                    Decider pour b
+                    Decider pour {driverIdentityB}
                   </Button>
                 </CardBody>
               </Row>
