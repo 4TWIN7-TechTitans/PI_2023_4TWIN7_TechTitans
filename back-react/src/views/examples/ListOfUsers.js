@@ -62,20 +62,20 @@ function ListOfUsers() {
   };
 
 
-   
-    const handleBanUser = async (e, user) => {
-      e.preventDefault();
-    
-      try {
-        const response = await axios.post(
-          "http://127.0.0.1:5000/users/ban/" + user.email
-        );
-    
-        console.log(response);
-        fetchData();
-        user.banned = !user.banned;
-        if (response.data === true) {
-        }
+
+  const handleBanUser = async (e, user) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/users/ban/" + user.email
+      );
+
+      console.log(response);
+      fetchData();
+      user.banned = !user.banned;
+      if (response.data === true) {
+      }
     } catch (error) {
       console.log(error);
     }
@@ -109,6 +109,7 @@ function ListOfUsers() {
                     <th scope="col">Last Name</th>
                     <th scope="col">Role</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Avatar</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -127,11 +128,16 @@ function ListOfUsers() {
                         </Badge>
                       </td>
                       <td>{user.email}</td>
-          <td>
-            <Button onClick={(e) => handleBanUser(e, user)}>
-              {user.banned ? "Unban User" : "Ban User"}
-            </Button>
-          </td>
+                      <td>
+                        <Badge color="primary" className="badge-dot mr-4">
+                          <img src={user.image} />
+                        </Badge>
+                      </td>
+                      <td>
+                        <Button onClick={(e) => handleBanUser(e, user)}>
+                          {user.banned ? "Unban User" : "Ban User"}
+                        </Button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
