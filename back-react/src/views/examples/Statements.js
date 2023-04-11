@@ -27,12 +27,30 @@ function MyStatements() {
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
   const [sortOrderByDate, setSortOrderByDate] = useState("asc");
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [role, setRole] = useState("");
+
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+  useEffect(() => {
+    setNom(decodeURI(getCookie("lastname")));
+    setPrenom(decodeURI(getCookie("firstname")));
+    setRole(decodeURI(getCookie("role")));
+    console.log(role);
+   
+  }, [nom, prenom, role]);
+
 
   const fetchData = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:5000/getstatements");
       const filteredData = response.data.statements.filter(
-        (statements) => statements.role !== "Client"
+        (statement) =>
+          statement.insured_a.firstname === prenom &&
+          statement.insured_a.lastname === nom
       );
       console.log(filteredData);
       setStatements(filteredData);
@@ -40,6 +58,7 @@ function MyStatements() {
       console.log(error);
     }
   };
+
 
   useEffect(() => {
     fetchData();

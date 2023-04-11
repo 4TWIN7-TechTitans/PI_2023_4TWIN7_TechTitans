@@ -163,7 +163,17 @@ const AddStatement = () => {
   }
 
 
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [role, setRole] = useState("");
 
+  useEffect(() => {
+    setNom(decodeURI(getCookie("lastname")));
+    setPrenom(decodeURI(getCookie("firstname")));
+    setRole(decodeURI(getCookie("role")));
+    console.log(role);
+   
+  }, [nom, prenom, role]);
 
   const handleSubmit = async (e) => {
 
@@ -1281,7 +1291,7 @@ const AddStatement = () => {
                                 name="firstname_a"
                                 id="firstname_a"
                                 maxLength="50"
-                                value={firstname_a}
+                                value={prenom}
                                 onChange={(e) => setFirstName_a(e.target.value)}
                                 required
                               />
@@ -1295,7 +1305,7 @@ const AddStatement = () => {
                                 name="lastname_a"
                                 id="lastname_a"
                                 maxLength="50"
-                                value={lastname_a}
+                                value={nom}
                                 onChange={(e) => setLastname_a(e.target.value)}
                                 required
                               />
