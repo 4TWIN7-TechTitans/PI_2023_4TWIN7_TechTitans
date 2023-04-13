@@ -691,9 +691,9 @@ const AddStatement = () => {
                                 required
                               />
                               <div className="location error"></div>
-                              <div style={{ height: '400px', width: '100%' }}>
+                              {/* <div style={{ height: '400px', width: '100%' }}>
                                 <GoogleMapReact center={location} zoom={15}></GoogleMapReact>
-                              </div>
+                              </div> */}
                             </FormGroup>
                           </Col>
                           <Col lg="3">
