@@ -37,6 +37,7 @@ import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 // core components
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -172,7 +173,7 @@ const AddStatement = () => {
     setPrenom(decodeURI(getCookie("firstname")));
     setRole(decodeURI(getCookie("role")));
     console.log(role);
-   
+
   }, [nom, prenom, role]);
 
   const handleSubmit = async (e) => {
@@ -299,7 +300,7 @@ const AddStatement = () => {
     const signatureARes = await axios.post(
       "https://api.cloudinary.com/v1_1/dczz1wjxm/image/upload",
       signatureAFormData,
-      
+
     );
     console.log(signatureARes.data.secure_url);
 
@@ -540,6 +541,7 @@ const AddStatement = () => {
         setShowError(false);
 
         toast.success("Statement created successfully");
+        window.location.redirect("http://localhost:3000/mystatement");
       } else {
         setShowNotification(false);
         setErrors({ ...errors, message: "Statement adding failed" });
@@ -599,9 +601,21 @@ const AddStatement = () => {
   };
   //validators and handle :
 
+  //geolocalisation
+  /*
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+    });
+  }, []);
+? `${location.lat},${location.lng}` : ''*/
 
   return (
     <>
+      <ToastContainer />
       {/*<UserHeader /> */}
       {/* Page content */}
       <Container className="mt--7" fluid>
@@ -663,10 +677,7 @@ const AddStatement = () => {
                           </Col>
                           <Col lg="6">
                             <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-email"
-                              >
+                              <label className="form-control-label" htmlFor="input-email">
                                 2. Location
                               </label>
                               <Input
@@ -675,11 +686,14 @@ const AddStatement = () => {
                                 type="text"
                                 name="location"
                                 placeholder="location"
-                                value={location}
+                                value={location } 
                                 onChange={(e) => setLocation(e.target.value)}
                                 required
                               />
                               <div className="location error"></div>
+                              <div style={{ height: '400px', width: '100%' }}>
+                                <GoogleMapReact center={location} zoom={15}></GoogleMapReact>
+                              </div>
                             </FormGroup>
                           </Col>
                           <Col lg="3">
@@ -2232,7 +2246,7 @@ const AddStatement = () => {
                         {/* FIN SECTION 15  Observation */}
 
                         <Row>
-                          <Col align="right">
+                          <Col align="left">
                             <FormGroup>
                               <Button
                                 color="secondary"
@@ -2243,60 +2257,13 @@ const AddStatement = () => {
                               </Button>
                             </FormGroup>
                           </Col>
-                          <Col align="left">
-                            <FormGroup>
-                              <Button
-                                color="primary"
-                                type="button"
-                                onClick={handleNext}
-                              >
-                                Next
-                              </Button>
-                            </FormGroup>
-                          </Col>
-
                         </Row>
 
                       </div>
 
                       <Row>
                       </Row>
-                      {/* partie suivant :
-                      <div className="form-group">
-                        <label>
-                          <input
-                            type="checkbox"
-                            checked={!hasAccount}
-                            onChange={() => setHasAccount(!hasAccount)}
-                          />
-                          {" "}
-                          Create Account for Client
-                        </label>
-                      </div>
-                      {!hasAccount && (
-                        <div className="form-group">
-                          <label>Password</label>
-                          <input
-                            type="password"
-                            name="password"
-                            className="form-control"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                          />
 
-                          <label>Email</label>
-                          <input
-                            type="email"
-                            name="email"
-                            className="form-control"
-                            placeholder="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                          />
-                        </div>
-
-                      )} */}
                       <div className="text-center">
 
                         <Button color="info" type="submit">

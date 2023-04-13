@@ -43,7 +43,7 @@ function MyStatements() {
    
   }, [nom, prenom, role]);
 
-
+  useEffect(() => {
   const fetchData = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:5000/getstatements");
@@ -52,17 +52,17 @@ function MyStatements() {
           statement.insured_a.firstname === prenom &&
           statement.insured_a.lastname === nom
       );
+        
       console.log(filteredData);
       setStatements(filteredData);
+      
     } catch (error) {
       console.log(error);
     }
   };
 
-
-  useEffect(() => {
     fetchData();
-  }, []);
+}, []);
 
   useEffect(() => {
     console.log(statements);
@@ -159,14 +159,15 @@ function MyStatements() {
                       break;
                   }
                   return (
+                    <tbody>
                     <tr key={statement._id}>
                       <td>{statement.date}</td>
-                      <td><img src={statement.accident_croquis} alt="Accident Croquis" /></td>
+                      <td><img src={statement.accident_croquis} alt="Accident Croquis" width={"150%"} /></td>
                       <td>{statement.vehicule_a.contractNumber}</td>
                       <td>{statement.insured_a.firstname}</td>
                       <td>{statement.insured_a.lastname}</td>
-                      <td><img src={statement.signature_a} alt="signature a" /></td>
-                      <td><img src={statement.signature_b} alt="signature b" /></td>
+                      <td><img src={statement.signature_a} alt="signature a" width={"150%"} /></td>
+                      <td><img src={statement.signature_b} alt="signature b" width={"150%"}  /></td>
                       <td>
                         <Button color={color} disabled>
                           {statusText}
@@ -174,7 +175,7 @@ function MyStatements() {
                       </td>
 
                     </tr>
-
+                    </tbody>
                   );
                 })}
 

@@ -130,7 +130,7 @@ function ListOfUsers() {
                       <td>{user.email}</td>
                       <td>
                         <Badge color="primary" className="badge-dot mr-4">
-                          <img src={user.image} />
+                          <img src={user.image} width={"10%"} height={"20%"}/>
                         </Badge>
                       </td>
                       <td>

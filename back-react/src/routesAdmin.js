@@ -70,7 +70,7 @@ var routesAdmin = [
   },
   {
     path: "/add",
-    name: "Add new user",
+    name: "Add new Agency",
     icon: "ni ni-circle-08 text-green",
     component: AddNew,
     layout: "/admin",

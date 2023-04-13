@@ -44,7 +44,7 @@ function AddNew() {
     const password2 = form.password2.value;
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
-    const role = form.role.value;
+
     const verified = true;
     const phone_number = form.phone_number.value
       ? "+216" + form.phone_number.value
@@ -56,7 +56,7 @@ function AddNew() {
       !password2 ||
       !last_name ||
       !first_name ||
-      !role ||
+      
       !verified
     ) {
       setShowNotification(false);
@@ -98,7 +98,7 @@ function AddNew() {
           password,
           last_name,
           first_name,
-          role,
+          role:"Agence",
           verif1,
           phone_number,
         },
@@ -385,7 +385,7 @@ function AddNew() {
                     </InputGroup>
                     <div className="phone_number error"></div>
                   </FormGroup>
-                  <Row>
+                  {/* <Row>
                     <Col md="12">
                       <FormGroup>
                         <label>Role</label>
@@ -398,7 +398,7 @@ function AddNew() {
                       />
                       </FormGroup>
                     </Col>
-                  </Row>
+                  </Row> */}
                   <Button className="btn-fill" color="primary" type="submit">
                     Add
                   </Button>

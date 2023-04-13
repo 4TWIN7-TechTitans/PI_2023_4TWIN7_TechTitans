@@ -281,6 +281,12 @@ const Profile = () => {
                       </Col>
                       <Col lg="12">
                         <FormGroup>
+                        <label
+                            className="form-control-label"
+                            htmlFor="input-address"
+                          >
+                            Date Of Birth
+                          </label>
                           <InputGroup className="input-group-alternative">
                             <InputGroupAddon addonType="prepend">
                               <InputGroupText>

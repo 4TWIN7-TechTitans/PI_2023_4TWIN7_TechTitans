@@ -103,11 +103,7 @@ const ViewProfile = () => {
                         alt="..."
                         className="rounded-circle"
                         // src={require("../../assets/img/theme/team-4-800x800.jpg")}
-                        src={
-                          image === ""
-                            ? require("../../assets/img/theme/team-4-800x800.jpg")
-                            : image
-                        }
+                        src={"" + image}
                       />
                     </a>
                   </div>
@@ -115,7 +111,7 @@ const ViewProfile = () => {
               </Row>
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                 <div className="d-flex justify-content-between">
-                  <Button
+                  {/* <Button
                     className="mr-4"
                     color="info"
                     href="#pablo"
@@ -123,7 +119,7 @@ const ViewProfile = () => {
                     size="sm"
                   >
                     PLACEHOLDER
-                  </Button>
+                  </Button> */}
                   <Button
                     className="float-right"
                     color="default"
@@ -143,7 +139,7 @@ const ViewProfile = () => {
                 <div className="text-center">
                   <h3>
                     {firstName + " , " + lastName}
-                    <span className="font-weight-light">, 27</span>
+                    <span className="font-weight-light">, {address}</span>
                   </h3>
                   <div className="h5 font-weight-300">
                     <i className="ni location_pin mr-2" />
@@ -159,9 +155,9 @@ const ViewProfile = () => {
                   </div>
                   <hr className="my-4" />
 
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                  {/* <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     BOUTON NBADLOUH
-                  </a>
+                  </a> */}
                 </div>
               </CardBody>
             </Card>

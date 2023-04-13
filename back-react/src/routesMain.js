@@ -54,7 +54,7 @@ var routesMain = [
       icon: "ni ni-collection text-red",
       component: AddStatement,
       layout: "/main",
-      showInSidebar: true,
+      showInSidebar: false,
     },
 ];
 export default routesMain;

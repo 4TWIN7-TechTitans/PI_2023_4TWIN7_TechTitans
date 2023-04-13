@@ -307,11 +307,12 @@ const sendVerifMail = async (mail, code) => {
 const selectRandomAvatar = async () => {
   const { resources } = await cloudinary.search
     .expression('folder:avatars')
-    .sort_by('public_id', 'desc')
     .execute();
-
-  const randomIndex = Math.floor(Math.random() * resources.length);
-  const avatar = resources[randomIndex];
+    const randomIndex = Math.floor(Math.random() * resources.length);
+    const avatar = resources[randomIndex];
+  
+    console.log(randomIndex);
+    console.log(avatar);
 
   return avatar.secure_url;
 };
@@ -875,8 +876,8 @@ module.exports.forgot_password_post = async (req, res) => {
     });
 
     const mailOptions = {
-      from: "fadwa.berrich@esprit.tn",
-      to: "mahmoud.cheikh@esprit.tn",
+      from: "mahmoud.cheikh@esprit.tn",
+      to: "mariem.nacib@esprit.tn",
       subject: "Reset your password",
       html: `
         <h2>Reset your password</h2>

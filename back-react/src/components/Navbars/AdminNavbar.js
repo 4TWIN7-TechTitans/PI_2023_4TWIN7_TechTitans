@@ -39,10 +39,10 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 const cookie = require("cookie");
 
 const AdminNavbar = (props) => {
+
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("");
-
  
   const handleLogout = async () => {
     try {
@@ -72,6 +72,21 @@ const AdminNavbar = (props) => {
    
   }, [nom, prenom, role]);
 
+  const [image, setImage] = useState("");
+  const fetchData = async () => {
+    const jwt = getCookie("jwt");
+    const imageUser = (
+      await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+    ).data.image;
+    console.log(imageUser);
+    setImage(imageUser);
+    console.log(image)
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   return (
     <>
@@ -91,7 +106,7 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="avatar"
-                      src={require("../../assets/img/theme/image6.png")}
+                      src={"" + image}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
