@@ -9,6 +9,13 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
+  Container,
+  Badge,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Table,
+  CardFooter,
   Row,
   Col,
 } from "reactstrap";
@@ -25,6 +32,10 @@ function AddNew() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [agencies, setAgencies] = useState([]);
+
+
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -35,6 +46,31 @@ function AddNew() {
     //if (getCookie("role") !== "admin") window.location.href = "/auth/login";
   }, []);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/getallagences");
+        setAgencies(response.data.agences);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const pageSize = 5;
+  const pageCount = Math.ceil(agencies.length / pageSize);
+  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedUsers = agencies.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,7 +149,7 @@ function AddNew() {
         setShowVerifyEmail(true);
         setErrors({});
         setShowError(false);
-        window.location.replace("http://localhost:3000/admin/listofusers");
+        window.location.replace("http://localhost:3000/admin/listOfagency");
       } else {
         setShowNotification(false);
         setShowVerifyEmail(false);
@@ -260,7 +296,7 @@ function AddNew() {
           <Col md="8" className="mx-auto">
             <Card className="card-user">
               <CardHeader>
-                <h5 className="title">Add a new account</h5>
+                <h5 className="title">Add Agence</h5>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={handleSubmit} noValidate>
@@ -403,7 +439,7 @@ function AddNew() {
                     Add
                   </Button>
 
-                  <Button href="/admin/listofusers">Back</Button>
+                  <Button href="/admin/listofagency">Back</Button>
                 </Form>
                 {showNotification && (
                   <div className="alert alert-success mt-3" role="alert">
@@ -421,6 +457,8 @@ function AddNew() {
             </Card>
           </Col>
         </Row>
+        
+       
       </div>
     </>
   );

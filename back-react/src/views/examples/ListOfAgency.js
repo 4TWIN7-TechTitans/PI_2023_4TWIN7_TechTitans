@@ -63,7 +63,6 @@ function ListOfAgency() {
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Address</th>
                     <th scope="col">Contact Number</th>
                   </tr>
                 </thead>
@@ -72,7 +71,6 @@ function ListOfAgency() {
                     <tr key={user._id}>
                       <td>{user.first_name}</td>
                       <td>{user.email}</td>
-                      <td>{user.address}</td>
                       <td>
                         <Badge color="primary" className="badge-dot mr-4">
                           {user.phone_number}
@@ -116,6 +114,7 @@ function ListOfAgency() {
                     </PaginationItem>
                   </Pagination>
                 </nav>
+                <Button href="/admin/add">Add an Agency</Button>
               </CardFooter>
             </Card>
           </div>

@@ -176,7 +176,7 @@ function ListOfUsers() {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-                <Button href="/admin/add">Add an account</Button>
+                <Button href="/admin/add">Add an Agency</Button>
               </CardFooter>
             </Card>
           </div>
