@@ -29,7 +29,7 @@ var routesAdmin = [
 
   {
     path: "/index",
-    name: "Welcome",
+    name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
     layout: "/admin",
@@ -70,7 +70,7 @@ var routesAdmin = [
   },
   {
     path: "/add",
-    name: "Add new user",
+    name: "Add Agence & List Of Agences",
     icon: "ni ni-circle-08 text-green",
     component: AddNew,
     layout: "/admin",
@@ -84,14 +84,6 @@ var routesAdmin = [
     layout: "/admin",
     showInSidebar: true,
   },
-  {
-    path: "/listofagences",
-    name: "List Of Agences",
-    icon: "ni ni-bullet-list-67 text-blue",
-    component: ListOfAgency,
-    layout: "/admin",
-    showInSidebar: true,
-  }
 
 ];
 export default routesAdmin;

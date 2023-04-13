@@ -9,6 +9,13 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
+  Container,
+  Badge,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Table,
+  CardFooter,
   Row,
   Col,
 } from "reactstrap";
@@ -25,6 +32,10 @@ function AddNew() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [agencies, setAgencies] = useState([]);
+
+
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -35,6 +46,31 @@ function AddNew() {
     //if (getCookie("role") !== "admin") window.location.href = "/auth/login";
   }, []);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/getallagences");
+        setAgencies(response.data.agences);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const pageSize = 5;
+  const pageCount = Math.ceil(agencies.length / pageSize);
+  const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedUsers = agencies.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,7 +149,7 @@ function AddNew() {
         setShowVerifyEmail(true);
         setErrors({});
         setShowError(false);
-        window.location.replace("http://localhost:3000/admin/listofusers");
+        window.location.replace("http://localhost:3000/admin/add");
       } else {
         setShowNotification(false);
         setShowVerifyEmail(false);
@@ -260,7 +296,7 @@ function AddNew() {
           <Col md="8" className="mx-auto">
             <Card className="card-user">
               <CardHeader>
-                <h5 className="title">Add a new account</h5>
+                <h5 className="title">Add Agence</h5>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={handleSubmit} noValidate>
@@ -421,6 +457,75 @@ function AddNew() {
             </Card>
           </Col>
         </Row>
+        
+        <Container  fluid>
+        <Row>
+          <div className="col">
+          <Card className="card-user">
+              <CardHeader className="border-0">
+                <h3 className="mb-0">List Of Agencies</h3>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Contact Number</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedUsers.map((user) => (
+                    <tr key={user._id}>
+                      <td>{user.first_name}</td>
+                      <td>{user.email}</td>
+                      <td>
+                        <Badge color="primary" className="badge-dot mr-4">
+                          {user.phone_number}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+                      
+              <CardFooter className="py-4">
+                <nav aria-label="...">
+                  <Pagination
+                    className="pagination justify-content-end mb-0"
+                    listClassName="justify-content-end mb-0"
+                  >
+                    <PaginationItem disabled={currentPage === 1}>
+                      <PaginationLink
+                        onClick={() => handlePageClick(currentPage - 1)}
+                        tabIndex="-1"
+                      >
+                        <i className="fas fa-angle-left" />
+                        <span className="sr-only">Previous</span>
+                      </PaginationLink>
+                    </PaginationItem>
+                    {pages.map((page) => (
+                      <PaginationItem key={page} active={currentPage === page}>
+                        <PaginationLink onClick={() => handlePageClick(page)}>
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem disabled={currentPage === pageCount}>
+                      <PaginationLink
+                        onClick={() => handlePageClick(currentPage + 1)}
+                        tabIndex="-1"
+                      >
+                        <i className="fas fa-angle-right" />
+                        <span className="sr-only">Next</span>
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </nav>
+              </CardFooter>
+            </Card>
+          </div>
+        </Row>
+      </Container>
       </div>
     </>
   );
