@@ -70,11 +70,11 @@ var routesAdmin = [
   },
   {
     path: "/add",
-    name: "Add new Agency",
+    name: "Add  Agency",
     icon: "ni ni-circle-08 text-green",
     component: AddNew,
     layout: "/admin",
-    showInSidebar: true,
+    showInSidebar: false,
   },
   {
     path: "/tickets",
@@ -92,14 +92,7 @@ var routesAdmin = [
     layout: "/admin",
     showInSidebar: true,
   },
-  {
-    path: "/add",
-    name: "Add Agence",
-    icon: "ni ni-circle-08 text-green",
-    component: AddNew,
-    layout: "/admin",
-    showInSidebar: false,
-  },
+
   
 
 ];
