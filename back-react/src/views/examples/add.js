@@ -149,7 +149,7 @@ function AddNew() {
         setShowVerifyEmail(true);
         setErrors({});
         setShowError(false);
-        window.location.replace("http://localhost:3000/admin/add");
+        window.location.replace("http://localhost:3000/admin/listOfagency");
       } else {
         setShowNotification(false);
         setShowVerifyEmail(false);
@@ -439,7 +439,7 @@ function AddNew() {
                     Add
                   </Button>
 
-                  <Button href="/admin/listofusers">Back</Button>
+                  <Button href="/admin/listofagency">Back</Button>
                 </Form>
                 {showNotification && (
                   <div className="alert alert-success mt-3" role="alert">
@@ -458,74 +458,7 @@ function AddNew() {
           </Col>
         </Row>
         
-        <Container  fluid>
-        <Row>
-          <div className="col">
-          <Card className="card-user">
-              <CardHeader className="border-0">
-                <h3 className="mb-0">List Of Agencies</h3>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Contact Number</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedUsers.map((user) => (
-                    <tr key={user._id}>
-                      <td>{user.first_name}</td>
-                      <td>{user.email}</td>
-                      <td>
-                        <Badge color="primary" className="badge-dot mr-4">
-                          {user.phone_number}
-                        </Badge>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-                      
-              <CardFooter className="py-4">
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem disabled={currentPage === 1}>
-                      <PaginationLink
-                        onClick={() => handlePageClick(currentPage - 1)}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    {pages.map((page) => (
-                      <PaginationItem key={page} active={currentPage === page}>
-                        <PaginationLink onClick={() => handlePageClick(page)}>
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                    <PaginationItem disabled={currentPage === pageCount}>
-                      <PaginationLink
-                        onClick={() => handlePageClick(currentPage + 1)}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter>
-            </Card>
-          </div>
-        </Row>
-      </Container>
+       
       </div>
     </>
   );

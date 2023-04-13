@@ -68,14 +68,7 @@ var routesAdmin = [
     layout: "/admin",
     showInSidebar: true,
   },
-  {
-    path: "/add",
-    name: "Add Agence & List Of Agences",
-    icon: "ni ni-circle-08 text-green",
-    component: AddNew,
-    layout: "/admin",
-    showInSidebar: true,
-  },
+ 
   {
     path: "/tickets",
     name: "Tickets",
@@ -84,6 +77,23 @@ var routesAdmin = [
     layout: "/admin",
     showInSidebar: true,
   },
+  {
+    path: "/listofagency",
+    name: "ListOfAgency",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: ListOfAgency,
+    layout: "/admin",
+    showInSidebar: true,
+  },
+  {
+    path: "/add",
+    name: "Add Agence",
+    icon: "ni ni-circle-08 text-green",
+    component: AddNew,
+    layout: "/admin",
+    showInSidebar: false,
+  },
+  
 
 ];
 export default routesAdmin;
