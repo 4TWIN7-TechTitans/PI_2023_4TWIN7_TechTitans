@@ -19,9 +19,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaCircle } from "react-icons/fa";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import jsPDF from "jspdf";
 
 function DetailsStatement() {
   const [driverIdentityA, setdriverIdentityA] = useState("");
@@ -39,8 +40,114 @@ function DetailsStatement() {
   const [signature_a, setsignature_a] = useState("");
   const [signature_b, setsignature_b] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
+  const [showPDF, setShowPDF] = useState(false);
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
 
+    // Set background color
+    doc.setFillColor("#EFEFEF");
+    doc.rect(0, 0, 210, 297, "F");
+
+    // Add logo or icon
+    const logo = new Image();
+    logo.src = "src/assets/img/gpdf/assurini.png";
+
+    // Add logo to PDF
+    logo.onload = function () {
+      const logoWidth = 50;
+      const logoHeight = 50;
+      const logoX = 15;
+      const logoY = 15;
+      doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight);
+    };
+
+    // Add title
+    doc.setTextColor("#333333");
+    doc.setFontSize(30);
+    doc.setFont("times", "bold");
+    doc.text("Assurini", 105, 40, "center");
+
+    // Add subtitle
+    doc.setFontSize(16);
+    doc.setFont("times", "normal");
+    doc.setTextColor("#2D3752");
+    doc.text("Accident Statement", 105, 55, "center");
+
+    // Add content
+    doc.setFontSize(14);
+    doc.setFont("times", "normal");
+    doc.setTextColor("#2D3752");
+    doc.text("Driver A: " + driverIdentityA, 20, 80);
+    doc.setFont("times", "italic");
+    doc.setTextColor("#767676");
+    doc.text("Driver A License: " + driver_license_a, 20, 90);
+    doc.setFont("times", "normal");
+    doc.setTextColor("#2D3752");
+    doc.text("Hits A: " + hits_a, 20, 100);
+    doc.text("Circumstances A: " + circumstances_a, 20, 110);
+    doc.text("Signature A: " + signature_a, 20, 120);
+
+    doc.text("Driver B: " + driverIdentityB, 100, 80);
+    doc.setFont("times", "italic");
+    doc.setTextColor("#767676");
+    doc.text("Driver B License: " + driver_license_b, 100, 90);
+    doc.setFont("times", "normal");
+    doc.setTextColor("#2D3752");
+    doc.text("Hits B: " + hits_b, 100, 100);
+    doc.text("Circumstances B: " + circumstances_b, 100, 110);
+    doc.text("Signature B: " + signature_b, 100, 120);
+
+    doc.setFont("times", "bold");
+    doc.text("Location: " + location, 20, 140);
+    
+    doc.setFont("times", "italic");
+    doc.text("Date Of Accident: " + date , 20 , 170);
+    
+    //Add additional text
+    doc.setFontSize(12);
+    doc.setTextColor("#2D3752");
+    doc.text(
+      `The specifications for experts and actuaries is a
+document that defines the requirements and standards that
+experts and actuaries must adhere to in the performance of
+their duties. This specifications document is based on the
+Law No. 83-112 of December 12, 1983, which pertains to the
+general status of personnel in the state, local public
+authorities, and administrative public establishments
+(EPA), as well as Law No. 85-78 of August 5, 1985, which
+pertains to the general status of agents of offices,
+public establishments with industrial and commercial
+character, and companies wholly owned by the state or
+local public authorities (EPIC). The document also
+includes the fee schedule for automobile experts and loss
+assessors, as well as the requirements for actuaries. It
+also includes forms for requests to add or change
+specialties, requests to change quality, integration of a
+natural person actuary into a legal entity, and requests
+for removal from the register.`,
+      30,
+      200
+    );
+
+    // Add footer with date
+    doc.setFontSize(10);
+    doc.setTextColor("#767676");
+    doc.text(
+      "Generated on " + new Date().toLocaleDateString(),
+      105,
+      290,
+      "center"
+    );
+
+    // Save document
+    doc.save("statement.pdf");
+
+    toast.success("PDF downloaded successfully!", {
+      position: toast.POSITION.BOTTOM_CENTER,
+      autoClose: 3000,
+    });
+  };
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -107,21 +214,21 @@ function DetailsStatement() {
     e.preventDefault();
     const search = window.location.search;
     const id_statement = new URLSearchParams(search).get("id");
-    setIsDisabled(true); 
+    setIsDisabled(true);
 
     const result = await axios.post("http://localhost:5000/setdecision", {
       statementId: id_statement,
       decision: target,
     });
-    toast.success('Decision Made Successfully!');
+    toast.success("Decision Made Successfully!");
     console.log(result);
   };
 
   return (
     <>
-          <Header />
+      <Header />
 
-           <ToastContainer /> 
+      <ToastContainer />
       <Container className="mt--10" fluid>
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="12">
@@ -191,7 +298,7 @@ function DetailsStatement() {
                     </div>
                   </div>
                   <Button
-                    type="Button" 
+                    type="Button"
                     onClick={(e) => handleStatement("a", e)}
                     disabled={isDisabled}
                   >
@@ -204,7 +311,21 @@ function DetailsStatement() {
                   >
                     Decider pour {driverIdentityB}
                   </Button>
-                  
+
+                  {/* <Button onClick={generatePDF}>Generate PDF</Button> */}
+                  <Button
+                    color={showPDF ? "success" : "primary"}
+                    onClick={() => setShowPDF(!showPDF)}
+                  >
+                    {showPDF
+                      ? "Hide Downaload Pdf"
+                      : "The Pdf Will Be Created Once You Press That Button"}
+                  </Button>
+                  {showPDF && (
+                    <Button color="primary" onClick={generatePDF}>
+                      Download PDF
+                    </Button>
+                  )}
                 </CardBody>
               </Row>
             </Card>
