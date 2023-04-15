@@ -26,7 +26,15 @@ import ListOfAgency from "views/examples/ListOfAgency";
 
 var routesAdmin = [
   //TODO : change admin to user view profile
-
+  
+  {
+    path: "/add",
+    name: "Add new Agency",
+    icon: "ni ni-circle-08 text-green",
+    component: AddNew,
+    layout: "/admin",
+    showInSidebar: false,
+  },
   {
     path: "/index",
     name: "Dashboard",
@@ -69,14 +77,6 @@ var routesAdmin = [
     showInSidebar: true,
   },
   {
-    path: "/add",
-    name: "Add  Agency",
-    icon: "ni ni-circle-08 text-green",
-    component: AddNew,
-    layout: "/admin",
-    showInSidebar: false,
-  },
-  {
     path: "/tickets",
     name: "Tickets",
     icon: "ni ni-bullet-list-67 text-blue",
@@ -84,6 +84,7 @@ var routesAdmin = [
     layout: "/admin",
     showInSidebar: true,
   },
+
   {
     path: "/listofagency",
     name: "ListOfAgency",
@@ -93,7 +94,6 @@ var routesAdmin = [
     showInSidebar: true,
   },
 
-  
 
 ];
 export default routesAdmin;

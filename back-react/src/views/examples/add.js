@@ -35,7 +35,7 @@ function AddNew() {
   const [currentPage, setCurrentPage] = useState(1);
   const [agencies, setAgencies] = useState([]);
 
-
+  const countries = ["Tunis","Sfax","Sousse","Gabès","Nabeul","Monastir","Bizerte","Gafsa","Kairouan","Tozeur","Djerba"];
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -92,7 +92,7 @@ function AddNew() {
       !password2 ||
       !last_name ||
       !first_name ||
-      
+
       !verified
     ) {
       setShowNotification(false);
@@ -134,7 +134,7 @@ function AddNew() {
           password,
           last_name,
           first_name,
-          role:"Agence",
+          role: "Agence",
           verif1,
           phone_number,
         },
@@ -256,7 +256,7 @@ function AddNew() {
     const phone_numberRegex = /^(?:\+216|00216|0)?[1-9]\d{7}$/;
     return phone_numberRegex.test(phone_number);
   };
-  
+
   const handlePhoneNumberChange = (e) => {
     const phone_number = e.target.value;
     const phone_numberError = document.querySelector(".phone_number.error");
@@ -266,7 +266,7 @@ function AddNew() {
       phone_numberError.textContent = "Phone number is correct";
     }
   };
-  
+
 
   const handleFirstNameChange = (e) => {
     const first_name = e.target.value;
@@ -303,11 +303,11 @@ function AddNew() {
                   <Row>
                     <Col md="6">
                       <FormGroup>
-                        <label>First Name</label>
+                        <label>Agency Name</label>
                         <Input
                           name="first_name"
                           type="text"
-                          placeholder="First Name"
+                          placeholder="Agency Name"
                           required
                           onChange={handleFirstNameChange}
                         />
@@ -316,14 +316,24 @@ function AddNew() {
                     </Col>
                     <Col md="6">
                       <FormGroup>
-                        <label>Last Name</label>
+                        <label>Branche</label>
                         <Input
                           name="last_name"
-                          type="text"
-                          placeholder="Last Name"
+                          type="select"
+                          placeholder="Branche Address"
                           required
                           onChange={handleLastNameChange}
-                        />
+                        >
+                          <option value="">Select a country</option>
+                          {countries.map((lastname, index) => (
+                            <option
+                              key={`${lastname}-${index}`}
+                              value={lastname}
+                            >
+                              {lastname}
+                            </option>
+                          ))}
+                        </Input>
                         <div className="last_name error"></div>
                       </FormGroup>
                     </Col>
@@ -457,8 +467,8 @@ function AddNew() {
             </Card>
           </Col>
         </Row>
-        
-       
+
+
       </div>
     </>
   );
