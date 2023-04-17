@@ -180,45 +180,53 @@ function Register() {
 
     emailError.innerHTML = errorMessage;
   };
-
   const handlePasswordChange = (e) => {
     const password = e.target.value;
     const passwordError = document.querySelector(".password.error");
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /\d/;
-
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
     let strength = 0;
     let strengthMessage = "";
-
+  
     if (password.length >= 8) {
       strength += 1;
       strengthMessage += "✅ is at least 8 characters long. <br>";
     } else {
       strengthMessage += "❌ must be at least 8 characters long. <br>";
     }
-
+  
     if (lowercaseRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ can contains a lowercase letter. <br>";
     } else {
       strengthMessage += "";
     }
-
+  
     if (uppercaseRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ contains a capital letter. <br>";
     } else {
       strengthMessage += "";
     }
-
+  
     if (numberRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ contains a number. <br>";
     } else {
       strengthMessage += "";
     }
-
+  
+    if (emailRegex.test(password)) {
+      strengthMessage += "❌ cannot be an email. <br>";
+      passwordError.innerHTML = "Password cannot be an email.";
+    } else {
+      strength += 1;
+      passwordError.innerHTML = "";
+    }
+  
     if (strength === 4) {
       strengthMessage += "✅ strong.<br>";
     } else if (strength >= 2) {
@@ -226,9 +234,10 @@ function Register() {
     } else {
       strengthMessage += "😔 weak.<br>";
     }
-
-    passwordError.innerHTML = strengthMessage;
+  
+    passwordError.innerHTML += strengthMessage;
   };
+  
 
   const handleFirstNameChange = (e) => {
     const first_name = e.target.value;
@@ -311,29 +320,30 @@ function Register() {
                   </Row>
                   <Row>
                     <Col md="6">
-                      <FormGroup>
-                        <label>Password</label>
-                        <InputGroup>
-                          <Input
-                            name="password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Password"
-                            required
-                            onChange={handlePasswordChange}
-                          />
-                          <InputGroupAddon addonType="append">
-                            <InputGroupText
-                              onClick={() => setShowPassword(!showPassword)}
-                            >
-                              {showPassword ? (
-                                <i className="fas fa-eye-slash" />
-                              ) : (
-                                <i className="fas fa-eye" />
-                              )}
-                            </InputGroupText>
-                          </InputGroupAddon>
-                        </InputGroup>
-                      </FormGroup>
+                    <FormGroup>
+  <label>Password</label>
+  <InputGroup>
+    <Input
+      name="password"
+      type={showPassword ? "text" : "password"}
+      placeholder="Password"
+      required
+      onChange={handlePasswordChange}
+    />
+    <InputGroupAddon addonType="append">
+      <InputGroupText
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? (
+          <i className="fas fa-eye-slash" />
+        ) : (
+          <i className="fas fa-eye" />
+        )}
+      </InputGroupText>
+    </InputGroupAddon>
+  </InputGroup>
+  <div className="password error"></div>
+</FormGroup>
                     </Col>
                     <Col md="6">
                       <FormGroup>
