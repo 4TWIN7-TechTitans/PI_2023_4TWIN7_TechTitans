@@ -40,13 +40,14 @@ function MyStatements() {
     setPrenom(decodeURI(getCookie("firstname")));
     setRole(decodeURI(getCookie("role")));
     console.log(role);
-   
+    
+    fetchData();
   }, [nom, prenom, role]);
 
-  useEffect(() => {
   const fetchData = async () => {
+
     try {
-      const response = await axios.get("http://127.0.0.1:5000/getstatements");
+      const response = await axios.get("http://localhost:5000/getstatements");
       const filteredData = response.data.statements.filter(
         (statement) =>
           statement.insured_a.firstname === prenom &&
@@ -61,6 +62,10 @@ function MyStatements() {
     }
   };
 
+  
+
+  useEffect(() => {
+  
     fetchData();
 }, []);
 

@@ -448,7 +448,7 @@ const AddStatement = () => {
 
     try {
       const add = await axios.post(
-        "http://127.0.0.1:5000/addstatement",
+        "http://localhost:5000/addstatement",
         {
           date: date,
           location: location,
