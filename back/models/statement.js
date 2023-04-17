@@ -5,6 +5,7 @@ const statementSchema = new mongoose.Schema({
   //Partie 1 :
   date: {
     type: Date,
+    required:true,
   },
   //Partie 2 :
   location: {
@@ -14,14 +15,17 @@ const statementSchema = new mongoose.Schema({
       /^[a-zA-Z0-9\s,'-]*$/,
       "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
     ],
+    required:true,
   },
   //Partie 3 :
   injured: {
     type: String,
+    required:true,
   },
   //Partie 4
   material_damage: {
     type: String,
+    required:true,
   },
   //Partie 5
   witness: {
@@ -39,31 +43,40 @@ const statementSchema = new mongoose.Schema({
   vehicule_a: {
     assureBy: {
       type: String, // Vehicule assure par (in english)
+      required:true,
     },
     contractNumber: {
       type: String, // Police D'assurance Number
+      required:true,
     },
     agency: {
       type: String, // Agence (id_agence foreign key)
+      required:true,
     },
     contractValidity: {
       start_date: {
         type: Date,
         default: Date.now,
+        required:true,
       },
       end_date: {
         type: Date,
+        required:true,
       },
+      
     },
+    
   },
   //vehicule B
 
   vehicule_b: {
     assureBy: {
       type: String, // Vehicule assure par (in english)
+      required:true,
     },
     contractNumber: {
       type: String, // Police D'assurance Number
+      required:true,
     },
     agency: {
       type: String, // Agence (id_agence foreign key)
@@ -72,9 +85,11 @@ const statementSchema = new mongoose.Schema({
       start_date: {
         type: Date,
         default: Date.now,
+        required:true,
       },
       end_date: {
         type: Date,
+        required:true,
       },
     },
   },
@@ -84,17 +99,21 @@ const statementSchema = new mongoose.Schema({
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
+      required:true,
     },
     last_name: {
       type: String,
       maxlength: [50, "last_name"],
+      required:true,
     },
     address: {
       type: String,
       maxlength: [100, "address"],
+      required:true,
     },
     drivers_license_issue_date: {
       type: Date,
+      required:true,
     },
     driver_license: {
       type: String,
@@ -103,6 +122,7 @@ const statementSchema = new mongoose.Schema({
         /^[a-zA-Z0-9]+$/,
         "driver_license should only contain letters and numbers",
       ],
+      
     },
   },
 
@@ -110,17 +130,21 @@ const statementSchema = new mongoose.Schema({
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
+      required:true,
     },
     last_name: {
       type: String,
       maxlength: [50, "last_name"],
+      required:true,
     },
     address: {
       type: String,
       maxlength: [100, "address"],
+      required:true,
     },
     drivers_license_issue_date: {
       type: Date,
+      required:true,
     },
     driver_license: {
       type: String,
@@ -129,67 +153,60 @@ const statementSchema = new mongoose.Schema({
         /^[a-zA-Z0-9]+$/,
         "driver_license should only contain letters and numbers",
       ],
+      
     },
   },
   //Partie 8
   insured_a: {
     firstname: {
       type: String,
+      required:true,
     },
     lastname: {
       type: String,
+      required:true,
     },
     phonenumber: {
       type: String,
+      required:true,
     },
     addr: {
       type: String,
+      required:true,
     },
   },
   insured_b: {
     firstname: {
       type: String,
+      required:true,
     },
     lastname: {
       type: String,
+      required:true,
     },
     phonenumber: {
       type: String,
+      required:true,
     },
     addr: {
       type: String,
+      required:true,
     },
   },
   //Partie 9
   vehicule_identity_a: {
     brand: {
       type: String,
-      enum: [
-        "Toyota",
-        "Honda",
-        "Ford",
-        "Chevrolet",
-        "Nissan",
-        "Audi",
-        "Isuzu",
-        "BMW",
-        "Golf",
-        "Tesla",
-        "Chevrolet",
-        "Hyundai",
-        "Infiniti",
-        "Volkswagen",
-        "Volvo",
-        "Alfa Romeo",
-        "Mitsubishi",
-      ],
+      required:true,
     },
     type: {
       type: String,
       enum: ["Car", "Truck", "MotoCycle"],
+      required:true,
     },
     matriculation: {
       type: String,
+      required:true,
     },
     country: {
       type: String,
@@ -352,43 +369,29 @@ const statementSchema = new mongoose.Schema({
         "Singapore",
         "Slovakia",
       ],
+      required:true,
     },
   },
   vehicule_identity_b: {
     brand: {
       type: String,
-      enum: [
-        "Toyota",
-        "Honda",
-        "Ford",
-        "Chevrolet",
-        "Nissan",
-        "Audi",
-        "Isuzu",
-        "BMW",
-        "Golf",
-        "Tesla",
-        "Chevrolet",
-        "Hyundai",
-        "Infiniti",
-        "Volkswagen",
-        "Volvo",
-        "Alfa Romeo",
-        "Mitsubishi",
-      ],
       coming_from: {
         type: String,
+        required:true,
       },
       going_to: {
         type: String,
+        required:true,
       },
     },
     type: {
       type: String,
       enum: ["Car", "Truck", "MotoCycle"],
+      required:true,
     },
     matriculation: {
       type: String,
+      required:true,
     },
     country: {
       type: String,
@@ -551,6 +554,7 @@ const statementSchema = new mongoose.Schema({
         "Singapore",
         "Slovakia",
       ],
+      required:true,
     },
     coming_from_b: {
       type: String,
@@ -583,6 +587,7 @@ const statementSchema = new mongoose.Schema({
       "Door Rear Right",
       "Other",
     ],
+    required:true,
   },
   hits_b: {
     type: String,
@@ -606,6 +611,7 @@ const statementSchema = new mongoose.Schema({
       "Door Rear Right",
       "Other",
     ],
+    required:true,
   },
   //Partie 11
   apparent_damages_a: {
@@ -620,6 +626,7 @@ const statementSchema = new mongoose.Schema({
       "Missing Parts",
       "Other",
     ],
+    required:true,
   },
 
   damage_direction_a: {
@@ -639,11 +646,13 @@ const statementSchema = new mongoose.Schema({
       "Missing Parts",
       "Other",
     ],
+    required:true,
   },
 
   damage_direction_b: {
     type: String,
     enum: ["Front", "Back", "Left", "Right"],
+    
   },
 
   //Partie 12
@@ -698,16 +707,20 @@ const statementSchema = new mongoose.Schema({
   // Partie 14
   notes_a: {
     type: String,
+    required:true,
   },
   notes_b: {
     type: String,
+    required:true,
   },
   //Partie 15
   signature_a: {
     type: String,
+    required:true,
   },
   signature_b: {
     type: String,
+    required:true,
   },
 
   // Partie 16     const [case_state, setCase_state] = useState(true); // waiting / treated /closed ma3adech boolean
