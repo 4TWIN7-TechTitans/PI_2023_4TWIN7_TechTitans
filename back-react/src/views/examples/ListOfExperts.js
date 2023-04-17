@@ -89,7 +89,6 @@ function ListOfAgency() {
       }
       doc.rect(20, row - 5, 170, 10, "F"); // Draw rectangle to fill row with color
       doc.setTextColor(0, 0, 0); // Set text color to black
-      doc.text(user._id, 20, row);
       doc.text(user.first_name, 80, row); // Increased x-coordinate of "Name" text
       doc.text(user.email, 130, row); // Increased x-coordinate of "Email" text
       doc.text(user.phone_number, 180, row); // Increased x-coordinate of "Contact Number" text
@@ -121,7 +120,6 @@ function ListOfAgency() {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scop="col">Identifiant Du L'Expert</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Contact Number</th>
@@ -130,7 +128,6 @@ function ListOfAgency() {
                 <tbody>
                   {paginatedUsers.map((user) => (
                     <tr key={user._id}>
-                      <td>{user._id}</td>
                       <td>{user.first_name}</td>
                       <td>{user.email}</td>
                       <td>
