@@ -33,11 +33,12 @@ import {
   InputGroupText,
   Label,
 } from "reactstrap";
+import AnimatedText from 'react-animated-text-content';
 import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+//import GoogleMapReact from 'google-map-react';
 // core components
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -46,7 +47,7 @@ const AddStatement = () => {
 
 
   const [date, setDate] = useState("");
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState({ lat: 48.8534, lng: 2.3488 });
   const [injured, setInjured] = useState("");
   const [material_damage, setMaterial_damage] = useState("");
   const [witness, setWitness] = useState("");
@@ -176,6 +177,17 @@ const AddStatement = () => {
 
   }, [nom, prenom, role]);
 
+  const [phone_number, setPhone_number] = useState("");
+  const fetchData = async () => {
+    const jwt = getCookie("jwt");
+    const phone_numberUser = (
+      await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+    ).data.phone_number;
+    setPhone_number(phone_numberUser);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -560,7 +572,12 @@ const AddStatement = () => {
       try {
         const response = await axios.get("http://localhost:5000/all-users");
         setUsers(response.data.users);
-        setUsers(response.data.users.filter((user) => user.role === "Agence"));
+        setUsers(response.data.users.filter(
+          (user) =>
+            user.role === "Agence"
+        )
+
+        );
       } catch (err) {
         console.log(err);
       }
@@ -602,19 +619,16 @@ const AddStatement = () => {
   //validators and handle :
 
   //geolocalisation
-  /*
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-    });
-  }, []);
-? `${location.lat},${location.lng}` : ''*/
+  // const MapMarker = ({ text }) => (
+  //   <div style={{ color: 'red', fontWeight: 'bold' }}>{text}</div>
+  // );
+  // const handleMapClick = ({ lat, lng }) => {
+  //   setLocation({ lat, lng });
+  // };
 
   return (
     <>
+
       <ToastContainer />
       {/*<UserHeader /> */}
       {/* Page content */}
@@ -628,7 +642,7 @@ const AddStatement = () => {
                     <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button color="info" onClick={handleClick}>
+                    <Button color="light" onClick={handleClick}>
                       {!isShown ? "Show" : "Hide"}
                     </Button>
                   </Col>
@@ -638,21 +652,34 @@ const AddStatement = () => {
               {isShown && (
                 <CardBody>
                   <form onSubmit={handleSubmit} noValidate>
-                    <h6 className="heading-small text-muted mb-4">
+                    <h2 className=" mb-2">
                       set all the infromations related to the accident please
-                    </h6>
+                    </h2>
                     <div className="pl-lg-4">
 
                       {/* 1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 1 ? "block" : "none" }}>
-                        <Row>
-                          {/* Section 1 + 2 + 3 + 4 + 5 */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 1 + 2 + 3 + 4 + 5
-                            </h6>
-                          </Col>
-                        </Row>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              x: '200px',
+                              y: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 1 :
+                          </AnimatedText>
+                        </Col>
 
                         <Row>
                           {/* SECTION 1 + 2 + 3 + 4 + 5 */}
@@ -680,21 +707,26 @@ const AddStatement = () => {
                               <label className="form-control-label" htmlFor="input-email">
                                 2. Location
                               </label>
+
                               <Input
                                 className="form-control-alternative"
                                 id="location"
                                 type="text"
                                 name="location"
-                                placeholder="location"
-                                value={location } 
-                                onChange={(e) => setLocation(e.target.value)}
+                                value={location}
                                 required
                               />
-                              <div className="location error"></div>
-                              {/* <div style={{ height: '400px', width: '100%' }}>
-                                <GoogleMapReact center={location} zoom={15}></GoogleMapReact>
-                              </div> */}
                             </FormGroup>
+                            {/* <div style={{ height: '400px', width: '100%' }}>
+                              <GoogleMapReact
+                                bootstrapURLKeys={{ key: '' }}
+                                center={location}
+                                zoom={15}
+                                onClick={handleMapClick}
+                              >
+                                <MapMarker lat={location.lat} lng={location.lng} text="📍" />
+                              </GoogleMapReact>
+                            </div> */}
                           </Col>
                           <Col lg="3">
                             <FormGroup>
@@ -752,6 +784,7 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
+
                         <Col align="center">
                           <FormGroup>
                             <Button
@@ -768,6 +801,27 @@ const AddStatement = () => {
 
                       {/*  Section 6 */}
                       <div style={{ display: section === 2 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 2 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
@@ -822,7 +876,7 @@ const AddStatement = () => {
                                 className="heading-small "
                                 htmlFor="input-email"
                               >
-                                Contartct Numbre:
+                                Contract Numbre:
                               </label>
                               <Input
                                 className="form-control-alternative"
@@ -847,11 +901,18 @@ const AddStatement = () => {
                                 className="form-control-alternative"
                                 id="agency_a"
                                 name="agency_a"
-                                type="text"
+                                type="select"
                                 value={agency_a}
                                 onChange={(e) => setAgency_a(e.target.value)}
                                 required
-                              />
+                              >
+                                <option value="">Select</option>
+                                {users.map((user) => (
+                                  <option key={user._id} value={user._id}>
+                                    {user.last_name}
+                                  </option>
+                                ))}
+                              </Input>
                             </FormGroup>
                             <FormGroup>
                               <label
@@ -914,7 +975,7 @@ const AddStatement = () => {
                                 className="heading-small "
                                 htmlFor="input-email"
                               >
-                                Contartct Numbre:
+                                Contract Numbre:
                               </label>
                               <Input
                                 className="form-control-alternative"
@@ -981,13 +1042,14 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
                                 Previous
                               </Button>
                             </FormGroup>
+
                           </Col>
                           <Col align="left">
                             <FormGroup>
@@ -1007,6 +1069,27 @@ const AddStatement = () => {
 
                       {/* Section 7 */}
                       <div style={{ display: section === 3 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 3 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
@@ -1233,7 +1316,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1259,8 +1342,28 @@ const AddStatement = () => {
 
                       {/*  SECTION 8 */}
                       <div style={{ display: section === 4 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 4 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
-
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
@@ -1349,7 +1452,7 @@ const AddStatement = () => {
                                 className="form-control-alternative"
                                 id="phonenumber_a"
                                 type="phonenumber_a"
-                                value={phonenumber_a}
+                                value={phone_number}
                                 onChange={(e) =>
                                   setPhonenumber_a(e.target.value)
                                 }
@@ -1433,7 +1536,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1459,6 +1562,27 @@ const AddStatement = () => {
 
                       {/*  SECTION 9 */}
                       <div style={{ display: section === 5 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 5 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
 
                           {/* VEHICULE A VS B */}
@@ -1492,16 +1616,16 @@ const AddStatement = () => {
                               9. Vehicule Identity
                             </label>
                             <FormGroup>
-                              <label>Brand</label>
+                              <label>Brand, Model</label>
                               <Input
-                                type="select"
+                                type="text"
                                 name="brand_a"
                                 id="brand_a"
                                 value={brand_a}
                                 onChange={(e) => setBrand_a(e.target.value)}
                                 required
-                              >
-                                <option value="">Select a brand</option>
+                              />
+                              {/* <option value="">Select a brand</option>
                                 {brands.map((brand, index) => (
                                   <option
                                     key={`${brand}-${index}`}
@@ -1510,7 +1634,7 @@ const AddStatement = () => {
                                     {brand}
                                   </option>
                                 ))}
-                              </Input>
+                              </Input> */}
                             </FormGroup>
                             <FormGroup>
                               <label>Country</label>
@@ -1621,16 +1745,16 @@ const AddStatement = () => {
                               9. Vehicule Identity
                             </label>
                             <FormGroup>
-                              <label>Brand</label>
+                              <label>Brand, Model</label>
                               <Input
-                                type="select"
+                                type="text"
                                 name="brand_b"
                                 id="brand_b"
                                 value={brand_b}
                                 onChange={(e) => setBrand_b(e.target.value)}
                                 required
-                              >
-                                <option value="">Select a brand</option>
+                              />
+                              {/* <option value="">Select a brand</option>
                                 {brands.map((brand, index) => (
                                   <option
                                     key={`${brand}-${index}`}
@@ -1639,7 +1763,7 @@ const AddStatement = () => {
                                     {brand}
                                   </option>
                                 ))}
-                              </Input>
+                              </Input> */}
                             </FormGroup>
                             <FormGroup>
                               <label>Country</label>
@@ -1747,7 +1871,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1755,6 +1879,7 @@ const AddStatement = () => {
                               </Button>
                             </FormGroup>
                           </Col>
+
                           <Col align="left">
                             <FormGroup>
                               <Button
@@ -1773,6 +1898,27 @@ const AddStatement = () => {
 
                       {/* Section 10 */}
                       <div style={{ display: section === 6 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 6 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
@@ -1871,7 +2017,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1890,14 +2036,33 @@ const AddStatement = () => {
                               </Button>
                             </FormGroup>
                           </Col>
-
                         </Row>
                       </div>
                       {/* FIN SECTION 10 */}
 
                       {/* Section 11 */}
                       <div style={{ display: section === 7 ? "block" : "none" }}>
-
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 7 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
 
                           {/* VEHICULE A VS B */}
@@ -2084,7 +2249,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -2110,6 +2275,27 @@ const AddStatement = () => {
 
                       {/* Section 13 + 14 + 14*/}
                       <div style={{ display: section === 8 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 8 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
@@ -2244,32 +2430,34 @@ const AddStatement = () => {
                           </Col>
                         </Row>
                         {/* FIN SECTION 15  Observation */}
-
                         <Row>
+
                           <Col align="left">
                             <FormGroup>
+
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
                                 Previous
                               </Button>
+
                             </FormGroup>
                           </Col>
                         </Row>
+                        <div className="text-center">
 
+                          <Button color="dark" type="submit">
+                            Submit
+                          </Button>
+                        </div>
                       </div>
 
                       <Row>
                       </Row>
 
-                      <div className="text-center">
 
-                        <Button color="info" type="submit">
-                          Submit
-                        </Button>
-                      </div>
 
                     </div>
 
