@@ -15,6 +15,7 @@ router.get('/statementbyexpertemail/:email', statementController.getStatementByE
 router.get('/get_specificstatement/:id', statementController.get_specific_statement);
 router.post('/setdecision/', statementController.post_decision);
 
+router.post('/statements_status/:id/status', statementController.update_statement_status);
 
 
 module.exports = router;

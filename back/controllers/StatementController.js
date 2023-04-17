@@ -166,3 +166,22 @@ module.exports.post_decision = async (req, res) => {
     res.status(500).json({ message: "Error setting decision", error });
   }
 };
+
+module.exports.update_statement_status = async (req, res) => {
+  const statementId = req.params.id;
+  const { case_state } = req.body;
+
+  try {
+    const statement = await StatementModel.findByIdAndUpdate(
+      statementId,
+      { case_state },
+      { new: true }
+    );
+    if (!statement) {
+      return res.status(404).json({ message: "Statement not found" });
+    }
+    res.status(200).json({ statement });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating statement status", error });
+  }
+};
