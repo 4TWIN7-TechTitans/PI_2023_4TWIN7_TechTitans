@@ -319,21 +319,12 @@ function AddNew() {
                         <label>Branche</label>
                         <Input
                           name="last_name"
-                          type="select"
+                          type="text"
                           placeholder="Branche Address"
                           required
                           onChange={handleLastNameChange}
-                        >
-                          <option value="">Select a country</option>
-                          {countries.map((lastname, index) => (
-                            <option
-                              key={`${lastname}-${index}`}
-                              value={lastname}
-                            >
-                              {lastname}
-                            </option>
-                          ))}
-                        </Input>
+                        />
+                          
                         <div className="last_name error"></div>
                       </FormGroup>
                     </Col>
