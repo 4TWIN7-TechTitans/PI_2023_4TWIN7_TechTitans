@@ -122,6 +122,7 @@ function ListOfAgency() {
                   <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Contact Number</th>
                   </tr>
                 </thead>
@@ -130,6 +131,7 @@ function ListOfAgency() {
                     <tr key={user._id}>
                       <td>{user.first_name}</td>
                       <td>{user.email}</td>
+                      <td>{user.role}</td>
                       <td>
                         <Badge color="primary" className="badge-dot mr-4">
                           {user.phone_number}
