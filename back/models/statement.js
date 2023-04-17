@@ -5,7 +5,7 @@ const statementSchema = new mongoose.Schema({
   //Partie 1 :
   date: {
     type: Date,
-    required:true,
+    required: true,
   },
   //Partie 2 :
   location: {
@@ -15,17 +15,17 @@ const statementSchema = new mongoose.Schema({
       /^[a-zA-Z0-9\s,'-]*$/,
       "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
     ],
-    required:true,
+    required: true,
   },
   //Partie 3 :
   injured: {
     type: String,
-    required:true,
+    required: true,
   },
   //Partie 4
   material_damage: {
     type: String,
-    required:true,
+    required: true,
   },
   //Partie 5
   witness: {
@@ -43,40 +43,40 @@ const statementSchema = new mongoose.Schema({
   vehicule_a: {
     assureBy: {
       type: String, // Vehicule assure par (in english)
-      required:true,
+      required: true,
     },
     contractNumber: {
       type: String, // Police D'assurance Number
-      required:true,
+      required: true,
     },
     agency: {
       type: String, // Agence (id_agence foreign key)
-      required:true,
+      required: true,
     },
     contractValidity: {
       start_date: {
         type: Date,
         default: Date.now,
-        required:true,
+        required: true,
       },
       end_date: {
         type: Date,
-        required:true,
+        required: true,
       },
-      
+
     },
-    
+
   },
   //vehicule B
 
   vehicule_b: {
     assureBy: {
       type: String, // Vehicule assure par (in english)
-      required:true,
+      required: true,
     },
     contractNumber: {
       type: String, // Police D'assurance Number
-      required:true,
+      required: true,
     },
     agency: {
       type: String, // Agence (id_agence foreign key)
@@ -85,11 +85,11 @@ const statementSchema = new mongoose.Schema({
       start_date: {
         type: Date,
         default: Date.now,
-        required:true,
+        required: true,
       },
       end_date: {
         type: Date,
-        required:true,
+        required: true,
       },
     },
   },
@@ -99,21 +99,21 @@ const statementSchema = new mongoose.Schema({
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
-      required:true,
+      required: true,
     },
     last_name: {
       type: String,
       maxlength: [50, "last_name"],
-      required:true,
+      required: true,
     },
     address: {
       type: String,
       maxlength: [100, "address"],
-      required:true,
+      required: true,
     },
     drivers_license_issue_date: {
       type: Date,
-      required:true,
+      required: true,
     },
     driver_license: {
       type: String,
@@ -122,7 +122,7 @@ const statementSchema = new mongoose.Schema({
         /^[a-zA-Z0-9]+$/,
         "driver_license should only contain letters and numbers",
       ],
-      
+
     },
   },
 
@@ -130,21 +130,21 @@ const statementSchema = new mongoose.Schema({
     first_name: {
       type: String,
       maxlength: [50, "first_name"],
-      required:true,
+      required: true,
     },
     last_name: {
       type: String,
       maxlength: [50, "last_name"],
-      required:true,
+      required: true,
     },
     address: {
       type: String,
       maxlength: [100, "address"],
-      required:true,
+      required: true,
     },
     drivers_license_issue_date: {
       type: Date,
-      required:true,
+      required: true,
     },
     driver_license: {
       type: String,
@@ -153,60 +153,60 @@ const statementSchema = new mongoose.Schema({
         /^[a-zA-Z0-9]+$/,
         "driver_license should only contain letters and numbers",
       ],
-      
+
     },
   },
   //Partie 8
   insured_a: {
     firstname: {
       type: String,
-      required:true,
+      required: true,
     },
     lastname: {
       type: String,
-      required:true,
+      required: true,
     },
     phonenumber: {
       type: String,
-      required:true,
+      required: true,
     },
     addr: {
       type: String,
-      required:true,
+      required: true,
     },
   },
   insured_b: {
     firstname: {
       type: String,
-      required:true,
+      required: true,
     },
     lastname: {
       type: String,
-      required:true,
+      required: true,
     },
     phonenumber: {
       type: String,
-      required:true,
+      required: true,
     },
     addr: {
       type: String,
-      required:true,
+      required: true,
     },
   },
   //Partie 9
   vehicule_identity_a: {
     brand: {
       type: String,
-      required:true,
+      required: true,
     },
     type: {
       type: String,
       enum: ["Car", "Truck", "MotoCycle"],
-      required:true,
+      required: true,
     },
     matriculation: {
       type: String,
-      required:true,
+      required: true,
     },
     country: {
       type: String,
@@ -369,7 +369,7 @@ const statementSchema = new mongoose.Schema({
         "Singapore",
         "Slovakia",
       ],
-      required:true,
+      required: true,
     },
   },
   vehicule_identity_b: {
@@ -377,21 +377,21 @@ const statementSchema = new mongoose.Schema({
       type: String,
       coming_from: {
         type: String,
-        required:true,
+        required: true,
       },
       going_to: {
         type: String,
-        required:true,
+        required: true,
       },
     },
     type: {
       type: String,
       enum: ["Car", "Truck", "MotoCycle"],
-      required:true,
+      required: true,
     },
     matriculation: {
       type: String,
-      required:true,
+      required: true,
     },
     country: {
       type: String,
@@ -554,7 +554,7 @@ const statementSchema = new mongoose.Schema({
         "Singapore",
         "Slovakia",
       ],
-      required:true,
+      required: true,
     },
     coming_from_b: {
       type: String,
@@ -565,140 +565,55 @@ const statementSchema = new mongoose.Schema({
   },
 
   //Partie 10
-  hits_a: {
+  hits_a: [{
     type: String,
-    enum: [
-      "Front Left Fender",
-      "Front Right Fender",
-      "Rear Left Fender",
-      "Rear Right Fender",
-      "Front Bumper",
-      "Rear Bumper",
-      "Hood",
-      "Trunk",
-      "Roof",
-      "Front Windshield",
-      "Rear Windshield",
-      "Side Mirror Right",
-      "Side Mirror Left",
-      "Door Front Left",
-      "Door Front Right",
-      "Door Rear Left",
-      "Door Rear Right",
-      "Other",
-    ],
-    required:true,
-  },
-  hits_b: {
-    type: String,
-    enum: [
-      "Front Left Fender",
-      "Front Right Fender",
-      "Rear Left Fender",
-      "Rear Right Fender",
-      "Front Bumper",
-      "Rear Bumper",
-      "Hood",
-      "Trunk",
-      "Roof",
-      "Front Windshield",
-      "Rear Windshield",
-      "Side Mirror Right",
-      "Side Mirror Left",
-      "Door Front Left",
-      "Door Front Right",
-      "Door Rear Left",
-      "Door Rear Right",
-      "Other",
-    ],
-    required:true,
-  },
-  //Partie 11
-  apparent_damages_a: {
-    type: String,
-    enum: [
-      "Scratches",
-      "Dents",
-      "Cracks",
-      "Paint Damage",
-      "Broken Lights",
-      "Broken Windows",
-      "Missing Parts",
-      "Other",
-    ],
-    required:true,
-  },
+    required: true,
+  }
 
+  ],
+
+  hits_b: [{
+    type: String,
+    required: true,
+  }
+  ],
+  //Partie 11
+  apparent_damages_a: [{
+    type: String,
+    required: true,
+  }
+  ],
   damage_direction_a: {
     type: String,
     enum: ["Front", "Back", "Left", "Right"],
   },
 
-  apparent_damages_b: {
+  apparent_damages_b: [{
     type: String,
-    enum: [
-      "Scratches",
-      "Dents",
-      "Cracks",
-      "Paint Damage",
-      "Broken Lights",
-      "Broken Windows",
-      "Missing Parts",
-      "Other",
-    ],
-    required:true,
-  },
+    required: true,
+  }
+  ],
 
   damage_direction_b: {
     type: String,
     enum: ["Front", "Back", "Left", "Right"],
-    
+
   },
 
   //Partie 12
-  circumstances_a: {
+  circumstances_a: [{
     type: String,
-    enum: [
-      "Driving in a normal and careful manner",
-      "Driving under the influence of drugs or alcohol",
-      "Speeding",
-      "Ignoring traffic signals or signs",
-      "Distracted driving",
-      "Driving while fatigued",
-      "Reckless driving",
-      "Tailgating",
-      "Changing lanes without signaling",
-      "Making an illegal turn",
-      "Backing up without looking",
-      "Driving in the wrong lane",
-      "Driving in a construction zone",
-      "Driving during inclement weather",
-      "Other",
-    ],
     required: true,
-  },
+  }
+  ],
 
-  circumstances_b: {
+
+  circumstances_b: [{
     type: String,
-    enum: [
-      "Driving in a normal and careful manner",
-      "Driving under the influence of drugs or alcohol",
-      "Speeding",
-      "Ignoring traffic signals or signs",
-      "Distracted driving",
-      "Driving while fatigued",
-      "Reckless driving",
-      "Tailgating",
-      "Changing lanes without signaling",
-      "Making an illegal turn",
-      "Backing up without looking",
-      "Driving in the wrong lane",
-      "Driving in a construction zone",
-      "Driving during inclement weather",
-      "Other",
-    ],
     required: true,
-  },
+  }
+  ],
+
   //Partie 13
   accident_croquis: {
     type: String,
@@ -707,20 +622,20 @@ const statementSchema = new mongoose.Schema({
   // Partie 14
   notes_a: {
     type: String,
-    required:true,
+    required: true,
   },
   notes_b: {
     type: String,
-    required:true,
+    required: true,
   },
   //Partie 15
   signature_a: {
     type: String,
-    required:true,
+    required: true,
   },
   signature_b: {
     type: String,
-    required:true,
+    required: true,
   },
 
   // Partie 16     const [case_state, setCase_state] = useState(true); // waiting / treated /closed ma3adech boolean

@@ -105,17 +105,18 @@ const AddStatement = () => {
   const [country_a, setCountry_a] = useState("");
   const [country_b, setCountry_b] = useState("");
   const [vehicule_identity_b, setVehicule_identity_b] = useState("");
-  const [hits_a, setHits_a] = useState("");
-  const [hits_b, setHits_b] = useState("");
-  const [hit_direction, setHit_direction] = useState("");
-  const [apparent_damages_a, setApparent_damages_a] = useState("");
-  const [apparent_damages_b, setApparent_damages_b] = useState("");
+
+
+  const [hits_a, setHits_a] = useState([]);
+  const [hits_b, setHits_b] = useState([]);
+  const [apparent_damages_a, setApparent_damages_a] = useState([]);
+  const [apparent_damages_b, setApparent_damages_b] = useState([]);
 
   const [damage_direction_a, setDamage_direction_a] = useState("");
   const [damage_direction_b, setDamage_direction_b] = useState("");
 
-  const [circumstances_a, setCircumstances_a] = useState("");
-  const [circumstances_b, setCircumstances_b] = useState("");
+  const [circumstances_a, setCircumstances_a] = useState([]);
+  const [circumstances_b, setCircumstances_b] = useState([]);
   const canvasRef = useRef(null);
   const canvasRef_a = useRef(null);
   const canvasRef_b = useRef(null);
@@ -132,6 +133,7 @@ const AddStatement = () => {
   const [going_to_b, setGoing_to_b] = useState("");
   const [possibleplaces_a, setPossiblePlace_a] = useState("");
   const [possibleplaces_b, setPossiblePlace_b] = useState("");
+
 
   const [showNotification, setShowNotification] = useState(false);
   const [errors, setErrors] = useState({});
@@ -153,8 +155,9 @@ const AddStatement = () => {
 
   const possibleplaces = ["Front Left Fender", "Front Right Fender", "Rear Left Fender", "Rear Right Fender", "Front Bumper", "Rear Bumper", "Hood", "Trunk", "Roof", "Front Windshield", "Rear Windshield", "Side Mirrors", "Doors", "Other",];
 
-  const hitdirections = ["Front", "Back", "Left", "Right"];
-  const dmgeplaces = ["Scratches", "Dents", "Cracks", "Paint Damage", "Broken Lights", "Broken Windows", "Missing Parts", "Other",];
+  const hitOptions = ['Front Left Fender', 'Front Right Fender', 'Rear Left Fender', 'Rear Right Fender', 'Front Bumper', 'Rear Bumper', 'Hood', 'Trunk', 'Roof', 'Front Windshield', 'Rear Windshield', 'Side Mirror Left', 'Side Mirror Right', 'Door Front Left', 'Door Front Right', 'Door Rear Left', 'Door Rear Right',];
+  const damageplaces = ["Scratches", "Dents", "Cracks", "Paint Damage", "Broken Lights", "Broken Windows", "Missing Parts", "Other",];
+
   const dmgdirections = ["Front", "Back", "Left", "Right"];
   const Circumstances = ["Driving in a normal and careful manner", "Driving under the influence of drugs or alcohol", "Speeding", "Ignoring traffic signals or signs", "Distracted driving", "Driving while fatigued", "Reckless driving", "Tailgating", "Changing lanes without signaling", "Making an illegal turn", "Backing up without looking", "Driving in the wrong lane", "Driving in a construction zone", "Driving during inclement weather", "Other",];
   const types = ["Car", "Truck", "MotoCycle"];
@@ -271,14 +274,33 @@ const AddStatement = () => {
       going_to: form.going_to_b.value,
     };
 
-    const hits_a = form.hits_a.value;
-    const hits_b = form.hits_b.value;
 
-    const apparent_damages_a = form.apparent_damages_a.value;
+    if (hits_a.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (hits_b.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (apparent_damages_a.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
 
-    const apparent_damages_b = form.apparent_damages_b.value;
-    const circumstances_a = form.circumstances_a.value;
-    const circumstances_b = form.circumstances_b.value;
+    if (apparent_damages_b.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (circumstances_a.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (circumstances_b.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+
     const accident_croquis = form.accident_croquis;
     const notes_a = form.notes_a.value;
     const notes_b = form.notes_b.value;
@@ -653,6 +675,77 @@ const AddStatement = () => {
     const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     return diffDays <= 5;
   }
+
+
+  //checkbox chock points a:
+  const handleChocpoints_a = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setHits_a((prevSelected) => [...prevSelected, value]);
+    } else {
+      setHits_a((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+
+  //checkbox chock points a:
+  const handleChocpoints_b = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setHits_b((prevSelected) => [...prevSelected, value]);
+    } else {
+      setHits_b((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+  //checkbox apparent damages a
+  const handleApparentdamages_a = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setApparent_damages_a((prevSelected) => [...prevSelected, value]);
+    } else {
+      setApparent_damages_a((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+
+  //checkbox apparent damages a
+  const handleApparentdamages_b = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setApparent_damages_b((prevSelected) => [...prevSelected, value]);
+    } else {
+      setApparent_damages_b((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+
+  //checkbox circumstances a
+  const handleCircumstances_a = (e) => {
+    const { value } = e.target;
+    if (circumstances_a.includes(value)) {
+      setCircumstances_a(circumstances_a.filter((v) => v !== value));
+    } else {
+      setCircumstances_a([...circumstances_a, value]);
+    }
+  };
+  //checkbox circumstances a
+  const handleCircumstances_b = (e) => {
+    const { value } = e.target;
+    if (apparent_damages_b.includes(value)) {
+      setCircumstances_b(circumstances_b.filter((v) => v !== value));
+    } else {
+      setCircumstances_b([...circumstances_b, value]);
+    }
+  };
   return (
     <>
 
@@ -686,7 +779,7 @@ const AddStatement = () => {
                     </h2>
                     <Row className="align-items-center">
 
-                      <Col className="text-right" xs="4">
+                      <Col className="text-left" xs="6">
                         <FormGroup>
                           <Button
                             color="info"
@@ -698,7 +791,8 @@ const AddStatement = () => {
                         </FormGroup>
 
                       </Col>
-                      <Col className="text-right" xs="4">
+                      
+                      <Col className="text-right" xs="6">
                         <FormGroup>
                           <Button
                             color="primary"
@@ -2004,73 +2098,44 @@ const AddStatement = () => {
                           {/* SECTION 10 */}
                           <Col lg="6">
                             <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-country"
-                              >
+                              <label className="form-control-label" htmlFor="input-country">
                                 10. Choc Points
                               </label>
-                              <Input
-                                name="hits_a"
-                                type="select"
-                                value={hits_a}
-                                onChange={(e) => setHits_a(e.target.value)}
-                                required
-                              >
-                                <option value="Other">Select</option>
-                                <option value="Front Left Fender"> Front Left Fender</option>
-                                <option value="Front Right Fender"> Front Right Fender</option>
-                                <option value="Rear Left Fender">Rear Left Fender</option>
-                                <option value="Rear Right Fender">Rear Right Fender</option>
-                                <option value="Front Bumper"> Front Bumper</option>
-                                <option value="Rear Bumper">Rear Bumper</option>
-                                <option value="Hood">Hood</option>
-                                <option value="Trunk">Trunk</option>
-                                <option value="Roof">Roof</option>
-                                <option value="Front Windshield">Front Windshield</option>
-                                <option value="Rear Windshield">Rear Windshield</option>
-                                <option value="Side Mirror Left">Side Mirror Left</option>
-                                <option value="Side Mirror Right">Side Mirror Right</option>
-                                <option value="Door Front Left">Door Front Left</option>
-                                <option value="Door Front Right">Door Front Right</option>
-                                <option value="Door Rear Left">Door Rear Left</option>
-                                <option value="Door Rear Right">Door Rear Right</option>
-                              </Input>
+                              {hitOptions.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="hits_a"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={hits_a.includes(option)}
+                                      onChange={handleChocpoints_a}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                           <Col lg="6">
                             <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-country"
-                              >
+                              <label className="form-control-label" htmlFor="input-country">
                                 10. Choc Points
                               </label>
-                              <Input
-                                name="hits_b"
-                                type="select"
-                                value={hits_b}
-                                onChange={(e) => setHits_b(e.target.value)}
-                                required
-                              >                              <option value="Other">Select</option>
-                                <option value="Front Left Fender"> Front Left Fender</option>
-                                <option value="Front Right Fender"> Front Right Fender</option>
-                                <option value="Rear Left Fender">Rear Left Fender</option>
-                                <option value="Rear Right Fender">Rear Right Fender</option>
-                                <option value="Front Bumper"> Front Bumper</option>
-                                <option value="Rear Bumper">Rear Bumper</option>
-                                <option value="Hood">Hood</option>
-                                <option value="Trunk">Trunk</option>
-                                <option value="Roof">Roof</option>
-                                <option value="Front Windshield">Front Windshield</option>
-                                <option value="Rear Windshield">Rear Windshield</option>
-                                <option value="Side Mirror Left">Side Mirror Left</option>
-                                <option value="Side Mirror Right">Side Mirror Right</option>
-                                <option value="Door Front Left">Door Front Left</option>
-                                <option value="Door Front Right">Door Front Right</option>
-                                <option value="Door Rear Left">Door Rear Left</option>
-                                <option value="Door Rear Right">Door Rear Right</option>
-                              </Input>
+                              {hitOptions.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="hits_b"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={hits_b.includes(option)}
+                                      onChange={handleChocpoints_b}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                         </Row>
@@ -2148,32 +2213,20 @@ const AddStatement = () => {
                               >
                                 11. Apparent Damages
                               </label>
-                              <Input
-                                name="apparent_damages_a"
-                                type="select"
-                                value={apparent_damages_a}
-                                onChange={(e) =>
-                                  setApparent_damages_a(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Scratches">Scratches</option>
-                                <option value="Dents">Dents</option>
-                                <option value="Cracks">Cracks</option>
-                                <option value="Paint Damage">
-                                  Paint Damage
-                                </option>
-                                <option value="Broken Lights">
-                                  Broken Lights
-                                </option>
-                                <option value="Broken Windows">
-                                  Broken Windows
-                                </option>
-                                <option value="Missing Parts">
-                                  Missing Parts
-                                </option>
-                              </Input>
+                              {damageplaces.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="apparent_damages_a"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={apparent_damages_a.includes(option)}
+                                      onChange={handleApparentdamages_a}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                           <Col lg="6">
@@ -2184,32 +2237,20 @@ const AddStatement = () => {
                               >
                                 11. Apparent Damages
                               </label>
-                              <Input
-                                name="apparent_damages_b"
-                                type="select"
-                                value={apparent_damages_b}
-                                onChange={(e) =>
-                                  setApparent_damages_b(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Scratches">Scratches</option>
-                                <option value="Dents">Dents</option>
-                                <option value="Cracks">Cracks</option>
-                                <option value="Paint Damage">
-                                  Paint Damage
-                                </option>
-                                <option value="Broken Lights">
-                                  Broken Lights
-                                </option>
-                                <option value="Broken Windows">
-                                  Broken Windows
-                                </option>
-                                <option value="Missing Parts">
-                                  Missing Parts
-                                </option>
-                              </Input>
+                              {damageplaces.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="apparent_damages_b"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={apparent_damages_b.includes(option)}
+                                      onChange={handleApparentdamages_b}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                         </Row>
@@ -2229,31 +2270,20 @@ const AddStatement = () => {
                               >
                                 12. Circumstances By client A
                               </label>
-                              <Input
-                                name="circumstances_a"
-                                type="select"
-                                value={circumstances_a}
-                                onChange={(e) =>
-                                  setCircumstances_a(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner </option>
-                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
-                                <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
-                                <option value="Distracted driving">Distracted driving</option>
-                                <option value="Driving while fatigued">Driving while fatigued</option>
-                                <option value="Reckless driving">Reckless driving</option>
-                                <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling"> Changing lanes without signaling</option>
-                                <option value="Making an illegal turn"> Making an illegal turn</option>
-                                <option value="Backing up without looking"> Backing up without looking </option>
-                                <option value="Driving in the wrong lane">Driving in the wrong lane </option>
-                                <option value="Driving in a construction zone">Driving in a construction zone</option>
-                                <option value="Driving during inclement weather"> Driving during inclement weather</option>
-                              </Input>
+                              {Circumstances.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="circumstances_a"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={circumstances_a.includes(option)}
+                                      onChange={handleCircumstances_a}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                           <Col md="6">
@@ -2264,31 +2294,20 @@ const AddStatement = () => {
                               >
                                 12. Circumstances By client B
                               </label>
-                              <Input
-                                name="circumstances_b"
-                                type="select"
-                                value={circumstances_b}
-                                onChange={(e) =>
-                                  setCircumstances_b(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner </option>
-                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
-                                <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
-                                <option value="Distracted driving">Distracted driving</option>
-                                <option value="Driving while fatigued">Driving while fatigued</option>
-                                <option value="Reckless driving">Reckless driving</option>
-                                <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling"> Changing lanes without signaling</option>
-                                <option value="Making an illegal turn"> Making an illegal turn</option>
-                                <option value="Backing up without looking"> Backing up without looking </option>
-                                <option value="Driving in the wrong lane">Driving in the wrong lane </option>
-                                <option value="Driving in a construction zone">Driving in a construction zone</option>
-                                <option value="Driving during inclement weather"> Driving during inclement weather</option>
-                              </Input>
+                              {Circumstances.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="circumstances_b"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={circumstances_b.includes(option)}
+                                      onChange={handleCircumstances_b}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                         </Row>
