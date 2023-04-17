@@ -52,6 +52,7 @@ function AddExpert() {
     const role = "Expert";
     const verified = true;
     const phone_number = String(form.phone_number.value);
+    const expert_status = true;
 
     if (
       !email ||
@@ -105,6 +106,7 @@ function AddExpert() {
           verif1,
           phone_number,
           id_agence,
+          expert_status
         },
         {
           headers: { "Content-Type": "application/json" },
