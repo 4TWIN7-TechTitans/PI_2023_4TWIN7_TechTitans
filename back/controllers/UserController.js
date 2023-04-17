@@ -1965,7 +1965,8 @@ module.exports.get_all_ExpCli  = async (req, res) => {
         address,
         phone_number,
         id_agence,
-        role
+        role,
+        expert_status
       } = user;
       return {
         _id,
@@ -1975,7 +1976,8 @@ module.exports.get_all_ExpCli  = async (req, res) => {
         address,
         phone_number,
         id_agence,
-        role
+        role,
+        expert_status
       };
     });
 
