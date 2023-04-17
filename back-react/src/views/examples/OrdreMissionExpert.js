@@ -10,6 +10,7 @@ import {
   Container,
   Row,
   Button,
+  Input
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -22,6 +23,10 @@ function OrdreMissionExpert() {
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [expertEmail, setExpertEmail] = useState("");
+  const [id, setId] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+
 
   useEffect(() => {
     function getCookie(key) {
@@ -55,6 +60,22 @@ function OrdreMissionExpert() {
     fetchData();
   }, []);
 
+
+  const handleSearchChange = (event) => {
+    setId(event.target.value);
+    setSearchResults(null); // reset the search results
+  };
+
+  const handleSearchSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.get(`http://localhost:5000/get_specificstatement/` + id );
+      setSearchResults(response.data.statement);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   const pageSize = 5;
   const pageCount = Math.ceil(statements.length / pageSize);
   const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
@@ -78,6 +99,22 @@ function OrdreMissionExpert() {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h3 className="mb-0">My Missions</h3>
+                <form onSubmit={handleSearchSubmit}>
+                  <Input
+                    type="text"
+                    placeholder="Search by ID"
+                    value={id}
+                    onChange={handleSearchChange}
+                  />
+                  <Button type="submit">Search</Button>
+                </form>
+                {searchResults ? (
+                  <div>
+                    <p>Statement ID: {searchResults._id}</p>
+                  </div>
+                ) : id ? (
+                  <p>Statement not found</p>
+                ) : null}
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
