@@ -39,7 +39,7 @@ var routesAgence = [
     name: "Tickets",
     icon: "ni ni-bullet-list-67 text-blue",
     component: Tickets,
-    layout: "/admin",
+    layout: "/agence",
     showInSidebar: true,
   },
   {
