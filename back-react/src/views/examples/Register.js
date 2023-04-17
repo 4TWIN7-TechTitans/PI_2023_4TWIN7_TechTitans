@@ -38,8 +38,8 @@ function Register() {
     const address = "";
     const date_of_birth = "";
     const phone_number = String(form.phone_number.value);
-    const  two_factor_auth = form.tfa.checked  ? "sms" : "none";
-    
+    const two_factor_auth = form.tfa.checked ? "sms" : "none";
+
     console.log(two_factor_auth);
 
     console.log(phone_number);
@@ -140,14 +140,15 @@ function Register() {
   };
 
   const validateFirstName = (first_name) => {
-    const firstNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
+    const firstNameRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F"]{3,20}$/;
     return firstNameRegex.test(first_name);
   };
-
+  
   const validateLastName = (last_name) => {
-    const lastNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
+    const lastNameRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F"]{3,20}$/;
     return lastNameRegex.test(last_name);
   };
+  
 
   const validatePhoneNumber = (phone_number) => {
     const phone_numberRegex = /^(\+216)?\d{8}$|^\d{8}$/;
@@ -187,38 +188,38 @@ function Register() {
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /\d/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
     let strength = 0;
     let strengthMessage = "";
-  
+
     if (password.length >= 8) {
       strength += 1;
       strengthMessage += "✅ is at least 8 characters long. <br>";
     } else {
       strengthMessage += "❌ must be at least 8 characters long. <br>";
     }
-  
+
     if (lowercaseRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ can contains a lowercase letter. <br>";
     } else {
       strengthMessage += "";
     }
-  
+
     if (uppercaseRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ contains a capital letter. <br>";
     } else {
       strengthMessage += "";
     }
-  
+
     if (numberRegex.test(password)) {
       strength += 1;
       strengthMessage += "✅ contains a number. <br>";
     } else {
       strengthMessage += "";
     }
-  
+
     if (emailRegex.test(password)) {
       strengthMessage += "❌ cannot be an email. <br>";
       passwordError.innerHTML = "Password cannot be an email.";
@@ -226,7 +227,7 @@ function Register() {
       strength += 1;
       passwordError.innerHTML = "";
     }
-  
+
     if (strength === 4) {
       strengthMessage += "✅ strong.<br>";
     } else if (strength >= 2) {
@@ -234,10 +235,9 @@ function Register() {
     } else {
       strengthMessage += "😔 weak.<br>";
     }
-  
+
     passwordError.innerHTML += strengthMessage;
   };
-  
 
   const handleFirstNameChange = (e) => {
     const first_name = e.target.value;
@@ -320,30 +320,30 @@ function Register() {
                   </Row>
                   <Row>
                     <Col md="6">
-                    <FormGroup>
-  <label>Password</label>
-  <InputGroup>
-    <Input
-      name="password"
-      type={showPassword ? "text" : "password"}
-      placeholder="Password"
-      required
-      onChange={handlePasswordChange}
-    />
-    <InputGroupAddon addonType="append">
-      <InputGroupText
-        onClick={() => setShowPassword(!showPassword)}
-      >
-        {showPassword ? (
-          <i className="fas fa-eye-slash" />
-        ) : (
-          <i className="fas fa-eye" />
-        )}
-      </InputGroupText>
-    </InputGroupAddon>
-  </InputGroup>
-  <div className="password error"></div>
-</FormGroup>
+                      <FormGroup>
+                        <label>Password</label>
+                        <InputGroup>
+                          <Input
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            required
+                            onChange={handlePasswordChange}
+                          />
+                          <InputGroupAddon addonType="append">
+                            <InputGroupText
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              {showPassword ? (
+                                <i className="fas fa-eye-slash" />
+                              ) : (
+                                <i className="fas fa-eye" />
+                              )}
+                            </InputGroupText>
+                          </InputGroupAddon>
+                        </InputGroup>
+                        <div className="password error"></div>
+                      </FormGroup>
                     </Col>
                     <Col md="6">
                       <FormGroup>
