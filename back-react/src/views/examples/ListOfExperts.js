@@ -100,7 +100,7 @@ function ListOfAgency() {
     doc.setTextColor(128, 128, 128); // Set text color to gray
     doc.text(`Generated on ${new Date().toLocaleDateString()}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, {align: "center"}); // Add date of generation
   
-    doc.save("list_of_experts.pdf");
+    doc.save("list_of_users.pdf");
   }
   
   
@@ -176,7 +176,7 @@ function ListOfAgency() {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-                <Button onClick={generatePDF}>Downaload List Of Experts</Button>
+                <Button onClick={generatePDF}>Downaload List Of Users</Button>
 
               </CardFooter>
             </Card>

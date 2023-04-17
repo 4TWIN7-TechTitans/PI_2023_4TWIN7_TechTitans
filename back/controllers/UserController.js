@@ -1948,13 +1948,13 @@ module.exports.get_all_agences = async (req, res) => {
   }
 };
 
-// Get All Experts
-module.exports.get_all_experts = async (req, res) => {
+// Get All Experts & Client
+module.exports.get_all_ExpCli  = async (req, res) => {
   try {
-    const experts = await userModel.find({ role: "Expert" });
+    const users = await userModel.find({ $or: [{ role: "Expert" }, { role: "Client" }]});
 
     // remove sensitive information from the response
-    const sanitizedExperts = experts.map((expert) => {
+    const sanitizedUsers = users.map((user) => {
       const {
         _id,
         first_name,
@@ -1963,7 +1963,8 @@ module.exports.get_all_experts = async (req, res) => {
         address,
         phone_number,
         id_agence,
-      } = expert;
+        role
+      } = user;
       return {
         _id,
         first_name,
@@ -1972,12 +1973,18 @@ module.exports.get_all_experts = async (req, res) => {
         address,
         phone_number,
         id_agence,
+        role
       };
     });
 
-    // return experts if found
+    // filter experts and clients from the users array
+    const experts = sanitizedUsers.filter((user) => user.role === "Expert");
+    const clients = sanitizedUsers.filter((user) => user.role === "Client");
+
+    // return users if found
     return res.status(200).json({
-      experts: sanitizedExperts,
+      experts,
+      clients,
       status: "success",
     });
   } catch (error) {
@@ -1988,6 +1995,7 @@ module.exports.get_all_experts = async (req, res) => {
     });
   }
 };
+
 
 // Function to set availability of expert
 module.exports.updateAvailability = async (req, res) => {

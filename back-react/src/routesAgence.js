@@ -60,7 +60,7 @@ var routesAgence = [
   },
   {
     path: "/listexpet",
-    name: "List Of Our Experts",
+    name: "List Of Our Users",
     icon: "ni ni-bullet-list-67 text-blue",
     component: ListOfExperts,
     layout: "/agence",
