@@ -80,6 +80,7 @@ function AddNew() {
     const password2 = form.password2.value;
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
+    const address = form.address.value;
 
     const verified = true;
     const phone_number = form.phone_number.value
@@ -92,6 +93,7 @@ function AddNew() {
       !password2 ||
       !last_name ||
       !first_name ||
+      !address||
 
       !verified
     ) {
@@ -137,6 +139,7 @@ function AddNew() {
           role: "Agence",
           verif1,
           phone_number,
+          address,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -186,7 +189,10 @@ function AddNew() {
     const last_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
     return last_nameRegex.test(last_name);
   };
-
+  const validateAddress = (address) => {
+    const addressRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F"]+$/;
+    return addressRegex.test(address);
+  };
   const handleEmailChange = (e) => {
     const email = e.target.value;
     const emailError = document.querySelector(".email.error");
@@ -286,6 +292,15 @@ function AddNew() {
     } else {
       last_nameError.textContent = "";
     }
+  };  
+  const handleAddressChange = (e) => {
+    const address = e.target.value;
+    const addressError = document.querySelector(".address.error");
+    if (!validateAddress(address)) {
+      addressError.textContent = "Please enter a valid address .";
+    } else {
+      addressError.textContent = "";
+    }
   };
 
   return (
@@ -326,6 +341,21 @@ function AddNew() {
                         />
                           
                         <div className="last_name error"></div>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md="12">
+                      <FormGroup>
+                        <label>Address</label>
+                        <Input
+                          name="address"
+                          type="address"
+                          placeholder="Address"
+                          required
+                          onChange={handleAddressChange}
+                        />
+                        <div className="address error"></div>
                       </FormGroup>
                     </Col>
                   </Row>
