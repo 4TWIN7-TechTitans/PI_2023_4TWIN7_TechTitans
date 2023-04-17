@@ -36,9 +36,13 @@ router.get("/all-experts", userController.show_experts_get);
 
 router.get("/getallagences", userController.get_all_agences);
 
-router.get("/getallexperts", userController.get_all_experts);
+router.get("/getallexperts", userController.get_all_ExpCli);
 
-router.post("/updateAvailability/:email", userController.updateAvailability);
+router.post("/status/:email", userController.expert_status_on);
+
+router.post("/statusoffline/:email", userController.expert_status_off);
+
+router.get("/getallexperts_status", userController.get_all_experts_status);
 
 
 module.exports = router;

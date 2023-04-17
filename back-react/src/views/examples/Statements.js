@@ -30,6 +30,7 @@ function MyStatements() {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("");
+  const [selectedStatement, setSelectedStatement] = useState(null);
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -40,7 +41,7 @@ function MyStatements() {
     setPrenom(decodeURI(getCookie("firstname")));
     setRole(decodeURI(getCookie("role")));
     console.log(role);
-    
+
     fetchData();
   }, [nom, prenom, role]);
 
@@ -53,21 +54,21 @@ function MyStatements() {
           statement.insured_a.firstname === prenom &&
           statement.insured_a.lastname === nom
       );
-        
+
       console.log(filteredData);
       setStatements(filteredData);
-      
+
     } catch (error) {
       console.log(error);
     }
   };
 
-  
+
 
   useEffect(() => {
-  
+
     fetchData();
-}, []);
+  }, []);
 
   useEffect(() => {
     console.log(statements);
@@ -125,18 +126,18 @@ function MyStatements() {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
 
-                
+
 
                 </thead>
                 <tbody>
                   <th scope="col">Date</th>
-                  <th>Croquis</th>
+
                   <th scope="col">ContractNumber</th>
                   <th scope="col">First Name </th>
                   <th scope="col">Last Name </th>
                   <th scope="col">my signature </th>
-                  <th scope="col">signature of B </th>
                   <th scope="col">Etat</th>
+                  <th scope="col">Action</th>
 
 
                 </tbody>
@@ -165,21 +166,26 @@ function MyStatements() {
                   }
                   return (
                     <tbody>
-                    <tr key={statement._id}>
-                      <td>{statement.date}</td>
-                      <td><img src={statement.accident_croquis} alt="Accident Croquis" width={"150%"} /></td>
-                      <td>{statement.vehicule_a.contractNumber}</td>
-                      <td>{statement.insured_a.firstname}</td>
-                      <td>{statement.insured_a.lastname}</td>
-                      <td><img src={statement.signature_a} alt="signature a" width={"150%"} /></td>
-                      <td><img src={statement.signature_b} alt="signature b" width={"150%"}  /></td>
-                      <td>
-                        <Button color={color} disabled>
-                          {statusText}
-                        </Button>
-                      </td>
+                      <tr key={statement._id}>
+                        <td>{statement.date}</td>
 
-                    </tr>
+                        <td>{statement.vehicule_a.contractNumber}</td>
+                        <td>{statement.insured_a.firstname}</td>
+                        <td>{statement.insured_a.lastname}</td>
+                        <td><img src={statement.signature_a} alt="signature a" width={"50%"} /></td>
+                        <td>
+                          <Button color={color} disabled>
+                            {statusText}
+                          </Button>
+                        </td>
+                        <td>
+                          <Button color="info" onClick={() => setSelectedStatement(statement)}>
+                            Details
+                          </Button>
+
+                        </td>
+
+                      </tr>
                     </tbody>
                   );
                 })}
@@ -226,7 +232,20 @@ function MyStatements() {
             </Card>
           </div>
         </Row>
+
       </Container>
+      <Badge className="mt--12" fluid>
+        {selectedStatement && (
+          <div>
+            <p>Date: {selectedStatement.date}</p>
+            <p>Contract Number: {selectedStatement.vehicule_a.contractNumber}</p>
+            <p>First Name: {selectedStatement.insured_a.firstname}</p>
+            <p>Last Name: {selectedStatement.insured_a.lastname}</p>
+            <img src={selectedStatement.signature_a} alt="signature a" width={"50%"} />
+            {/* continue all the data x))))))) */}
+          </div>
+        )}
+        </Badge>
     </>
   );
 }

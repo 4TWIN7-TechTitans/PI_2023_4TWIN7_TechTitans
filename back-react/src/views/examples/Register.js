@@ -38,8 +38,8 @@ function Register() {
     const address = "";
     const date_of_birth = "";
     const phone_number = String(form.phone_number.value);
-    const  two_factor_auth = form.tfa.checked  ? "sms" : "none";
-    
+    const two_factor_auth = form.tfa.checked ? "sms" : "none";
+
     console.log(two_factor_auth);
 
     console.log(phone_number);
@@ -140,14 +140,15 @@ function Register() {
   };
 
   const validateFirstName = (first_name) => {
-    const firstNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
+    const firstNameRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F"]{3,20}$/;
     return firstNameRegex.test(first_name);
   };
-
+  
   const validateLastName = (last_name) => {
-    const lastNameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]{3,20}$/;
+    const lastNameRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F"]{3,20}$/;
     return lastNameRegex.test(last_name);
   };
+  
 
   const validatePhoneNumber = (phone_number) => {
     const phone_numberRegex = /^(\+216)?\d{8}$|^\d{8}$/;
@@ -180,13 +181,13 @@ function Register() {
 
     emailError.innerHTML = errorMessage;
   };
-
   const handlePasswordChange = (e) => {
     const password = e.target.value;
     const passwordError = document.querySelector(".password.error");
     const lowercaseRegex = /[a-z]/;
     const uppercaseRegex = /[A-Z]/;
     const numberRegex = /\d/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     let strength = 0;
     let strengthMessage = "";
@@ -219,6 +220,14 @@ function Register() {
       strengthMessage += "";
     }
 
+    if (emailRegex.test(password)) {
+      strengthMessage += "❌ cannot be an email. <br>";
+      passwordError.innerHTML = "Password cannot be an email.";
+    } else {
+      strength += 1;
+      passwordError.innerHTML = "";
+    }
+
     if (strength === 4) {
       strengthMessage += "✅ strong.<br>";
     } else if (strength >= 2) {
@@ -227,7 +236,7 @@ function Register() {
       strengthMessage += "😔 weak.<br>";
     }
 
-    passwordError.innerHTML = strengthMessage;
+    passwordError.innerHTML += strengthMessage;
   };
 
   const handleFirstNameChange = (e) => {
@@ -333,6 +342,7 @@ function Register() {
                             </InputGroupText>
                           </InputGroupAddon>
                         </InputGroup>
+                        <div className="password error"></div>
                       </FormGroup>
                     </Col>
                     <Col md="6">

@@ -344,6 +344,7 @@ module.exports.post_signup = async (req, res) => {
       two_factor_auth_code: "",
       banned: "false",
       statements_number: 0,
+      expert_status : "true"
     });
 
     const verificationToken = createToken(user._id);
@@ -387,6 +388,7 @@ module.exports.add_post = async (req, res) => {
       verified: "true",
       image: avatar,
       statements_number: 0,
+      expert_status : "true"
     });
     if (user) {
       const transporter = nodemailer.createTransport({
@@ -1948,13 +1950,13 @@ module.exports.get_all_agences = async (req, res) => {
   }
 };
 
-// Get All Experts
-module.exports.get_all_experts = async (req, res) => {
+// Get All Experts & Client
+module.exports.get_all_ExpCli  = async (req, res) => {
   try {
-    const experts = await userModel.find({ role: "Expert" });
+    const users = await userModel.find({ $or: [{ role: "Expert" }, { role: "Client" }]});
 
     // remove sensitive information from the response
-    const sanitizedExperts = experts.map((expert) => {
+    const sanitizedUsers = users.map((user) => {
       const {
         _id,
         first_name,
@@ -1963,7 +1965,9 @@ module.exports.get_all_experts = async (req, res) => {
         address,
         phone_number,
         id_agence,
-      } = expert;
+        role,
+        expert_status
+      } = user;
       return {
         _id,
         first_name,
@@ -1972,12 +1976,19 @@ module.exports.get_all_experts = async (req, res) => {
         address,
         phone_number,
         id_agence,
+        role,
+        expert_status
       };
     });
 
-    // return experts if found
+    // filter experts and clients from the users array
+    const experts = sanitizedUsers.filter((user) => user.role === "Expert");
+    const clients = sanitizedUsers.filter((user) => user.role === "Client");
+
+    // return users if found
     return res.status(200).json({
-      experts: sanitizedExperts,
+      experts,
+      clients,
       status: "success",
     });
   } catch (error) {
@@ -1989,8 +2000,9 @@ module.exports.get_all_experts = async (req, res) => {
   }
 };
 
+
 // Function to set availability of expert
-module.exports.updateAvailability = async (req, res) => {
+module.exports.expert_status_on = async (req, res) => {
   const { email } = req.params;
   const is_available = req.body.is_available;
 
@@ -2004,12 +2016,69 @@ module.exports.updateAvailability = async (req, res) => {
       });
     }
 
-    user.is_available = is_available;
+    user.expert_status = true; // Set the expert online
     await user.save();
 
     return res.status(200).json({
-      message: "Expert availability updated successfully",
+      message: "Expert Online",
       status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
+
+
+//Offline Expert 
+module.exports.expert_status_off = async (req, res) => {
+  const { email } = req.params;
+  const is_available = req.body.is_available;
+
+  try {
+    // Find the user by email and check if they have the "Expert" role
+    const user = await userModel.findOne({ email: email });
+    if (!user || user.role !== "Expert") {
+      return res.status(404).json({
+        message: "User not found or not an expert",
+        status: "error",
+      });
+    }
+
+    user.expert_status = false; // Set the expert offline
+    await user.save();
+
+    return res.status(200).json({
+      message: "Expert Offline",
+      status: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
+
+module.exports.get_all_experts_status = async (req, res) => {
+  try {
+    // Find all users with the "Expert" role
+    const experts = await userModel.find({ role: "Expert" });
+
+    // Map the experts array to include only the email and expert_status properties
+    const expertList = experts.map((expert) => ({
+      email: expert.email,
+      expert_status: expert.expert_status,
+    }));
+
+    return res.status(200).json({
+      message: "List of all experts",
+      status: "success",
+      experts: expertList,
     });
   } catch (error) {
     console.log(error);

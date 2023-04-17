@@ -115,6 +115,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
+  expert_status: {
+    type: Boolean,
+    required: false,
+  },  
 });
 
 // fire a function before doc saved to db

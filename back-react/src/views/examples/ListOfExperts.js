@@ -16,8 +16,7 @@ import Header from "components/Headers/Header.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import jsPDF from 'jspdf';
-
+import jsPDF from "jspdf";
 
 function ListOfAgency() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,8 +44,20 @@ function ListOfAgency() {
         console.log(err);
       }
     };
-
+    const fetchExpertsStatus = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/getallexperts_status"
+        );
+        console.log(response);
+        // handle the response here
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
     fetchUsers();
+    fetchExpertsStatus();
   }, []);
 
   const pageSize = 5;
@@ -61,24 +72,37 @@ function ListOfAgency() {
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  function getStatusBadge(expertStatus) {
+    const color = expertStatus ? "success" : "danger";
+    const text = expertStatus ? "Online" : "Offline";
+    return (
+      <Badge color={color} pill>
+        {text}
+      </Badge>
+    );
+  }
+  
+  
+
   function generatePDF() {
     const doc = new jsPDF();
-  
+
     // Add agency name
     doc.setFontSize(14);
-    doc.text("Assurini Agency", 105, 30, {align: "center"});
-  
+    doc.text("Assurini Agency", 105, 30, { align: "center" });
+
     // Add title
     doc.setFontSize(18);
-    doc.text("List Of Experts", 105, 50, {align: "center"});
-  
+    doc.text("List Of Experts", 105, 50, { align: "center" });
+
     // Add table headers
     doc.setFontSize(12);
     doc.text("Identifiant Du L'Expert", 20, 60);
     doc.text("Name", 80, 60); // Increased x-coordinate of "Name" header
     doc.text("Email", 130, 60); // Increased x-coordinate of "Email" header
     doc.text("Contact Number", 180, 60); // Increased x-coordinate of "Contact Number" header
-  
+
     // Add table rows
     let row = 70;
     Experts.forEach((user, index) => {
@@ -89,24 +113,23 @@ function ListOfAgency() {
       }
       doc.rect(20, row - 5, 170, 10, "F"); // Draw rectangle to fill row with color
       doc.setTextColor(0, 0, 0); // Set text color to black
-      doc.text(user._id, 20, row);
       doc.text(user.first_name, 80, row); // Increased x-coordinate of "Name" text
       doc.text(user.email, 130, row); // Increased x-coordinate of "Email" text
       doc.text(user.phone_number, 180, row); // Increased x-coordinate of "Contact Number" text
       row += 10;
     });
-    
+
     // Add generation date
     doc.setTextColor(128, 128, 128); // Set text color to gray
-    doc.text(`Generated on ${new Date().toLocaleDateString()}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, {align: "center"}); // Add date of generation
-  
-    doc.save("list_of_experts.pdf");
-  }
-  
-  
-  
-  
+    doc.text(
+      `Generated on ${new Date().toLocaleDateString()}`,
+      doc.internal.pageSize.getWidth() / 2,
+      doc.internal.pageSize.getHeight() - 10,
+      { align: "center" }
+    ); // Add date of generation
 
+    doc.save("list_of_users.pdf");
+  }
   return (
     <>
       <Header />
@@ -121,23 +144,25 @@ function ListOfAgency() {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scop="col">Identifiant Du L'Expert</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Contact Number</th>
+                    <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedUsers.map((user) => (
                     <tr key={user._id}>
-                      <td>{user._id}</td>
                       <td>{user.first_name}</td>
                       <td>{user.email}</td>
+                      <td>{user.role}</td>
                       <td>
                         <Badge color="primary" className="badge-dot mr-4">
                           {user.phone_number}
                         </Badge>
                       </td>
+                      <td>{getStatusBadge(user.expertStatus)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -176,8 +201,7 @@ function ListOfAgency() {
                     </PaginationItem>
                   </Pagination>
                 </nav>
-                <Button onClick={generatePDF}>Downaload List Of Experts</Button>
-
+                <Button onClick={generatePDF}>Downaload List Of Users</Button>
               </CardFooter>
             </Card>
           </div>

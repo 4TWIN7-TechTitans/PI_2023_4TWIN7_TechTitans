@@ -59,8 +59,8 @@ var routesAgence = [
     showInSidebar: true,
   },
   {
-    path: "/listexpet",
-    name: "List Of Our Experts",
+    path: "/listexpert",
+    name: "List Of Our Users",
     icon: "ni ni-bullet-list-67 text-blue",
     component: ListOfExperts,
     layout: "/agence",

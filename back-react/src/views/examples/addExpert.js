@@ -52,6 +52,7 @@ function AddExpert() {
     const role = "Expert";
     const verified = true;
     const phone_number = String(form.phone_number.value);
+    const expert_status = true;
 
     if (
       !email ||
@@ -105,6 +106,7 @@ function AddExpert() {
           verif1,
           phone_number,
           id_agence,
+          expert_status
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -131,18 +133,6 @@ function AddExpert() {
     const emailRegex = /\S+@\S+\.\S+/;
     return emailRegex.test(email);
   };
-  // const validatePassword = (password) => {
-  //   const lowercaseRegex = /[a-z]/;
-  //   const uppercaseRegex = /[A-Z]/;
-  //   const numberRegex = /[0-9]/;
-
-  //   return (
-  //     password.length >= 8 &&
-  //     lowercaseRegex.test(password) &&
-  //     uppercaseRegex.test(password) &&
-  //     numberRegex.test(password)
-  //   );
-  // };
 
   const validateFirstName = (first_name) => {
     const first_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;

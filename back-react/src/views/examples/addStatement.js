@@ -33,11 +33,12 @@ import {
   InputGroupText,
   Label,
 } from "reactstrap";
+import AnimatedText from 'react-animated-text-content';
 import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+//import GoogleMapReact from 'google-map-react';
 // core components
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -46,7 +47,7 @@ const AddStatement = () => {
 
 
   const [date, setDate] = useState("");
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState("");
   const [injured, setInjured] = useState("");
   const [material_damage, setMaterial_damage] = useState("");
   const [witness, setWitness] = useState("");
@@ -104,17 +105,18 @@ const AddStatement = () => {
   const [country_a, setCountry_a] = useState("");
   const [country_b, setCountry_b] = useState("");
   const [vehicule_identity_b, setVehicule_identity_b] = useState("");
-  const [hits_a, setHits_a] = useState("");
-  const [hits_b, setHits_b] = useState("");
-  const [hit_direction, setHit_direction] = useState("");
-  const [apparent_damages_a, setApparent_damages_a] = useState("");
-  const [apparent_damages_b, setApparent_damages_b] = useState("");
+
+
+  const [hits_a, setHits_a] = useState([]);
+  const [hits_b, setHits_b] = useState([]);
+  const [apparent_damages_a, setApparent_damages_a] = useState([]);
+  const [apparent_damages_b, setApparent_damages_b] = useState([]);
 
   const [damage_direction_a, setDamage_direction_a] = useState("");
   const [damage_direction_b, setDamage_direction_b] = useState("");
 
-  const [circumstances_a, setCircumstances_a] = useState("");
-  const [circumstances_b, setCircumstances_b] = useState("");
+  const [circumstances_a, setCircumstances_a] = useState([]);
+  const [circumstances_b, setCircumstances_b] = useState([]);
   const canvasRef = useRef(null);
   const canvasRef_a = useRef(null);
   const canvasRef_b = useRef(null);
@@ -131,6 +133,7 @@ const AddStatement = () => {
   const [going_to_b, setGoing_to_b] = useState("");
   const [possibleplaces_a, setPossiblePlace_a] = useState("");
   const [possibleplaces_b, setPossiblePlace_b] = useState("");
+
 
   const [showNotification, setShowNotification] = useState(false);
   const [errors, setErrors] = useState({});
@@ -152,8 +155,9 @@ const AddStatement = () => {
 
   const possibleplaces = ["Front Left Fender", "Front Right Fender", "Rear Left Fender", "Rear Right Fender", "Front Bumper", "Rear Bumper", "Hood", "Trunk", "Roof", "Front Windshield", "Rear Windshield", "Side Mirrors", "Doors", "Other",];
 
-  const hitdirections = ["Front", "Back", "Left", "Right"];
-  const dmgeplaces = ["Scratches", "Dents", "Cracks", "Paint Damage", "Broken Lights", "Broken Windows", "Missing Parts", "Other",];
+  const hitOptions = ['Front Left Fender', 'Front Right Fender', 'Rear Left Fender', 'Rear Right Fender', 'Front Bumper', 'Rear Bumper', 'Hood', 'Trunk', 'Roof', 'Front Windshield', 'Rear Windshield', 'Side Mirror Left', 'Side Mirror Right', 'Door Front Left', 'Door Front Right', 'Door Rear Left', 'Door Rear Right',];
+  const damageplaces = ["Scratches", "Dents", "Cracks", "Paint Damage", "Broken Lights", "Broken Windows", "Missing Parts", "Other",];
+
   const dmgdirections = ["Front", "Back", "Left", "Right"];
   const Circumstances = ["Driving in a normal and careful manner", "Driving under the influence of drugs or alcohol", "Speeding", "Ignoring traffic signals or signs", "Distracted driving", "Driving while fatigued", "Reckless driving", "Tailgating", "Changing lanes without signaling", "Making an illegal turn", "Backing up without looking", "Driving in the wrong lane", "Driving in a construction zone", "Driving during inclement weather", "Other",];
   const types = ["Car", "Truck", "MotoCycle"];
@@ -176,11 +180,27 @@ const AddStatement = () => {
 
   }, [nom, prenom, role]);
 
+  const [phone_number, setPhone_number] = useState("");
+  const fetchData = async () => {
+    const jwt = getCookie("jwt");
+    const phone_numberUser = (
+      await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+    ).data.phone_number;
+    setPhone_number(phone_numberUser);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   const handleSubmit = async (e) => {
 
     e.preventDefault();
     const form = e.target;
-    const date = form.date.value;
+    const isValidDate = validateDate(date);
+    if (!isValidDate) {
+      const errorElement = document.querySelector(".date.error");
+      errorElement.innerText = "La date de l'accident ne doit pas dépasser 5 jours à compter de la date d'aujourd'hui.";
+      return;
+    }
     const location = form.location.value;
     const injured = form.injured.value;
     const material_damage = form.material_damage.value;
@@ -254,14 +274,33 @@ const AddStatement = () => {
       going_to: form.going_to_b.value,
     };
 
-    const hits_a = form.hits_a.value;
-    const hits_b = form.hits_b.value;
 
-    const apparent_damages_a = form.apparent_damages_a.value;
+    if (hits_a.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (hits_b.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (apparent_damages_a.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
 
-    const apparent_damages_b = form.apparent_damages_b.value;
-    const circumstances_a = form.circumstances_a.value;
-    const circumstances_b = form.circumstances_b.value;
+    if (apparent_damages_b.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (circumstances_a.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+    if (circumstances_b.length === 0) {
+      toast.error('Please select at least one option');
+      return;
+    }
+
     const accident_croquis = form.accident_croquis;
     const notes_a = form.notes_a.value;
     const notes_b = form.notes_b.value;
@@ -541,14 +580,19 @@ const AddStatement = () => {
         setShowError(false);
 
         toast.success("Statement created successfully");
-        window.location.redirect("http://localhost:3000/mystatement");
-      } else {
-        setShowNotification(false);
-        setErrors({ ...errors, message: "Statement adding failed" });
-        setShowError(true);
-        toast.error("Error creating statement");
+        setTimeout(() => {
+          window.location.href = "/mystatement";
+
+        }, 7000);
       }
     } catch (error) {
+
+      setShowNotification(false);
+      setErrors({ ...errors, message: "Statement adding failed" });
+      setShowError(true);
+      console.log("lenna");
+      toast.error("Error creating statement");
+
       console.log(error);
     }
 
@@ -560,7 +604,12 @@ const AddStatement = () => {
       try {
         const response = await axios.get("http://localhost:5000/all-users");
         setUsers(response.data.users);
-        setUsers(response.data.users.filter((user) => user.role === "Agence"));
+        setUsers(response.data.users.filter(
+          (user) =>
+            user.role === "Agence"
+        )
+
+        );
       } catch (err) {
         console.log(err);
       }
@@ -592,8 +641,16 @@ const AddStatement = () => {
     e.preventDefault();
     setSection(section - 1);
   };
+  const handleFirst = (e) => {
+    e.preventDefault();
+    setSection(1);
+  };
 
-
+  const handleLast = (e) => {
+    e.preventDefault();
+    // Set the last section number here
+    setSection(8);
+  };
 
 
   const handleUndo = () => {
@@ -602,19 +659,96 @@ const AddStatement = () => {
   //validators and handle :
 
   //geolocalisation
-  /*
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-    });
-  }, []);
-? `${location.lat},${location.lng}` : ''*/
+  // const MapMarker = ({ text }) => (
+  //   <div style={{ color: 'red', fontWeight: 'bold' }}>{text}</div>
+  // );
+  // const handleMapClick = ({ lat, lng }) => {
+  //   setLocation({ lat, lng });
+  // };
 
+
+  //ctrl de saisie date de l'accident :
+  function validateDate(date) {
+    const today = new Date();
+    const accidentDate = new Date(date);
+    const timeDiff = Math.abs(today.getTime() - accidentDate.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return diffDays <= 5;
+  }
+
+
+  //checkbox chock points a:
+  const handleChocpoints_a = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setHits_a((prevSelected) => [...prevSelected, value]);
+    } else {
+      setHits_a((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+
+  //checkbox chock points a:
+  const handleChocpoints_b = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setHits_b((prevSelected) => [...prevSelected, value]);
+    } else {
+      setHits_b((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+  //checkbox apparent damages a
+  const handleApparentdamages_a = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setApparent_damages_a((prevSelected) => [...prevSelected, value]);
+    } else {
+      setApparent_damages_a((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+
+  //checkbox apparent damages a
+  const handleApparentdamages_b = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+    if (isChecked) {
+      setApparent_damages_b((prevSelected) => [...prevSelected, value]);
+    } else {
+      setApparent_damages_b((prevSelected) =>
+        prevSelected.filter((v) => v !== value)
+      );
+    }
+  };
+
+  //checkbox circumstances a
+  const handleCircumstances_a = (e) => {
+    const { value } = e.target;
+    if (circumstances_a.includes(value)) {
+      setCircumstances_a(circumstances_a.filter((v) => v !== value));
+    } else {
+      setCircumstances_a([...circumstances_a, value]);
+    }
+  };
+  //checkbox circumstances a
+  const handleCircumstances_b = (e) => {
+    const { value } = e.target;
+    if (apparent_damages_b.includes(value)) {
+      setCircumstances_b(circumstances_b.filter((v) => v !== value));
+    } else {
+      setCircumstances_b([...circumstances_b, value]);
+    }
+  };
   return (
     <>
+
       <ToastContainer />
       {/*<UserHeader /> */}
       {/* Page content */}
@@ -628,31 +762,74 @@ const AddStatement = () => {
                     <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button color="info" onClick={handleClick}>
+                    <Button color="light" onClick={handleClick}>
                       {!isShown ? "Show" : "Hide"}
                     </Button>
                   </Col>
                 </Row>
+
               </CardHeader>
 
               {isShown && (
                 <CardBody>
+
                   <form onSubmit={handleSubmit} noValidate>
-                    <h6 className="heading-small text-muted mb-4">
+                    <h2 className=" mb-2">
                       set all the infromations related to the accident please
-                    </h6>
+                    </h2>
+                    <Row className="align-items-center">
+
+                      <Col className="text-left" xs="6">
+                        <FormGroup>
+                          <Button
+                            color="info"
+                            type="button"
+                            onClick={handleFirst}
+                          >
+                            Fisrt Step
+                          </Button>
+                        </FormGroup>
+
+                      </Col>
+                      
+                      <Col className="text-right" xs="6">
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleLast}
+                          >
+                            Last Step
+                          </Button>
+                        </FormGroup>
+                      </Col>
+
+                    </Row>
                     <div className="pl-lg-4">
 
                       {/* 1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 1 ? "block" : "none" }}>
-                        <Row>
-                          {/* Section 1 + 2 + 3 + 4 + 5 */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 1 + 2 + 3 + 4 + 5
-                            </h6>
-                          </Col>
-                        </Row>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              x: '200px',
+                              y: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="blocks"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 1 :
+                          </AnimatedText>
+                        </Col>
 
                         <Row>
                           {/* SECTION 1 + 2 + 3 + 4 + 5 */}
@@ -672,29 +849,36 @@ const AddStatement = () => {
                                 required
                                 onChange={(e) => setDate(e.target.value)}
                               />
-                              <div className="date error"></div>
+
                             </FormGroup>
+
                           </Col>
                           <Col lg="6">
                             <FormGroup>
                               <label className="form-control-label" htmlFor="input-email">
                                 2. Location
                               </label>
+
                               <Input
                                 className="form-control-alternative"
                                 id="location"
                                 type="text"
                                 name="location"
-                                placeholder="location"
-                                value={location } 
+                                value={location}
                                 onChange={(e) => setLocation(e.target.value)}
                                 required
                               />
-                              <div className="location error"></div>
-                              {/* <div style={{ height: '400px', width: '100%' }}>
-                                <GoogleMapReact center={location} zoom={15}></GoogleMapReact>
-                              </div> */}
                             </FormGroup>
+                            {/* <div style={{ height: '400px', width: '100%' }}>
+                              <GoogleMapReact
+                                bootstrapURLKeys={{ key: '' }}
+                                center={location}
+                                zoom={15}
+                                onClick={handleMapClick}
+                              >
+                                <MapMarker lat={location.lat} lng={location.lng} text="📍" />
+                              </GoogleMapReact>
+                            </div> */}
                           </Col>
                           <Col lg="3">
                             <FormGroup>
@@ -752,6 +936,7 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                         </Row>
+
                         <Col align="center">
                           <FormGroup>
                             <Button
@@ -768,6 +953,27 @@ const AddStatement = () => {
 
                       {/*  Section 6 */}
                       <div style={{ display: section === 2 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 2 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
@@ -778,11 +984,6 @@ const AddStatement = () => {
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
                               VEHICULE B
-                            </h6>
-                          </Col>
-                          <Col lg="12">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 6
                             </h6>
                           </Col>
                         </Row>
@@ -822,7 +1023,7 @@ const AddStatement = () => {
                                 className="heading-small "
                                 htmlFor="input-email"
                               >
-                                Contartct Numbre:
+                                Contract Numbre:
                               </label>
                               <Input
                                 className="form-control-alternative"
@@ -847,17 +1048,21 @@ const AddStatement = () => {
                                 className="form-control-alternative"
                                 id="agency_a"
                                 name="agency_a"
-                                type="text"
+                                type="select"
                                 value={agency_a}
                                 onChange={(e) => setAgency_a(e.target.value)}
                                 required
-                              />
+                              >
+                                <option value="">Select</option>
+                                {users.map((user) => (
+                                  <option key={user._id} value={user._id}>
+                                    {user.last_name}
+                                  </option>
+                                ))}
+                              </Input>
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 Start date of contract:
                               </label>
                               <Input
@@ -867,13 +1072,16 @@ const AddStatement = () => {
                                 type="date"
                                 value={start_date_a}
                                 onChange={(e) => setStartDate_a(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_a) > new Date(end_date_a)) {
+                                    toast.error('Start date should be less than End date');
+                                    setStartDate_a('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 End date of contract:
                               </label>
                               <Input
@@ -883,6 +1091,12 @@ const AddStatement = () => {
                                 type="date"
                                 value={end_date_a}
                                 onChange={(e) => setEndDate_a(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_a) > new Date(end_date_a)) {
+                                    toast.error('End date should be greater than Start date');
+                                    setEndDate_a('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                           </Col>
@@ -914,7 +1128,7 @@ const AddStatement = () => {
                                 className="heading-small "
                                 htmlFor="input-email"
                               >
-                                Contartct Numbre:
+                                Contract Numbre:
                               </label>
                               <Input
                                 className="form-control-alternative"
@@ -944,10 +1158,7 @@ const AddStatement = () => {
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 Start date of contract:
                               </label>
                               <Input
@@ -957,13 +1168,16 @@ const AddStatement = () => {
                                 type="date"
                                 value={start_date_b}
                                 onChange={(e) => setStartDate_b(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_b) > new Date(end_date_b)) {
+                                    toast.error('Start date should be less than End date');
+                                    setStartDate_b('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 End date of contract:
                               </label>
                               <Input
@@ -973,6 +1187,12 @@ const AddStatement = () => {
                                 type="date"
                                 value={end_date_b}
                                 onChange={(e) => setEndDate_b(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_a) > new Date(end_date_a)) {
+                                    toast.error('End date should be greater than Start date');
+                                    setEndDate_b('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                           </Col>
@@ -981,13 +1201,14 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
                                 Previous
                               </Button>
                             </FormGroup>
+
                           </Col>
                           <Col align="left">
                             <FormGroup>
@@ -1007,6 +1228,27 @@ const AddStatement = () => {
 
                       {/* Section 7 */}
                       <div style={{ display: section === 3 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 3 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
@@ -1017,13 +1259,6 @@ const AddStatement = () => {
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
                               VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 7
                             </h6>
                           </Col>
                         </Row>
@@ -1088,10 +1323,7 @@ const AddStatement = () => {
                               />
                             </FormGroup>
                             <FormGroup>
-                              <Label
-                                className="heading-small"
-                                for="drivers_license_issue_date_a"
-                              >
+                              <Label className="heading-small" for="drivers_license_issue_date_a">
                                 Driver's License Issue Date
                               </Label>
                               <Input
@@ -1099,35 +1331,47 @@ const AddStatement = () => {
                                 name="drivers_license_issue_date_a"
                                 id="drivers_license_issue_date_a"
                                 value={drivers_license_issue_date_a}
-                                onChange={(e) =>
-                                  setDrivers_license_issue_date_a(
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => {
+                                  const selectedDate = new Date(e.target.value);
+                                  const today = new Date();
+                                  if (selectedDate > today) {
+                                    toast.error("Please select a date less than today's date.");
+                                    return;
+                                  }
+                                  setDrivers_license_issue_date_a(e.target.value);
+                                }}
                                 required
                               />
                             </FormGroup>
-
                             <FormGroup>
-                              <Label
-                                className="heading-small"
-                                for="driver_license_a"
-                              >
+                              <Label className="heading-small" for="driver_license_a">
                                 Driver's License
                               </Label>
                               <Input
                                 type="text"
                                 name="driver_license_a"
                                 id="driver_license_a"
-                                maxLength="20"
-                                pattern="^[a-zA-Z0-9]+$"
+                                pattern="[0-9]{8}"
                                 value={driver_license_a}
-                                onChange={(e) =>
-                                  setDriver_license_a(e.target.value)
-                                }
+                                onChange={(e) => {
+                                  const inputValue = e.target.value;
+                                  if (!/^[0-9]{0,8}$/.test(inputValue)) {
+                                    toast.error("Please enter a valid Driver's License with 8 digits");
+                                    return;
+                                  }
+                                  setDriver_license_a(inputValue);
+                                }}
+                                onBlur={() => {
+                                  if (!driver_license_a) {
+                                    toast.warn("Please enter your Driver's License");
+                                  }
+                                }}
                                 required
                               />
                             </FormGroup>
+
+
+
                           </Col>
                           <Col lg="6">
                             <label
@@ -1198,32 +1442,42 @@ const AddStatement = () => {
                                 name="drivers_license_issue_date_b"
                                 id="drivers_license_issue_date_b"
                                 value={drivers_license_issue_date_b}
-                                onChange={(e) =>
-                                  setDrivers_license_issue_date_b(
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => {
+                                  const selectedDate = new Date(e.target.value);
+                                  const today = new Date();
+                                  if (selectedDate > today) {
+                                    toast.error("Please select a date less than today's date.");
+                                    return;
+                                  }
+                                  setDrivers_license_issue_date_b(e.target.value);
+                                }}
                                 required
                               />
                             </FormGroup>
 
                             <FormGroup>
-                              <Label
-                                className="heading-small"
-                                for="drivers_identity_b"
-                              >
+                              <Label className="heading-small" for="driver_license_b">
                                 Driver's License
                               </Label>
                               <Input
                                 type="text"
                                 name="driver_license_b"
                                 id="driver_license_b"
-                                maxLength="20"
-                                pattern="^[a-zA-Z0-9]+$"
+                                pattern="[0-9]{8}"
                                 value={driver_license_b}
-                                onChange={(e) =>
-                                  setDriver_license_b(e.target.value)
-                                }
+                                onChange={(e) => {
+                                  const inputValue = e.target.value;
+                                  if (!/^[0-9]{0,8}$/.test(inputValue)) {
+                                    toast.error("Please enter a valid Driver's License with 8 digits");
+                                    return;
+                                  }
+                                  setDriver_license_b(inputValue);
+                                }}
+                                onBlur={() => {
+                                  if (!driver_license_b) {
+                                    toast.warn("Please enter the Driver's License");
+                                  }
+                                }}
                                 required
                               />
                             </FormGroup>
@@ -1233,7 +1487,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1259,8 +1513,28 @@ const AddStatement = () => {
 
                       {/*  SECTION 8 */}
                       <div style={{ display: section === 4 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 4 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
-
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
@@ -1270,15 +1544,6 @@ const AddStatement = () => {
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
                               VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
-
-                          {/* Section 8 */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 8
                             </h6>
                           </Col>
                         </Row>
@@ -1349,7 +1614,7 @@ const AddStatement = () => {
                                 className="form-control-alternative"
                                 id="phonenumber_a"
                                 type="phonenumber_a"
-                                value={phonenumber_a}
+                                value={phone_number}
                                 onChange={(e) =>
                                   setPhonenumber_a(e.target.value)
                                 }
@@ -1433,7 +1698,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1459,6 +1724,27 @@ const AddStatement = () => {
 
                       {/*  SECTION 9 */}
                       <div style={{ display: section === 5 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 5 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
 
                           {/* VEHICULE A VS B */}
@@ -1492,16 +1778,16 @@ const AddStatement = () => {
                               9. Vehicule Identity
                             </label>
                             <FormGroup>
-                              <label>Brand</label>
+                              <label>Brand, Model</label>
                               <Input
-                                type="select"
+                                type="text"
                                 name="brand_a"
                                 id="brand_a"
                                 value={brand_a}
                                 onChange={(e) => setBrand_a(e.target.value)}
                                 required
-                              >
-                                <option value="">Select a brand</option>
+                              />
+                              {/* <option value="">Select a brand</option>
                                 {brands.map((brand, index) => (
                                   <option
                                     key={`${brand}-${index}`}
@@ -1510,7 +1796,7 @@ const AddStatement = () => {
                                     {brand}
                                   </option>
                                 ))}
-                              </Input>
+                              </Input> */}
                             </FormGroup>
                             <FormGroup>
                               <label>Country</label>
@@ -1621,16 +1907,16 @@ const AddStatement = () => {
                               9. Vehicule Identity
                             </label>
                             <FormGroup>
-                              <label>Brand</label>
+                              <label>Brand, Model</label>
                               <Input
-                                type="select"
+                                type="text"
                                 name="brand_b"
                                 id="brand_b"
                                 value={brand_b}
                                 onChange={(e) => setBrand_b(e.target.value)}
                                 required
-                              >
-                                <option value="">Select a brand</option>
+                              />
+                              {/* <option value="">Select a brand</option>
                                 {brands.map((brand, index) => (
                                   <option
                                     key={`${brand}-${index}`}
@@ -1639,7 +1925,7 @@ const AddStatement = () => {
                                     {brand}
                                   </option>
                                 ))}
-                              </Input>
+                              </Input> */}
                             </FormGroup>
                             <FormGroup>
                               <label>Country</label>
@@ -1747,7 +2033,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1755,6 +2041,7 @@ const AddStatement = () => {
                               </Button>
                             </FormGroup>
                           </Col>
+
                           <Col align="left">
                             <FormGroup>
                               <Button
@@ -1773,6 +2060,27 @@ const AddStatement = () => {
 
                       {/* Section 10 */}
                       <div style={{ display: section === 6 ? "block" : "none" }}>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 6 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
                           <Col lg="6">
@@ -1787,83 +2095,47 @@ const AddStatement = () => {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 10
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
                           {/* SECTION 10 */}
                           <Col lg="6">
                             <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-country"
-                              >
+                              <label className="form-control-label" htmlFor="input-country">
                                 10. Choc Points
                               </label>
-                              <Input
-                                name="hits_a"
-                                type="select"
-                                value={hits_a}
-                                onChange={(e) => setHits_a(e.target.value)}
-                                required
-                              >
-                                <option value="Other">Select</option>
-                                <option value="Front Left Fender"> Front Left Fender</option>
-                                <option value="Front Right Fender"> Front Right Fender</option>
-                                <option value="Rear Left Fender">Rear Left Fender</option>
-                                <option value="Rear Right Fender">Rear Right Fender</option>
-                                <option value="Front Bumper"> Front Bumper</option>
-                                <option value="Rear Bumper">Rear Bumper</option>
-                                <option value="Hood">Hood</option>
-                                <option value="Trunk">Trunk</option>
-                                <option value="Roof">Roof</option>
-                                <option value="Front Windshield">Front Windshield</option>
-                                <option value="Rear Windshield">Rear Windshield</option>
-                                <option value="Side Mirror Left">Side Mirror Left</option>
-                                <option value="Side Mirror Right">Side Mirror Right</option>
-                                <option value="Door Front Left">Door Front Left</option>
-                                <option value="Door Front Right">Door Front Right</option>
-                                <option value="Door Rear Left">Door Rear Left</option>
-                                <option value="Door Rear Right">Door Rear Right</option>
-                              </Input>
+                              {hitOptions.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="hits_a"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={hits_a.includes(option)}
+                                      onChange={handleChocpoints_a}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                           <Col lg="6">
                             <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-country"
-                              >
+                              <label className="form-control-label" htmlFor="input-country">
                                 10. Choc Points
                               </label>
-                              <Input
-                                name="hits_b"
-                                type="select"
-                                value={hits_b}
-                                onChange={(e) => setHits_b(e.target.value)}
-                                required
-                              >                              <option value="Other">Select</option>
-                                <option value="Front Left Fender"> Front Left Fender</option>
-                                <option value="Front Right Fender"> Front Right Fender</option>
-                                <option value="Rear Left Fender">Rear Left Fender</option>
-                                <option value="Rear Right Fender">Rear Right Fender</option>
-                                <option value="Front Bumper"> Front Bumper</option>
-                                <option value="Rear Bumper">Rear Bumper</option>
-                                <option value="Hood">Hood</option>
-                                <option value="Trunk">Trunk</option>
-                                <option value="Roof">Roof</option>
-                                <option value="Front Windshield">Front Windshield</option>
-                                <option value="Rear Windshield">Rear Windshield</option>
-                                <option value="Side Mirror Left">Side Mirror Left</option>
-                                <option value="Side Mirror Right">Side Mirror Right</option>
-                                <option value="Door Front Left">Door Front Left</option>
-                                <option value="Door Front Right">Door Front Right</option>
-                                <option value="Door Rear Left">Door Rear Left</option>
-                                <option value="Door Rear Right">Door Rear Right</option>
-                              </Input>
+                              {hitOptions.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="hits_b"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={hits_b.includes(option)}
+                                      onChange={handleChocpoints_b}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                         </Row>
@@ -1871,7 +2143,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -1890,14 +2162,33 @@ const AddStatement = () => {
                               </Button>
                             </FormGroup>
                           </Col>
-
                         </Row>
                       </div>
                       {/* FIN SECTION 10 */}
 
                       {/* Section 11 */}
                       <div style={{ display: section === 7 ? "block" : "none" }}>
-
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 7 :
+                          </AnimatedText>
+                        </Col>
                         <Row>
 
                           {/* VEHICULE A VS B */}
@@ -1913,13 +2204,6 @@ const AddStatement = () => {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 11
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
                           {/* SECTION 11 */}
                           <Col lg="6">
                             <FormGroup>
@@ -1929,32 +2213,20 @@ const AddStatement = () => {
                               >
                                 11. Apparent Damages
                               </label>
-                              <Input
-                                name="apparent_damages_a"
-                                type="select"
-                                value={apparent_damages_a}
-                                onChange={(e) =>
-                                  setApparent_damages_a(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Scratches">Scratches</option>
-                                <option value="Dents">Dents</option>
-                                <option value="Cracks">Cracks</option>
-                                <option value="Paint Damage">
-                                  Paint Damage
-                                </option>
-                                <option value="Broken Lights">
-                                  Broken Lights
-                                </option>
-                                <option value="Broken Windows">
-                                  Broken Windows
-                                </option>
-                                <option value="Missing Parts">
-                                  Missing Parts
-                                </option>
-                              </Input>
+                              {damageplaces.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="apparent_damages_a"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={apparent_damages_a.includes(option)}
+                                      onChange={handleApparentdamages_a}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                           <Col lg="6">
@@ -1965,32 +2237,20 @@ const AddStatement = () => {
                               >
                                 11. Apparent Damages
                               </label>
-                              <Input
-                                name="apparent_damages_b"
-                                type="select"
-                                value={apparent_damages_b}
-                                onChange={(e) =>
-                                  setApparent_damages_b(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Scratches">Scratches</option>
-                                <option value="Dents">Dents</option>
-                                <option value="Cracks">Cracks</option>
-                                <option value="Paint Damage">
-                                  Paint Damage
-                                </option>
-                                <option value="Broken Lights">
-                                  Broken Lights
-                                </option>
-                                <option value="Broken Windows">
-                                  Broken Windows
-                                </option>
-                                <option value="Missing Parts">
-                                  Missing Parts
-                                </option>
-                              </Input>
+                              {damageplaces.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="apparent_damages_b"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={apparent_damages_b.includes(option)}
+                                      onChange={handleApparentdamages_b}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                         </Row>
@@ -2000,14 +2260,7 @@ const AddStatement = () => {
 
 
                         {/* SECTION 12 */}
-                        <Row>
-                          {/* Section 12 */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 12
-                            </h6>
-                          </Col>
-                        </Row>
+
                         <Row>
                           <Col md="6">
                             <FormGroup>
@@ -2017,31 +2270,20 @@ const AddStatement = () => {
                               >
                                 12. Circumstances By client A
                               </label>
-                              <Input
-                                name="circumstances_a"
-                                type="select"
-                                value={circumstances_a}
-                                onChange={(e) =>
-                                  setCircumstances_a(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner </option>
-                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
-                                <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
-                                <option value="Distracted driving">Distracted driving</option>
-                                <option value="Driving while fatigued">Driving while fatigued</option>
-                                <option value="Reckless driving">Reckless driving</option>
-                                <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling"> Changing lanes without signaling</option>
-                                <option value="Making an illegal turn"> Making an illegal turn</option>
-                                <option value="Backing up without looking"> Backing up without looking </option>
-                                <option value="Driving in the wrong lane">Driving in the wrong lane </option>
-                                <option value="Driving in a construction zone">Driving in a construction zone</option>
-                                <option value="Driving during inclement weather"> Driving during inclement weather</option>
-                              </Input>
+                              {Circumstances.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="circumstances_a"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={circumstances_a.includes(option)}
+                                      onChange={handleCircumstances_a}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                           <Col md="6">
@@ -2052,31 +2294,20 @@ const AddStatement = () => {
                               >
                                 12. Circumstances By client B
                               </label>
-                              <Input
-                                name="circumstances_b"
-                                type="select"
-                                value={circumstances_b}
-                                onChange={(e) =>
-                                  setCircumstances_b(e.target.value)
-                                }
-                                required
-                              >
-                                <option value="">Select</option>
-                                <option value="Driving in a normal and careful manner">Driving in a normal and careful manner </option>
-                                <option value="Driving under the influence of drugs or alcohol">Driving under the influence of drugs or alcohol</option>
-                                <option value="Speeding">Speeding</option>
-                                <option value="Ignoring traffic signals or signs">Ignoring traffic signals or signs</option>
-                                <option value="Distracted driving">Distracted driving</option>
-                                <option value="Driving while fatigued">Driving while fatigued</option>
-                                <option value="Reckless driving">Reckless driving</option>
-                                <option value="Tailgating">Tailgating</option>
-                                <option value="Changing lanes without signaling"> Changing lanes without signaling</option>
-                                <option value="Making an illegal turn"> Making an illegal turn</option>
-                                <option value="Backing up without looking"> Backing up without looking </option>
-                                <option value="Driving in the wrong lane">Driving in the wrong lane </option>
-                                <option value="Driving in a construction zone">Driving in a construction zone</option>
-                                <option value="Driving during inclement weather"> Driving during inclement weather</option>
-                              </Input>
+                              {Circumstances.map((option) => (
+                                <FormGroup check key={option}>
+                                  <Label check>
+                                    <Input
+                                      name="circumstances_b"
+                                      type="checkbox"
+                                      value={option}
+                                      checked={circumstances_b.includes(option)}
+                                      onChange={handleCircumstances_b}
+                                    />
+                                    {option}
+                                  </Label>
+                                </FormGroup>
+                              ))}
                             </FormGroup>
                           </Col>
                         </Row>
@@ -2084,7 +2315,7 @@ const AddStatement = () => {
                           <Col align="right">
                             <FormGroup>
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
@@ -2110,13 +2341,27 @@ const AddStatement = () => {
 
                       {/* Section 13 + 14 + 14*/}
                       <div style={{ display: section === 8 ? "block" : "none" }}>
-                        <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 13 + 14 + 15
-                            </h6>
-                          </Col>
-                        </Row>
+                        <Col align="center">
+                          <AnimatedText
+                            type="words" // animate words or chars
+                            animation={{
+                              y: '200px',
+                              x: '-20px',
+                              scale: 1.1,
+                              ease: 'ease-in-out',
+                            }}
+                            animationType="lights"
+                            interval={0.06}
+                            duration={0.8}
+                            tag="h1"
+                            className="animated-paragraph text-success"
+                            includeWhiteSpaces
+                            threshold={0.1}
+                            rootMargin="20%"
+                          >
+                            STEP 8 :
+                          </AnimatedText>
+                        </Col>
 
                         <Row>
                           {/* SECTION 13  IMAGE */}
@@ -2244,47 +2489,51 @@ const AddStatement = () => {
                           </Col>
                         </Row>
                         {/* FIN SECTION 15  Observation */}
-
                         <Row>
+
                           <Col align="left">
                             <FormGroup>
+
                               <Button
-                                color="secondary"
+                                color="info"
                                 type="button"
                                 onClick={handlePrev}
                               >
                                 Previous
                               </Button>
+
                             </FormGroup>
                           </Col>
                         </Row>
+                        <div className="text-center">
 
+                          <Button color="dark" type="submit">
+                            Submit
+                          </Button>
+                        </div>
                       </div>
 
-                      <Row>
-                      </Row>
 
-                      <div className="text-center">
 
-                        <Button color="info" type="submit">
-                          Submit
-                        </Button>
-                      </div>
+
 
                     </div>
 
+                    {showError && (
+                      <div className="col-12 my-3 alert alert-danger">
+                        Invalid fields , Please Recheck !
+                      </div>
+                    )}
                   </form>
+                  <Row>
+                    <div className="date error"></div>
+                  </Row>
                   {showNotification && (
                     <div className="alert alert-success mt-3" role="alert">
                       Statement created successfully
                     </div>
                   )}
 
-                  {showError && (
-                    <div className="col-12 my-3 alert alert-danger">
-                      Invalid fields , Please Recheck !
-                    </div>
-                  )}
                 </CardBody>
               )}
 
