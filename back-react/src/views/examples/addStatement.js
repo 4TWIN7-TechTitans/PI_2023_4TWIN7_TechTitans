@@ -47,7 +47,7 @@ const AddStatement = () => {
 
 
   const [date, setDate] = useState("");
-  const [location, setLocation] = useState({ lat: 48.8534, lng: 2.3488 });
+  const [location, setLocation] = useState("");
   const [injured, setInjured] = useState("");
   const [material_damage, setMaterial_damage] = useState("");
   const [witness, setWitness] = useState("");
@@ -192,7 +192,12 @@ const AddStatement = () => {
 
     e.preventDefault();
     const form = e.target;
-    const date = form.date.value;
+    const isValidDate = validateDate(date);
+    if (!isValidDate) {
+      const errorElement = document.querySelector(".date.error");
+      errorElement.innerText = "La date de l'accident ne doit pas dépasser 5 jours à compter de la date d'aujourd'hui.";
+      return;
+    }
     const location = form.location.value;
     const injured = form.injured.value;
     const material_damage = form.material_damage.value;
@@ -553,14 +558,19 @@ const AddStatement = () => {
         setShowError(false);
 
         toast.success("Statement created successfully");
-        window.location.redirect("http://localhost:3000/mystatement");
-      } else {
-        setShowNotification(false);
-        setErrors({ ...errors, message: "Statement adding failed" });
-        setShowError(true);
-        toast.error("Error creating statement");
+        setTimeout(() => {
+          window.location.href = "/mystatement";
+
+        }, 7000);
       }
     } catch (error) {
+
+      setShowNotification(false);
+      setErrors({ ...errors, message: "Statement adding failed" });
+      setShowError(true);
+      console.log("lenna");
+      toast.error("Error creating statement");
+
       console.log(error);
     }
 
@@ -609,8 +619,16 @@ const AddStatement = () => {
     e.preventDefault();
     setSection(section - 1);
   };
+  const handleFirst = (e) => {
+    e.preventDefault();
+    setSection(1);
+  };
 
-
+  const handleLast = (e) => {
+    e.preventDefault();
+    // Set the last section number here
+    setSection(8);
+  };
 
 
   const handleUndo = () => {
@@ -626,6 +644,15 @@ const AddStatement = () => {
   //   setLocation({ lat, lng });
   // };
 
+
+  //ctrl de saisie date de l'accident :
+  function validateDate(date) {
+    const today = new Date();
+    const accidentDate = new Date(date);
+    const timeDiff = Math.abs(today.getTime() - accidentDate.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return diffDays <= 5;
+  }
   return (
     <>
 
@@ -647,14 +674,43 @@ const AddStatement = () => {
                     </Button>
                   </Col>
                 </Row>
+
               </CardHeader>
 
               {isShown && (
                 <CardBody>
+
                   <form onSubmit={handleSubmit} noValidate>
                     <h2 className=" mb-2">
                       set all the infromations related to the accident please
                     </h2>
+                    <Row className="align-items-center">
+
+                      <Col className="text-right" xs="4">
+                        <FormGroup>
+                          <Button
+                            color="info"
+                            type="button"
+                            onClick={handleFirst}
+                          >
+                            Fisrt Step
+                          </Button>
+                        </FormGroup>
+
+                      </Col>
+                      <Col className="text-right" xs="4">
+                        <FormGroup>
+                          <Button
+                            color="primary"
+                            type="button"
+                            onClick={handleLast}
+                          >
+                            Last Step
+                          </Button>
+                        </FormGroup>
+                      </Col>
+
+                    </Row>
                     <div className="pl-lg-4">
 
                       {/* 1 + 2 + 3 + 4 + 5 */}
@@ -668,7 +724,7 @@ const AddStatement = () => {
                               scale: 1.1,
                               ease: 'ease-in-out',
                             }}
-                            animationType="lights"
+                            animationType="blocks"
                             interval={0.06}
                             duration={0.8}
                             tag="h1"
@@ -699,8 +755,9 @@ const AddStatement = () => {
                                 required
                                 onChange={(e) => setDate(e.target.value)}
                               />
-                              <div className="date error"></div>
+
                             </FormGroup>
+
                           </Col>
                           <Col lg="6">
                             <FormGroup>
@@ -714,6 +771,7 @@ const AddStatement = () => {
                                 type="text"
                                 name="location"
                                 value={location}
+                                onChange={(e) => setLocation(e.target.value)}
                                 required
                               />
                             </FormGroup>
@@ -834,11 +892,6 @@ const AddStatement = () => {
                               VEHICULE B
                             </h6>
                           </Col>
-                          <Col lg="12">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 6
-                            </h6>
-                          </Col>
                         </Row>
                         <Row>
                           {/* SECTION 6 */}
@@ -915,10 +968,7 @@ const AddStatement = () => {
                               </Input>
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 Start date of contract:
                               </label>
                               <Input
@@ -928,13 +978,16 @@ const AddStatement = () => {
                                 type="date"
                                 value={start_date_a}
                                 onChange={(e) => setStartDate_a(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_a) > new Date(end_date_a)) {
+                                    toast.error('Start date should be less than End date');
+                                    setStartDate_a('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 End date of contract:
                               </label>
                               <Input
@@ -944,6 +997,12 @@ const AddStatement = () => {
                                 type="date"
                                 value={end_date_a}
                                 onChange={(e) => setEndDate_a(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_a) > new Date(end_date_a)) {
+                                    toast.error('End date should be greater than Start date');
+                                    setEndDate_a('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                           </Col>
@@ -1005,10 +1064,7 @@ const AddStatement = () => {
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 Start date of contract:
                               </label>
                               <Input
@@ -1018,13 +1074,16 @@ const AddStatement = () => {
                                 type="date"
                                 value={start_date_b}
                                 onChange={(e) => setStartDate_b(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_b) > new Date(end_date_b)) {
+                                    toast.error('Start date should be less than End date');
+                                    setStartDate_b('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                             <FormGroup>
-                              <label
-                                className="heading-small "
-                                htmlFor="input-email"
-                              >
+                              <label className="heading-small " htmlFor="input-email">
                                 End date of contract:
                               </label>
                               <Input
@@ -1034,6 +1093,12 @@ const AddStatement = () => {
                                 type="date"
                                 value={end_date_b}
                                 onChange={(e) => setEndDate_b(e.target.value)}
+                                onBlur={() => {
+                                  if (new Date(start_date_a) > new Date(end_date_a)) {
+                                    toast.error('End date should be greater than Start date');
+                                    setEndDate_b('');
+                                  }
+                                }}
                               />
                             </FormGroup>
                           </Col>
@@ -1103,13 +1168,6 @@ const AddStatement = () => {
                             </h6>
                           </Col>
                         </Row>
-                        <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 7
-                            </h6>
-                          </Col>
-                        </Row>
 
                         <Row>
                           {/*  SECTION 7 */}
@@ -1171,10 +1229,7 @@ const AddStatement = () => {
                               />
                             </FormGroup>
                             <FormGroup>
-                              <Label
-                                className="heading-small"
-                                for="drivers_license_issue_date_a"
-                              >
+                              <Label className="heading-small" for="drivers_license_issue_date_a">
                                 Driver's License Issue Date
                               </Label>
                               <Input
@@ -1182,35 +1237,47 @@ const AddStatement = () => {
                                 name="drivers_license_issue_date_a"
                                 id="drivers_license_issue_date_a"
                                 value={drivers_license_issue_date_a}
-                                onChange={(e) =>
-                                  setDrivers_license_issue_date_a(
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => {
+                                  const selectedDate = new Date(e.target.value);
+                                  const today = new Date();
+                                  if (selectedDate > today) {
+                                    toast.error("Please select a date less than today's date.");
+                                    return;
+                                  }
+                                  setDrivers_license_issue_date_a(e.target.value);
+                                }}
                                 required
                               />
                             </FormGroup>
-
                             <FormGroup>
-                              <Label
-                                className="heading-small"
-                                for="driver_license_a"
-                              >
+                              <Label className="heading-small" for="driver_license_a">
                                 Driver's License
                               </Label>
                               <Input
                                 type="text"
                                 name="driver_license_a"
                                 id="driver_license_a"
-                                maxLength="20"
-                                pattern="^[a-zA-Z0-9]+$"
+                                pattern="[0-9]{8}"
                                 value={driver_license_a}
-                                onChange={(e) =>
-                                  setDriver_license_a(e.target.value)
-                                }
+                                onChange={(e) => {
+                                  const inputValue = e.target.value;
+                                  if (!/^[0-9]{0,8}$/.test(inputValue)) {
+                                    toast.error("Please enter a valid Driver's License with 8 digits");
+                                    return;
+                                  }
+                                  setDriver_license_a(inputValue);
+                                }}
+                                onBlur={() => {
+                                  if (!driver_license_a) {
+                                    toast.warn("Please enter your Driver's License");
+                                  }
+                                }}
                                 required
                               />
                             </FormGroup>
+
+
+
                           </Col>
                           <Col lg="6">
                             <label
@@ -1281,32 +1348,42 @@ const AddStatement = () => {
                                 name="drivers_license_issue_date_b"
                                 id="drivers_license_issue_date_b"
                                 value={drivers_license_issue_date_b}
-                                onChange={(e) =>
-                                  setDrivers_license_issue_date_b(
-                                    e.target.value
-                                  )
-                                }
+                                onChange={(e) => {
+                                  const selectedDate = new Date(e.target.value);
+                                  const today = new Date();
+                                  if (selectedDate > today) {
+                                    toast.error("Please select a date less than today's date.");
+                                    return;
+                                  }
+                                  setDrivers_license_issue_date_b(e.target.value);
+                                }}
                                 required
                               />
                             </FormGroup>
 
                             <FormGroup>
-                              <Label
-                                className="heading-small"
-                                for="drivers_identity_b"
-                              >
+                              <Label className="heading-small" for="driver_license_b">
                                 Driver's License
                               </Label>
                               <Input
                                 type="text"
                                 name="driver_license_b"
                                 id="driver_license_b"
-                                maxLength="20"
-                                pattern="^[a-zA-Z0-9]+$"
+                                pattern="[0-9]{8}"
                                 value={driver_license_b}
-                                onChange={(e) =>
-                                  setDriver_license_b(e.target.value)
-                                }
+                                onChange={(e) => {
+                                  const inputValue = e.target.value;
+                                  if (!/^[0-9]{0,8}$/.test(inputValue)) {
+                                    toast.error("Please enter a valid Driver's License with 8 digits");
+                                    return;
+                                  }
+                                  setDriver_license_b(inputValue);
+                                }}
+                                onBlur={() => {
+                                  if (!driver_license_b) {
+                                    toast.warn("Please enter the Driver's License");
+                                  }
+                                }}
                                 required
                               />
                             </FormGroup>
@@ -1373,15 +1450,6 @@ const AddStatement = () => {
                           <Col lg="6">
                             <h6 className="heading-small text-muted mb-4">
                               VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
-
-                          {/* Section 8 */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 8
                             </h6>
                           </Col>
                         </Row>
@@ -1933,13 +2001,6 @@ const AddStatement = () => {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 10
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
                           {/* SECTION 10 */}
                           <Col lg="6">
                             <FormGroup>
@@ -2078,13 +2139,6 @@ const AddStatement = () => {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 11
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
                           {/* SECTION 11 */}
                           <Col lg="6">
                             <FormGroup>
@@ -2165,14 +2219,7 @@ const AddStatement = () => {
 
 
                         {/* SECTION 12 */}
-                        <Row>
-                          {/* Section 12 */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 12
-                            </h6>
-                          </Col>
-                        </Row>
+
                         <Row>
                           <Col md="6">
                             <FormGroup>
@@ -2296,13 +2343,6 @@ const AddStatement = () => {
                             STEP 8 :
                           </AnimatedText>
                         </Col>
-                        <Row>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 13 + 14 + 15
-                            </h6>
-                          </Col>
-                        </Row>
 
                         <Row>
                           {/* SECTION 13  IMAGE */}
@@ -2454,25 +2494,27 @@ const AddStatement = () => {
                         </div>
                       </div>
 
-                      <Row>
-                      </Row>
+
 
 
 
                     </div>
 
+                    {showError && (
+                      <div className="col-12 my-3 alert alert-danger">
+                        Invalid fields , Please Recheck !
+                      </div>
+                    )}
                   </form>
+                  <Row>
+                    <div className="date error"></div>
+                  </Row>
                   {showNotification && (
                     <div className="alert alert-success mt-3" role="alert">
                       Statement created successfully
                     </div>
                   )}
 
-                  {showError && (
-                    <div className="col-12 my-3 alert alert-danger">
-                      Invalid fields , Please Recheck !
-                    </div>
-                  )}
                 </CardBody>
               )}
 
