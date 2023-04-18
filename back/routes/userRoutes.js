@@ -22,7 +22,7 @@ router.get("/all-users", userController.show_users_get);
 router.get("/userbyemail/:email", userController.get_user_by_email);
 router.get("/users/:email", userController.get_user_by_email);
 router.get("/usersid/:id", userController.get_userbyid);
-
+router.get("/filtreusers/:role", userController.filtre_users);
 //ban
 router.post("/users/ban/:mail", userController.post_ban_user);
 router.get("/users/checkban/:email", userController.check_ban_user);
