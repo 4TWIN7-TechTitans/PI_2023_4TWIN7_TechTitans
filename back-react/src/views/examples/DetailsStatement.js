@@ -253,27 +253,26 @@ for removal from the register.`,
   };
 
   const handleStatusChange = async (event) => {
-
     const search = window.location.search;
     const id_statement = new URLSearchParams(search).get("id");
     console.log("http://localhost:5000/statements_status/" + id_statement + "/status")
-
+  
     const newStatus = event.target.value;
     try {
       await axios.post("http://localhost:5000/statements_status/" + id_statement + "/status", {
         case_state: newStatus,
       });
       setStatus(newStatus);
-      setShowNotification(true);
+      toast.success("Status updated successfully!");
     } catch (error) {
       console.error(error);
+      toast.error("An error occurred while updating the status.");
     }
   };
-
+  
   const handleNotificationClose = () => {
     setShowNotification(false);
   };
-
   return (
     <>
       <Header />
