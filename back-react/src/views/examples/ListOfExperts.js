@@ -74,6 +74,7 @@ function ListOfAgency() {
   );
 
   function getStatusBadge(expertStatus) {
+    console.log
     const color = expertStatus ? "success" : "danger";
     const text = expertStatus ? "Online" : "Offline";
     return (
@@ -162,7 +163,7 @@ function ListOfAgency() {
                           {user.phone_number}
                         </Badge>
                       </td>
-                      <td>{getStatusBadge(user.expertStatus)}</td>
+                      <td>{getStatusBadge(user.expert_status)}</td>
                     </tr>
                   ))}
                 </tbody>
