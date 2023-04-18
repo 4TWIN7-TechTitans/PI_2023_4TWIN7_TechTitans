@@ -230,27 +230,7 @@ for removal from the register.`,
     console.log(result);
   };
 
-  useEffect(() => {
-    // Retrieve comments from local storage when component mounts
-    const savedComments = JSON.parse(localStorage.getItem("comments"));
-    if (savedComments) {
-      setComments(savedComments);
-    }
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newComment = {
-      text: commentaire,
-      date: new Date().toISOString(),
-    };
-    // Save the new comment to local storage
-    localStorage.setItem("comments", JSON.stringify([...comments, newComment]));
-    // Update the list of comments displayed on the page
-    setComments([...comments, newComment]);
-    // Clear the input field
-    setCommentaire("");
-  };
+ 
 
   const handleStatusChange = async (event) => {
     const search = window.location.search;
@@ -364,19 +344,7 @@ for removal from the register.`,
                       for removal from the register."
                     </div>
                   </div>
-                  <form onSubmit={handleSubmit}>
-                    <FormGroup>
-                      <Label for="commentaire">Commentaire:</Label>
-                      <Input
-                        type="textarea"
-                        name="commentaire"
-                        id="commentaire"
-                        value={commentaire}
-                        onChange={(e) => setCommentaire(e.target.value)}
-                      />
-                    </FormGroup>
-                    <Button type="submit">Add Commentaire</Button>
-                  </form>
+                  
 
                   {comments.map((comment) => (
                     <div key={comment.date}></div>

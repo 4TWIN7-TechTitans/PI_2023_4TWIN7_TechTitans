@@ -186,21 +186,22 @@ module.exports.update_statement_status = async (req, res) => {
   }
 };
 
+//////////////////////////////////////////////////////////////////
 module.exports.add_comment_to_statement = async (req, res) => {
   try {
     const { comment } = req.body;
     const statementId = req.params.statementId;
 
-    // find the statement by ID
     const statement = await StatementModel.findById(statementId);
     if (!statement) {
       return res.status(404).json({ message: "Statement not found" });
     }
 
-    // add comment to the statement
-    statement.comments.push({ text: comment });
+    if (!statement.comments) {
+      statement.comments = [];
+    }
 
-    // save the updated statement to database
+    statement.comments.push({ text: comment });
     const updatedStatement = await statement.save();
 
     res.status(200).json({
@@ -208,9 +209,10 @@ module.exports.add_comment_to_statement = async (req, res) => {
       statement: updatedStatement,
     });
   } catch (error) {
-    res.status(400).json({ message: "Error adding comment", error });
+    res.status(400).json({ message: "Error adding comment", error: error.message });
   }
 };
+////////////////////////////////////
 //get comments
 module.exports.get_statement_comments = async (req, res) => {
   try {
