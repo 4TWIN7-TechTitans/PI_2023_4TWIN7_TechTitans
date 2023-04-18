@@ -74,7 +74,7 @@ function ListOfAgency() {
   );
 
   function getStatusBadge(expertStatus) {
-    console.log
+    console.log(expertStatus)
     const color = expertStatus ? "success" : "danger";
     const text = expertStatus ? "Online" : "Offline";
     return (

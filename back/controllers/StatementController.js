@@ -185,3 +185,29 @@ module.exports.update_statement_status = async (req, res) => {
     res.status(500).json({ message: "Error updating statement status", error });
   }
 };
+
+module.exports.add_comment_to_statement = async (req, res) => {
+  try {
+    const { comment } = req.body;
+    const statementId = req.params.statementId;
+
+    // find the statement by ID
+    const statement = await StatementModel.findById(statementId);
+    if (!statement) {
+      return res.status(404).json({ message: "Statement not found" });
+    }
+
+    // add comment to the statement
+    statement.comments.push({ text: comment });
+
+    // save the updated statement to database
+    const updatedStatement = await statement.save();
+
+    res.status(200).json({
+      message: "Comment added successfully",
+      statement: updatedStatement,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error adding comment", error });
+  }
+};

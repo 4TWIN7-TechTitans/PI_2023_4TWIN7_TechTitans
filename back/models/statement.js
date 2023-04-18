@@ -656,6 +656,10 @@ const statementSchema = new mongoose.Schema({
     required: false,
     enum: ["a", "b"],
   },
+  commentaire: {
+    type: String,
+    required: false,
+  },
 });
 
 const Statement = mongoose.model("Statement", statementSchema);
