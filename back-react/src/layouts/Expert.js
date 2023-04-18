@@ -92,7 +92,6 @@ const Expert = (props) => {
         
         {window.location.pathname === "/expert/OrdreMissionExpert" && (<OrdreMissionExpert/>)}
         
-        {/* Render DetailsStatement if statementId is defined */}
         {statementId && <DetailsStatement id={statementId} />}
         
         <Container fluid>
