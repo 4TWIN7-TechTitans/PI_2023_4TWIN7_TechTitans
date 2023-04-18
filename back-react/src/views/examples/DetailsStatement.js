@@ -38,7 +38,6 @@ function DetailsStatement() {
   const [circumstances_b, setcircumstances_b] = useState("");
   const [location, setlocation] = useState("");
   const [date, setDate] = useState("");
-  const [showNotification, setShowNotification] = useState(false);
   const [Experts, setExperts] = useState([]);
   const [signature_a, setsignature_a] = useState("");
   const [signature_b, setsignature_b] = useState("");
@@ -46,9 +45,8 @@ function DetailsStatement() {
   const [showPDF, setShowPDF] = useState(false);
   const [commentaire, setCommentaire] = useState("");
   const [comments, setComments] = useState([]);
-  const [status, setStatus] = useState(
-    localStorage.getItem("statement_status") || "waiting"
-  );
+  const [status, setStatus] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -254,19 +252,28 @@ for removal from the register.`,
     setCommentaire("");
   };
 
-  function updateStatementStatus(id) {
-    axios.post(`/statements_status/${id}/status`, { status: 'inProgress' })
-      .then(response => {
-        console.log('Statement status updated successfully');
-        // handle success
-      })
-      .catch(error => {
-        console.error('Failed to update statement status', error);
-        // handle error
-      });
-  }
+  const handleStatusChange = async (event) => {
 
- 
+    const search = window.location.search;
+    const id_statement = new URLSearchParams(search).get("id");
+    console.log("http://localhost:5000/statements_status/" + id_statement + "/status")
+
+    const newStatus = event.target.value;
+    try {
+      await axios.post("http://localhost:5000/statements_status/" + id_statement + "/status", {
+        case_state: newStatus,
+      });
+      setStatus(newStatus);
+      setShowNotification(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleNotificationClose = () => {
+    setShowNotification(false);
+  };
+
   return (
     <>
       <Header />
@@ -314,7 +321,25 @@ for removal from the register.`,
                         {signature_a} || {signature_b}
                       </span>
                     </div>
-                          
+                    <select
+                      className="status-dropdown"
+                      value={status}
+                      onChange={handleStatusChange}
+                    >
+                      <option value="waiting">Waiting</option>
+                      <option value="treated">Treated</option>
+                      <option value="inProgress">In Progress</option>
+                      <option value="closed">Closed</option>
+                    </select>
+
+                    {showNotification && (
+                      <div
+                        className="notification"
+                        onClick={handleNotificationClose}
+                      >
+                        Status has been changed.
+                      </div>
+                    )}
 
                     <hr className="my-4" />
                     <div>
