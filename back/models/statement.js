@@ -50,7 +50,8 @@ const statementSchema = new mongoose.Schema({
     },
   }
   ],
-witness_b: {
+witness_b: [
+  {
   firstName_w: {
     type: String,
     maxlength: [50, "First name should not exceed 50 characters"],
@@ -69,7 +70,7 @@ witness_b: {
     type: String,
     required: false,
   },
-},
+},],
   //Partie 6
   //Vehicule A
   vehicule_a: {
