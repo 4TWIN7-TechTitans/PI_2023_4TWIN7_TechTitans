@@ -211,3 +211,22 @@ module.exports.add_comment_to_statement = async (req, res) => {
     res.status(400).json({ message: "Error adding comment", error });
   }
 };
+//get comments
+module.exports.get_statement_comments = async (req, res) => {
+  try {
+    const statementId = req.params.statementId;
+
+    // find the statement by ID
+    const statement = await StatementModel.findById(statementId);
+    if (!statement) {
+      return res.status(404).json({ message: "Statement not found" });
+    }
+
+    res.status(200).json({
+      message: "Statement comments retrieved successfully",
+      comments: statement.comments,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error retrieving comments", error });
+  }
+};
