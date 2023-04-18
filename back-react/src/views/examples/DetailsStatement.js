@@ -46,6 +46,10 @@ function DetailsStatement() {
   const [showPDF, setShowPDF] = useState(false);
   const [commentaire, setCommentaire] = useState("");
   const [comments, setComments] = useState([]);
+  const [status, setStatus] = useState(
+    localStorage.getItem("statement_status") || "waiting"
+  );
+
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -243,63 +247,79 @@ for removal from the register.`,
       date: new Date().toISOString(),
     };
     // Save the new comment to local storage
-    localStorage.setItem(
-      "comments",
-      JSON.stringify([...comments, newComment])
-    );
+    localStorage.setItem("comments", JSON.stringify([...comments, newComment]));
     // Update the list of comments displayed on the page
     setComments([...comments, newComment]);
     // Clear the input field
     setCommentaire("");
   };
 
+  function updateStatementStatus(id) {
+    axios.post(`/statements_status/${id}/status`, { status: 'inProgress' })
+      .then(response => {
+        console.log('Statement status updated successfully');
+        // handle success
+      })
+      .catch(error => {
+        console.error('Failed to update statement status', error);
+        // handle error
+      });
+  }
+
+ 
   return (
     <>
-     <Header />
-  <ToastContainer />
-  <Container className="mt--10" fluid>
-    <Row>
-      <Col className="order-xl-2 mb-5 mb-xl-0" xl="12">
-        <Card className="card-profile shadow">
-          <Row className="justify-content-center">
-            <h3 className="mb-0">Examine claim </h3>
-            <CardBody className="pt-0 pt-md-4">
-              <div className="text-center">
-                <div className="h5 font-weight-300">
-                  <span className="font-weight-light">
-                    Driver A: {driverIdentityA} || Driver B: {driverIdentityB}
-                  </span>
-                </div>
-                <div className="h5 font-weight-300">
-                  <span className="font-weight-light">
-                    License A: {driver_license_a} || License B: {driver_license_b}
-                  </span>
-                </div>
-                <div className="h5 font-weight-300">
-                  <span className="font-weight-light">
-                    Place Of Damage For A: {hits_a} || Place Of Damage For B: {hits_b}
-                  </span>
-                </div>
-                <div className="h5 font-weight-300">
-                  <span className="font-weight-light">
-                    Circumstances A: {circumstances_a} || Circumstances B: {circumstances_b}
-                  </span>
-                </div>
-                <div className="h5 font-weight-300">
-                  <span className="font-weight-light">
-                    Location of The Accident: {location}
-                  </span>
-                </div>
-                <div className="h5 font-weight-300">
-                  <span className="font-weight-light">
-                    <h4>Signature</h4>
-                    {signature_a} || {signature_b}
-                  </span>
-                </div>
-                <hr className="my-4" />
-                <div>
-                  Date of The Accident: {date}
-                  <br />
+      <Header />
+      <ToastContainer />
+      <Container className="mt--10" fluid>
+        <Row>
+          <Col className="order-xl-2 mb-5 mb-xl-0" xl="12">
+            <Card className="card-profile shadow">
+              <Row className="justify-content-center">
+                <h3 className="mb-0">Examine claim </h3>
+                <CardBody className="pt-0 pt-md-4">
+                  <div className="text-center">
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                        Driver A: {driverIdentityA} || Driver B:{" "}
+                        {driverIdentityB}
+                      </span>
+                    </div>
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                        License A: {driver_license_a} || License B:{" "}
+                        {driver_license_b}
+                      </span>
+                    </div>
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                        Place Of Damage For A: {hits_a} || Place Of Damage For
+                        B: {hits_b}
+                      </span>
+                    </div>
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                        Circumstances A: {circumstances_a} || Circumstances B:{" "}
+                        {circumstances_b}
+                      </span>
+                    </div>
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                        Location of The Accident: {location}
+                      </span>
+                    </div>
+                    <div className="h5 font-weight-300">
+                      <span className="font-weight-light">
+                        <h4>Signature</h4>
+                        {signature_a} || {signature_b}
+                      </span>
+                    </div>
+                          
+
+                    <hr className="my-4" />
+                    <div>
+                      Date of The Accident: {date}
+                      <br />
                       "The specifications for experts and actuaries is a
                       document that defines the requirements and standards that
                       experts and actuaries must adhere to in the performance of
@@ -321,23 +341,22 @@ for removal from the register.`,
                     </div>
                   </div>
                   <form onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label for="commentaire">Commentaire:</Label>
-          <Input
-            type="textarea"
-            name="commentaire"
-            id="commentaire"
-            value={commentaire}
-            onChange={(e) => setCommentaire(e.target.value)}
-          />
-        </FormGroup>
-        <Button type="submit">Add Commentaire</Button>
-      </form>
-      
-        {comments.map((comment) => (
-          <div key={comment.date}>
-          </div>
-        ))}
+                    <FormGroup>
+                      <Label for="commentaire">Commentaire:</Label>
+                      <Input
+                        type="textarea"
+                        name="commentaire"
+                        id="commentaire"
+                        value={commentaire}
+                        onChange={(e) => setCommentaire(e.target.value)}
+                      />
+                    </FormGroup>
+                    <Button type="submit">Add Commentaire</Button>
+                  </form>
+
+                  {comments.map((comment) => (
+                    <div key={comment.date}></div>
+                  ))}
                   {comments.map((comment, index) => (
                     <div key={index}>
                       <p>{comment.text}</p>
