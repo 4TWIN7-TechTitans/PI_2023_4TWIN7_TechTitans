@@ -129,7 +129,7 @@ function OrdreMissionExpert() {
         expert_status: true,
       });
       setIsAvailable(true);
-      // console.log("Online status updated successfully");
+      toast.success('You are now online!');
     } catch (error) {
       console.log(error);
     }
@@ -146,6 +146,7 @@ function OrdreMissionExpert() {
         expert_status: false,
       });
       setIsAvailable(false);
+      toast.warning('You are now offline.');
       console.log("Offline status updated successfully");
     } catch (error) {
       console.log(error);
