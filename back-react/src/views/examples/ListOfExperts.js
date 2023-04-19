@@ -10,6 +10,7 @@ import {
   Container,
   Row,
   Button,
+  Input,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -21,6 +22,7 @@ import jsPDF from "jspdf";
 function ListOfAgency() {
   const [currentPage, setCurrentPage] = useState(1);
   const [Experts, setExperts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -55,7 +57,7 @@ function ListOfAgency() {
         console.log(err);
       }
     };
-    
+
     fetchUsers();
     fetchExpertsStatus();
   }, []);
@@ -74,6 +76,7 @@ function ListOfAgency() {
   );
 
   function getStatusBadge(expertStatus) {
+    console.log(expertStatus);
     const color = expertStatus ? "success" : "danger";
     const text = expertStatus ? "Online" : "Offline";
     return (
@@ -82,8 +85,6 @@ function ListOfAgency() {
       </Badge>
     );
   }
-  
-  
 
   function generatePDF() {
     const doc = new jsPDF();
@@ -130,6 +131,24 @@ function ListOfAgency() {
 
     doc.save("list_of_users.pdf");
   }
+
+ const handleSearchInputChange = async (event) => {
+  setSearchTerm(event.target.value);
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/searchexpert?email=${searchTerm}`
+    );
+    setExperts(response.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+  const filteredUsers = Experts.filter((user) => {
+    return user.email.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
   return (
     <>
       <Header />
@@ -141,6 +160,15 @@ function ListOfAgency() {
               <CardHeader className="border-0">
                 <h3 className="mb-0">List Of Experts</h3>
               </CardHeader>
+              <div className="p-4">
+                <Input
+                  type="text"
+                  placeholder="Search by email"
+                  value={searchTerm}
+                  onChange={handleSearchInputChange}
+                />
+              </div>
+
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
@@ -152,7 +180,7 @@ function ListOfAgency() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedUsers.map((user) => (
+                  {filteredUsers.map((user) => (
                     <tr key={user._id}>
                       <td>{user.first_name}</td>
                       <td>{user.email}</td>
@@ -162,7 +190,7 @@ function ListOfAgency() {
                           {user.phone_number}
                         </Badge>
                       </td>
-                      <td>{getStatusBadge(user.expertStatus)}</td>
+                      <td>{getStatusBadge(user.expert_status)}</td>
                     </tr>
                   ))}
                 </tbody>

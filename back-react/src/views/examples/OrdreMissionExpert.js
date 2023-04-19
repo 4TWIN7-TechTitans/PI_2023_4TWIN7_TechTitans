@@ -10,7 +10,7 @@ import {
   Container,
   Row,
   Button,
-  Input
+  Input,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -18,15 +18,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaCircle } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function OrdreMissionExpert() {
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [expertEmail, setExpertEmail] = useState("");
   const [id, setId] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isAvailable, setIsAvailable] = useState(false);
 
   useEffect(() => {
     function getCookie(key) {
@@ -42,12 +43,14 @@ function OrdreMissionExpert() {
         // );
         // //console.log(filteredData);
         const jwt = getCookie("jwt");
-        const response= await axios.get("http://localhost:5000/getmailfromtoken/?token=" + jwt);
+        const response = await axios.get(
+          "http://localhost:5000/getmailfromtoken/?token=" + jwt
+        );
         const email = response.data.email;
         setExpertEmail(email);
         if (email) {
           const response = await axios.get(
-           ( `http://localhost:5000/statementbyexpertemail/` + email ) 
+            `http://localhost:5000/statementbyexpertemail/` + email
           );
 
           setStatements(response.data.statements);
@@ -56,25 +59,26 @@ function OrdreMissionExpert() {
         console.log(error);
       }
     };
+ 
 
     fetchData();
   }, []);
-
-
-  const handleSearchChange = (event) => {
-    setId(event.target.value);
-    setSearchResults(null); // reset the search results
-  };
-
-  const handleSearchSubmit = async (event) => {
-    event.preventDefault();
+  
+  const fetchExpertsStatus = async (email) => {
     try {
-      const response = await axios.get(`http://localhost:5000/get_specificstatement/` + id );
-      setSearchResults(response.data.statement);
-    } catch (error) {
-      console.log(error);
+      const response = await axios.get(
+        `http://localhost:5000/getexpert_status/` + email
+      );
+      console.log(response);
+      // handle the response here
+    } catch (err) {
     }
   };
+  useEffect(() => {
+    fetchExpertsStatus(expertEmail);
+  }, [expertEmail]);
+  
+
   
   const pageSize = 5;
   const pageCount = Math.ceil(statements.length / pageSize);
@@ -89,9 +93,61 @@ function OrdreMissionExpert() {
     currentPage * pageSize
   );
 
+  const handleSearchInputChange = async (event) => {
+    setSearchTerm(event.target.value);
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/get_specificstatement?id=${searchTerm}`
+      );
+      setStatements(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const filteredStatements = statements.filter((statement) => {
+    return statement._id.toString().includes(searchTerm);
+  });
+
+  /////Status////////////////
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
+
+  const handleOnline = async () => {
+    const email = getCookie("email");
+    try {
+      await axios.post("http://localhost:5000/status/" + email, {
+        expert_status: true,
+      });
+      setIsAvailable(true);
+      console.log("Online status updated successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleOffline = async () => {
+    const email = getCookie("email");
+    try {
+      await axios.post("http://localhost:5000/status/" + email, {
+        expert_status: false,
+      });
+      setIsAvailable(false);
+      console.log("Offline status updated successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /////Status////////////////
+
   return (
     <>
       <Header />
+      <ToastContainer />
+
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -99,23 +155,36 @@ function OrdreMissionExpert() {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h3 className="mb-0">My Missions</h3>
-                <form onSubmit={handleSearchSubmit}>
-                  <Input
-                    type="text"
-                    placeholder="Search by ID"
-                    value={id}
-                    onChange={handleSearchChange}
-                  />
-                  <Button type="submit">Search</Button>
-                </form>
-                {searchResults ? (
-                  <div>
-                    <p>Statement ID: {searchResults._id}</p>
-                  </div>
-                ) : id ? (
-                  <p>Statement not found</p>
-                ) : null}
               </CardHeader>
+
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Button
+                  color="primary"
+                  className="mr-4"
+                  onClick={handleOnline}
+                  disabled={isAvailable} 
+                >
+                  Go Online
+                </Button>
+
+                <Button
+                  color="danger"
+                  onClick={handleOffline}
+                  disabled={!isAvailable} 
+                >
+                  Go Offline
+                </Button>
+              </div>
+
+              <div className="p-4">
+                <Input
+                  type="text"
+                  placeholder="Search by identifier of Statement"
+                  value={searchTerm}
+                  onChange={handleSearchInputChange}
+                />
+              </div>
+
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
@@ -131,41 +200,53 @@ function OrdreMissionExpert() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedStatements.map((statement) => {
-                     let statusText = "";
-                     let color = "orange";
-                     switch (statement.case_state) {
-                       case "treated":
-                         statusText = "Treated";
-                         color = "success";
-                         break;
-                       case "inProgress":
-                         statusText = "In Progress";
-                         color = "info";
-                         break;
-                       case "closed":
-                         statusText = "Closed";
-                         color = "warning";
-                         break;
-                       default:
-                         statusText = "Waiting";
-                         color = "danger";
-   
-                         break;
-                     }
+                  {filteredStatements.map((statement) => {
+                    let statusText = "";
+                    let color = "orange";
+                    switch (statement.case_state) {
+                      case "treated":
+                        statusText = "Treated";
+                        color = "success";
+                        break;
+                      case "inProgress":
+                        statusText = "In Progress";
+                        color = "info";
+                        break;
+                      case "closed":
+                        statusText = "Closed";
+                        color = "warning";
+                        break;
+                      default:
+                        statusText = "Waiting";
+                        color = "danger";
+
+                        break;
+                    }
                     return (
                       <tr key={statement._id} className={color}>
                         {console.log(statement)}
-                        <td>{statement._id}</td> 
+                        <td>{statement._id}</td>
                         <td>{statement.date}</td>
                         <td>{statement.vehicule_identity_a.matriculation}</td>
-                        <td>{statement.vehicule_identity_b.matriculation}</td>  
+                        <td>{statement.vehicule_identity_b.matriculation}</td>
                         <td>{statement.circumstances_a}</td>
                         <td>{statement.circumstances_b}</td>
                         <td>
-                        <Button color={color} disabled>{statusText}</Button>
+                          <Button color={color} disabled>
+                            {statusText}
+                          </Button>
                         </td>
-                        <td> <Button href={"/expert/detailsstatement?id=" + statement._id}   > Details</Button> </td>
+                        <td>
+                          {" "}
+                          <Button
+                            href={
+                              "/expert/detailsstatement?id=" + statement._id
+                            }
+                          >
+                            {" "}
+                            Details
+                          </Button>{" "}
+                        </td>
                       </tr>
                     );
                   })}

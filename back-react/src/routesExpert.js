@@ -44,8 +44,6 @@ var routesExpert = [
     layout: "/expert",
     showInSidebar: false,
   },
-
-
  
 ];
 export default routesExpert;

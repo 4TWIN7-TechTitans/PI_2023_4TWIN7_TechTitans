@@ -75,7 +75,7 @@ var routesAdmin = [
     component: ListOfUsers,
     layout: "/admin",
     showInSidebar: true,
-  },/*
+  },
   {
     path: "/tickets",
     name: "Tickets",
@@ -83,7 +83,7 @@ var routesAdmin = [
     component: Tickets,
     layout: "/admin",
     showInSidebar: true,
-  },*/
+  },
 
   {
     path: "/listofagency",

@@ -12,7 +12,6 @@ import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
 import DetailsStatement from "views/examples/DetailsStatement";
 import Header from "components/Headers/Header.js";
-
 const Expert = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -91,8 +90,7 @@ const Expert = (props) => {
         </Switch>
         
         {window.location.pathname === "/expert/OrdreMissionExpert" && (<OrdreMissionExpert/>)}
-        
-        {/* Render DetailsStatement if statementId is defined */}
+
         {statementId && <DetailsStatement id={statementId} />}
         
         <Container fluid>

@@ -38,7 +38,21 @@ import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-//import GoogleMapReact from 'google-map-react';
+import alanBtn from '@alan-ai/alan-sdk-web';
+import swal from 'sweetalert';
+import 'ol/ol.css';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import { fromLonLat, toLonLat } from 'ol/proj';
+import { Vector as VectorLayer } from 'ol/layer';
+import { Vector as VectorSource } from 'ol/source';
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from 'ol/style';
+import Geolocation from 'ol/Geolocation';
+
 // core components
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -112,8 +126,6 @@ const AddStatement = () => {
   const [apparent_damages_a, setApparent_damages_a] = useState([]);
   const [apparent_damages_b, setApparent_damages_b] = useState([]);
 
-  const [damage_direction_a, setDamage_direction_a] = useState("");
-  const [damage_direction_b, setDamage_direction_b] = useState("");
 
   const [circumstances_a, setCircumstances_a] = useState([]);
   const [circumstances_b, setCircumstances_b] = useState([]);
@@ -131,8 +143,14 @@ const AddStatement = () => {
   const [coming_from_b, setComing_from_b] = useState("");
   const [going_to_a, setGoing_to_a] = useState("");
   const [going_to_b, setGoing_to_b] = useState("");
-  const [possibleplaces_a, setPossiblePlace_a] = useState("");
-  const [possibleplaces_b, setPossiblePlace_b] = useState("");
+  const [firstName_w_a, setFirstName_w_a] = useState("");
+  const [firstName_w_b, setFirstName_w_b] = useState("");
+  const [lastName_w_a, setLastName_w_a] = useState("");
+  const [lastName_w_b, setLastName_w_b] = useState("");
+  const [addressWitness_a, setAddressWitness_a] = useState("");
+  const [addressWitness_b, setAddressWitness_b] = useState("");
+  const [phoneWitness_a, setPhoneWitness_a] = useState("");
+  const [phoneWitness_b, setPhoneWitness_b] = useState("");
 
 
   const [showNotification, setShowNotification] = useState(false);
@@ -197,14 +215,35 @@ const AddStatement = () => {
     const form = e.target;
     const isValidDate = validateDate(date);
     if (!isValidDate) {
-      const errorElement = document.querySelector(".date.error");
-      errorElement.innerText = "La date de l'accident ne doit pas dépasser 5 jours à compter de la date d'aujourd'hui.";
+      swal({
+        title: 'Erreur',
+        text: "La date de l'accident ne doit pas dépasser 5 jours à compter de la date d'aujourd'hui.",
+        icon: 'error',
+        button: 'OK',
+      });
       return;
     }
     const location = form.location.value;
     const injured = form.injured.value;
     const material_damage = form.material_damage.value;
-    const witness = "aaa";
+    const witness_a = witnesses_a.map((witness) => {
+      return {
+
+        firstName_w: form.firstName_w_a.value,
+        lastName_w: form.lastName_w_a.value,
+        addressWitness: form.addressWitness_a.value,
+        phoneWitness: form.phoneWitness_a.value,
+
+      };
+    });
+    const witness_b = witnesses_b.map((witness) => {
+      return {
+        firstName_w: form.firstName_w_b.value,
+        lastName_w: form.lastName_w_b.value,
+        addressWitness: form.addressWitness_b.value,
+        phoneWitness: form.phoneWitness_b.value,
+      };
+    });
 
     const vehicule_a = {
       assureBy: form.assureBy_a.value,
@@ -361,7 +400,6 @@ const AddStatement = () => {
       location: location,
       injured: injured,
       material_damage: material_damage,
-      witness: witness,
       drivers_identity_a: {
         first_name: drivers_identity_a.first_name,
         last_name: drivers_identity_a.last_name,
@@ -436,7 +474,20 @@ const AddStatement = () => {
       notes_b: notes_b,
       signature_a: signatureARes.data.secure_url,
       signature_b: signatureBRes.data.secure_url,
-      case_state: "waiting",
+
+      witness_a: {
+        firstName_w: form.firstName_w_a,
+        lastName_w: form.lastName_w_a,
+        addressWitness: form.addressWitness_a,
+        phoneWitness: form.phoneWitness_a,
+      },
+      witness_b: {
+        firstName_w: form.firstName_w_b,
+        lastName_w: form.lastName_w_b,
+        addressWitness: form.addressWitness_b,
+        phoneWitness: form.phoneWitness_b,
+      },
+
     };
     console.log(mystatement);
 
@@ -493,7 +544,18 @@ const AddStatement = () => {
           location: location,
           injured: injured,
           material_damage: material_damage,
-          witness: witness,
+          witness_a: {
+            firstName_w: witness_a.firstName_w,
+            lastName_w: witness_a.lastName_w,
+            addressWitness: witness_a.addressWitness,
+            phoneWitness: witness_a.phoneWitness,
+          },
+          witness_b: {
+            firstName_w: witness_b.firstName_w,
+            lastName_w: witness_b.lastName_w,
+            addressWitness: witness_b.addressWitness,
+            phoneWitness: witness_b.phoneWitness,
+          },
           drivers_identity_a: {
             first_name: drivers_identity_a.first_name,
             last_name: drivers_identity_a.last_name,
@@ -649,7 +711,7 @@ const AddStatement = () => {
   const handleLast = (e) => {
     e.preventDefault();
     // Set the last section number here
-    setSection(8);
+    setSection(9);
   };
 
 
@@ -657,14 +719,67 @@ const AddStatement = () => {
     canvasRef.current.undo();
   };
   //validators and handle :
+  useEffect(() => {
+    // Charger la carte Google Maps
+    const loadMap = () => {
 
-  //geolocalisation
-  // const MapMarker = ({ text }) => (
-  //   <div style={{ color: 'red', fontWeight: 'bold' }}>{text}</div>
-  // );
-  // const handleMapClick = ({ lat, lng }) => {
-  //   setLocation({ lat, lng });
-  // };
+      if (window.google) {
+        const mapOptions = {
+          center: { lat: 0, lng: 0 },
+          zoom: 14,
+          streetViewControl: true,
+          disableDefaultUI: true
+        };
+
+        const map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
+
+        const marker = new window.google.maps.Marker({
+          position: mapOptions.center,
+          map: map,
+          draggable: true
+        });
+
+        window.google.maps.event.addListener(marker, 'dragend', (event) => {
+          const lat = event.latLng.lat();
+          const lng = event.latLng.lng();
+
+          setLocation(`${lat}, ${lng}`);
+        });
+
+        document.getElementById('currentLocationBtn').addEventListener('click', () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                setLocation(`${lat}, ${lng}`);
+
+                map.setCenter({ lat, lng });
+
+                marker.setPosition({ lat, lng });
+              },
+              (error) => {
+                console.error(error);
+              }
+            );
+          } else {
+            console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
+          }
+        });
+      }
+    };
+
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAkqb5vUGDj06rTFIkdontCQQtzZAD7IW4&libraries=places`;
+    script.onload = loadMap;
+    document.body.appendChild(script);
+
+    return () => {
+
+      document.body.removeChild(script);
+    };
+  }, []);
 
 
   //ctrl de saisie date de l'accident :
@@ -746,6 +861,129 @@ const AddStatement = () => {
       setCircumstances_b([...circumstances_b, value]);
     }
   };
+
+  //alan.ai 
+  // useEffect(() => {
+  //   alanBtn({
+  //     key: '63919c26fc0982151fe31a18728a75212e956eca572e1d8b807a3e2338fdd0dc/stage',
+  //     onCommand: (commandData) => {
+  //       if (commandData.command === 'go:openForm') {
+  //         //props.history.push("addStatement ");
+  //       }
+  //       if (commandData.command === 'getDate') {
+  //         setDate(commandData.value);
+  //       }
+  //       if (commandData.command === 'getLocation') {
+  //         setLocation(commandData.value);
+  //       }
+  //       if (commandData.command === 'getInjured') {
+  //         setInjured(commandData.value);
+  //       }
+  //       if (commandData.command === 'getMaterial_damage') {
+  //         setMaterial_damage(commandData.value);
+  //       }
+  //     }
+  //   });
+  // }, []);
+  //geolocalisation :
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    const map = new Map({
+      target: mapRef.current,
+      layers: [
+        new TileLayer({
+          source: new OSM(),
+        }),
+      ],
+      view: new View({
+        center: [0, 0],
+        zoom: 2,
+      }),
+    });
+
+    // Add a vector layer for displaying the current location
+    const vectorSource = new VectorSource();
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+    });
+    map.addLayer(vectorLayer);
+
+    // Get current location and update the map
+    const updateLocation = (position) => {
+      const { latitude, longitude } = position.coords;
+      const coords = fromLonLat([longitude, latitude]);
+      map.getView().setCenter(coords);
+      map.getView().setZoom(10);
+
+      // Create a marker at the current location
+      const marker = new Feature({
+        geometry: new Point(coords),
+      });
+
+      // Style the marker
+      const iconStyle = new Style({
+        image: new Icon({
+          src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+          scale: 0.1,
+        }),
+      });
+      marker.setStyle(iconStyle);
+
+      vectorSource.clear();
+      vectorSource.addFeature(marker);
+    };
+
+    const handleLocationError = (error) => {
+      console.error('Error getting current location:', error);
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(updateLocation, handleLocationError);
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+
+    return () => map.dispose();
+  }, []);
+
+
+  //witnesses
+
+
+  const [numWitnesses_a, setNumWitnesses_a] = useState(0);
+  const [numWitnesses_b, setNumWitnesses_b] = useState(0);
+  const [witnesses_a, setWitnesses_a] = useState([]);
+  const [witnesses_b, setWitnesses_b] = useState([]);
+
+  const handleNumWitnessesChange_a = (e) => {
+    const num = parseInt(e.target.value);
+    setNumWitnesses_a(num);
+    setWitnesses_a(Array.from({ length: num }, () => ({})));
+  };
+
+  const handleNumWitnessesChange_b = (e) => {
+    const num = parseInt(e.target.value);
+    setNumWitnesses_b(num);
+    setWitnesses_b(Array.from({ length: num }, () => ({})));
+  };
+
+  const handleWitnessChange_a = (index, field, value) => {
+    const updatedWitnesses_a = [...witnesses_a];
+    updatedWitnesses_a[index][field] = value;
+    setWitnesses_a(updatedWitnesses_a);
+  };
+
+
+  const handleWitnessChange_b = (index, field, value) => {
+    const updatedWitnesses_b = [...witnesses_b];
+    updatedWitnesses_b[index][field] = value;
+    setWitnesses_b(updatedWitnesses_b);
+  };
+
+
+
+
   return (
     <>
 
@@ -753,6 +991,10 @@ const AddStatement = () => {
       {/*<UserHeader /> */}
       {/* Page content */}
       <Container className="mt--7" fluid>
+        {/* <div className="alan-btn-container">
+          <div ref={alanBtn}></div>
+        </div> */}
+
         <Row>
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
@@ -773,7 +1015,7 @@ const AddStatement = () => {
               {isShown && (
                 <CardBody>
 
-                  <form onSubmit={handleSubmit} noValidate>
+                  <form onSubmit={handleSubmit} className="openForm" noValidate>
                     <h2 className=" mb-2">
                       set all the infromations related to the accident please
                     </h2>
@@ -791,7 +1033,7 @@ const AddStatement = () => {
                         </FormGroup>
 
                       </Col>
-                      
+
                       <Col className="text-right" xs="6">
                         <FormGroup>
                           <Button
@@ -833,7 +1075,7 @@ const AddStatement = () => {
 
                         <Row>
                           {/* SECTION 1 + 2 + 3 + 4 + 5 */}
-                          <Col lg="3">
+                          <Col lg="6">
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -854,33 +1096,21 @@ const AddStatement = () => {
 
                           </Col>
                           <Col lg="6">
-                            <FormGroup>
-                              <label className="form-control-label" htmlFor="input-email">
-                                2. Location
-                              </label>
 
-                              <Input
-                                className="form-control-alternative"
-                                id="location"
-                                type="text"
-                                name="location"
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                required
-                              />
-                            </FormGroup>
-                            {/* <div style={{ height: '400px', width: '100%' }}>
-                              <GoogleMapReact
-                                bootstrapURLKeys={{ key: '' }}
-                                center={location}
-                                zoom={15}
-                                onClick={handleMapClick}
-                              >
-                                <MapMarker lat={location.lat} lng={location.lng} text="📍" />
-                              </GoogleMapReact>
-                            </div> */}
+                            <label htmlFor="location">2.Location:</label>
+                            <Input
+                              id="location"
+                              type="text"
+                              name="location"
+                              placeholder="Location"
+                              value={location}
+                              onChange={(e) => setLocation(e.target.value)}
+                              required
+                            />
+
                           </Col>
-                          <Col lg="3">
+                          <div id="map" className="map-container" ref={mapRef} style={{ height: '500px', width: '100%', marginBottom: '10px' }}></div>
+                          <Col lg="6">
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -902,7 +1132,7 @@ const AddStatement = () => {
                               <div className="injured error"></div>
                             </FormGroup>
                           </Col>
-                          <Col lg="3">
+                          <Col lg="6">
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -925,16 +1155,6 @@ const AddStatement = () => {
                               </Input>
                             </FormGroup>
                           </Col>
-                          <Col lg="9">
-                            <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-email"
-                              >
-                                5. Witness to add if exists
-                              </label>
-                            </FormGroup>
-                          </Col>
                         </Row>
 
                         <Col align="center">
@@ -948,11 +1168,233 @@ const AddStatement = () => {
                             </Button>
                           </FormGroup>
                         </Col>
+
                       </div>
                       {/* FIN  1 + 2 + 3 + 4 + 5 */}
+                      <div style={{ display: section === 2 ? "block" : "none" }}>
+                        <Row>
+                          <Col align="center">
+                            <AnimatedText
+                              type="words" // animate words or chars
+                              animation={{
+                                y: '200px',
+                                x: '-20px',
+                                scale: 1.1,
+                                ease: 'ease-in-out',
+                              }}
+                              animationType="lights"
+                              interval={0.06}
+                              duration={0.8}
+                              tag="h1"
+                              className="animated-paragraph text-success"
+                              includeWhiteSpaces
+                              threshold={0.1}
+                              rootMargin="20%"
+                            >
+                              STEP 2.2 :
+                            </AnimatedText>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="6">
+                            <FormGroup>
+                              <Label className="form-control-label" htmlFor="input-email">
+                                5. Witnesses of Client B to add if exists
+                              </Label>
+                              <Input
+                                type="number"
+                                name="numWitnesses_a"
+                                id="numWitnesses_a"
+                                value={numWitnesses_a}
+                                onChange={handleNumWitnessesChange_a}
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <Label className="form-control-label" htmlFor="input-email">
+                                5. Witnesses of Client B to add if exists
+                              </Label>
+                              <Input
+                                type="number"
+                                name="numWitnesses_b"
+                                id="numWitnesses_b"
+                                value={numWitnesses_b}
+                                onChange={handleNumWitnessesChange_b}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="6">
+                            {witnesses_a.map((witness, index) => (
+                              <div key={index}>
+                                <Col lg="6">
+                                  <h6 className="heading-small text-muted mb-4">
+                                    Wintess of Insured A
+                                  </h6>
+                                </Col>
+
+                                <FormGroup>
+                                  <Label htmlFor={`firstName_w_a`}>
+                                    First Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`firstName_w_a`}
+                                    name="firstName_w_a"
+                                    value={witnesses_a[index]?.firstName_w || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, "firstName_w", e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`input-last-name-witness-${index}`}>
+                                    Last Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`lastName_w_a`}
+                                    name="lastName_w_a"
+                                    value={witnesses_a[index]?.lastName_w || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, "lastName_w", e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`input-address-witness-${index}`}>
+                                    Address of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`addressWitness_a`}
+                                    name="addressWitness_a"
+                                    value={witnesses_a[index]?.addressWitness || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, 'addressWitness', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`input-phone-witness-${index}`}>
+                                    Phone Number of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`input-phone-witness-${index}`}
+                                    name="phoneWitness_a"
+                                    value={witnesses_a[index]?.phoneWitness || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, 'phoneWitness', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                              </div>
+                            ))}
+                          </Col>
+
+
+                          <Col lg="6">
+                            {witnesses_b.map((witness, index) => (
+                              <div key={index}>
+                                <Col lg="6">
+                                  <h6 className="heading-small text-muted mb-4">
+                                    Wintess of Insured b
+                                  </h6>
+                                </Col>
+                                <FormGroup>
+                                  <Label htmlFor={`firstName_w_b_${index}`}>
+                                    First Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`firstName_w_b_${index}`}
+                                    name="firstName_w_b"
+                                    value={witnesses_b[index]?.firstName_w_b || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, "firstName_w_b", e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`input-last-name-witness-${index}`}>
+                                    Last Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`input-last-name-witness-${index}`}
+                                    name="lastName_w_b"
+                                    value={witnesses_b[index]?.lastName_w_b || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, 'lastName_w_b', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`input-address-witness-${index}`}>
+                                    Address of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`input-address-witness-${index}`}
+                                    name="addressWitness_b"
+                                    value={witnesses_b[index]?.addressWitness_b || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, 'addressWitness_b', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`input-phone-witness-${index}`}>
+                                    Phone Number of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`input-phone-witness-${index}`}
+                                    name="phoneWitness_b"
+                                    value={witnesses_b[index]?.phoneWitness_b || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, 'phoneWitness_b', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                              </div>
+                            ))}
+
+                          </Col>
+                        </Row>
+
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="info"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </div>
 
                       {/*  Section 6 */}
-                      <div style={{ display: section === 2 ? "block" : "none" }}>
+                      < div style={{ display: section === 3 ? "block" : "none" }}>
                         <Col align="center">
                           <AnimatedText
                             type="words" // animate words or chars
@@ -1227,7 +1669,7 @@ const AddStatement = () => {
                       {/*  FIN Section 6 */}
 
                       {/* Section 7 */}
-                      <div style={{ display: section === 3 ? "block" : "none" }}>
+                      <div style={{ display: section === 4 ? "block" : "none" }}>
                         <Col align="center">
                           <AnimatedText
                             type="words" // animate words or chars
@@ -1512,7 +1954,7 @@ const AddStatement = () => {
                       {/*  FIN SECTION 7 */}
 
                       {/*  SECTION 8 */}
-                      <div style={{ display: section === 4 ? "block" : "none" }}>
+                      <div style={{ display: section === 5 ? "block" : "none" }}>
                         <Col align="center">
                           <AnimatedText
                             type="words" // animate words or chars
@@ -1723,7 +2165,7 @@ const AddStatement = () => {
                       {/*  FIN SECTION 8 */}
 
                       {/*  SECTION 9 */}
-                      <div style={{ display: section === 5 ? "block" : "none" }}>
+                      <div style={{ display: section === 6 ? "block" : "none" }}>
                         <Col align="center">
                           <AnimatedText
                             type="words" // animate words or chars
@@ -2059,7 +2501,7 @@ const AddStatement = () => {
                       {/*  FIN SECTION 9 */}
 
                       {/* Section 10 */}
-                      <div style={{ display: section === 6 ? "block" : "none" }}>
+                      <div style={{ display: section === 7 ? "block" : "none" }}>
                         <Col align="center">
                           <AnimatedText
                             type="words" // animate words or chars
@@ -2167,7 +2609,7 @@ const AddStatement = () => {
                       {/* FIN SECTION 10 */}
 
                       {/* Section 11 */}
-                      <div style={{ display: section === 7 ? "block" : "none" }}>
+                      <div style={{ display: section === 8 ? "block" : "none" }}>
                         <Col align="center">
                           <AnimatedText
                             type="words" // animate words or chars
@@ -2340,7 +2782,7 @@ const AddStatement = () => {
                       {/* FIN SECTION 12 */}
 
                       {/* Section 13 + 14 + 14*/}
-                      <div style={{ display: section === 8 ? "block" : "none" }}>
+                      <div style={{ display: section === 9 ? "block" : "none" }}>
                         <Col align="center">
                           <AnimatedText
                             type="words" // animate words or chars
@@ -2446,6 +2888,7 @@ const AddStatement = () => {
                                 className="form-control-label"
                                 htmlFor="input-address"
                               >
+
                                 15. Signature of A
                               </label>
                               <InputGroup className="input-group-alternative">
@@ -2461,6 +2904,12 @@ const AddStatement = () => {
                                   value={signature_a}
                                 />
                               </InputGroup>
+                              <Label>Or Upload it via :</Label>
+                              <Input
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                onChange={setSignature_a}
+                              />
                             </FormGroup>
                           </Col>
                           <Col lg="6">
@@ -2485,6 +2934,12 @@ const AddStatement = () => {
                                   value={signature_b}
                                 />
                               </InputGroup>
+                              <Label>Or Upload it via :</Label>
+                              <Input
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                onChange={setSignature_b}
+                              />
                             </FormGroup>
                           </Col>
                         </Row>
