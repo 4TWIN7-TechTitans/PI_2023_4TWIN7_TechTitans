@@ -746,27 +746,27 @@ const AddStatement = () => {
           setLocation(`${lat}, ${lng}`);
         });
 
-        document.getElementById('currentLocationBtn').addEventListener('click', () => {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
+        // document.getElementById('currentLocationBtn').addEventListener('click', () => {
+        //   if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(
+        //       (position) => {
+        //         const lat = position.coords.latitude;
+        //         const lng = position.coords.longitude;
 
-                setLocation(`${lat}, ${lng}`);
+        //         setLocation(`${lat}, ${lng}`);
 
-                map.setCenter({ lat, lng });
+        //         map.setCenter({ lat, lng });
 
-                marker.setPosition({ lat, lng });
-              },
-              (error) => {
-                console.error(error);
-              }
-            );
-          } else {
-            console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
-          }
-        });
+        //         marker.setPosition({ lat, lng });
+        //       },
+        //       (error) => {
+        //         console.error(error);
+        //       }
+        //     );
+        //   } else {
+        //     console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
+        //   }
+        // });
       }
     };
 
