@@ -18,6 +18,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function ListOfAgency() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,6 +45,11 @@ function ListOfAgency() {
           (elem) => elem.id_agence === id_agenceJwt
         );
         setExperts(responseExpert);
+         // add Toastify notification
+         toast.success('Welcome Dear Agency, you are in Our List !', {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 30000, 
+        });
       } catch (err) {
         console.log(err);
       }
@@ -139,6 +147,7 @@ function ListOfAgency() {
       `http://localhost:5000/searchexpert?email=${searchTerm}`
     );
     setExperts(response.data);
+    
   } catch (err) {
     console.log(err);
   }
@@ -153,6 +162,8 @@ function ListOfAgency() {
     <>
       <Header />
       {/* Page content */}
+      <ToastContainer />
+
       <Container className="mt--7" fluid>
         <Row>
           <div className="col">

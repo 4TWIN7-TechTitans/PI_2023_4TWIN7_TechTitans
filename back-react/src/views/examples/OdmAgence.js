@@ -109,6 +109,7 @@ function OdmAgence() {
 
       if (assignResponse.status === 200) {
         statement.assign = true;
+        toast.success('Statement assigned To our Expert!');
         setAssignedStatementId(statement._id);
         localStorage.setItem("assignedStatementId", statement._id); // save to local storage or cookies
         fetchData();
