@@ -1208,47 +1208,6 @@ module.exports.show_users_get = async (req, res) => {
     });
   }
 };
-//
-module.exports.filtre_users = async (req, res) => {
-  try {
-    const { role } = req.params;
-    let users;
-
-    if (role) {
-      switch (role.toLowerCase()) {
-        case "admin":
-        case "expert":
-        case "agence":
-        case "client":
-          users = await userModel.find({ role });
-          break;
-        default:
-          res.status(400).json({
-            message: "Invalid role parameter",
-            status: "error",
-          });
-          return;
-      }
-    } else {
-      users = await userModel.find({});
-    }
-
-    res.status(200).json({
-      users,
-      message: "Users retrieved successfully",
-      status: "success",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "Failed to retrieve users",
-      status: "error",
-    });
-  }
-};
-
-
-
 // Show Expert
 module.exports.show_experts_get = async (req, res) => {
   try {
@@ -2133,65 +2092,18 @@ module.exports.get_all_experts_status = async (req, res) => {
     });
   }
 };
-///get only one expert status
 
-module.exports.get_expert_status = async (req, res) => {
+
+module.exports.get_userbyiduser = async (req, res) => {
+  const { id } = req.body;
   try {
-    const { email } = req.params;
-
-    // Find the expert with the given email
-    const expert = await userModel.findOne({ role: "Expert", email });
-
-    if (!expert) {
-      return res.status(404).json({
-        message: `Expert with email ${email} not found`,
-        status: "error",
-      });
-    }
-
-    return res.status(200).json({
-      message: `Expert with email ${email}`,
-      status: "success",
-      expert_status: expert.expert_status,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-      status: "error",
-    });
-  }
-};
-
-
-/// get expert search 
-module.exports.get_expert_by_email = async (req, res) => {
-  try {
-    const email = req.params.email;
-
-    // Find the expert with the specified email
-    const expert = await userModel.findOne({ email: email, role: "Expert" });
-
-    if (!expert) {
-      return res.status(404).json({
-        message: "Expert not found",
-        status: "error",
-      });
-    }
-
-    return res.status(200).json({
-      message: "Expert found",
-      status: "success",
-      expert: {
-        email: expert.email,
-        expert_status: expert.expert_status,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-      status: "error",
-    });
+    const user = await userModel.find( {_id : id}   );
+    if (user) 
+    res.status(200).json({ user: user});
+    
+  } catch (err) {
+   
+    
+    res.status(400).json({ err, status: "error" });
   }
 };

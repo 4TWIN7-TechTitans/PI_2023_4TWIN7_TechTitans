@@ -746,27 +746,27 @@ const AddStatement = () => {
           setLocation(`${lat}, ${lng}`);
         });
 
-        document.getElementById('currentLocationBtn').addEventListener('click', () => {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
+        // document.getElementById('currentLocationBtn').addEventListener('click', () => {
+        //   if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(
+        //       (position) => {
+        //         const lat = position.coords.latitude;
+        //         const lng = position.coords.longitude;
 
-                setLocation(`${lat}, ${lng}`);
+        //         setLocation(`${lat}, ${lng}`);
 
-                map.setCenter({ lat, lng });
+        //         map.setCenter({ lat, lng });
 
-                marker.setPosition({ lat, lng });
-              },
-              (error) => {
-                console.error(error);
-              }
-            );
-          } else {
-            console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
-          }
-        });
+        //         marker.setPosition({ lat, lng });
+        //       },
+        //       (error) => {
+        //         console.error(error);
+        //       }
+        //     );
+        //   } else {
+        //     console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
+        //   }
+        // });
       }
     };
 
@@ -863,28 +863,28 @@ const AddStatement = () => {
   };
 
   //alan.ai 
-  useEffect(() => {
-    alanBtn({
-      key: '63919c26fc0982151fe31a18728a75212e956eca572e1d8b807a3e2338fdd0dc/stage',
-      onCommand: (commandData) => {
-        if (commandData.command === 'go:openForm') {
-          //props.history.push("addStatement ");
-        }
-        if (commandData.command === 'getDate') {
-          setDate(commandData.value);
-        }
-        if (commandData.command === 'getLocation') {
-          setLocation(commandData.value);
-        }
-        if (commandData.command === 'getInjured') {
-          setInjured(commandData.value);
-        }
-        if (commandData.command === 'getMaterial_damage') {
-          setMaterial_damage(commandData.value);
-        }
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   alanBtn({
+  //     key: '63919c26fc0982151fe31a18728a75212e956eca572e1d8b807a3e2338fdd0dc/stage',
+  //     onCommand: (commandData) => {
+  //       if (commandData.command === 'go:openForm') {
+  //         //props.history.push("addStatement ");
+  //       }
+  //       if (commandData.command === 'getDate') {
+  //         setDate(commandData.value);
+  //       }
+  //       if (commandData.command === 'getLocation') {
+  //         setLocation(commandData.value);
+  //       }
+  //       if (commandData.command === 'getInjured') {
+  //         setInjured(commandData.value);
+  //       }
+  //       if (commandData.command === 'getMaterial_damage') {
+  //         setMaterial_damage(commandData.value);
+  //       }
+  //     }
+  //   });
+  // }, []);
   //geolocalisation :
   const mapRef = useRef(null);
 
@@ -991,9 +991,9 @@ const AddStatement = () => {
       {/*<UserHeader /> */}
       {/* Page content */}
       <Container className="mt--7" fluid>
-        <div className="alan-btn-container">
+        {/* <div className="alan-btn-container">
           <div ref={alanBtn}></div>
-        </div>
+        </div> */}
 
         <Row>
           <Col className="order-xl-1" xl="12">

@@ -27,50 +27,17 @@ const statementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-    //Partie 5
-  witness_a: [
-    {
-    firstName_w: {
-      type: String,
-      maxlength: [50, "First name should not exceed 50 characters"],
-      required: false,
-    },
-    lastName_w: {
-      type: String,
-      maxlength: [50, "Last name should not exceed 50 characters"],
-      required: false,
-    },
-    addressWitness: {
-      type: String,
-      required: false,
-    },
-    phoneWitness: {
-      type: String,
-      required: false,
-    },
-  }
-  ],
-witness_b: [
-  {
-  firstName_w: {
+  //Partie 5
+  witness: {
     type: String,
-    maxlength: [50, "First name should not exceed 50 characters"],
+
+    maxlength: [50, "Witness name should not exceed 50 characters"],
+    match: [
+      /^[A-Za-z\s'À-ÖØ-öø-ÿ]+$/,
+      "Witness name should only contain letters, spaces, quotes, and French characters",
+    ],
     required: false,
   },
-  lastName_w: {
-    type: String,
-    maxlength: [50, "Last name should not exceed 50 characters"],
-    required: false,
-  },
-  addressWitness: {
-    type: String,
-    required: false,
-  },
-  phoneWitness: {
-    type: String,
-    required: false,
-  },
-},],
   //Partie 6
   //Vehicule A
   vehicule_a: {
@@ -688,10 +655,6 @@ witness_b: [
     type: String,
     required: false,
     enum: ["a", "b"],
-  },
-  commentaire: {
-    type: String,
-    required: false,
   },
 });
 
