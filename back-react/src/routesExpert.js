@@ -18,7 +18,6 @@
 
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert";
 import DetailsStatement from "views/examples/DetailsStatement";
-import Setavailability from "views/examples/Setavailability";
 var routesExpert = [
   //TODO : change admin to user view profile
   {
@@ -45,15 +44,6 @@ var routesExpert = [
     layout: "/expert",
     showInSidebar: false,
   },
-  {
-    path: "/setavailability",
-    name: "Set availability",
-    icon: "ni ni-bullet-list-67 text-blue",
-    component: Setavailability,
-    layout: "/expert",
-    showInSidebar: true,
-  },
-
  
 ];
 export default routesExpert;
