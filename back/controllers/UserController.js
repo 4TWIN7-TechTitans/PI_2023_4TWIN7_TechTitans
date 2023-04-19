@@ -2133,39 +2133,6 @@ module.exports.get_all_experts_status = async (req, res) => {
 
 module.exports.get_userbyiduser = async (req, res) => {
   const { id } = req.body;
-///get only one expert status
-
-module.exports.get_expert_status = async (req, res) => {
-  try {
-    const { email } = req.params;
-
-    // Find the expert with the given email
-    const expert = await userModel.findOne({ role: "Expert", email });
-
-    if (!expert) {
-      return res.status(404).json({
-        message: `Expert with email ${email} not found`,
-        status: "error",
-      });
-    }
-
-    return res.status(200).json({
-      message: `Expert with email ${email}`,
-      status: "success",
-      expert_status: expert.expert_status,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-      status: "error",
-    });
-  }
-};
-
-
-/// get expert search 
-module.exports.get_expert_by_email = async (req, res) => {
   try {
     const user = await userModel.find( {_id : id}   );
     if (user) 
