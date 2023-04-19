@@ -185,3 +185,50 @@ module.exports.update_statement_status = async (req, res) => {
     res.status(500).json({ message: "Error updating statement status", error });
   }
 };
+
+//////////////////////////////////////////////////////////////////
+module.exports.add_comment_to_statement = async (req, res) => {
+  try {
+    const { comment } = req.body;
+    const statementId = req.params.statementId;
+
+    const statement = await StatementModel.findById(statementId);
+    if (!statement) {
+      return res.status(404).json({ message: "Statement not found" });
+    }
+
+    if (!statement.comments) {
+      statement.comments = [];
+    }
+
+    statement.comments.push({ text: comment });
+    const updatedStatement = await statement.save();
+
+    res.status(200).json({
+      message: "Comment added successfully",
+      statement: updatedStatement,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error adding comment", error: error.message });
+  }
+};
+////////////////////////////////////
+//get comments
+module.exports.get_statement_comments = async (req, res) => {
+  try {
+    const statementId = req.params.statementId;
+
+    // find the statement by ID
+    const statement = await StatementModel.findById(statementId);
+    if (!statement) {
+      return res.status(404).json({ message: "Statement not found" });
+    }
+
+    res.status(200).json({
+      message: "Statement comments retrieved successfully",
+      comments: statement.comments,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error retrieving comments", error });
+  }
+};

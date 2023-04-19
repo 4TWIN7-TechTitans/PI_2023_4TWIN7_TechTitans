@@ -16,6 +16,7 @@ router.get('/get_specificstatement/:id', statementController.get_specific_statem
 router.post('/setdecision/', statementController.post_decision);
 
 router.post('/statements_status/:id/status', statementController.update_statement_status);
+router.post('/add_comment_to_statement/:statementId', statementController.add_comment_to_statement);
 
 
 module.exports = router;
