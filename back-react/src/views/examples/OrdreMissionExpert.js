@@ -47,6 +47,7 @@ function OrdreMissionExpert() {
           "http://localhost:5000/getmailfromtoken/?token=" + jwt
         );
         const email = response.data.email;
+        setIsAvailable(response.data.expert_status)
         setExpertEmail(email);
         if (email) {
           const response = await axios.get(
@@ -72,6 +73,7 @@ function OrdreMissionExpert() {
       console.log(response);
       // handle the response here
     } catch (err) {
+      console.log(err);
     }
   };
   useEffect(() => {
@@ -116,22 +118,31 @@ function OrdreMissionExpert() {
   }
 
   const handleOnline = async () => {
-    const email = getCookie("email");
+
+    const jwt = getCookie("jwt");
+    const email = (
+      await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
+    ).data.email;
+
     try {
       await axios.post("http://localhost:5000/status/" + email, {
         expert_status: true,
       });
       setIsAvailable(true);
-      console.log("Online status updated successfully");
+      // console.log("Online status updated successfully");
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleOffline = async () => {
-    const email = getCookie("email");
+    const jwt = getCookie("jwt");
+    const email = (
+      await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
+    ).data.email;
+
     try {
-      await axios.post("http://localhost:5000/status/" + email, {
+      await axios.post("http://localhost:5000/statusoffline/" + email, {
         expert_status: false,
       });
       setIsAvailable(false);
@@ -161,7 +172,7 @@ function OrdreMissionExpert() {
                 <Button
                   color="primary"
                   className="mr-4"
-                  onClick={handleOnline}
+                  onClick={(e) => handleOnline()}
                   disabled={isAvailable} 
                 >
                   Go Online
@@ -169,7 +180,7 @@ function OrdreMissionExpert() {
 
                 <Button
                   color="danger"
-                  onClick={handleOffline}
+                  onClick={(e) => handleOffline()}
                   disabled={!isAvailable} 
                 >
                   Go Offline

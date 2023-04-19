@@ -42,10 +42,8 @@ function OdmAgence() {
         "http://127.0.0.1:5000/all-experts"
       );
       const filteredExperts = expertsResponse.data.experts.filter((elem) => {
-        if (elem.statements_number >= 3 && !notificationShown) {
-          // Show a notification message using toast
-          toast.error("You cannot assign more than 3 statements to an expert.");
-          notificationShown = true; // update flag variable
+        console.log(elem.expert_status)
+        if (!elem.expert_status) {
           return false;
         } else {
           return true;

@@ -2057,8 +2057,9 @@ module.exports.expert_status_on = async (req, res) => {
       });
     }
 
-    user.expert_status = true; // Set the expert online
-    await user.save();
+    // user.expert_status = true; // Set the expert online
+    // await user.save();
+    await userModel.findByIdAndUpdate(user._id, { expert_status: true });
 
     return res.status(200).json({
       message: "Expert Online",
@@ -2089,8 +2090,11 @@ module.exports.expert_status_off = async (req, res) => {
       });
     }
 
-    user.expert_status = false; // Set the expert offline
-    await user.save();
+    
+    await userModel.findByIdAndUpdate(user._id, { expert_status: false });
+    
+    // user.expert_status = false; // Set the expert offline
+    // await user.save();
 
     return res.status(200).json({
       message: "Expert Offline",

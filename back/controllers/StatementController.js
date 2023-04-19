@@ -155,7 +155,7 @@ module.exports.post_decision = async (req, res) => {
       return res.status(404).json({ message: "Statement not found" });
     }
     statement.decision = decision;
-    statement.case_state = "closed";
+    statement.case_state = "treated";
     console.log(statement);
     const result = await StatementModel.findByIdAndUpdate(
       statement._id,
