@@ -1208,47 +1208,6 @@ module.exports.show_users_get = async (req, res) => {
     });
   }
 };
-//
-module.exports.filtre_users = async (req, res) => {
-  try {
-    const { role } = req.params;
-    let users;
-
-    if (role) {
-      switch (role.toLowerCase()) {
-        case "admin":
-        case "expert":
-        case "agence":
-        case "client":
-          users = await userModel.find({ role });
-          break;
-        default:
-          res.status(400).json({
-            message: "Invalid role parameter",
-            status: "error",
-          });
-          return;
-      }
-    } else {
-      users = await userModel.find({});
-    }
-
-    res.status(200).json({
-      users,
-      message: "Users retrieved successfully",
-      status: "success",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "Failed to retrieve users",
-      status: "error",
-    });
-  }
-};
-
-
-
 // Show Expert
 module.exports.show_experts_get = async (req, res) => {
   try {

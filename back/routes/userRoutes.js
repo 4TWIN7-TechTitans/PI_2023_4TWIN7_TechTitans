@@ -46,6 +46,5 @@ router.post("/statusoffline/:email", userController.expert_status_off);
 
 router.get("/getallexperts_status", userController.get_all_experts_status);
 
-router.get("/searchexpert/:email", userController.get_expert_by_email);
 
 module.exports = router;

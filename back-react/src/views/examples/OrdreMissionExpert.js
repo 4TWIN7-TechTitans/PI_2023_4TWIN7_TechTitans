@@ -18,15 +18,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaCircle } from "react-icons/fa";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 function OrdreMissionExpert() {
   const [statements, setStatements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [expertEmail, setExpertEmail] = useState("");
   const [id, setId] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
 
 
@@ -63,6 +61,20 @@ function OrdreMissionExpert() {
   }, []);
 
 
+  const handleSearchChange = (event) => {
+    setId(event.target.value);
+    setSearchResults(null); // reset the search results
+  };
+
+  const handleSearchSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.get(`http://localhost:5000/get_specificstatement/` + id );
+      setSearchResults(response.data.statement);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   
   const pageSize = 5;
   const pageCount = Math.ceil(statements.length / pageSize);
@@ -77,28 +89,9 @@ function OrdreMissionExpert() {
     currentPage * pageSize
   );
 
-  const handleSearchInputChange = async (event) => {
-    setSearchTerm(event.target.value);
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/get_specificstatement?id=${searchTerm}`
-      );
-      setStatements(response.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  
-  
-  const filteredStatements = statements.filter((statement) => {
-    return statement._id.toString().includes(searchTerm);
-  });
-  
   return (
     <>
       <Header />
-      <ToastContainer />
-
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -106,16 +99,23 @@ function OrdreMissionExpert() {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h3 className="mb-0">My Missions</h3>
+                <form onSubmit={handleSearchSubmit}>
+                  <Input
+                    type="text"
+                    placeholder="Search by ID"
+                    value={id}
+                    onChange={handleSearchChange}
+                  />
+                  <Button type="submit">Search</Button>
+                </form>
+                {searchResults ? (
+                  <div>
+                    <p>Statement ID: {searchResults._id}</p>
+                  </div>
+                ) : id ? (
+                  <p>Statement not found</p>
+                ) : null}
               </CardHeader>
-              <div className="p-4">
-                <Input
-                  type="text"
-                  placeholder="Search by identifier of Statement"
-                  value={searchTerm}
-                  onChange={handleSearchInputChange}
-                />
-              </div>
-
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
@@ -131,7 +131,7 @@ function OrdreMissionExpert() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredStatements.map((statement) => {
+                  {paginatedStatements.map((statement) => {
                      let statusText = "";
                      let color = "orange";
                      switch (statement.case_state) {

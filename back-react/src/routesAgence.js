@@ -21,7 +21,7 @@ import Tickets from "views/examples/Tickets";
 import AddExpert from "views/examples/addExpert";
 import ListOfExperts from "views/examples/ListOfExperts";
 import OdmAgence from "views/examples/OdmAgence";
-import Detailssag from "views/examples/Detailssag";
+
 var routesAgence = [
   //TODO : change admin to user view profile
   
@@ -65,16 +65,6 @@ var routesAgence = [
     component: ListOfExperts,
     layout: "/agence",
     showInSidebar: true,
-  },
-
-  {
-    path: "/detailssag",
-    name: "Detailssag",
-    icon: "ni ni-bullet-list-67 text-blue",
-    component: Detailssag,
-    layout: "/agence",
-    showInSidebar: false,
-  },
-
+  }
 ];
 export default routesAgence;

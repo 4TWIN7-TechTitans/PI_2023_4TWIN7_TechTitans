@@ -6,8 +6,9 @@ import { Button, Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import SidebarAgence from "components/Sidebar/SidebarAgence.js";
-import OdmAgence from "views/examples/OdmAgence";
+
 import routesAgence from "routesAgence.js";
+
 const Agence = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -18,7 +19,6 @@ const Agence = (props) => {
  
   
   const [role, setRole] = useState("");
-  const [statementId, setStatementId] = useState("");
 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -84,9 +84,7 @@ const Agence = (props) => {
           
           <Redirect from="*" to="/agence/index" />
         </Switch>
-        {window.location.pathname === "/agence/OdmAgence" && (<OdmAgence/>)}
-
-
+        
         <Container fluid>
           <AdminFooter />
           

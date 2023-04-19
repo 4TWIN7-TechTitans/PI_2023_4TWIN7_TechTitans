@@ -38,6 +38,7 @@ function DetailsStatement() {
   const [circumstances_b, setcircumstances_b] = useState("");
   const [location, setlocation] = useState("");
   const [date, setDate] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
   const [Experts, setExperts] = useState([]);
   const [signature_a, setsignature_a] = useState("");
   const [signature_b, setsignature_b] = useState("");
@@ -45,9 +46,6 @@ function DetailsStatement() {
   const [showPDF, setShowPDF] = useState(false);
   const [commentaire, setCommentaire] = useState("");
   const [comments, setComments] = useState([]);
-  const [status, setStatus] = useState("");
-  const [showNotification, setShowNotification] = useState(false);
-
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -230,100 +228,78 @@ for removal from the register.`,
     console.log(result);
   };
 
- 
-
-  const handleStatusChange = async (event) => {
-    const search = window.location.search;
-    const id_statement = new URLSearchParams(search).get("id");
-    console.log("http://localhost:5000/statements_status/" + id_statement + "/status")
-  
-    const newStatus = event.target.value;
-    try {
-      await axios.post("http://localhost:5000/statements_status/" + id_statement + "/status", {
-        case_state: newStatus,
-      });
-      setStatus(newStatus);
-      toast.success("Status updated successfully!");
-    } catch (error) {
-      console.error(error);
-      toast.error("An error occurred while updating the status.");
+  useEffect(() => {
+    // Retrieve comments from local storage when component mounts
+    const savedComments = JSON.parse(localStorage.getItem("comments"));
+    if (savedComments) {
+      setComments(savedComments);
     }
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newComment = {
+      text: commentaire,
+      date: new Date().toISOString(),
+    };
+    // Save the new comment to local storage
+    localStorage.setItem(
+      "comments",
+      JSON.stringify([...comments, newComment])
+    );
+    // Update the list of comments displayed on the page
+    setComments([...comments, newComment]);
+    // Clear the input field
+    setCommentaire("");
   };
-  
-  const handleNotificationClose = () => {
-    setShowNotification(false);
-  };
+
   return (
     <>
-      <Header />
-      <ToastContainer />
-      <Container className="mt--10" fluid>
-        <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="12">
-            <Card className="card-profile shadow">
-              <Row className="justify-content-center">
-                <h3 className="mb-0">Examine claim </h3>
-                <CardBody className="pt-0 pt-md-4">
-                  <div className="text-center">
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Driver A: {driverIdentityA} || Driver B:{" "}
-                        {driverIdentityB}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        License A: {driver_license_a} || License B:{" "}
-                        {driver_license_b}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Place Of Damage For A: {hits_a} || Place Of Damage For
-                        B: {hits_b}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Circumstances A: {circumstances_a} || Circumstances B:{" "}
-                        {circumstances_b}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Location of The Accident: {location}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        <h4>Signature</h4>
-                        {signature_a} || {signature_b}
-                      </span>
-                    </div>
-                    <select
-                      className="status-dropdown"
-                      value={status}
-                      onChange={handleStatusChange}
-                    >
-                      <option value="waiting">Waiting</option>
-                      <option value="treated">Treated</option>
-                      <option value="inProgress">In Progress</option>
-                      <option value="closed">Closed</option>
-                    </select>
-
-                    {showNotification && (
-                      <div
-                        className="notification"
-                        onClick={handleNotificationClose}
-                      >
-                        Status has been changed.
-                      </div>
-                    )}
-
-                    <hr className="my-4" />
-                    <div>
-                      Date of The Accident: {date}
-                      <br />
+     <Header />
+  <ToastContainer />
+  <Container className="mt--10" fluid>
+    <Row>
+      <Col className="order-xl-2 mb-5 mb-xl-0" xl="12">
+        <Card className="card-profile shadow">
+          <Row className="justify-content-center">
+            <h3 className="mb-0">Examine claim </h3>
+            <CardBody className="pt-0 pt-md-4">
+              <div className="text-center">
+                <div className="h5 font-weight-300">
+                  <span className="font-weight-light">
+                    Driver A: {driverIdentityA} || Driver B: {driverIdentityB}
+                  </span>
+                </div>
+                <div className="h5 font-weight-300">
+                  <span className="font-weight-light">
+                    License A: {driver_license_a} || License B: {driver_license_b}
+                  </span>
+                </div>
+                <div className="h5 font-weight-300">
+                  <span className="font-weight-light">
+                    Place Of Damage For A: {hits_a} || Place Of Damage For B: {hits_b}
+                  </span>
+                </div>
+                <div className="h5 font-weight-300">
+                  <span className="font-weight-light">
+                    Circumstances A: {circumstances_a} || Circumstances B: {circumstances_b}
+                  </span>
+                </div>
+                <div className="h5 font-weight-300">
+                  <span className="font-weight-light">
+                    Location of The Accident: {location}
+                  </span>
+                </div>
+                <div className="h5 font-weight-300">
+                  <span className="font-weight-light">
+                    <h4>Signature</h4>
+                    {signature_a} || {signature_b}
+                  </span>
+                </div>
+                <hr className="my-4" />
+                <div>
+                  Date of The Accident: {date}
+                  <br />
                       "The specifications for experts and actuaries is a
                       document that defines the requirements and standards that
                       experts and actuaries must adhere to in the performance of
@@ -344,11 +320,24 @@ for removal from the register.`,
                       for removal from the register."
                     </div>
                   </div>
-                  
-
-                  {comments.map((comment) => (
-                    <div key={comment.date}></div>
-                  ))}
+                  <form onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label for="commentaire">Commentaire:</Label>
+          <Input
+            type="textarea"
+            name="commentaire"
+            id="commentaire"
+            value={commentaire}
+            onChange={(e) => setCommentaire(e.target.value)}
+          />
+        </FormGroup>
+        <Button type="submit">Add Commentaire</Button>
+      </form>
+      
+        {comments.map((comment) => (
+          <div key={comment.date}>
+          </div>
+        ))}
                   {comments.map((comment, index) => (
                     <div key={index}>
                       <p>{comment.text}</p>

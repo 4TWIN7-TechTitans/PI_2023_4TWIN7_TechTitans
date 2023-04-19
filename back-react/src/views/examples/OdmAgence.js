@@ -215,7 +215,6 @@ function OdmAgence() {
                           </button>
                         </div>
                       </td>
-                      <td> <Button href={"/agence/detailssag?id=" + statement._id}   > Details</Button> </td>
                     </tr>
                   );
                 })}
