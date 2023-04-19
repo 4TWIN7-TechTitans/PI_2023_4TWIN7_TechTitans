@@ -2088,3 +2088,18 @@ module.exports.get_all_experts_status = async (req, res) => {
     });
   }
 };
+
+
+module.exports.get_userbyiduser = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const user = await userModel.find( {_id : id}   );
+    if (user) 
+    res.status(200).json({ user: user});
+    
+  } catch (err) {
+   
+    
+    res.status(400).json({ err, status: "error" });
+  }
+};

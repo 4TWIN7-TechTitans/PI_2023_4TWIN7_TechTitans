@@ -23,6 +23,8 @@ router.get("/userbyemail/:email", userController.get_user_by_email);
 router.get("/users/:email", userController.get_user_by_email);
 router.get("/usersid/:id", userController.get_userbyid);
 
+//added by oz
+router.get("/userid", userController.get_userbyiduser);
 //ban
 router.post("/users/ban/:mail", userController.post_ban_user);
 router.get("/users/checkban/:email", userController.check_ban_user);

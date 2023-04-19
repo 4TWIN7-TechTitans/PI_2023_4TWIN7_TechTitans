@@ -24,7 +24,6 @@ import { Link } from "react-router-dom";
 const Tickets = () => {
   const [tickets, setTickets] = useState([]);
 
- 
   const [errors, setErrors] = useState({});
   const [showErrorObjet, setShowErrorObjet] = useState(false);
   const [showErroroDescription, setShowErrorDescription] = useState(false);
@@ -41,14 +40,50 @@ const Tickets = () => {
   const [ticket_id, setTicket_id] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-
-
-
   const role = getCookie("role");
   const userid = getCookie("userid").substring(
     3,
     getCookie("userid").length - 1
   );
+
+  //getting user from database
+  const fetchuser = async () => {
+   /* try {
+      const response = await axios.get("http://localhost:5000/userid", {
+        id: userid,
+      });
+      console.log(response.data.user);
+    } catch (error) {
+      console.log(error);
+    }*/
+
+    await axios
+        .get("http://localhost:5000/userid", {
+          id:userid,
+        })
+        .then(
+          (res) => {
+            console.error(res.data);
+      
+            
+          },
+          (err) => {
+            console.log("err then");
+            console.log(err);
+    
+          }
+        )
+        .catch((err) => {
+          console.log("catch");
+          console.log(err);
+         
+        });
+    
+
+
+
+
+  };
 
   const fetchData = async () => {
     try {
@@ -74,6 +109,7 @@ const Tickets = () => {
 
   useEffect(() => {
     fetchData();
+    fetchuser();
   }, []);
 
   const [isShownadd_ticket, setIsShownadd_ticket] = useState("list");
@@ -165,27 +201,21 @@ const Tickets = () => {
     }
   };
 
-
-
   const handleupdateticket = async (e) => {
     e.preventDefault();
     const form = e.target;
-    
-   
+
     const log = form.log.value;
-    const etat=etat;
-    const id=ticket_id;
-  
-   
+    const etat = etat;
+    const id = ticket_id;
+
     try {
       const updateticket = await axios.post(
         "http://localhost:5000/ticket/update",
         {
-         
           log: log,
-          
+
           etat: etat,
-         
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -202,9 +232,6 @@ const Tickets = () => {
     }
   };
 
-
-
-
   const DetailsTickets = async (e, id) => {
     try {
       const response = await axios.get("http://localhost:5000/ticket/");
@@ -218,13 +245,18 @@ const Tickets = () => {
       setEtat(ticket[0].etat);
       setTicket_id(ticket[0]._id);
       setId_demandeur(ticket[0].id_demandeur);
-      var timestamp = Date.parse(ticket[0].date_demande); 
-      var date_dem = new Intl.DateTimeFormat('fr-FR', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(timestamp);
+      var timestamp = Date.parse(ticket[0].date_demande);
+      var date_dem = new Intl.DateTimeFormat("fr-FR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(timestamp);
       setDate_demande(date_dem);
       setDescription(ticket[0].description);
       setLog(ticket[0].log);
 
-      
       setTicketadded("");
       setIsShownadd_ticket("modif");
     } catch (error) {
@@ -258,7 +290,7 @@ const Tickets = () => {
                 {isShownadd_ticket === "add" && (
                   <h3 className="mb-0">New Ticket</h3>
                 )}
-               
+
                 <Button
                   color="info float-right"
                   onClick={handleShownadd_ticket}
@@ -430,8 +462,7 @@ const Tickets = () => {
               {isShownadd_ticket === "modif" && (
                 <CardBody>
                   <div className="card-profile-stats d-flex justify-content-center ">
-                  
-                  <div>
+                    <div>
                       <span className="heading ">Ticket </span>
                       <span className="heading ni ni-support-16"></span>
                       <span className="description ">N° {num_ticket}</span>
@@ -449,42 +480,43 @@ const Tickets = () => {
                     <div>
                       <span className="heading">Etat</span>
                       <span className="heading ni ni-sound-wave"></span>
-                      
+
                       <span className="description">{etat}</span>
                     </div>
                     <div>
-                      {role!=="Client" && (<Input
-                                name="apparent_damages_a"
-                                type="select"
-                                value={etat}
-                                         >
-                                <option value="a traiter">a traiter</option>
-                                <option value="en cours de traitement">en cours de traitement</option>
-                                <option value="traité">traité</option>
-                                <option value="clos">clos</option>
-                                </Input>)}
-                    
+                      {role !== "Client" && (
+                        <Input
+                          name="apparent_damages_a"
+                          type="select"
+                          value={etat}
+                        >
+                          <option value="a traiter">a traiter</option>
+                          <option value="en cours de traitement">
+                            en cours de traitement
+                          </option>
+                          <option value="traité">traité</option>
+                          <option value="clos">clos</option>
+                        </Input>
+                      )}
                     </div>
-
-                   
                   </div>
-                  <hr className="my-4"/>
+                  <hr className="my-4" />
                   <span class="heading ni ni-ruler-pencil"></span>
-                    <span class="heading"> Description</span>
-                      
-                      <br/>
-                      <span class="description">{description}</span>
-                      <hr className="my-4"/>
+                  <span class="heading"> Description</span>
+
+                  <br />
+                  <span class="description">{description}</span>
+                  <hr className="my-4" />
                   <Form onSubmit={handleupdateticket} noValidate>
                     <Row>
                       <Col md="12">
                         <FormGroup></FormGroup>
                       </Col>
-                     
+
                       <Col md="12">
                         <FormGroup>
-                        <span class="heading ni ni-single-copy-04"></span>
-                        <span class="heading">Suivi</span>
+                          <span class="heading ni ni-single-copy-04"></span>
+                          <span class="heading">Suivi</span>
 
                           <Input
                             type="textarea"
@@ -509,12 +541,7 @@ const Tickets = () => {
                         </div>
                       )}
 
-                      <Button
-                        className="my-4"
-                        color="primary"
-                        type="submit"
-                        
-                      >
+                      <Button className="my-4" color="primary" type="submit">
                         Enregistrer
                       </Button>
                     </div>
