@@ -216,34 +216,45 @@ const AddStatement = () => {
     const isValidDate = validateDate(date);
     if (!isValidDate) {
       swal({
-        title: 'Erreur',
-        text: "La date de l'accident ne doit pas dépasser 5 jours à compter de la date d'aujourd'hui.",
+        title: 'warning',
+        text: "The date of the accident must not be greater than 5 days from today's date.",
         icon: 'error',
         button: 'OK',
       });
       return;
     }
     const location = form.location.value;
+    if (!location) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Location in Step 1",
+        button: 'Ok',
+      });
+      return;
+    }
     const injured = form.injured.value;
+    if (!injured) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Injured in Step 1",
+        button: 'Ok',
+      });
+      return;
+    }
     const material_damage = form.material_damage.value;
-    const witness_a = witnesses_a.map((witness) => {
-      return {
-
-        firstName_w: form.firstName_w_a.value,
-        lastName_w: form.lastName_w_a.value,
-        addressWitness: form.addressWitness_a.value,
-        phoneWitness: form.phoneWitness_a.value,
-
-      };
-    });
-    const witness_b = witnesses_b.map((witness) => {
-      return {
-        firstName_w: form.firstName_w_b.value,
-        lastName_w: form.lastName_w_b.value,
-        addressWitness: form.addressWitness_b.value,
-        phoneWitness: form.phoneWitness_b.value,
-      };
-    });
+    if (!material_damage) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Material Damage in Step 1",
+        button: 'Ok',
+      });
+      return;
+    }
+    const witness_a = form.witnesses_a;
+    const witness_b = form.witnesses_b;
 
     const vehicule_a = {
       assureBy: form.assureBy_a.value,
@@ -342,14 +353,28 @@ const AddStatement = () => {
 
     const accident_croquis = form.accident_croquis;
     const notes_a = form.notes_a.value;
+    if (!notes_a) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Observations of Client A in Step 8",
+        button: 'Ok',
+      });
+      return;
+    }
     const notes_b = form.notes_b.value;
+    if (!notes_b) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Observations of Client B in Step 8",
+        button: 'Ok',
+      });
+      return;
+    }
     const signature_a = form.signature_a;
     const signature_b = form.signature_b;
     const verified = true;
-
-    //console.log( notes_a)
-    //debut image
-    // Get the canvas elements
     const canvas = canvasRef.current;
     const canvas_a = canvasRef_a.current;
     const canvas_b = canvasRef_b.current;
@@ -475,62 +500,49 @@ const AddStatement = () => {
       signature_a: signatureARes.data.secure_url,
       signature_b: signatureBRes.data.secure_url,
 
-      witness_a: {
-        firstName_w: form.firstName_w_a,
-        lastName_w: form.lastName_w_a,
-        addressWitness: form.addressWitness_a,
-        phoneWitness: form.phoneWitness_a,
-      },
-      witness_b: {
-        firstName_w: form.firstName_w_b,
-        lastName_w: form.lastName_w_b,
-        addressWitness: form.addressWitness_b,
-        phoneWitness: form.phoneWitness_b,
-      },
+      witness_a: [
+        {
+          witnesses_a
+        },
+      ],
+
+
+      witness_b: [
+        {
+          witnesses_b
+        },]
 
     };
     console.log(mystatement);
 
 
 
-    /* if (!date || !location || !injured || !material_damage 
-  
-        || !vehicule_a.assureBy || !vehicule_a.agency || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date || !vehicule_a.contractNumber
-  
-        || !vehicule_b.assureBy || !vehicule_b.agency || !vehicule_b.contractValidity || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b.contractNumber
-  
-        || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license
-  
-        || !drivers_identity_b.first_name || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date || !drivers_identity_b.driver_license
-  
-        || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr
-  
-        || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
-  
-        || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to
-  
-        || !vehicule_identity_b.brand || !vehicule_identity_b.type || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
-  
-        || !hits_a || !hits_b
-  
-        || !apparent_damages_a || !apparent_damages_b
-  
-        || !circumstances_a || !circumstances_b
-  
-        || !accident_croquis
-  
-        || !notes_a || !notes_b
-  
-      ) {
-        setShowNotification(false);
-        setErrors({});
-        setShowError(true);
-        setErrors({
-          ...errors,
-          message: "Please fill all the fields",
-        });
-        return;
-      }*/
+    if (!vehicule_a.assureBy || !vehicule_a.agency || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date || !vehicule_a.contractNumber
+
+      || !vehicule_b.assureBy || !vehicule_b.agency || !vehicule_b.contractValidity || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b.contractNumber
+
+    ) {
+      toast.error("fill in all the fields in step 2");
+    }
+     if (!drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license
+
+      || !drivers_identity_b.first_name || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date || !drivers_identity_b.driver_license
+
+
+    ) {
+      toast.error("fill in all the fields in step 3");
+    }
+     if (!insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr
+
+      || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr) {
+      toast.error("fill in all the fields in step 4");
+    }
+
+     if (!vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to
+
+      || !vehicule_identity_b.brand || !vehicule_identity_b.type || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to) {
+      toast.error("fill in all the fields in step 5");
+    }
 
     //user haven't an account connected
     const user = users.find((user) => user.role === "Client");
@@ -544,18 +556,8 @@ const AddStatement = () => {
           location: location,
           injured: injured,
           material_damage: material_damage,
-          witness_a: {
-            firstName_w: witness_a.firstName_w,
-            lastName_w: witness_a.lastName_w,
-            addressWitness: witness_a.addressWitness,
-            phoneWitness: witness_a.phoneWitness,
-          },
-          witness_b: {
-            firstName_w: witness_b.firstName_w,
-            lastName_w: witness_b.lastName_w,
-            addressWitness: witness_b.addressWitness,
-            phoneWitness: witness_b.phoneWitness,
-          },
+          witness_a: witnesses_a,
+          witness_b: witnesses_b,
           drivers_identity_a: {
             first_name: drivers_identity_a.first_name,
             last_name: drivers_identity_a.last_name,
@@ -593,7 +595,7 @@ const AddStatement = () => {
           },
           vehicule_identity_b: {
             brand: vehicule_identity_b.brand,
-            type: vehicule_identity_a.type,
+            type: vehicule_identity_b.type,
             matriculation: vehicule_identity_b.matriculation,
             country: vehicule_identity_b.country,
             coming_from: vehicule_identity_b.coming_from,
@@ -652,7 +654,6 @@ const AddStatement = () => {
       setShowNotification(false);
       setErrors({ ...errors, message: "Statement adding failed" });
       setShowError(true);
-      console.log("lenna");
       toast.error("Error creating statement");
 
       console.log(error);
@@ -919,6 +920,7 @@ const AddStatement = () => {
       // Create a marker at the current location
       const marker = new Feature({
         geometry: new Point(coords),
+        draggable: true
       });
 
       // Style the marker
@@ -970,14 +972,13 @@ const AddStatement = () => {
 
   const handleWitnessChange_a = (index, field, value) => {
     const updatedWitnesses_a = [...witnesses_a];
-    updatedWitnesses_a[index][field] = value;
+    updatedWitnesses_a[index][field] = value ? value : {}; // Set value to empty object if it is empty
     setWitnesses_a(updatedWitnesses_a);
   };
 
-
   const handleWitnessChange_b = (index, field, value) => {
     const updatedWitnesses_b = [...witnesses_b];
-    updatedWitnesses_b[index][field] = value;
+    updatedWitnesses_b[index][field] = value ? value : {}; // Set value to empty object if it is empty
     setWitnesses_b(updatedWitnesses_b);
   };
 
@@ -1191,7 +1192,7 @@ const AddStatement = () => {
                               threshold={0.1}
                               rootMargin="20%"
                             >
-                              STEP 2.2 :
+                              STEP 1.2 :
                             </AnimatedText>
                           </Col>
                         </Row>
@@ -1199,7 +1200,7 @@ const AddStatement = () => {
                           <Col lg="6">
                             <FormGroup>
                               <Label className="form-control-label" htmlFor="input-email">
-                                5. Witnesses of Client B to add if exists
+                                5. Witnesses of Client A to add if exists
                               </Label>
                               <Input
                                 type="number"
@@ -1230,7 +1231,7 @@ const AddStatement = () => {
                             {witnesses_a.map((witness, index) => (
                               <div key={index}>
                                 <Col lg="6">
-                                  <h6 className="heading-small text-muted mb-4">
+                                  <h6 className="heading-small  mb-4">
                                     Wintess of Insured A
                                   </h6>
                                 </Col>
@@ -1250,7 +1251,7 @@ const AddStatement = () => {
                                   />
                                 </FormGroup>
                                 <FormGroup>
-                                  <Label htmlFor={`input-last-name-witness-${index}`}>
+                                  <Label htmlFor={`lastName_w_a`}>
                                     Last Name of Witness {index + 1}
                                   </Label>
                                   <Input
@@ -1264,7 +1265,7 @@ const AddStatement = () => {
                                   />
                                 </FormGroup>
                                 <FormGroup>
-                                  <Label htmlFor={`input-address-witness-${index}`}>
+                                  <Label htmlFor={`addressWitness_a`}>
                                     Address of Witness {index + 1}
                                   </Label>
                                   <Input
@@ -1278,12 +1279,12 @@ const AddStatement = () => {
                                   />
                                 </FormGroup>
                                 <FormGroup>
-                                  <Label htmlFor={`input-phone-witness-${index}`}>
+                                  <Label htmlFor={`phoneWitness_a`}>
                                     Phone Number of Witness {index + 1}
                                   </Label>
                                   <Input
                                     type="text"
-                                    id={`input-phone-witness-${index}`}
+                                    id={`phoneWitness_a`}
                                     name="phoneWitness_a"
                                     value={witnesses_a[index]?.phoneWitness || ''}
                                     onChange={(e) =>
@@ -1305,58 +1306,58 @@ const AddStatement = () => {
                                   </h6>
                                 </Col>
                                 <FormGroup>
-                                  <Label htmlFor={`firstName_w_b_${index}`}>
+                                  <Label htmlFor={`firstName_w_b`}>
                                     First Name of Witness {index + 1}
                                   </Label>
                                   <Input
                                     type="text"
-                                    id={`firstName_w_b_${index}`}
+                                    id={`firstName_w_b`}
                                     name="firstName_w_b"
-                                    value={witnesses_b[index]?.firstName_w_b || ''}
+                                    value={witnesses_b[index]?.firstName_w || ''}
                                     onChange={(e) =>
-                                      handleWitnessChange_b(index, "firstName_w_b", e.target.value)
+                                      handleWitnessChange_b(index, "firstName_w", e.target.value)
                                     }
                                   />
                                 </FormGroup>
                                 <FormGroup>
-                                  <Label htmlFor={`input-last-name-witness-${index}`}>
+                                  <Label htmlFor={`lastName_w_b`}>
                                     Last Name of Witness {index + 1}
                                   </Label>
                                   <Input
                                     type="text"
-                                    id={`input-last-name-witness-${index}`}
+                                    id={`lastName_w_b`}
                                     name="lastName_w_b"
-                                    value={witnesses_b[index]?.lastName_w_b || ''}
+                                    value={witnesses_b[index]?.lastName_w || ''}
                                     onChange={(e) =>
-                                      handleWitnessChange_b(index, 'lastName_w_b', e.target.value)
+                                      handleWitnessChange_b(index, "lastName_w", e.target.value)
                                     }
                                   />
                                 </FormGroup>
                                 <FormGroup>
-                                  <Label htmlFor={`input-address-witness-${index}`}>
+                                  <Label htmlFor={`addressWitness_b`}>
                                     Address of Witness {index + 1}
                                   </Label>
                                   <Input
                                     type="text"
-                                    id={`input-address-witness-${index}`}
+                                    id={`addressWitness_b`}
                                     name="addressWitness_b"
-                                    value={witnesses_b[index]?.addressWitness_b || ''}
+                                    value={witnesses_b[index]?.addressWitness || ''}
                                     onChange={(e) =>
-                                      handleWitnessChange_b(index, 'addressWitness_b', e.target.value)
+                                      handleWitnessChange_b(index, 'addressWitness', e.target.value)
                                     }
                                   />
                                 </FormGroup>
                                 <FormGroup>
-                                  <Label htmlFor={`input-phone-witness-${index}`}>
+                                  <Label htmlFor={`phoneWitness_b`}>
                                     Phone Number of Witness {index + 1}
                                   </Label>
                                   <Input
                                     type="text"
-                                    id={`input-phone-witness-${index}`}
+                                    id={`phoneWitness_b`}
                                     name="phoneWitness_b"
-                                    value={witnesses_b[index]?.phoneWitness_b || ''}
+                                    value={witnesses_b[index]?.phoneWitness || ''}
                                     onChange={(e) =>
-                                      handleWitnessChange_b(index, 'phoneWitness_b', e.target.value)
+                                      handleWitnessChange_b(index, 'phoneWitness', e.target.value)
                                     }
                                   />
                                 </FormGroup>

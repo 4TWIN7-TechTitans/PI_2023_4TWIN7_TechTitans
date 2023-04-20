@@ -10,11 +10,6 @@ const statementSchema = new mongoose.Schema({
   //Partie 2 :
   location: {
     type: String,
-
-    match: [
-      /^[a-zA-Z0-9\s,'-]*$/,
-      "Location should only contain letters, numbers, spaces, commas, apostrophes and hyphens",
-    ],
     required: true,
   },
   //Partie 3 :
@@ -27,50 +22,51 @@ const statementSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-    //Partie 5
+  //Partie 5
   witness_a: [
     {
-    firstName_w: {
-      type: String,
-      maxlength: [50, "First name should not exceed 50 characters"],
-      required: false,
-    },
-    lastName_w: {
-      type: String,
-      maxlength: [50, "Last name should not exceed 50 characters"],
-      required: false,
-    },
-    addressWitness: {
-      type: String,
-      required: false,
-    },
-    phoneWitness: {
-      type: String,
-      required: false,
-    },
-  }
+      firstName_w: {
+        type: String,
+        maxlength: [50, "First name should not exceed 50 characters"],
+        required: false,
+      },
+      lastName_w: {
+        type: String,
+        maxlength: [50, "Last name should not exceed 50 characters"],
+        required: false,
+      },
+      addressWitness: {
+        type: String,
+        required: false,
+      },
+      phoneWitness: {
+        type: String,
+        required: false,
+      },
+    }
   ],
-witness_b: [
-  {
-  firstName_w: {
-    type: String,
-    maxlength: [50, "First name should not exceed 50 characters"],
-    required: false,
-  },
-  lastName_w: {
-    type: String,
-    maxlength: [50, "Last name should not exceed 50 characters"],
-    required: false,
-  },
-  addressWitness: {
-    type: String,
-    required: false,
-  },
-  phoneWitness: {
-    type: String,
-    required: false,
-  },
-},],
+  witness_b: [
+    {
+      firstName_w: {
+        type: String,
+        maxlength: [50, "First name should not exceed 50 characters"],
+        required: false,
+      },
+      lastName_w: {
+        type: String,
+        maxlength: [50, "Last name should not exceed 50 characters"],
+        required: false,
+      },
+      addressWitness: {
+        type: String,
+        required: false,
+      },
+      phoneWitness: {
+        type: String,
+        required: false,
+      },
+    },
+  ],
 
   //Partie 6
   //Vehicule A
@@ -405,24 +401,25 @@ witness_b: [
       ],
       required: true,
     },
+    coming_from: {
+      type: String,
+      required: true,
+    },
+    going_to: {
+      type: String,
+      required: true,
+    },
   },
   vehicule_identity_b: {
     brand: {
       type: String,
-      coming_from: {
-        type: String,
-        required: true,
-      },
-      going_to: {
-        type: String,
-        required: true,
-      },
     },
     type: {
       type: String,
       enum: ["Car", "Truck", "MotoCycle"],
       required: true,
     },
+
     matriculation: {
       type: String,
       required: true,
@@ -590,11 +587,13 @@ witness_b: [
       ],
       required: true,
     },
-    coming_from_b: {
+    coming_from: {
       type: String,
+      required: true,
     },
-    going_to_b: {
+    going_to: {
       type: String,
+      required: true,
     },
   },
 
