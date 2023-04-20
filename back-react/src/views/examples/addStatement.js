@@ -524,7 +524,7 @@ const AddStatement = () => {
     ) {
       toast.error("fill in all the fields in step 2");
     }
-     if (!drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license
+    if (!drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license
 
       || !drivers_identity_b.first_name || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date || !drivers_identity_b.driver_license
 
@@ -532,13 +532,13 @@ const AddStatement = () => {
     ) {
       toast.error("fill in all the fields in step 3");
     }
-     if (!insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr
+    if (!insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr
 
       || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr) {
       toast.error("fill in all the fields in step 4");
     }
 
-     if (!vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to
+    if (!vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to
 
       || !vehicule_identity_b.brand || !vehicule_identity_b.type || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to) {
       toast.error("fill in all the fields in step 5");
@@ -719,68 +719,68 @@ const AddStatement = () => {
   const handleUndo = () => {
     canvasRef.current.undo();
   };
-  //validators and handle :
-  useEffect(() => {
-    // Charger la carte Google Maps
-    const loadMap = () => {
+  // //validators and handle :
+  // useEffect(() => {
+  //   // Charger la carte Google Maps
+  //   const loadMap = () => {
 
-      if (window.google) {
-        const mapOptions = {
-          center: { lat: 0, lng: 0 },
-          zoom: 14,
-          streetViewControl: true,
-          disableDefaultUI: true
-        };
+  //     if (window.google) {
+  //       const mapOptions = {
+  //         center: { lat: 0, lng: 0 },
+  //         zoom: 14,
+  //         streetViewControl: true,
+  //         disableDefaultUI: true
+  //       };
 
-        const map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
+  //       const map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
 
-        const marker = new window.google.maps.Marker({
-          position: mapOptions.center,
-          map: map,
-          draggable: true
-        });
+  //       const marker = new window.google.maps.Marker({
+  //         position: mapOptions.center,
+  //         map: map,
+  //         draggable: true
+  //       });
 
-        window.google.maps.event.addListener(marker, 'dragend', (event) => {
-          const lat = event.latLng.lat();
-          const lng = event.latLng.lng();
+  //       window.google.maps.event.addListener(marker, 'dragend', (event) => {
+  //         const lat = event.latLng.lat();
+  //         const lng = event.latLng.lng();
 
-          setLocation(`${lat}, ${lng}`);
-        });
+  //         setLocation(`${lat}, ${lng}`);
+  //       });
 
-        // document.getElementById('currentLocationBtn').addEventListener('click', () => {
-        //   if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(
-        //       (position) => {
-        //         const lat = position.coords.latitude;
-        //         const lng = position.coords.longitude;
+  //       // document.getElementById('currentLocationBtn').addEventListener('click', () => {
+  //       //   if (navigator.geolocation) {
+  //       //     navigator.geolocation.getCurrentPosition(
+  //       //       (position) => {
+  //       //         const lat = position.coords.latitude;
+  //       //         const lng = position.coords.longitude;
 
-        //         setLocation(`${lat}, ${lng}`);
+  //       //         setLocation(`${lat}, ${lng}`);
 
-        //         map.setCenter({ lat, lng });
+  //       //         map.setCenter({ lat, lng });
 
-        //         marker.setPosition({ lat, lng });
-        //       },
-        //       (error) => {
-        //         console.error(error);
-        //       }
-        //     );
-        //   } else {
-        //     console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
-        //   }
-        // });
-      }
-    };
+  //       //         marker.setPosition({ lat, lng });
+  //       //       },
+  //       //       (error) => {
+  //       //         console.error(error);
+  //       //       }
+  //       //     );
+  //       //   } else {
+  //       //     console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
+  //       //   }
+  //       // });
+  //     }
+  //   };
 
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAkqb5vUGDj06rTFIkdontCQQtzZAD7IW4&libraries=places`;
-    script.onload = loadMap;
-    document.body.appendChild(script);
+  //   const script = document.createElement('script');
+  //   script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAkqb5vUGDj06rTFIkdontCQQtzZAD7IW4&libraries=places`;
+  //   script.onload = loadMap;
+  //   document.body.appendChild(script);
 
-    return () => {
+  //   return () => {
 
-      document.body.removeChild(script);
-    };
-  }, []);
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
 
 
   //ctrl de saisie date de l'accident :
@@ -934,6 +934,10 @@ const AddStatement = () => {
 
       vectorSource.clear();
       vectorSource.addFeature(marker);
+      vectorSource.clear();
+
+      // Update the location input field with the current coordinates
+      setLocation(`${latitude}, ${longitude}`);
     };
 
     const handleLocationError = (error) => {
@@ -946,7 +950,26 @@ const AddStatement = () => {
       console.error('Geolocation is not supported by this browser.');
     }
 
-    return () => map.dispose();
+    // Add an event listener for map click event
+    const handleMapClick = (event) => {
+      // Get clicked coordinates
+      const clickedCoords = event.coordinate;
+
+      // Convert clicked coordinates to lon/lat
+      const [longitude, latitude] = toLonLat(clickedCoords);
+
+      // Update the location input field with clicked coordinates
+      setLocation(`${latitude}, ${longitude}`);
+    };
+
+    // Add the click event listener to the map
+    map.on('click', handleMapClick);
+
+    return () => {
+      // Remove the click event listener when component is unmounted
+      map.un('click', handleMapClick);
+      map.dispose();
+    };
   }, []);
 
 
