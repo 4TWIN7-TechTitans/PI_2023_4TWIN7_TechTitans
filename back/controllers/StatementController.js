@@ -187,7 +187,7 @@ module.exports.update_statement_status = async (req, res) => {
 };
 
 // Filter status statement 
-module.exports.filter_statements = async (req, res) => {
+module.exports.filtre_statements = async (req, res) => {
   try {
     const { case_state } = req.params;
     let statements;
@@ -222,3 +222,4 @@ module.exports.filter_statements = async (req, res) => {
     });
   }
 };
+

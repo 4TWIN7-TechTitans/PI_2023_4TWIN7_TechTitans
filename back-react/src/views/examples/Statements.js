@@ -11,6 +11,9 @@ import {
   Container,
   Row,
   Button,
+  Input,
+  FormGroup,
+  Label,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -111,6 +114,31 @@ function MyStatements() {
   const handleCloseModal = () => {
     setSelectedStatement(null);
   };
+  const [selectedCaseState, setSelectedCaseState] = useState("");
+  const handleCaseStateFilter = async (caseState) => {
+    setSelectedCaseState(caseState);
+    
+  };
+  const fetchFilter = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/getstatements/${selectedCaseState}`
+      );
+      const filteredData = response.data.statements.filter(
+        (statement) =>
+          statement.insured_a.firstname === prenom &&
+          statement.insured_a.lastname === nom
+      );
+      console.log(filteredData);
+      setStatements(filteredData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchFilter();
+  }, [selectedCaseState]);
   return (
     <>
 
@@ -129,6 +157,30 @@ function MyStatements() {
                       Sort By Date
                     </Button>
                   </Col>
+
+                </Row>
+                <Row>
+                  <FormGroup>
+                    <Col>
+                    <Label>
+                      Filter By Case State
+                    </Label>
+                  <Input
+                    className="form-control"
+                    type="select"
+                    value={selectedCaseState}
+                    onChange={(e) => handleCaseStateFilter(e.target.value)}
+                  >
+                   
+                    <option value="">All</option>
+                    <option value="treated">Treated</option>
+                    <option value="closed">Closed</option>
+                    <option value="waiting">Waiting</option>
+                    <option value="inProgress">In Progress</option>
+                    
+                  </Input>
+                  </Col>
+                  </FormGroup>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
@@ -138,6 +190,7 @@ function MyStatements() {
 
                 </thead>
                 <tbody>
+
                   <th scope="col">Date</th>
 
                   <th scope="col">ContractNumber</th>
