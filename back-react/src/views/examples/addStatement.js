@@ -168,6 +168,7 @@ const AddStatement = () => {
   const [email, setEmail] = useState("");
   //statement by steps
   const [section, setSection] = useState(1);
+
   const brands = ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "Audi", "Isuzu", "BMW", "Golf", "Tesla", "Chevrolet", "Hyundai", "Infiniti", "Volkswagen", "Volvo", "Alfa Romeo", "Mitsubishi",];
   const countries = ["Tunisia", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"]
 
@@ -217,7 +218,7 @@ const AddStatement = () => {
     if (!isValidDate) {
       swal({
         title: 'warning',
-        text: "The date of the accident must not be greater than 5 days from today's date.",
+        text: "The date of the accident must not be greater than 5 days from today's date. recheck Step 1 !",
         icon: 'error',
         button: 'OK',
       });
@@ -714,7 +715,35 @@ const AddStatement = () => {
     // Set the last section number here
     setSection(9);
   };
+  // Handle step All change
+  const handleStepChange = (step) => {
+    setSection(step);
+  };
 
+  const renderStepContent = (step) => {
+    switch (step) {
+      case 1:
+        return <div>Step 1 :</div>;
+      case 2:
+        return <div>Step 2 :</div>;
+      case 3:
+        return <div>Step 3 :</div>;
+      case 4:
+        return <div>Step 4 :</div>;
+      case 5:
+        return <div>Step 5 :</div>;
+      case 6:
+        return <div>Step 6 :</div>;
+      case 7:
+        return <div>Step 7 :</div>;
+      case 8:
+        return <div>Step 8 :</div>;
+      case 9:
+        return <div>Step 9 :</div>;
+      default:
+        return null;
+    }
+  };
 
   const handleUndo = () => {
     canvasRef.current.undo();
@@ -1028,7 +1057,7 @@ const AddStatement = () => {
                     <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button color="light" onClick={handleClick}>
+                    <Button color="dark" onClick={handleClick}>
                       {!isShown ? "Show" : "Hide"}
                     </Button>
                   </Col>
@@ -1044,57 +1073,109 @@ const AddStatement = () => {
                       set all the infromations related to the accident please
                     </h2>
                     <Row className="align-items-center">
+                      <Col xs="12" className="align-items-center">
 
-                      <Col className="text-left" xs="6">
-                        <FormGroup>
-                          <Button
-                            color="info"
-                            type="button"
-                            onClick={handleFirst}
-                          >
-                            Fisrt Step
-                          </Button>
+                        <FormGroup className="text-center">
+                          <Container className="btn-toolbar" role="toolbar">
+                            <Container className="btn-group mr-2 align-items-center" role="group" >
+                              <Button
+                                color="light"
+                                type="button"
+                                class="btn btn-secondary"
+                                onClick={() => handleStepChange(1)}
+                                className={section === 1 ? "active" : ""}
+
+                              >
+                                1
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(2)}
+                                className={section === 2 ? "active" : ""}
+
+                              >
+                                1.1
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(3)}
+                                className={section === 3 ? "active" : ""}
+
+                              >
+                                2
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(4)}
+                                className={section === 4 ? "active" : ""}
+
+                              >
+                                3
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(5)}
+                                className={section === 5 ? "active" : ""}
+
+                              >
+                                4
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(6)}
+                                className={section === 6 ? "active" : ""}
+
+                              >
+                                5
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(7)}
+                                className={section === 7 ? "active" : ""}
+
+                              >
+                               6
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(8)}
+                                className={section === 8 ? "active" : ""}
+
+                              >
+                                7
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(9)}
+                                className={section === 9 ? "active" : ""}
+
+                              >
+                                8
+                              </Button>{" "}
+                            </Container>
+                          </Container>
                         </FormGroup>
 
                       </Col>
-
-                      <Col className="text-right" xs="6">
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleLast}
-                          >
-                            Last Step
-                          </Button>
-                        </FormGroup>
-                      </Col>
-
                     </Row>
+
+
                     <div className="pl-lg-4">
 
                       {/* 1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 1 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              x: '200px',
-                              y: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="blocks"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 1 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 1 :</h1>
+
                         </Col>
 
                         <Row>
@@ -1197,26 +1278,10 @@ const AddStatement = () => {
                       {/* FIN  1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 2 ? "block" : "none" }}>
                         <Row>
-                          <Col align="center">
-                            <AnimatedText
-                              type="words" // animate words or chars
-                              animation={{
-                                y: '200px',
-                                x: '-20px',
-                                scale: 1.1,
-                                ease: 'ease-in-out',
-                              }}
-                              animationType="lights"
-                              interval={0.06}
-                              duration={0.8}
-                              tag="h1"
-                              className="animated-paragraph text-success"
-                              includeWhiteSpaces
-                              threshold={0.1}
-                              rootMargin="20%"
-                            >
-                              STEP 1.2 :
-                            </AnimatedText>
+                          <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                            <h1 style={{ color: '#1171ef' }}>STEP 1.2 :</h1>
+
                           </Col>
                         </Row>
                         <Row>
@@ -1419,26 +1484,10 @@ const AddStatement = () => {
 
                       {/*  Section 6 */}
                       < div style={{ display: section === 3 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 2 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 2 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -1694,26 +1743,10 @@ const AddStatement = () => {
 
                       {/* Section 7 */}
                       <div style={{ display: section === 4 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 3 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 3 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -1979,26 +2012,10 @@ const AddStatement = () => {
 
                       {/*  SECTION 8 */}
                       <div style={{ display: section === 5 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 4 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 4 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -2190,26 +2207,10 @@ const AddStatement = () => {
 
                       {/*  SECTION 9 */}
                       <div style={{ display: section === 6 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 5 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 5 :</h1>
+
                         </Col>
                         <Row>
 
@@ -2526,26 +2527,10 @@ const AddStatement = () => {
 
                       {/* Section 10 */}
                       <div style={{ display: section === 7 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 6 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 6 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -2634,26 +2619,10 @@ const AddStatement = () => {
 
                       {/* Section 11 */}
                       <div style={{ display: section === 8 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 7 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 7 :</h1>
+
                         </Col>
                         <Row>
 
@@ -2807,8 +2776,8 @@ const AddStatement = () => {
 
                       {/* Section 13 + 14 + 14*/}
                       <div style={{ display: section === 9 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
+
+                        {/* <AnimatedText
                             type="words" // animate words or chars
                             animation={{
                               y: '200px',
@@ -2824,10 +2793,14 @@ const AddStatement = () => {
                             includeWhiteSpaces
                             threshold={0.1}
                             rootMargin="20%"
-                          >
-                            STEP 8 :
-                          </AnimatedText>
+                          > */}
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 8 :</h1>
+
                         </Col>
+                        {/* </AnimatedText> */}
+
 
                         <Row>
                           {/* SECTION 13  IMAGE */}
@@ -2986,7 +2959,7 @@ const AddStatement = () => {
                         </Row>
                         <div className="text-center">
 
-                          <Button color="dark" type="submit">
+                          <Button color="success" type="submit">
                             Submit
                           </Button>
                         </div>
