@@ -134,19 +134,19 @@ module.exports.getStatementByExpertEmail = async function (req, res) {
   }
 };
 
-module.exports.get_specific_statement = async (req, res) => {
-  const statementId = req.params.id;
+
+module.exports.get_statement_by_id = async (req, res) => {
   try {
-    const statement = await StatementModel.findById(statementId);
+    const statement = await StatementModel.findById(req.params.id); 
     if (!statement) {
-      return res.status(404).json({ message: "Statement not found" });
+      res.status(404).json({ message: "Statement not found" });
+    } else {
+      res.status(200).json({ statement });
     }
-    res.status(200).json({ statement });
   } catch (error) {
     res.status(500).json({ message: "Error retrieving statement", error });
   }
 };
-
 module.exports.post_decision = async (req, res) => {
   const { statementId, decision } = req.body;
   try {

@@ -102,7 +102,15 @@ function MyStatements() {
     }
     setStatements(sortedStatements);
   }, [sortOrderByDate]);
+  // Update the handleStatementSelect function to set the selected statement
+  const handleStatementSelect = (statement) => {
+    setSelectedStatement(statement);
+  };
 
+  // Update the handleCloseModal function to clear the selected statement
+  const handleCloseModal = () => {
+    setSelectedStatement(null);
+  };
   return (
     <>
 
@@ -179,8 +187,8 @@ function MyStatements() {
                           </Button>
                         </td>
                         <td>
-                          <Button color="info" onClick={() => setSelectedStatement(statement)}>
-                            Details
+                          <Button color="light" onClick={() => handleStatementSelect(statement)}>
+                            Show Details
                           </Button>
 
                         </td>
@@ -233,19 +241,154 @@ function MyStatements() {
           </div>
         </Row>
 
-      </Container>
-      <Badge className="mt--12" fluid>
         {selectedStatement && (
           <div>
-            <p>Date: {selectedStatement.date}</p>
-            <p>Contract Number: {selectedStatement.vehicule_a.contractNumber}</p>
-            <p>First Name: {selectedStatement.insured_a.firstname}</p>
-            <p>Last Name: {selectedStatement.insured_a.lastname}</p>
-            <img src={selectedStatement.signature_a} alt="signature a" width={"50%"} />
-            {/* continue all the data x))))))) */}
+            {/* Render modal backdrop */}
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                zIndex: 9999,
+              }}
+              onClick={handleCloseModal}
+            ></div>
+            {/* Render modal content */}
+            <div
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "#fff",
+                padding: "20px",
+                zIndex: 10000,
+                maxWidth: "950px",
+                width: "100%",
+                maxHeight: "80vh", // Ajout de la hauteur maximale avec défilement
+                overflowY: "auto", // Activation de la barre de défilement verticale
+              }}
+            >
+
+              <h3>Statement Details</h3>
+              <hr />
+              <div style={{ marginBottom: "20px" }}>
+                <h5 style={{ color: "#666", marginBottom: "10px" }}>Accident Information</h5>
+                <p style={{ marginBottom: "5px" }}>Date: {selectedStatement.date}</p>
+                <p style={{ marginBottom: "5px" }}>Location: {selectedStatement.location}</p>
+                <p style={{ marginBottom: "5px" }}>Injured: {selectedStatement.injured}</p>
+                <p style={{ marginBottom: "5px" }}>Material Damage: {selectedStatement.material_damage}</p>
+                <p style={{ marginBottom: "5px" }}>Witness A: {selectedStatement.witness_a}</p>
+                <p style={{ marginBottom: "5px" }}>Witness B: {selectedStatement.witness_b}</p>
+              </div>
+
+              <hr />
+              <div>
+                <h5>Driver's Identity</h5>
+                <div style={{ marginBottom: "20px" }}>
+                  <h5 style={{ color: "#666", marginBottom: "10px" }}>Driver's Identity</h5>
+                  <div style={{ marginBottom: "10px" }}>
+                    <h6 style={{ color: "#999", marginBottom: "5px" }}>Driver A:</h6>
+                    <p style={{ marginBottom: "5px" }}>First Name: {selectedStatement.drivers_identity_a.first_name}</p>
+                    <p style={{ marginBottom: "5px" }}>Last Name: {selectedStatement.drivers_identity_a.last_name}</p>
+                    <p style={{ marginBottom: "5px" }}>Address: {selectedStatement.drivers_identity_a.address}</p>
+                    <p style={{ marginBottom: "5px" }}>Driver's License Issue Date: {selectedStatement.drivers_identity_a.drivers_license_issue_date}</p>
+                    <p style={{ marginBottom: "5px" }}>Driver's License: {selectedStatement.drivers_identity_a.driver_license}</p>
+                  </div>
+                </div>
+                <div>
+                  <h6>Driver B:</h6>
+                  <p>First Name: {selectedStatement.drivers_identity_b.first_name}</p>
+                  <p>Last Name: {selectedStatement.drivers_identity_b.last_name}</p>
+                  <p>Address: {selectedStatement.drivers_identity_b.address}</p>
+                  <p>Driver's License Issue Date: {selectedStatement.drivers_identity_b.drivers_license_issue_date}</p>
+                  <p>Driver's License: {selectedStatement.drivers_identity_b.driver_license}</p>
+                </div>
+              </div>
+              <hr />
+              <div>
+                <h5>Insured Information</h5>
+                <div>
+                  <h6>Insured A:</h6>
+                  <p>First Name: {selectedStatement.insured_a.firstname}</p>
+                  <p>Last Name: {selectedStatement.insured_a.lastname}</p>
+                  <p>Phone Number: {selectedStatement.insured_a.phonenumber}</p>
+                  <p>Address: {selectedStatement.insured_a.addr}</p>
+                </div>
+                <div>
+                  <h6>Insured B:</h6>
+                  <p>First Name: {selectedStatement.insured_b.firstname}</p>
+                  <p>Last Name: {selectedStatement.insured_b.lastname}</p>
+                  <p>Phone Number: {selectedStatement.insured_b.phonenumber}</p>
+                  <p>Address: {selectedStatement.insured_b
+                    .addr}</p>
+                </div>
+              </div>
+              <hr />
+              <div>
+                <h5>Vehicle Information</h5>
+                <div>
+                  <h6>Vehicle A:</h6>
+                  <p>Model: {selectedStatement.vehicule_identity_a.brand}</p>
+                  <p>type: {selectedStatement.vehicule_identity_a.type}</p>
+                  <p>License Plate: {selectedStatement.vehicule_identity_a.matriculation}</p>
+                  <p>Insurance Policy Number: {selectedStatement.vehicule_identity_a.country}</p>
+                  <p>License Plate: {selectedStatement.vehicule_identity_a.coming_from}</p>
+                  <p>Insurance Policy Number: {selectedStatement.vehicule_identity_a.going_to}</p>
+                </div>
+                <div>
+                  <h6>Vehicle B:</h6>
+                  <p>Model: {selectedStatement.vehicule_identity_b.brand}</p>
+                  <p>Make: {selectedStatement.vehicule_identity_b.type}</p>
+                  <p>License Plate: {selectedStatement.vehicule_identity_b.matriculation}</p>
+                  <p>Insurance Policy Number: {selectedStatement.vehicule_identity_b.country}</p>
+                  <p>Year: {selectedStatement.vehicule_identity_b.coming_from}</p>
+                  <p>Year: {selectedStatement.vehicule_identity_b.going_to}</p>
+                </div>
+                <div>
+                  <h6>Vehicle Owner A:</h6>
+                  <p>Model: {selectedStatement.vehicule_a.assureBy}</p>
+                  <p>Make: {selectedStatement.vehicule_a.contractNumber}</p>
+                  <p>License Plate: {selectedStatement.vehicule_a.agency}</p>
+                  <p>Insurance Policy Number: {selectedStatement.vehicule_a.country}</p>
+                  <p>Year: {selectedStatement.vehicule_a.contractValidity.start_date}</p>
+                  <p>Year: {selectedStatement.vehicule_a.contractValidity.end_date}</p>
+                </div>
+                <div>
+                  <h6>Vehicle Owner B:</h6>
+                  <p>Model: {selectedStatement.vehicule_b.assureBy}</p>
+                  <p>Make: {selectedStatement.vehicule_b.contractNumber}</p>
+                  <p>License Plate: {selectedStatement.vehicule_b.agency}</p>
+                  <p>Insurance Policy Number: {selectedStatement.vehicule_b.contractValidity.start_date}</p>
+                  <p>Year: {selectedStatement.vehicule_b.contractValidity.end_date}</p>
+                </div>
+              </div>
+              <hr />
+              <div>
+                <h5>Additional Information</h5>
+                <p>Police Report Number: {selectedStatement.hits_a}</p>
+                <p>Additional Notes: {selectedStatement.hits_b}</p>
+                <p>Additional Notes: {selectedStatement.apparent_damages_a}</p>
+                <p>Additional Notes: {selectedStatement.apparent_damages_b}</p>
+                <p>Additional Notes: {selectedStatement.circumstances_a}</p>
+                <p>Additional Notes: {selectedStatement.circumstances_b}</p>
+                <img src={selectedStatement.accident_croquis} />
+                <p>Police Report Number: {selectedStatement.notes_a}</p>
+                <p>Police Report Number: {selectedStatement.notes_b}</p>
+                <img src={selectedStatement.signature_a} />
+                <img src={selectedStatement.signature_b} />
+              </div>
+              <hr />
+              <center><Button color="success" onClick={handleCloseModal}>Close</Button></center>
+            </div>
+
           </div>
         )}
-        </Badge>
+      </Container>
+
     </>
   );
 }
