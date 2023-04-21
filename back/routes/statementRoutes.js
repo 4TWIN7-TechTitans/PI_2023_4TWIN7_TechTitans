@@ -16,6 +16,6 @@ router.get('/get_specificstatement/:id', statementController.get_statement_by_id
 router.post('/setdecision/', statementController.post_decision);
 
 router.post('/statements_status/:id/status', statementController.update_statement_status);
-
+router.get("/filtreusers/:case_state", statementController.filter_statements);
 
 module.exports = router;

@@ -185,3 +185,40 @@ module.exports.update_statement_status = async (req, res) => {
     res.status(500).json({ message: "Error updating statement status", error });
   }
 };
+
+// Filter status statement 
+module.exports.filter_statements = async (req, res) => {
+  try {
+    const { case_state } = req.params;
+    let statements;
+    if (case_state) {
+      switch (case_state) {
+        case "waiting":
+        case "treated":
+        case "inProgress":
+        case "closed":
+          statements = await StatementModel.find({ case_state });
+          break;
+        default:
+          res.status(400).json({
+            message: "Invalid case state parameter",
+            status: "error",
+          });
+          return;
+      }
+    } else {
+      statements = await StatementModel.find({});
+    }
+    res.status(200).json({
+      statements,
+      message: "Statements retrieved successfully",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to retrieve statements",
+      status: "error",
+    });
+  }
+};
