@@ -43,6 +43,7 @@ router.post("/status/:email", userController.expert_status_on);
 router.post("/statusoffline/:email", userController.expert_status_off);
 
 router.get("/getallexperts_status", userController.get_all_experts_status);
+router.post("/resetpassword", userController.post_change_password);
 
 router.get("/searchexpert/:email", userController.get_expert_by_email);
 
