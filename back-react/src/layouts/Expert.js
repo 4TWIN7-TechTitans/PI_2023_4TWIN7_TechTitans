@@ -12,7 +12,6 @@ import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
 import DetailsStatement from "views/examples/DetailsStatement";
 import Header from "components/Headers/Header.js";
-import Setavailability from "views/examples/Setavailability";
 const Expert = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -91,7 +90,6 @@ const Expert = (props) => {
         </Switch>
         
         {window.location.pathname === "/expert/OrdreMissionExpert" && (<OrdreMissionExpert/>)}
-        {window.location.pathname === "/expert/Setavailability" && (<Setavailability/>)}
 
         {statementId && <DetailsStatement id={statementId} />}
         

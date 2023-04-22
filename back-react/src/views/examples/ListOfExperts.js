@@ -18,11 +18,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function ListOfAgency() {
   const [currentPage, setCurrentPage] = useState(1);
   const [Experts, setExperts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [Clients, setClient] = useState([]);
+
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -38,28 +43,25 @@ function ListOfAgency() {
         ).data._id;
         const response = await axios.get("http://localhost:5000/getallexperts");
         console.log(response);
-        const responseExpert = response.data.experts.filter(
+       
+        const responseExpert = response.data.experts.concat(response.data.clients).filter(
           (elem) => elem.id_agence === id_agenceJwt
-        );
-        setExperts(responseExpert);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    const fetchExpertsStatus = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/getallexperts_status"
-        );
-        console.log(response);
-        // handle the response here
-      } catch (err) {
-        console.log(err);
-      }
-    };
+        );        
+       
+     
 
+        setExperts(responseExpert);
+         // add Toastify notification
+         toast.success('Welcome Dear Agency, you are in Our List !', {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 30000, 
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
     fetchUsers();
-    fetchExpertsStatus();
   }, []);
 
   const pageSize = 5;
@@ -139,6 +141,7 @@ function ListOfAgency() {
       `http://localhost:5000/searchexpert?email=${searchTerm}`
     );
     setExperts(response.data);
+    
   } catch (err) {
     console.log(err);
   }
@@ -153,6 +156,8 @@ function ListOfAgency() {
     <>
       <Header />
       {/* Page content */}
+      <ToastContainer />
+
       <Container className="mt--7" fluid>
         <Row>
           <div className="col">

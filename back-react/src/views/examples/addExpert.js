@@ -16,6 +16,9 @@ import { checkEmail } from "../services/api";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Header from "components/Headers/Header";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function AddExpert() {
   const [showNotification, setShowNotification] = useState(false);
@@ -115,10 +118,12 @@ function AddExpert() {
 
       // handle response
       if (add.status === 201) {
+        toast.success('Expert has been added successfully!');
         setShowNotification(true);
         setShowVerifyEmail(true);
         setErrors({});
         setShowError(false);
+        window.location.replace("http://localhost:3000/agence/listexpert");
       } else {
         setShowNotification(false);
         setShowVerifyEmail(false);
@@ -247,7 +252,10 @@ function AddExpert() {
 
   return (
     <>
+    
       <Header />
+      <ToastContainer />
+
       <div className="content">
         <Row>
           <Col md="8" className="mx-auto">

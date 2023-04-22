@@ -134,19 +134,19 @@ module.exports.getStatementByExpertEmail = async function (req, res) {
   }
 };
 
-module.exports.get_specific_statement = async (req, res) => {
-  const statementId = req.params.id;
+
+module.exports.get_statement_by_id = async (req, res) => {
   try {
-    const statement = await StatementModel.findById(statementId);
+    const statement = await StatementModel.findById(req.params.id); 
     if (!statement) {
-      return res.status(404).json({ message: "Statement not found" });
+      res.status(404).json({ message: "Statement not found" });
+    } else {
+      res.status(200).json({ statement });
     }
-    res.status(200).json({ statement });
   } catch (error) {
     res.status(500).json({ message: "Error retrieving statement", error });
   }
 };
-
 module.exports.post_decision = async (req, res) => {
   const { statementId, decision } = req.body;
   try {
@@ -155,7 +155,7 @@ module.exports.post_decision = async (req, res) => {
       return res.status(404).json({ message: "Statement not found" });
     }
     statement.decision = decision;
-    statement.case_state = "closed";
+    statement.case_state = "treated";
     console.log(statement);
     const result = await StatementModel.findByIdAndUpdate(
       statement._id,
@@ -186,49 +186,40 @@ module.exports.update_statement_status = async (req, res) => {
   }
 };
 
-//////////////////////////////////////////////////////////////////
-module.exports.add_comment_to_statement = async (req, res) => {
+// Filter status statement 
+module.exports.filtre_statements = async (req, res) => {
   try {
-    const { comment } = req.body;
-    const statementId = req.params.statementId;
-
-    const statement = await StatementModel.findById(statementId);
-    if (!statement) {
-      return res.status(404).json({ message: "Statement not found" });
+    const { case_state } = req.params;
+    let statements;
+    if (case_state) {
+      switch (case_state) {
+        case "waiting":
+        case "treated":
+        case "inProgress":
+        case "closed":
+          statements = await StatementModel.find({ case_state });
+          break;
+        default:
+          res.status(400).json({
+            message: "Invalid case state parameter",
+            status: "error",
+          });
+          return;
+      }
+    } else {
+      statements = await StatementModel.find({});
     }
-
-    if (!statement.comments) {
-      statement.comments = [];
-    }
-
-    statement.comments.push({ text: comment });
-    const updatedStatement = await statement.save();
-
     res.status(200).json({
-      message: "Comment added successfully",
-      statement: updatedStatement,
+      statements,
+      message: "Statements retrieved successfully",
+      status: "success",
     });
-  } catch (error) {
-    res.status(400).json({ message: "Error adding comment", error: error.message });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to retrieve statements",
+      status: "error",
+    });
   }
 };
-////////////////////////////////////
-//get comments
-module.exports.get_statement_comments = async (req, res) => {
-  try {
-    const statementId = req.params.statementId;
 
-    // find the statement by ID
-    const statement = await StatementModel.findById(statementId);
-    if (!statement) {
-      return res.status(404).json({ message: "Statement not found" });
-    }
-
-    res.status(200).json({
-      message: "Statement comments retrieved successfully",
-      comments: statement.comments,
-    });
-  } catch (error) {
-    res.status(400).json({ message: "Error retrieving comments", error });
-  }
-};

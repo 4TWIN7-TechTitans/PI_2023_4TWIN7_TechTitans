@@ -38,7 +38,21 @@ import SignatureCanvas from "react-signature-canvas";
 import CanvasDraw from "react-canvas-draw";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-//import GoogleMapReact from 'google-map-react';
+import alanBtn from '@alan-ai/alan-sdk-web';
+import swal from 'sweetalert';
+import 'ol/ol.css';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import { fromLonLat, toLonLat } from 'ol/proj';
+import { Vector as VectorLayer } from 'ol/layer';
+import { Vector as VectorSource } from 'ol/source';
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from 'ol/style';
+import Geolocation from 'ol/Geolocation';
+
 // core components
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -112,8 +126,6 @@ const AddStatement = () => {
   const [apparent_damages_a, setApparent_damages_a] = useState([]);
   const [apparent_damages_b, setApparent_damages_b] = useState([]);
 
-  const [damage_direction_a, setDamage_direction_a] = useState("");
-  const [damage_direction_b, setDamage_direction_b] = useState("");
 
   const [circumstances_a, setCircumstances_a] = useState([]);
   const [circumstances_b, setCircumstances_b] = useState([]);
@@ -131,8 +143,14 @@ const AddStatement = () => {
   const [coming_from_b, setComing_from_b] = useState("");
   const [going_to_a, setGoing_to_a] = useState("");
   const [going_to_b, setGoing_to_b] = useState("");
-  const [possibleplaces_a, setPossiblePlace_a] = useState("");
-  const [possibleplaces_b, setPossiblePlace_b] = useState("");
+  const [firstName_w_a, setFirstName_w_a] = useState("");
+  const [firstName_w_b, setFirstName_w_b] = useState("");
+  const [lastName_w_a, setLastName_w_a] = useState("");
+  const [lastName_w_b, setLastName_w_b] = useState("");
+  const [addressWitness_a, setAddressWitness_a] = useState("");
+  const [addressWitness_b, setAddressWitness_b] = useState("");
+  const [phoneWitness_a, setPhoneWitness_a] = useState("");
+  const [phoneWitness_b, setPhoneWitness_b] = useState("");
 
 
   const [showNotification, setShowNotification] = useState(false);
@@ -150,6 +168,7 @@ const AddStatement = () => {
   const [email, setEmail] = useState("");
   //statement by steps
   const [section, setSection] = useState(1);
+
   const brands = ["Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "Audi", "Isuzu", "BMW", "Golf", "Tesla", "Chevrolet", "Hyundai", "Infiniti", "Volkswagen", "Volvo", "Alfa Romeo", "Mitsubishi",];
   const countries = ["Tunisia", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia"]
 
@@ -197,14 +216,46 @@ const AddStatement = () => {
     const form = e.target;
     const isValidDate = validateDate(date);
     if (!isValidDate) {
-      const errorElement = document.querySelector(".date.error");
-      errorElement.innerText = "La date de l'accident ne doit pas dépasser 5 jours à compter de la date d'aujourd'hui.";
+      swal({
+        title: 'warning',
+        text: "The date of the accident must not be greater than 5 days from today's date. recheck Step 1 !",
+        icon: 'error',
+        button: 'OK',
+      });
       return;
     }
     const location = form.location.value;
+    if (!location) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Location in Step 1",
+        button: 'Ok',
+      });
+      return;
+    }
     const injured = form.injured.value;
+    if (!injured) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Injured in Step 1",
+        button: 'Ok',
+      });
+      return;
+    }
     const material_damage = form.material_damage.value;
-    const witness = "aaa";
+    if (!material_damage) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Material Damage in Step 1",
+        button: 'Ok',
+      });
+      return;
+    }
+    const witness_a = form.witnesses_a;
+    const witness_b = form.witnesses_b;
 
     const vehicule_a = {
       assureBy: form.assureBy_a.value,
@@ -303,14 +354,28 @@ const AddStatement = () => {
 
     const accident_croquis = form.accident_croquis;
     const notes_a = form.notes_a.value;
+    if (!notes_a) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Observations of Client A in Step 8",
+        button: 'Ok',
+      });
+      return;
+    }
     const notes_b = form.notes_b.value;
+    if (!notes_b) {
+      swal({
+        icon: "warning",
+        title: "Validation Error",
+        text: "Please select an option for Observations of Client B in Step 8",
+        button: 'Ok',
+      });
+      return;
+    }
     const signature_a = form.signature_a;
     const signature_b = form.signature_b;
     const verified = true;
-
-    //console.log( notes_a)
-    //debut image
-    // Get the canvas elements
     const canvas = canvasRef.current;
     const canvas_a = canvasRef_a.current;
     const canvas_b = canvasRef_b.current;
@@ -361,7 +426,6 @@ const AddStatement = () => {
       location: location,
       injured: injured,
       material_damage: material_damage,
-      witness: witness,
       drivers_identity_a: {
         first_name: drivers_identity_a.first_name,
         last_name: drivers_identity_a.last_name,
@@ -436,50 +500,50 @@ const AddStatement = () => {
       notes_b: notes_b,
       signature_a: signatureARes.data.secure_url,
       signature_b: signatureBRes.data.secure_url,
-      case_state: "waiting",
+
+      witness_a: [
+        {
+          witnesses_a
+        },
+      ],
+
+
+      witness_b: [
+        {
+          witnesses_b
+        },]
+
     };
     console.log(mystatement);
 
 
 
-    /* if (!date || !location || !injured || !material_damage 
-  
-        || !vehicule_a.assureBy || !vehicule_a.agency || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date || !vehicule_a.contractNumber
-  
-        || !vehicule_b.assureBy || !vehicule_b.agency || !vehicule_b.contractValidity || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b.contractNumber
-  
-        || !drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license
-  
-        || !drivers_identity_b.first_name || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date || !drivers_identity_b.driver_license
-  
-        || !insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr
-  
-        || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr
-  
-        || !vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to
-  
-        || !vehicule_identity_b.brand || !vehicule_identity_b.type || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to
-  
-        || !hits_a || !hits_b
-  
-        || !apparent_damages_a || !apparent_damages_b
-  
-        || !circumstances_a || !circumstances_b
-  
-        || !accident_croquis
-  
-        || !notes_a || !notes_b
-  
-      ) {
-        setShowNotification(false);
-        setErrors({});
-        setShowError(true);
-        setErrors({
-          ...errors,
-          message: "Please fill all the fields",
-        });
-        return;
-      }*/
+    if (!vehicule_a.assureBy || !vehicule_a.agency || !vehicule_a.contractValidity || !vehicule_a.contractValidity.start_date || !vehicule_a.contractValidity.end_date || !vehicule_a.contractNumber
+
+      || !vehicule_b.assureBy || !vehicule_b.agency || !vehicule_b.contractValidity || !vehicule_b.contractValidity.start_date || !vehicule_b.contractValidity.end_date || !vehicule_b.contractNumber
+
+    ) {
+      toast.error("fill in all the fields in step 2");
+    }
+    if (!drivers_identity_a.first_name || !drivers_identity_a.last_name || !drivers_identity_a.address || !drivers_identity_a.drivers_license_issue_date || !drivers_identity_a.driver_license
+
+      || !drivers_identity_b.first_name || !drivers_identity_b.last_name || !drivers_identity_b.address || !drivers_identity_b.drivers_license_issue_date || !drivers_identity_b.driver_license
+
+
+    ) {
+      toast.error("fill in all the fields in step 3");
+    }
+    if (!insured_a.firstname || !insured_a.lastname || !insured_a.phonenumber || !insured_a.addr
+
+      || !insured_b.firstname || !insured_b.lastname || !insured_b.phonenumber || !insured_b.addr) {
+      toast.error("fill in all the fields in step 4");
+    }
+
+    if (!vehicule_identity_a.brand || !vehicule_identity_a.type || !vehicule_identity_a.matriculation || !vehicule_identity_a.country || !vehicule_identity_a.coming_from || !vehicule_identity_a.going_to
+
+      || !vehicule_identity_b.brand || !vehicule_identity_b.type || !vehicule_identity_b.matriculation || !vehicule_identity_b.country || !vehicule_identity_b.coming_from || !vehicule_identity_b.going_to) {
+      toast.error("fill in all the fields in step 5");
+    }
 
     //user haven't an account connected
     const user = users.find((user) => user.role === "Client");
@@ -493,7 +557,8 @@ const AddStatement = () => {
           location: location,
           injured: injured,
           material_damage: material_damage,
-          witness: witness,
+          witness_a: witnesses_a,
+          witness_b: witnesses_b,
           drivers_identity_a: {
             first_name: drivers_identity_a.first_name,
             last_name: drivers_identity_a.last_name,
@@ -531,7 +596,7 @@ const AddStatement = () => {
           },
           vehicule_identity_b: {
             brand: vehicule_identity_b.brand,
-            type: vehicule_identity_a.type,
+            type: vehicule_identity_b.type,
             matriculation: vehicule_identity_b.matriculation,
             country: vehicule_identity_b.country,
             coming_from: vehicule_identity_b.coming_from,
@@ -590,7 +655,6 @@ const AddStatement = () => {
       setShowNotification(false);
       setErrors({ ...errors, message: "Statement adding failed" });
       setShowError(true);
-      console.log("lenna");
       toast.error("Error creating statement");
 
       console.log(error);
@@ -649,22 +713,103 @@ const AddStatement = () => {
   const handleLast = (e) => {
     e.preventDefault();
     // Set the last section number here
-    setSection(8);
+    setSection(9);
+  };
+  // Handle step All change
+  const handleStepChange = (step) => {
+    setSection(step);
   };
 
+  const renderStepContent = (step) => {
+    switch (step) {
+      case 1:
+        return <div>Step 1 :</div>;
+      case 2:
+        return <div>Step 2 :</div>;
+      case 3:
+        return <div>Step 3 :</div>;
+      case 4:
+        return <div>Step 4 :</div>;
+      case 5:
+        return <div>Step 5 :</div>;
+      case 6:
+        return <div>Step 6 :</div>;
+      case 7:
+        return <div>Step 7 :</div>;
+      case 8:
+        return <div>Step 8 :</div>;
+      case 9:
+        return <div>Step 9 :</div>;
+      default:
+        return null;
+    }
+  };
 
   const handleUndo = () => {
     canvasRef.current.undo();
   };
-  //validators and handle :
+  // //validators and handle :
+  // useEffect(() => {
+  //   // Charger la carte Google Maps
+  //   const loadMap = () => {
 
-  //geolocalisation
-  // const MapMarker = ({ text }) => (
-  //   <div style={{ color: 'red', fontWeight: 'bold' }}>{text}</div>
-  // );
-  // const handleMapClick = ({ lat, lng }) => {
-  //   setLocation({ lat, lng });
-  // };
+  //     if (window.google) {
+  //       const mapOptions = {
+  //         center: { lat: 0, lng: 0 },
+  //         zoom: 14,
+  //         streetViewControl: true,
+  //         disableDefaultUI: true
+  //       };
+
+  //       const map = new window.google.maps.Map(document.getElementById('map'), mapOptions);
+
+  //       const marker = new window.google.maps.Marker({
+  //         position: mapOptions.center,
+  //         map: map,
+  //         draggable: true
+  //       });
+
+  //       window.google.maps.event.addListener(marker, 'dragend', (event) => {
+  //         const lat = event.latLng.lat();
+  //         const lng = event.latLng.lng();
+
+  //         setLocation(`${lat}, ${lng}`);
+  //       });
+
+  //       // document.getElementById('currentLocationBtn').addEventListener('click', () => {
+  //       //   if (navigator.geolocation) {
+  //       //     navigator.geolocation.getCurrentPosition(
+  //       //       (position) => {
+  //       //         const lat = position.coords.latitude;
+  //       //         const lng = position.coords.longitude;
+
+  //       //         setLocation(`${lat}, ${lng}`);
+
+  //       //         map.setCenter({ lat, lng });
+
+  //       //         marker.setPosition({ lat, lng });
+  //       //       },
+  //       //       (error) => {
+  //       //         console.error(error);
+  //       //       }
+  //       //     );
+  //       //   } else {
+  //       //     console.error('La géolocalisation n\'est pas supportée par ce navigateur.');
+  //       //   }
+  //       // });
+  //     }
+  //   };
+
+  //   const script = document.createElement('script');
+  //   script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAkqb5vUGDj06rTFIkdontCQQtzZAD7IW4&libraries=places`;
+  //   script.onload = loadMap;
+  //   document.body.appendChild(script);
+
+  //   return () => {
+
+  //     document.body.removeChild(script);
+  //   };
+  // }, []);
 
 
   //ctrl de saisie date de l'accident :
@@ -746,6 +891,152 @@ const AddStatement = () => {
       setCircumstances_b([...circumstances_b, value]);
     }
   };
+
+  //alan.ai 
+  // useEffect(() => {
+  //   alanBtn({
+  //     key: '63919c26fc0982151fe31a18728a75212e956eca572e1d8b807a3e2338fdd0dc/stage',
+  //     onCommand: (commandData) => {
+  //       if (commandData.command === 'go:openForm') {
+  //         //props.history.push("addStatement ");
+  //       }
+  //       if (commandData.command === 'getDate') {
+  //         setDate(commandData.value);
+  //       }
+  //       if (commandData.command === 'getLocation') {
+  //         setLocation(commandData.value);
+  //       }
+  //       if (commandData.command === 'getInjured') {
+  //         setInjured(commandData.value);
+  //       }
+  //       if (commandData.command === 'getMaterial_damage') {
+  //         setMaterial_damage(commandData.value);
+  //       }
+  //     }
+  //   });
+  // }, []);
+  //geolocalisation :
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    const map = new Map({
+      target: mapRef.current,
+      layers: [
+        new TileLayer({
+          source: new OSM(),
+        }),
+      ],
+      view: new View({
+        center: [0, 0],
+        zoom: 2,
+      }),
+    });
+
+    // Add a vector layer for displaying the current location
+    const vectorSource = new VectorSource();
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+    });
+    map.addLayer(vectorLayer);
+
+    // Get current location and update the map
+    const updateLocation = (position) => {
+      const { latitude, longitude } = position.coords;
+      const coords = fromLonLat([longitude, latitude]);
+      map.getView().setCenter(coords);
+      map.getView().setZoom(10);
+
+      // Create a marker at the current location
+      const marker = new Feature({
+        geometry: new Point(coords),
+        draggable: true
+      });
+
+      // Style the marker
+      const iconStyle = new Style({
+        image: new Icon({
+          src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+          scale: 0.1,
+        }),
+      });
+      marker.setStyle(iconStyle);
+
+      vectorSource.clear();
+      vectorSource.addFeature(marker);
+      vectorSource.clear();
+
+      // Update the location input field with the current coordinates
+      setLocation(`${latitude}, ${longitude}`);
+    };
+
+    const handleLocationError = (error) => {
+      console.error('Error getting current location:', error);
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(updateLocation, handleLocationError);
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+
+    // Add an event listener for map click event
+    const handleMapClick = (event) => {
+      // Get clicked coordinates
+      const clickedCoords = event.coordinate;
+
+      // Convert clicked coordinates to lon/lat
+      const [longitude, latitude] = toLonLat(clickedCoords);
+
+      // Update the location input field with clicked coordinates
+      setLocation(`${latitude}, ${longitude}`);
+    };
+
+    // Add the click event listener to the map
+    map.on('click', handleMapClick);
+
+    return () => {
+      // Remove the click event listener when component is unmounted
+      map.un('click', handleMapClick);
+      map.dispose();
+    };
+  }, []);
+
+
+  //witnesses
+
+
+  const [numWitnesses_a, setNumWitnesses_a] = useState(0);
+  const [numWitnesses_b, setNumWitnesses_b] = useState(0);
+  const [witnesses_a, setWitnesses_a] = useState([]);
+  const [witnesses_b, setWitnesses_b] = useState([]);
+
+  const handleNumWitnessesChange_a = (e) => {
+    const num = parseInt(e.target.value);
+    setNumWitnesses_a(num);
+    setWitnesses_a(Array.from({ length: num }, () => ({})));
+  };
+
+  const handleNumWitnessesChange_b = (e) => {
+    const num = parseInt(e.target.value);
+    setNumWitnesses_b(num);
+    setWitnesses_b(Array.from({ length: num }, () => ({})));
+  };
+
+  const handleWitnessChange_a = (index, field, value) => {
+    const updatedWitnesses_a = [...witnesses_a];
+    updatedWitnesses_a[index][field] = value ? value : {}; // Set value to empty object if it is empty
+    setWitnesses_a(updatedWitnesses_a);
+  };
+
+  const handleWitnessChange_b = (index, field, value) => {
+    const updatedWitnesses_b = [...witnesses_b];
+    updatedWitnesses_b[index][field] = value ? value : {}; // Set value to empty object if it is empty
+    setWitnesses_b(updatedWitnesses_b);
+  };
+
+
+
+
   return (
     <>
 
@@ -753,6 +1044,10 @@ const AddStatement = () => {
       {/*<UserHeader /> */}
       {/* Page content */}
       <Container className="mt--7" fluid>
+        {/* <div className="alan-btn-container">
+          <div ref={alanBtn}></div>
+        </div> */}
+
         <Row>
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
@@ -762,7 +1057,7 @@ const AddStatement = () => {
                     <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button color="light" onClick={handleClick}>
+                    <Button color="dark" onClick={handleClick}>
                       {!isShown ? "Show" : "Hide"}
                     </Button>
                   </Col>
@@ -773,67 +1068,119 @@ const AddStatement = () => {
               {isShown && (
                 <CardBody>
 
-                  <form onSubmit={handleSubmit} noValidate>
+                  <form onSubmit={handleSubmit} className="openForm" noValidate>
                     <h2 className=" mb-2">
                       set all the infromations related to the accident please
                     </h2>
                     <Row className="align-items-center">
+                      <Col xs="12" className="align-items-center">
 
-                      <Col className="text-left" xs="6">
-                        <FormGroup>
-                          <Button
-                            color="info"
-                            type="button"
-                            onClick={handleFirst}
-                          >
-                            Fisrt Step
-                          </Button>
+                        <FormGroup className="text-center">
+                          <Container className="btn-toolbar" role="toolbar">
+                            <Container className="btn-group mr-2 align-items-center" role="group" >
+                              <Button
+                                color="light"
+                                type="button"
+                                class="btn btn-secondary"
+                                onClick={() => handleStepChange(1)}
+                                className={section === 1 ? "active" : ""}
+
+                              >
+                                1
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(2)}
+                                className={section === 2 ? "active" : ""}
+
+                              >
+                                1.1
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(3)}
+                                className={section === 3 ? "active" : ""}
+
+                              >
+                                2
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(4)}
+                                className={section === 4 ? "active" : ""}
+
+                              >
+                                3
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(5)}
+                                className={section === 5 ? "active" : ""}
+
+                              >
+                                4
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(6)}
+                                className={section === 6 ? "active" : ""}
+
+                              >
+                                5
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(7)}
+                                className={section === 7 ? "active" : ""}
+
+                              >
+                               6
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(8)}
+                                className={section === 8 ? "active" : ""}
+
+                              >
+                                7
+                              </Button>{" "}
+                              <Button
+                                color="light"
+                                type="button"
+                                onClick={() => handleStepChange(9)}
+                                className={section === 9 ? "active" : ""}
+
+                              >
+                                8
+                              </Button>{" "}
+                            </Container>
+                          </Container>
                         </FormGroup>
 
                       </Col>
-                      
-                      <Col className="text-right" xs="6">
-                        <FormGroup>
-                          <Button
-                            color="primary"
-                            type="button"
-                            onClick={handleLast}
-                          >
-                            Last Step
-                          </Button>
-                        </FormGroup>
-                      </Col>
-
                     </Row>
+
+
                     <div className="pl-lg-4">
 
                       {/* 1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 1 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              x: '200px',
-                              y: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="blocks"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 1 :
-                          </AnimatedText>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 1 :</h1>
+
                         </Col>
 
                         <Row>
                           {/* SECTION 1 + 2 + 3 + 4 + 5 */}
-                          <Col lg="3">
+                          <Col lg="6">
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -854,33 +1201,21 @@ const AddStatement = () => {
 
                           </Col>
                           <Col lg="6">
-                            <FormGroup>
-                              <label className="form-control-label" htmlFor="input-email">
-                                2. Location
-                              </label>
 
-                              <Input
-                                className="form-control-alternative"
-                                id="location"
-                                type="text"
-                                name="location"
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                required
-                              />
-                            </FormGroup>
-                            {/* <div style={{ height: '400px', width: '100%' }}>
-                              <GoogleMapReact
-                                bootstrapURLKeys={{ key: '' }}
-                                center={location}
-                                zoom={15}
-                                onClick={handleMapClick}
-                              >
-                                <MapMarker lat={location.lat} lng={location.lng} text="📍" />
-                              </GoogleMapReact>
-                            </div> */}
+                            <label htmlFor="location">2.Location:</label>
+                            <Input
+                              id="location"
+                              type="text"
+                              name="location"
+                              placeholder="Location"
+                              value={location}
+                              onChange={(e) => setLocation(e.target.value)}
+                              required
+                            />
+
                           </Col>
-                          <Col lg="3">
+                          <div id="map" className="map-container" ref={mapRef} style={{ height: '500px', width: '100%', marginBottom: '10px' }}></div>
+                          <Col lg="6">
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -902,7 +1237,7 @@ const AddStatement = () => {
                               <div className="injured error"></div>
                             </FormGroup>
                           </Col>
-                          <Col lg="3">
+                          <Col lg="6">
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -925,16 +1260,6 @@ const AddStatement = () => {
                               </Input>
                             </FormGroup>
                           </Col>
-                          <Col lg="9">
-                            <FormGroup>
-                              <label
-                                className="form-control-label"
-                                htmlFor="input-email"
-                              >
-                                5. Witness to add if exists
-                              </label>
-                            </FormGroup>
-                          </Col>
                         </Row>
 
                         <Col align="center">
@@ -948,31 +1273,221 @@ const AddStatement = () => {
                             </Button>
                           </FormGroup>
                         </Col>
+
                       </div>
                       {/* FIN  1 + 2 + 3 + 4 + 5 */}
+                      <div style={{ display: section === 2 ? "block" : "none" }}>
+                        <Row>
+                          <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                            <h1 style={{ color: '#1171ef' }}>STEP 1.2 :</h1>
+
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="6">
+                            <FormGroup>
+                              <Label className="form-control-label" htmlFor="input-email">
+                                5. Witnesses of Client A to add if exists
+                              </Label>
+                              <Input
+                                type="number"
+                                name="numWitnesses_a"
+                                id="numWitnesses_a"
+                                value={numWitnesses_a}
+                                onChange={handleNumWitnessesChange_a}
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg="6">
+                            <FormGroup>
+                              <Label className="form-control-label" htmlFor="input-email">
+                                5. Witnesses of Client B to add if exists
+                              </Label>
+                              <Input
+                                type="number"
+                                name="numWitnesses_b"
+                                id="numWitnesses_b"
+                                value={numWitnesses_b}
+                                onChange={handleNumWitnessesChange_b}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg="6">
+                            {witnesses_a.map((witness, index) => (
+                              <div key={index}>
+                                <Col lg="6">
+                                  <h6 className="heading-small  mb-4">
+                                    Wintess of Insured A
+                                  </h6>
+                                </Col>
+
+                                <FormGroup>
+                                  <Label htmlFor={`firstName_w_a`}>
+                                    First Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`firstName_w_a`}
+                                    name="firstName_w_a"
+                                    value={witnesses_a[index]?.firstName_w || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, "firstName_w", e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`lastName_w_a`}>
+                                    Last Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`lastName_w_a`}
+                                    name="lastName_w_a"
+                                    value={witnesses_a[index]?.lastName_w || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, "lastName_w", e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`addressWitness_a`}>
+                                    Address of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`addressWitness_a`}
+                                    name="addressWitness_a"
+                                    value={witnesses_a[index]?.addressWitness || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, 'addressWitness', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`phoneWitness_a`}>
+                                    Phone Number of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`phoneWitness_a`}
+                                    name="phoneWitness_a"
+                                    value={witnesses_a[index]?.phoneWitness || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_a(index, 'phoneWitness', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                              </div>
+                            ))}
+                          </Col>
+
+
+                          <Col lg="6">
+                            {witnesses_b.map((witness, index) => (
+                              <div key={index}>
+                                <Col lg="6">
+                                  <h6 className="heading-small text-muted mb-4">
+                                    Wintess of Insured b
+                                  </h6>
+                                </Col>
+                                <FormGroup>
+                                  <Label htmlFor={`firstName_w_b`}>
+                                    First Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`firstName_w_b`}
+                                    name="firstName_w_b"
+                                    value={witnesses_b[index]?.firstName_w || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, "firstName_w", e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`lastName_w_b`}>
+                                    Last Name of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`lastName_w_b`}
+                                    name="lastName_w_b"
+                                    value={witnesses_b[index]?.lastName_w || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, "lastName_w", e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`addressWitness_b`}>
+                                    Address of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`addressWitness_b`}
+                                    name="addressWitness_b"
+                                    value={witnesses_b[index]?.addressWitness || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, 'addressWitness', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor={`phoneWitness_b`}>
+                                    Phone Number of Witness {index + 1}
+                                  </Label>
+                                  <Input
+                                    type="text"
+                                    id={`phoneWitness_b`}
+                                    name="phoneWitness_b"
+                                    value={witnesses_b[index]?.phoneWitness || ''}
+                                    onChange={(e) =>
+                                      handleWitnessChange_b(index, 'phoneWitness', e.target.value)
+                                    }
+                                  />
+                                </FormGroup>
+                              </div>
+                            ))}
+
+                          </Col>
+                        </Row>
+
+                        <Row>
+                          <Col align="right">
+                            <FormGroup>
+                              <Button
+                                color="info"
+                                type="button"
+                                onClick={handlePrev}
+                              >
+                                Previous
+                              </Button>
+                            </FormGroup>
+
+                          </Col>
+                          <Col align="left">
+                            <FormGroup>
+                              <Button
+                                color="primary"
+                                type="button"
+                                onClick={handleNext}
+                              >
+                                Next
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </div>
 
                       {/*  Section 6 */}
-                      <div style={{ display: section === 2 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 2 :
-                          </AnimatedText>
+                      < div style={{ display: section === 3 ? "block" : "none" }}>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 2 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -1227,27 +1742,11 @@ const AddStatement = () => {
                       {/*  FIN Section 6 */}
 
                       {/* Section 7 */}
-                      <div style={{ display: section === 3 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 3 :
-                          </AnimatedText>
+                      <div style={{ display: section === 4 ? "block" : "none" }}>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 3 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -1512,27 +2011,11 @@ const AddStatement = () => {
                       {/*  FIN SECTION 7 */}
 
                       {/*  SECTION 8 */}
-                      <div style={{ display: section === 4 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 4 :
-                          </AnimatedText>
+                      <div style={{ display: section === 5 ? "block" : "none" }}>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 4 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -1723,27 +2206,11 @@ const AddStatement = () => {
                       {/*  FIN SECTION 8 */}
 
                       {/*  SECTION 9 */}
-                      <div style={{ display: section === 5 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 5 :
-                          </AnimatedText>
+                      <div style={{ display: section === 6 ? "block" : "none" }}>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 5 :</h1>
+
                         </Col>
                         <Row>
 
@@ -2059,27 +2526,11 @@ const AddStatement = () => {
                       {/*  FIN SECTION 9 */}
 
                       {/* Section 10 */}
-                      <div style={{ display: section === 6 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 6 :
-                          </AnimatedText>
+                      <div style={{ display: section === 7 ? "block" : "none" }}>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 6 :</h1>
+
                         </Col>
                         <Row>
                           {/* VEHICULE A VS B */}
@@ -2167,27 +2618,11 @@ const AddStatement = () => {
                       {/* FIN SECTION 10 */}
 
                       {/* Section 11 */}
-                      <div style={{ display: section === 7 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
-                            type="words" // animate words or chars
-                            animation={{
-                              y: '200px',
-                              x: '-20px',
-                              scale: 1.1,
-                              ease: 'ease-in-out',
-                            }}
-                            animationType="lights"
-                            interval={0.06}
-                            duration={0.8}
-                            tag="h1"
-                            className="animated-paragraph text-success"
-                            includeWhiteSpaces
-                            threshold={0.1}
-                            rootMargin="20%"
-                          >
-                            STEP 7 :
-                          </AnimatedText>
+                      <div style={{ display: section === 8 ? "block" : "none" }}>
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 7 :</h1>
+
                         </Col>
                         <Row>
 
@@ -2340,9 +2775,9 @@ const AddStatement = () => {
                       {/* FIN SECTION 12 */}
 
                       {/* Section 13 + 14 + 14*/}
-                      <div style={{ display: section === 8 ? "block" : "none" }}>
-                        <Col align="center">
-                          <AnimatedText
+                      <div style={{ display: section === 9 ? "block" : "none" }}>
+
+                        {/* <AnimatedText
                             type="words" // animate words or chars
                             animation={{
                               y: '200px',
@@ -2358,10 +2793,14 @@ const AddStatement = () => {
                             includeWhiteSpaces
                             threshold={0.1}
                             rootMargin="20%"
-                          >
-                            STEP 8 :
-                          </AnimatedText>
+                          > */}
+                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
+
+                          <h1 style={{ color: '#1171ef' }}>STEP 8 :</h1>
+
                         </Col>
+                        {/* </AnimatedText> */}
+
 
                         <Row>
                           {/* SECTION 13  IMAGE */}
@@ -2446,6 +2885,7 @@ const AddStatement = () => {
                                 className="form-control-label"
                                 htmlFor="input-address"
                               >
+
                                 15. Signature of A
                               </label>
                               <InputGroup className="input-group-alternative">
@@ -2461,6 +2901,12 @@ const AddStatement = () => {
                                   value={signature_a}
                                 />
                               </InputGroup>
+                              <Label>Or Upload it via :</Label>
+                              <Input
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                onChange={setSignature_a}
+                              />
                             </FormGroup>
                           </Col>
                           <Col lg="6">
@@ -2485,6 +2931,12 @@ const AddStatement = () => {
                                   value={signature_b}
                                 />
                               </InputGroup>
+                              <Label>Or Upload it via :</Label>
+                              <Input
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                onChange={setSignature_b}
+                              />
                             </FormGroup>
                           </Col>
                         </Row>
@@ -2507,7 +2959,7 @@ const AddStatement = () => {
                         </Row>
                         <div className="text-center">
 
-                          <Button color="dark" type="submit">
+                          <Button color="success" type="submit">
                             Submit
                           </Button>
                         </div>
