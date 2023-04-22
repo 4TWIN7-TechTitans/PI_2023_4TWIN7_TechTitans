@@ -163,7 +163,7 @@ function ListOfAgency() {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">List Of Experts</h3>
+                <h3 className="mb-0">List Of Users</h3>
               </CardHeader>
               <div className="p-4">
                 <Input
@@ -195,7 +195,9 @@ function ListOfAgency() {
                           {user.phone_number}
                         </Badge>
                       </td>
-                      <td>{getStatusBadge(user.expert_status)}</td>
+                      {user.role === "Client" ? null : (
+          <td>{getStatusBadge(user.expert_status)}</td>
+        )}
                     </tr>
                   ))}
                 </tbody>
