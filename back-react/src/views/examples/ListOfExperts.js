@@ -26,6 +26,8 @@ function ListOfAgency() {
   const [currentPage, setCurrentPage] = useState(1);
   const [Experts, setExperts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [Clients, setClient] = useState([]);
+
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -41,9 +43,13 @@ function ListOfAgency() {
         ).data._id;
         const response = await axios.get("http://localhost:5000/getallexperts");
         console.log(response);
-        const responseExpert = response.data.experts.filter(
+       
+        const responseExpert = response.data.experts.concat(response.data.clients).filter(
           (elem) => elem.id_agence === id_agenceJwt
-        );
+        );        
+       
+     
+
         setExperts(responseExpert);
          // add Toastify notification
          toast.success('Welcome Dear Agency, you are in Our List !', {
@@ -54,20 +60,8 @@ function ListOfAgency() {
         console.log(err);
       }
     };
-    const fetchExpertsStatus = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/getallexperts_status"
-        );
-        console.log(response);
-        // handle the response here
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
+    
     fetchUsers();
-    fetchExpertsStatus();
   }, []);
 
   const pageSize = 5;
