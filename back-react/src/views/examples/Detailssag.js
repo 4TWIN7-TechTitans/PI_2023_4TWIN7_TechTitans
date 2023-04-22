@@ -279,41 +279,97 @@ import {
                   <h3 className="mb-0">Examine claim </h3>
                   <CardBody className="pt-0 pt-md-4">
                     <div className="text-center">
-                      <div className="h5 font-weight-300">
-                        <span className="font-weight-light">
-                          Driver A: {driverIdentityA} || Driver B:{" "}
-                          {driverIdentityB}
-                        </span>
-                      </div>
-                      <div className="h5 font-weight-300">
-                        <span className="font-weight-light">
-                          License A: {driver_license_a} || License B:{" "}
-                          {driver_license_b}
-                        </span>
-                      </div>
-                      <div className="h5 font-weight-300">
-                        <span className="font-weight-light">
-                          Place Of Damage For A: {hits_a} || Place Of Damage For
-                          B: {hits_b}
-                        </span>
-                      </div>
-                      <div className="h5 font-weight-300">
-                        <span className="font-weight-light">
-                          Circumstances A: {circumstances_a} || Circumstances B:{" "}
-                          {circumstances_b}
-                        </span>
-                      </div>
-                      <div className="h5 font-weight-300">
-                        <span className="font-weight-light">
-                          Location of The Accident: {location}
-                        </span>
-                      </div>
-                      <div className="h5 font-weight-300">
-                        <span className="font-weight-light">
-                          <h4>Signature</h4>
-                          {signature_a} || {signature_b}
-                        </span>
-                      </div>
+                    <div>
+  <h2>Details About {driverIdentityA}</h2>
+  <hr />
+                    <table className="mx-auto">
+                      <thead>
+                        <tr>
+                        <th>Driver A</th>
+      <th><hr /></th>
+      <th>License A</th>
+      <th><hr /></th>
+      <th>Place of Damage for A</th>
+      <th><hr /></th>
+      <th>Circumstances A</th>
+      <th><hr /></th>
+      <th>Location of the Accident</th>
+      <th><hr /></th>
+      <th>Signature</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{driverIdentityA}</td>
+                          <th><hr /></th>
+                          <td>{driver_license_a}</td>
+                          <th><hr /></th>
+                          <td>{hits_a}</td>
+                          <th><hr /></th>
+                          <td>{circumstances_a}</td>
+                          <th><hr /></th>
+                          <td>{location}</td>
+                          <th><hr /></th>
+                          <td>
+                            <h4>Signature</h4>
+                            {signature_a}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="6">
+                            <hr />
+                          </td>{" "}
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
+                    <div>
+                      <div></div></div>
+                      <div>
+  <h2>Details About {driverIdentityA}</h2>
+  <hr />
+                    <table className="mx-auto">
+                      <thead>
+                        <tr>
+                        <th>Driver B</th>
+      <th><hr /></th>
+      <th>License B</th>
+      <th><hr /></th>
+      <th>Place of Damage for B</th>
+      <th><hr /></th>
+      <th>Circumstances B</th>
+      <th><hr /></th>
+      <th>Location of the Accident</th>
+      <th><hr /></th>
+      <th>Signature</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{driverIdentityB}</td>
+                          <th><hr /></th>
+                          <td>{driver_license_b}</td>
+                          <th><hr /></th>
+                          <td>{hits_b}</td>
+                          <th><hr /></th>
+                          <td>{circumstances_b}</td>
+                          <th><hr /></th>
+                          <td>{location}</td>
+                          <th><hr /></th>
+                          <td>
+                            <h4>Signature</h4>
+                            {signature_b}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="6">
+                            <hr />
+                          </td>{" "}
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
+
                             
   
                       <hr className="my-4" />
