@@ -2547,3 +2547,20 @@ module.exports.get_userbyiduser = async (req, res) => {
     res.status(400).json({ err, status: "error" });
   }
 };
+
+module.exports.update_id_ag = async (req, res) => {
+  const { _id } = req.user; 
+  
+  try {
+    const update = await userModel.findByIdAndUpdate(
+      _id,
+      { id_agence: _id },
+      { new: true }
+    );
+    
+    res.status(200).json(update);
+  } catch (err) {
+    const errorp=err.message;
+    res.status(400).json({ errorp, status: "error" });
+  }
+};
