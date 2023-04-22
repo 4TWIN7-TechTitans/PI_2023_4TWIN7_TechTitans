@@ -274,35 +274,65 @@ for removal from the register.`,
                     <table className="mx-auto">
                       <thead>
                         <tr>
-                        <th>Driver A</th>
-      <th><hr /></th>
-      <th>License A</th>
-      <th><hr /></th>
-      <th>Place of Damage for A</th>
-      <th><hr /></th>
-      <th>Circumstances A</th>
-      <th><hr /></th>
-      <th>Location of the Accident</th>
-      <th><hr /></th>
-      <th>Signature</th>
+                        <Row>
+                              <Col lg="2">
+                            <th>Driver A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>License A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Place of Damage for A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Circumstances A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Location of the Accident</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Signature</th>
+                            </Col>
+
+                            </Row>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{driverIdentityA}</td>
-                          <th><hr /></th>
-                          <td>{driver_license_a}</td>
-                          <th><hr /></th>
-                          <td>{hits_a}</td>
-                          <th><hr /></th>
-                          <td>{circumstances_a}</td>
-                          <th><hr /></th>
-                          <td>{location}</td>
-                          <th><hr /></th>
-                          <td>
-                            <h4>Signature</h4>
-                            {signature_a}
-                          </td>
+                        <Row>
+                          <Col lg="2">
+
+                            <td>{driverIdentityA}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{driver_license_a}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{hits_a}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{circumstances_a}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{location}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>
+                           <img src={signature_a} alt="a"/>
+                            </td>
+                            </Col>
+
+                            </Row>
                         </tr>
                         <tr>
                           <td colspan="6">
@@ -315,40 +345,71 @@ for removal from the register.`,
                     <div>
                       <div></div></div>
                       <div>
-  <h2>Details About {driverIdentityA}</h2>
+  <h2>Details About {driverIdentityB}</h2>
   <hr />
                     <table className="mx-auto">
                       <thead>
                         <tr>
-                        <th>Driver B</th>
-      <th><hr /></th>
-      <th>License B</th>
-      <th><hr /></th>
-      <th>Place of Damage for B</th>
-      <th><hr /></th>
-      <th>Circumstances B</th>
-      <th><hr /></th>
-      <th>Location of the Accident</th>
-      <th><hr /></th>
-      <th>Signature</th>
+                        <Row>
+                              <Col lg="2">
+                            <th>Driver B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>License B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Place of Damage for B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Circumstances B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Location of the Accident</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Signature</th>
+                            </Col>
+
+                            </Row>
+                          
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{driverIdentityB}</td>
-                          <th><hr /></th>
-                          <td>{driver_license_b}</td>
-                          <th><hr /></th>
-                          <td>{hits_b}</td>
-                          <th><hr /></th>
-                          <td>{circumstances_b}</td>
-                          <th><hr /></th>
-                          <td>{location}</td>
-                          <th><hr /></th>
-                          <td>
-                            <h4>Signature</h4>
-                            {signature_b}
-                          </td>
+                        <Row>
+                          <Col lg="2">
+
+                            <td>{driverIdentityB}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{driver_license_b}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{hits_b}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{circumstances_b}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{location}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>
+                            <img src={signature_b} alt="b"/>
+                            </td>
+                            </Col>
+
+                            </Row>
                         </tr>
                         <tr>
                           <td colspan="6">
@@ -359,7 +420,7 @@ for removal from the register.`,
                     </table>
                     </div>
 
-                    <select
+                    <Input type="select" 
                       className="status-dropdown"
                       value={status}
                       onChange={handleStatusChange}
@@ -368,7 +429,7 @@ for removal from the register.`,
                       <option value="treated">Treated</option>
                       <option value="inProgress">In Progress</option>
                       <option value="closed">Closed</option>
-                    </select>
+                    </Input>
 
                     {showNotification && (
                       <div
