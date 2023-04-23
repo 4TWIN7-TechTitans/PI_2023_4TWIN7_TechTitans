@@ -48,7 +48,7 @@ function DetailsStatement() {
   const [comment, setComment] = useState([]);
   const [status, setStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
-
+  const [timestamp, settimestamp] = useState("");
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -165,7 +165,7 @@ for removal from the register.`,
     const fetchUsers = async () => {
       try {
         const jwt = getCookie("jwt");
-    if(jwt == "") return ;
+        if (jwt == "") return;
 
         const id_agenceJwt = (
           await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
@@ -208,6 +208,7 @@ for removal from the register.`,
         setsignature_b(statement.signature_b);
 
         setDate(statement.date);
+        setCommentaire(statement.commentaire);
 
         console.log(driverIdentityA);
         console.log(driverIdentityB);
@@ -259,24 +260,27 @@ for removal from the register.`,
   const handleNotificationClose = () => {
     setShowNotification(false);
   };
-///
-const handleCommentSubmit = async (event) => {
-  event.preventDefault();
-  const id_statement = new URLSearchParams(window.location.search).get("id");
-
-  try {
-    await axios.post(
-      "http://localhost:5000/comment/" + id_statement,
-      { commentaire: comment }
-    );
-    // handle successful response
-    setComment("");
-    toast.success("Comment added successfully!");
-  } catch (error) {
-    // handle error
-    toast.error("An error occurred while adding the comment.");
-  }
-};
+  ///
+  const handleCommentSubmit = async (event) => {
+    event.preventDefault();
+    const id_statement = new URLSearchParams(window.location.search).get("id");
+    const timestamp = new Date();
+  
+    try {
+      await axios.post(
+        "http://localhost:5000/comment/" + id_statement,
+        { commentaire: comment, timestamp: timestamp }
+      );
+      // handle successful response
+      setComment("");
+      toast.success("Comment added successfully!");
+      window.location.reload(); // reload the page after successful submit
+    } catch (error) {
+      // handle error
+      toast.error("An error occurred while adding the comment.");
+    }
+  };
+  
 
   return (
     <>
@@ -290,159 +294,159 @@ const handleCommentSubmit = async (event) => {
                 <h3 className="mb-0">Examine claim </h3>
                 <CardBody className="pt-0 pt-md-4">
                   <div className="text-center">
-                  <div>
-  <h2>Details About {driverIdentityA}</h2>
-  <hr />
-                    <table className="mx-auto">
-                      <thead>
-                        <tr>
-                        <Row>
+                    <div>
+                      <h2>Details About {driverIdentityA}</h2>
+                      <hr />
+                      <table className="mx-auto">
+                        <thead>
+                          <tr>
+                            <Row>
                               <Col lg="2">
-                            <th>Driver A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Driver A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>License A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>License A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Place of Damage for A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Place of Damage for A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Circumstances A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Circumstances A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Location of the Accident</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Location of the Accident</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Signature</th>
-                            </Col>
-
-                            </Row>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                        <Row>
-                          <Col lg="2">
-
-                            <td>{driverIdentityA}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{driver_license_a}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{hits_a}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{circumstances_a}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{location}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>
-                           <img src={signature_a} alt="a"/>
-                            </td>
-                            </Col>
+                                <th>Signature</th>
+                              </Col>
 
                             </Row>
-                        </tr>
-                        <tr>
-                          <td colspan="6">
-                            <hr />
-                          </td>{" "}
-                        </tr>
-                      </tbody>
-                    </table>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <Row>
+                              <Col lg="2">
+
+                                <td>{driverIdentityA}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{driver_license_a}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{hits_a}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{circumstances_a}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{location}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>
+                                  <img src={signature_a} alt="a" />
+                                </td>
+                              </Col>
+
+                            </Row>
+                          </tr>
+                          <tr>
+                            <td colspan="6">
+                              <hr />
+                            </td>{" "}
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                     <div>
                       <div></div></div>
-                      <div>
-  <h2>Details About {driverIdentityB}</h2>
-  <hr />
-                    <table className="mx-auto">
-                      <thead>
-                        <tr>
-                        <Row>
+                    <div>
+                      <h2>Details About {driverIdentityB}</h2>
+                      <hr />
+                      <table className="mx-auto">
+                        <thead>
+                          <tr>
+                            <Row>
                               <Col lg="2">
-                            <th>Driver B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Driver B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>License B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>License B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Place of Damage for B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Place of Damage for B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Circumstances B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Circumstances B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Location of the Accident</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Location of the Accident</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Signature</th>
-                            </Col>
-
-                            </Row>
-                          
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                        <Row>
-                          <Col lg="2">
-
-                            <td>{driverIdentityB}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{driver_license_b}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{hits_b}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{circumstances_b}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>{location}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>
-                            <img src={signature_b} alt="b"/>
-                            </td>
-                            </Col>
+                                <th>Signature</th>
+                              </Col>
 
                             </Row>
-                        </tr>
-                        <tr>
-                          <td colspan="6">
-                            <hr />
-                          </td>{" "}
-                        </tr>
-                      </tbody>
-                    </table>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <Row>
+                              <Col lg="2">
+
+                                <td>{driverIdentityB}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{driver_license_b}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{hits_b}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{circumstances_b}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>{location}</td>
+                              </Col>
+                              <Col lg="2">
+
+                                <td>
+                                  <img src={signature_b} alt="b" />
+                                </td>
+                              </Col>
+
+                            </Row>
+                          </tr>
+                          <tr>
+                            <td colspan="6">
+                              <hr />
+                            </td>{" "}
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
 
-                    <Input type="select" 
+                    <Input type="select"
                       className="status-dropdown"
                       value={status}
                       onChange={handleStatusChange}
@@ -486,23 +490,8 @@ const handleCommentSubmit = async (event) => {
                       for removal from the register."
                     </div>
                   </div>
-                  
 
-                <div>
-                  <h3>Write A Rapport :</h3>
-                </div>
-                  <Form onSubmit={handleCommentSubmit}>
-                    <FormGroup>
-                      <Input
-                        placeholder="Write a comment"
-                        type="text"
-                        value={comment}
-                      />
-                    </FormGroup>
-                    <Button color="primary" type="submit">
-                      Add Comment
-                    </Button>
-                  </Form>
+
 
                   <Button
                     type="Button"
@@ -533,6 +522,35 @@ const handleCommentSubmit = async (event) => {
                       Download PDF
                     </Button>
                   )}
+
+                  <div>
+                    <h3>Write A Rapport :</h3>
+                  </div>
+                  <Form onSubmit={handleCommentSubmit}>
+                    <FormGroup>
+                      <Input
+                        placeholder="Write Your Notes "
+                        type="text"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                      />
+                    </FormGroup>
+                    <Button color="primary" type="submit">
+                      Add Comment
+                    </Button>
+                  </Form>
+                  <div>
+                    <Card>
+                      <Row>
+                        <Col lg="12" >
+                          {commentaire}
+                          <h2>{timestamp}</h2>
+
+                        </Col>
+                      </Row>
+                    </Card>
+                  </div>
+
                 </CardBody>
               </Row>
             </Card>
