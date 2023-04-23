@@ -276,11 +276,7 @@ const AdminNavbar = (props) => {
                 </DropdownItem>
                 <DropdownItem divider />
 
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-notification-70" />
-                  <span> 9 Notification</span>
-                </DropdownItem>
-                <DropdownItem divider />
+              
 
 
 
