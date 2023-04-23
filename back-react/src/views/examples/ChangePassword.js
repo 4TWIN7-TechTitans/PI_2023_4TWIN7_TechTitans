@@ -38,10 +38,8 @@ import { Link, Redirect } from "react-router-dom";
 import UserHeader from "components/Headers/UserHeader.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ReactDatetime from "react-datetime";
-import moment from "moment";
 
-const Profile = () => {
+const ChangePassword = () => {
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -60,14 +58,8 @@ const Profile = () => {
     e.preventDefault();
 
     const user = {
-      email: email,
       first_name: firstName,
       last_name: lastName,
-      address: address,
-      gender: gender,
-      two_factor_auth: tfa,
-      date_of_birth: date,
-      phone_number: phone,
     };
     console.log(user);
 
@@ -81,7 +73,7 @@ const Profile = () => {
 
       console.log(true);
       window.location.href = "/main/view-user-profile/";
-      window.location.href = "/profile/" ;
+      window.location.href = "/profile/";
     }
     if (response.data === false) {
       //TODO :afficher erreur
@@ -89,9 +81,6 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
-  }, []);
 
   useEffect(() => {
     console.log(window.location.pathname);
@@ -104,24 +93,14 @@ const Profile = () => {
         await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
       ).data;
 
-      setFirstName(response.first_name);
-      setLastName(response.last_name);
       setEmail(response.email);
-      setGender(response.gender);
-      setTfa(response.two_factor_auth);
-      setPhone(response.phone_number);
-      setAddress(response.address);
-
-      const date = new Date(response.date_of_birth);
-      const formattedDate = date.toLocaleDateString("en-US");
-      setDate(new Date(formattedDate));
     }
     getUser(jwt);
   }, []);
 
   return (
     <>
-      {window.location.pathname != "/modifyprofile" && <UserHeader />}
+      {window.location.pathname !==  "/changepassword" && <UserHeader />}
 
       {/* Page content */}
       <Container className="mt--12" fluid>
@@ -199,109 +178,9 @@ const Profile = () => {
                       </Col>
                     </Row>
                   </div>
-                  <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                  </h6>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            id="input-address"
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-city"
-                          >
-                            Gender
-                          </label>
-                          <Input
-                            name="gender"
-                            type="select"
-                            value={gender}
-                            onChange={(e) => setGender(e.target.value)}
-                            required
-                          >
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                          </Input>
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
-                            2FA
-                          </label>
-                          <Input
-                            name="tfa"
-                            type="select"
-                            value={tfa}
-                            onChange={(e) => setTfa(e.target.value)}
-                            required
-                          >
-                            <option value="SMS">SMS</option>
-                            <option value="none">none</option>
-                          </Input>
-                        </FormGroup>
-                      </Col>
-                      <Col md="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Phone number
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-address"
-                            type="text"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                          />
-                        </FormGroup>
-                      </Col>
                       <Col lg="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Date Of Birth
-                          </label>
-                          <InputGroup className="input-group-alternative">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="ni ni-calendar-grid-58" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <ReactDatetime
-                              value={date}
-                              onChange={(e) => setDate(moment(e))}
-                              timeFormat={false}
-                            />
-                          </InputGroup>
-                        </FormGroup>
                         <Button color="info" type="submit">
                           Edit Profile
                         </Button>
@@ -318,4 +197,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ChangePassword;

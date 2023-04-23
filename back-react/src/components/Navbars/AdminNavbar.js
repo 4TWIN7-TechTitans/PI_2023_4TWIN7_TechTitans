@@ -93,6 +93,7 @@ const AdminNavbar = (props) => {
   const [image, setImage] = useState("");
   const fetchData = async () => {
     const jwt = getCookie("jwt");
+    if(jwt == "") return ;
     const imageUser = (
       await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
     ).data.image;

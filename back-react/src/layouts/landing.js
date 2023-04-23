@@ -45,6 +45,9 @@ import routes from "routes.js";
 import MultipleRows from "./MultipleRows";
 import MyStatements from "views/examples/Statements";
 import Notfound from "views/examples/Notfound";
+import Profile from "views/examples/Profile";
+import ViewProfile from "views/examples/ViewProfile";
+import ChangePassword from "views/examples/ChangePassword";
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -100,22 +103,20 @@ const Landing = (props) => {
               <Tickets />
             </Row>
           )}
-        {window.location.pathname == "/" && (
-           <>
-    <Row>
-            <AddStatement />
-          </Row>
-          
+          {window.location.pathname == "/" && (
+            <>
+              <Row>
+                <AddStatement />
+              </Row>
 
-<Row>
-            <div className="col">
-              <Card className="shadow">
-                <MultipleRows />
-              </Card>
-            </div>
-          </Row>
-           </>
-       
+              <Row>
+                <div className="col">
+                  <Card className="shadow">
+                    <MultipleRows />
+                  </Card>
+                </div>
+              </Row>
+            </>
           )}
           {/* statements */}
           {window.location.pathname == "/mystatement" && (
@@ -124,16 +125,29 @@ const Landing = (props) => {
             </Row>
           )}
 
-            {/* statements */}
-            {window.location.pathname == "/notfound" && (
+          {window.location.pathname == "/changepassword" && (
             <Row>
-            <Notfound />
+              <ChangePassword />
             </Row>
           )}
 
+          {window.location.pathname == "/profile" && (
+            <Row>
+              <ViewProfile />
+            </Row>
+          )}
 
-
-          
+          {window.location.pathname == "/modifyprofile" && (
+            <Row>
+              <Profile />
+            </Row>
+          )}
+          {/* statements */}
+          {window.location.pathname == "/notfound" && (
+            <Row>
+              <Notfound />
+            </Row>
+          )}
         </Container>
       </div>
 

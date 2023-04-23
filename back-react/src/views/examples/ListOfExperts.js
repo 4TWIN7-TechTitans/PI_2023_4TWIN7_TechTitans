@@ -38,6 +38,8 @@ function ListOfAgency() {
     const fetchUsers = async () => {
       try {
         const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+
         const id_agenceJwt = (
           await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
         ).data._id;

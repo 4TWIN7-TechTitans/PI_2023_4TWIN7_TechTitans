@@ -202,6 +202,7 @@ const AddStatement = () => {
   const [phone_number, setPhone_number] = useState("");
   const fetchData = async () => {
     const jwt = getCookie("jwt");
+    if(jwt == "") return ;
     const phone_numberUser = (
       await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
     ).data.phone_number;

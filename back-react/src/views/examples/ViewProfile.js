@@ -55,6 +55,8 @@ const ViewProfile = () => {
   useEffect(() => {
     const search = window.location.search;
     const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+
     async function getUser(jwt) {
       const response = (
         await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
@@ -89,11 +91,18 @@ const ViewProfile = () => {
 
   return (
     <>
-      <UserHeader />
+      {window.location.pathname != "/profile" && <UserHeader />}
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+          <p></p>
+        </Row>
+        <Row>
+          <p></p>
+        </Row>
+        <Row>
+          <Col xl="4"></Col>
+          <Col className="order-xl-2 mb-5 mb-xl-0" l="4" xl="4">
             <Card className="card-profile shadow">
               <Row className="justify-content-center">
                 <Col className="order-lg-2" lg="3">
@@ -111,22 +120,31 @@ const ViewProfile = () => {
               </Row>
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                 <div className="d-flex justify-content-between">
-                  {/* <Button
+                  <Button
                     className="mr-4"
                     color="info"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
                     size="sm"
+                    href={
+                      //TODO : change location
+                      window.location.pathname != "/profile" 
+                        ? "/main/user-profile/"
+                        : "modifyprofile"
+                    }
                   >
-                    PLACEHOLDER
-                  </Button> */}
+                    Change <br /> Password
+                  </Button>
                   <Button
                     className="float-right"
                     color="default"
-                    href={"/main/user-profile/?mail=" + email}
+                    href={
+                      window.location.pathname != "/profile"
+                        ? "/main/user-profile/"
+                        : "modifyprofile"
+                    }
                     size="sm"
                   >
                     Modifier
+                    <br /> profile
                   </Button>
                 </div>
               </CardHeader>

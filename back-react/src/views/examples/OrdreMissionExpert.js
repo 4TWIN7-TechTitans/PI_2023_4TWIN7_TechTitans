@@ -43,6 +43,8 @@ function OrdreMissionExpert() {
         // );
         // //console.log(filteredData);
         const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+
         const response = await axios.get(
           "http://localhost:5000/getmailfromtoken/?token=" + jwt
         );
@@ -120,6 +122,8 @@ function OrdreMissionExpert() {
   const handleOnline = async () => {
 
     const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+
     const email = (
       await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
     ).data.email;
@@ -137,6 +141,8 @@ function OrdreMissionExpert() {
 
   const handleOffline = async () => {
     const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+
     const email = (
       await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
     ).data.email;

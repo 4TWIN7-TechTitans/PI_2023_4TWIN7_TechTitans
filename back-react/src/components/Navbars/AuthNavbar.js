@@ -104,6 +104,7 @@ const AdminNavbar = () => {
 
   const fetchData = async () => {
     const jwt = getCookie("jwt");
+    if(jwt == "") return ;
     if (jwt) {
       const imageUser = (
         await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
