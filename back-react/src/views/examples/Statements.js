@@ -139,6 +139,13 @@ function MyStatements() {
   useEffect(() => {
     fetchFilter();
   }, [selectedCaseState]);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
   return (
     <>
 
@@ -228,7 +235,7 @@ function MyStatements() {
                   return (
                     <tbody>
                       <tr key={statement._id}>
-                        <td>{statement.date}</td>
+                        <td>{formatDate(statement.date)}</td>
 
                         <td>{statement.vehicule_a.contractNumber}</td>
                         <td>{statement.insured_a.firstname}</td>

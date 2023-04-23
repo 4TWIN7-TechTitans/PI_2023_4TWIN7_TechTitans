@@ -2090,7 +2090,7 @@ const AddStatement = () => {
                             </FormGroup>
                             <FormGroup>
                               <Label className="heading-small" for="lastname_a">
-                                First Name
+                                Last Name
                               </Label>
                               <Input
                                 type="text"
@@ -2169,7 +2169,7 @@ const AddStatement = () => {
                             </FormGroup>
                             <FormGroup>
                               <Label className="heading-small" for="lastname_b">
-                                First Name
+                                Last Name
                               </Label>
                               <Input
                                 type="text"
