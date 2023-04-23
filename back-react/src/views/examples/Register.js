@@ -360,7 +360,7 @@ function Register() {
                             <InputGroupText
                               onClick={() => setShowPassword2(!showPassword2)}
                             >
-                              {showPassword2 ? (
+                                {showPassword2 ? (
                                 <i className="fas fa-eye-slash" />
                               ) : (
                                 <i className="fas fa-eye" />
