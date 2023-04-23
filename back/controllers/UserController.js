@@ -2621,7 +2621,7 @@ module.exports.post_change_password = async (req, res) => {
   }
 };
 module.exports.update_id_ag = async (req, res) => {
-  const { _id } = req.user; 
+  const  _id  = req.user; 
   
   try {
     const update = await userModel.findByIdAndUpdate(
