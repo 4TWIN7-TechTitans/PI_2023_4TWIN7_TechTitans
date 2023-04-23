@@ -108,14 +108,16 @@ const Landing = (props) => {
               <Row>
                 <AddStatement />
               </Row>
-
+              {/*
               <Row>
+            
                 <div className="col">
                   <Card className="shadow">
                     <MultipleRows />
                   </Card>
                 </div>
               </Row>
+          */}
             </>
           )}
           {/* statements */}
