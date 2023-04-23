@@ -80,9 +80,9 @@ function Login() {
             {
  
               if(email===password)
-              window.location.href = "/";
+              window.location.href = "/changepassword";             
               else
-              window.location.href = "/changepassword";
+              window.location.href = "/";
             }
            
             else
