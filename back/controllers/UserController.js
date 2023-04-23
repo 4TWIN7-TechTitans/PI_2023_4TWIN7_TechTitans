@@ -805,13 +805,13 @@ module.exports.login_post = async (req, res) => {
     if (!user.verified) {
       throw Error("email not verified");
     }
-
-    if (user.two_factor_auth === "sms") {
+    if (user.two_factor_auth === "sms" || user.two_factor_auth === "SMS") {
       const code = Math.floor(100000 + Math.random() * 900000);
+      user.two_factor_auth_code = code;
       await userModel.findByIdAndUpdate(user._id, {
         two_factor_auth_code: code,
       });
-      // sendSms(user);
+      // await sendSms(user);
       throw Error("check your sms to 2FA auth"); // redirect
     }
 
@@ -1163,7 +1163,7 @@ module.exports.logout_get = (req, res) => {
   res.status(200).json({ message: "User logged out successfully." });
 };
 
-const sendSms = (user) => {
+const sendSms =  async (user) => {
   client.messages
     .create({
       body: "Twillio sms Test : " + user.two_factor_auth_code,
