@@ -52,6 +52,7 @@ import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from 'ol/style';
 import Geolocation from 'ol/Geolocation';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 // core components
 import { useEffect, useState, useRef } from "react";
@@ -166,6 +167,7 @@ const AddStatement = () => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [email, setEmail] = useState("");
+
   //statement by steps
   const [section, setSection] = useState(1);
 
@@ -675,6 +677,7 @@ const AddStatement = () => {
         )
 
         );
+        console.log(response);
       } catch (err) {
         console.log(err);
       }
@@ -1038,6 +1041,17 @@ const AddStatement = () => {
 
 
 
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+
   return (
     <>
 
@@ -1053,6 +1067,19 @@ const AddStatement = () => {
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
+                <Row className="align-items-center">
+                  <Col>
+                    <div>
+                      <span>Microphone: {listening ? 'on' : 'off'}</span><br></br>
+                      
+                      <Button onClick={SpeechRecognition.startListening}>Start</Button>
+                      <Button onClick={SpeechRecognition.stopListening}>Stop</Button>
+                      <Button onClick={resetTranscript}>Reset</Button><br></br>
+                      <span>{transcript}</span>
+
+                    </div>
+                  </Col>
+                </Row>
                 <Row className="align-items-center">
                   <Col xs="8">
                     <h3 className="mb-0">Fill In Your Statement</h3>
@@ -1074,95 +1101,93 @@ const AddStatement = () => {
                       set all the infromations related to the accident please
                     </h2>
                     <Row className="align-items-center">
-                      <Col xs="12" className="align-items-center">
+                      <Col lg="12" className="align-items-center">
 
-                        <FormGroup className="text-center">
-                          <Container className="btn-toolbar" role="toolbar">
-                            <Container className="btn-group mr-2 align-items-center" role="group" >
-                              <Button
-                                color="light"
-                                type="button"
-                                class="btn btn-secondary"
-                                onClick={() => handleStepChange(1)}
-                                className={section === 1 ? "active" : ""}
+                        <FormGroup className="btn-toolbar btn-group">
 
-                              >
-                                1
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(2)}
-                                className={section === 2 ? "active" : ""}
 
-                              >
-                                1.1
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(3)}
-                                className={section === 3 ? "active" : ""}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(1)}
+                            className={section === 1 ? "active" : ""}
 
-                              >
-                                2
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(4)}
-                                className={section === 4 ? "active" : ""}
+                          >
+                            STEP 1
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(2)}
+                            className={section === 2 ? "active" : ""}
 
-                              >
-                                3
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(5)}
-                                className={section === 5 ? "active" : ""}
+                          >
+                            STEP 1.2
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(3)}
+                            className={section === 3 ? "active" : ""}
 
-                              >
-                                4
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(6)}
-                                className={section === 6 ? "active" : ""}
+                          >
+                            STEP 2
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(4)}
+                            className={section === 4 ? "active" : ""}
 
-                              >
-                                5
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(7)}
-                                className={section === 7 ? "active" : ""}
+                          >
+                            STEP 3
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(5)}
+                            className={section === 5 ? "active" : ""}
 
-                              >
-                               6
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(8)}
-                                className={section === 8 ? "active" : ""}
+                          >
+                            STEP 4
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(6)}
+                            className={section === 6 ? "active" : ""}
 
-                              >
-                                7
-                              </Button>{" "}
-                              <Button
-                                color="light"
-                                type="button"
-                                onClick={() => handleStepChange(9)}
-                                className={section === 9 ? "active" : ""}
+                          >
+                            STEP 5
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(7)}
+                            className={section === 7 ? "active" : ""}
 
-                              >
-                                8
-                              </Button>{" "}
-                            </Container>
-                          </Container>
+                          >
+                            STEP 6
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(8)}
+                            className={section === 8 ? "active" : ""}
+
+                          >
+                            STEP 7
+                          </Button>{" "}
+                          <Button
+                            color="light"
+                            type="button"
+                            onClick={() => handleStepChange(9)}
+                            className={section === 9 ? "active" : ""}
+
+                          >
+                            STEP 8
+                          </Button>{" "}
+
                         </FormGroup>
 
                       </Col>
@@ -1173,11 +1198,7 @@ const AddStatement = () => {
 
                       {/* 1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 1 ? "block" : "none" }}>
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 1 :</h1>
-
-                        </Col>
 
                         <Row>
                           {/* SECTION 1 + 2 + 3 + 4 + 5 */}
@@ -1279,11 +1300,7 @@ const AddStatement = () => {
                       {/* FIN  1 + 2 + 3 + 4 + 5 */}
                       <div style={{ display: section === 2 ? "block" : "none" }}>
                         <Row>
-                          <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                            <h1 style={{ color: '#1171ef' }}>STEP 1.2 :</h1>
-
-                          </Col>
                         </Row>
                         <Row>
                           <Col lg="6">
@@ -1485,27 +1502,19 @@ const AddStatement = () => {
 
                       {/*  Section 6 */}
                       < div style={{ display: section === 3 ? "block" : "none" }}>
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 2 :</h1>
 
-                        </Col>
-                        <Row>
-                          {/* VEHICULE A VS B */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE A
-                            </h6>
-                          </Col>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
                         <Row>
                           {/* SECTION 6 */}
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE A
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -1617,6 +1626,14 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE B
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -1744,28 +1761,19 @@ const AddStatement = () => {
 
                       {/* Section 7 */}
                       <div style={{ display: section === 4 ? "block" : "none" }}>
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 3 :</h1>
-
-                        </Col>
-                        <Row>
-                          {/* VEHICULE A VS B */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE A
-                            </h6>
-                          </Col>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
 
                         <Row>
                           {/*  SECTION 7 */}
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE A
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -1874,6 +1882,14 @@ const AddStatement = () => {
 
                           </Col>
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE B
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -2013,29 +2029,20 @@ const AddStatement = () => {
 
                       {/*  SECTION 8 */}
                       <div style={{ display: section === 5 ? "block" : "none" }}>
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 4 :</h1>
-
-                        </Col>
-                        <Row>
-                          {/* VEHICULE A VS B */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE A
-                            </h6>
-                          </Col>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
 
                         <Row>
 
                           {/* SECTION 8 */}
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE A
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -2107,6 +2114,14 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE B
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -2208,37 +2223,20 @@ const AddStatement = () => {
 
                       {/*  SECTION 9 */}
                       <div style={{ display: section === 6 ? "block" : "none" }}>
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 5 :</h1>
 
-                        </Col>
-                        <Row>
-
-                          {/* VEHICULE A VS B */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE A
-                            </h6>
-                          </Col>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
-                        <Row>
-                          {/* Section 9 */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              Section 9
-                            </h6>
-                          </Col>
-                        </Row>
                         <Row>
 
                           {/*  SECTION 9 */}
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE A
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -2368,6 +2366,14 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE B
+                                </h6>
+                              </Col>
+                            </Row>
                             <label
                               className="form-control-label"
                               htmlFor="input-email"
@@ -2528,27 +2534,19 @@ const AddStatement = () => {
 
                       {/* Section 10 */}
                       <div style={{ display: section === 7 ? "block" : "none" }}>
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 6 :</h1>
 
-                        </Col>
-                        <Row>
-                          {/* VEHICULE A VS B */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE A
-                            </h6>
-                          </Col>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
                         <Row>
                           {/* SECTION 10 */}
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE A
+                                </h6>
+                              </Col>
+                            </Row>
                             <FormGroup>
                               <label className="form-control-label" htmlFor="input-country">
                                 10. Choc Points
@@ -2570,6 +2568,14 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE B
+                                </h6>
+                              </Col>
+                            </Row>
                             <FormGroup>
                               <label className="form-control-label" htmlFor="input-country">
                                 10. Choc Points
@@ -2620,28 +2626,18 @@ const AddStatement = () => {
 
                       {/* Section 11 */}
                       <div style={{ display: section === 8 ? "block" : "none" }}>
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 7 :</h1>
-
-                        </Col>
-                        <Row>
-
-                          {/* VEHICULE A VS B */}
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE A
-                            </h6>
-                          </Col>
-                          <Col lg="6">
-                            <h6 className="heading-small text-muted mb-4">
-                              VEHICULE B
-                            </h6>
-                          </Col>
-                        </Row>
                         <Row>
                           {/* SECTION 11 */}
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE A
+                                </h6>
+                              </Col>
+                            </Row>
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -2666,6 +2662,14 @@ const AddStatement = () => {
                             </FormGroup>
                           </Col>
                           <Col lg="6">
+                            <Row>
+                              {/* VEHICULE A VS B */}
+                              <Col lg="6">
+                                <h6 className="heading-small text-muted mb-4">
+                                  VEHICULE B
+                                </h6>
+                              </Col>
+                            </Row>
                             <FormGroup>
                               <label
                                 className="form-control-label"
@@ -2795,11 +2799,7 @@ const AddStatement = () => {
                             threshold={0.1}
                             rootMargin="20%"
                           > */}
-                        <Col align="center" className="font-weight-bold text-uppercase mb-4" >
 
-                          <h1 style={{ color: '#1171ef' }}>STEP 8 :</h1>
-
-                        </Col>
                         {/* </AnimatedText> */}
 
 
@@ -2842,7 +2842,7 @@ const AddStatement = () => {
                                 className="form-control-label"
                                 htmlFor="input-address"
                               >
-                                14. Observations
+                                14. Observations Of Client A
                               </label>
                               <Input
                                 type="text"
@@ -2862,7 +2862,7 @@ const AddStatement = () => {
                                 className="form-control-label"
                                 htmlFor="input-address"
                               >
-                                14. Observations
+                                14. Observations Of Client B
                               </label>
                               <Input
                                 type="text"

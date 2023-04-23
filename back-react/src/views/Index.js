@@ -1,5 +1,4 @@
 import React from "react";
-// reactstrap components
 import {
   Card,
   CardBody,
@@ -22,48 +21,44 @@ const Index = () => {
   const [accidentsCount, setAccidentsCount] = useState({});
   const [topLocations, setTopLocations] = useState([]);
 
-useEffect(() => {
-  const fetchStatements = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/getstatements");
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`);
-      }
-      const data = await response.json();
-      console.log("Data:", data);
-      if (!Array.isArray(data)) {
-        throw new Error("Data is not an array");
-      }
-  
-      const formattedData = data.data
-      .filter((d) => d.location !== "") // Remove records without a location
-      .map((d) => ({ date: new Date(d.date), location: d.location }));
-    
-  
-      // Count the number of accidents per location
-      const accidentsCount = formattedData.reduce((counts, d) => {
-        counts[d.location] = (counts[d.location] || 0) + 1;
-        return counts;
-      }, {});
-  
-      // Get the top 10 locations with the highest number of accidents
-      const topLocations = Object.entries(accidentsCount)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10);
-  
-      setAccidentsCount(accidentsCount);
-      setTopLocations(topLocations);
-    } catch (error) {
-      console.error("Error fetching statements:", error);
-    }
-  };
-  
+  useEffect(() => {
+    const fetchStatements = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/getstatements");
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Data:", data); // Debugging statement to check the format of the data
+        if (!Array.isArray(data)) {
+          throw new Error("Data is not an array");
+        }
 
-  fetchStatements();
-}, []);
+        const formattedData = data.data
+          .filter((d) => d.location !== "") // Remove records without a location
+          .map((d) => ({ date: new Date(d.date), location: d.location }));
 
-  
-  
+        let accidentsCount = 0; // Define accidentsCount variable with initial value of 0
+
+        for (let i = 0; i < formattedData.length; i++) {
+          if (formattedData[i].location === "Accident") {
+            accidentsCount++;
+          }
+        }
+
+        const topLocations = Object.entries(accidentsCount)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 10);
+
+        setAccidentsCount(accidentsCount);
+        setTopLocations(topLocations);
+      } catch (error) {
+        console.error("Error fetching statements:", error);
+      }
+    };
+
+    fetchStatements();
+  }, []);
 
   const chartData = {
     labels: topLocations.map((l) => l[0]),
@@ -77,7 +72,6 @@ useEffect(() => {
       },
     ],
   };
-
 
   return (
     <>
@@ -102,7 +96,6 @@ useEffect(() => {
       </div>
     </>
   );
-
-}
+};
 
 export default Index;
