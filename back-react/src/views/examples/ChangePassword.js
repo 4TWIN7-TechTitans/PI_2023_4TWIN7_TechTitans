@@ -38,16 +38,14 @@ import { Link, Redirect } from "react-router-dom";
 import UserHeader from "components/Headers/UserHeader.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ReactDatetime from "react-datetime";
+import moment from "moment";
 
 const ChangePassword = () => {
-  const [lastName, setLastName] = useState("");
-  const [firstName, setFirstName] = useState("");
+  const [newConfirm, setNewConfirm] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [gender, setGender] = useState("");
-  const [tfa, setTfa] = useState("");
-  const [date, setDate] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -56,37 +54,43 @@ const ChangePassword = () => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
+    const jwt = getCookie("jwt");
 
     const user = {
-      first_name: firstName,
-      last_name: lastName,
+      oldpassword: oldPassword,
+      password: newPassword,
+      token: jwt,
     };
     console.log(user);
 
-    const response = await axios.post("http://127.0.0.1:5000/users/", user);
+    const response = await axios.post(
+      "http://127.0.0.1:5000/resetpassword/",
+      user
+    );
 
-    console.log(response);
+    console.log(response.data);
 
     console.log("after");
-    if (response.data === true) {
+    if (response.data.changed === true) {
       //TODO : redirect profile ? /dmin/user-profile/?mail
 
       console.log(true);
-      window.location.href = "/main/view-user-profile/";
-      window.location.href = "/profile/";
-    }
-    if (response.data === false) {
-      //TODO :afficher erreur
-      console.log(false);
+     if ( window.location.pathname == "/main/changepassword/") window.location.href = "/main/view-user-profile/";
+     if ( window.location.pathname == "/changepassword") window.location.href = "/profile";
+    } else {
+      console.log("change password failed")
+
     }
   };
 
+  useEffect(() => {
+    //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
+  }, []);
 
   useEffect(() => {
     console.log(window.location.pathname);
     const jwt = getCookie("jwt");
-    if(jwt == "") return ;
-
+    if (jwt == "") return;
 
     async function getUser(mail) {
       const response = (
@@ -100,7 +104,7 @@ const ChangePassword = () => {
 
   return (
     <>
-      {window.location.pathname !==  "/changepassword" && <UserHeader />}
+      {window.location.pathname !== "/changepassword" && <UserHeader />}
 
       {/* Page content */}
       <Container className="mt--12" fluid>
@@ -147,14 +151,14 @@ const ChangePassword = () => {
                             className="form-control-label"
                             htmlFor="input-first-name"
                           >
-                            First name
+                            new password
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="first_name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            type="text"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            type="password"
                             name="first_name"
                           />
                         </FormGroup>
@@ -165,20 +169,40 @@ const ChangePassword = () => {
                             className="form-control-label"
                             htmlFor="input-last-name"
                           >
-                            Last name
+                            confirm password
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="last_name"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            type="text"
+                            value={newConfirm}
+                            onChange={(e) => setNewConfirm(e.target.value)}
+                            type="password"
                           />
                         </FormGroup>
                       </Col>
                     </Row>
                   </div>
                   <div className="pl-lg-4">
+                    <Row>
+                      <Col md="12">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-address"
+                          >
+                            Old password
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                            id="input-address"
+                            type="password"
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
                     <Row>
                       <Col lg="12">
                         <Button color="info" type="submit">

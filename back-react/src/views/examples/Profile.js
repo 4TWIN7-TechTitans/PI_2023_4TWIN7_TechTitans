@@ -80,8 +80,11 @@ const Profile = () => {
       //TODO : redirect profile ? /dmin/user-profile/?mail
 
       console.log(true);
-      window.location.href = "/main/view-user-profile/";
-      window.location.href = "/profile/" ;
+      window.location.href = "/main/view-user-profile";
+      window.location.href = "/profile" ;
+
+      if ( window.location.pathname == "/main/user-profile/") window.location.href = "/main/view-user-profile/";
+      if ( window.location.pathname == "/modifyprofile") window.location.href = "/profile";
     }
     if (response.data === false) {
       //TODO :afficher erreur
@@ -121,7 +124,7 @@ const Profile = () => {
 
   return (
     <>
-      {window.location.pathname != "/modifyprofile" && <UserHeader />}
+      {window.location.pathname !== "/modifyprofile" && <UserHeader />}
 
       {/* Page content */}
       <Container className="mt--12" fluid>

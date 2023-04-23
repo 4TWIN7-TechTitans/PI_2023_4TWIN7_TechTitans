@@ -127,8 +127,8 @@ const ViewProfile = () => {
                     href={
                       //TODO : change location
                       window.location.pathname != "/profile" 
-                        ? "/main/user-profile/"
-                        : "modifyprofile"
+                        ? "/main/changepassword/"
+                        : "changepassword"
                     }
                   >
                     Change <br /> Password

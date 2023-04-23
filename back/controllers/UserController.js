@@ -2611,6 +2611,7 @@ module.exports.post_change_password = async (req, res) => {
 
     return res.status(200).json({
       user: user,
+      changed : true,
     });
   } catch (error) {
     console.log(error);

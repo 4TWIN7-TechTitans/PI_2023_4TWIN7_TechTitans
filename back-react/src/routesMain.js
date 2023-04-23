@@ -19,6 +19,7 @@ import Profile from "views/examples/Profile.js";
 import addcar from "views/examples/addCar";
 import AddStatement from "views/examples/addStatement";
 import ViewProfile from "views/examples/ViewProfile";
+import ChangePassword from "views/examples/ChangePassword";
 
 var routesMain = [
   //TODO : change admin to user view profile
@@ -27,6 +28,14 @@ var routesMain = [
     name: "User Profile",
     icon: "ni ni-tv-2 text-primary",
     component: ViewProfile,
+    layout: "/main",
+    showInSidebar: true,
+  },
+  {
+    path: "/changepassword",
+    name: "Change password",
+    icon: "ni ni-tv-2 text-primary",
+    component: ChangePassword,
     layout: "/main",
     showInSidebar: true,
   },
