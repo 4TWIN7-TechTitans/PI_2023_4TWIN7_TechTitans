@@ -30,14 +30,27 @@ function OdmAgence() {
   const [showError, setShowError] = useState(false);
   const [assignedStatementId, setAssignedStatementId] = useState("");
 
+  function getCookie(key) {
+    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+    return b ? b.pop() : "";
+  }
 
   let notificationShown = false; 
   const fetchData = async () => {
     try {
+
+      const jwt = getCookie("jwt");
+
+      const idagence = (
+        await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
+      ).data._id;
+      console.log(idagence)
       const response = await axios.get("http://127.0.0.1:5000/getstatements");
       const filteredData = response.data.statements.filter(
-        (statements) => statements.role !== "agency"
+        (statements) => statements.vehicule_a.assureBy == idagence
       );
+
+      
       const expertsResponse = await axios.get(
         "http://127.0.0.1:5000/all-experts"
       );
@@ -154,7 +167,7 @@ function OdmAgence() {
                   <th scope="col">Assign To Expert</th>
                 </tbody>
                 {paginatedStatements.map((statement) => {
-                  console.log(statement); // Add this line to log the statements object
+               //   console.log(statement); // Add this line to log the statements object
                   let statusText = "";
                   let color = "orange";
                   switch (statement.case_state) {
