@@ -47,7 +47,7 @@ const ViewProfile = () => {
   const [tfa, setTfa] = useState("");
   const [date, setDate] = useState("");
   const [image, setImage] = useState("");
-
+  const [fastate, setFastate] = useState(false);
   useEffect(() => {
     //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
   }, []);
@@ -172,6 +172,17 @@ const ViewProfile = () => {
                     {address}
                   </div>
                   <hr className="my-4" />
+                  {(tfa==="sms" || tfa==="SMS" ) ? (""):
+                  (  <div>
+                    <i className="ni education_hat mr-2" />
+                    <span>Your profile is not secured activate please  the double authentification</span>
+                  </div>) 
+                 }
+                 
+                  
+                
+
+               
 
                   {/* <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     BOUTON NBADLOUH

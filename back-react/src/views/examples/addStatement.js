@@ -60,7 +60,7 @@ import axios from "axios";
 const AddStatement = () => {
 
 
-
+  const [date_demande, setDate_demande] = useState("");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
   const [injured, setInjured] = useState("");
@@ -647,6 +647,28 @@ const AddStatement = () => {
         setErrors({});
         setShowError(false);
         // add user affect here
+       
+        var date_dem = new Date();
+        setDate_demande(date_dem);
+        const postData = {
+          titre: "A New statement is added ",
+          id_user:add.data.agency_a,
+          date_notif:date_demande,
+          descrip:""
+
+         
+        };
+        
+        axios.post('http://localhost:5000/notif/', postData)
+          .then(response => {
+           console.log("ticket add notif added")
+          })
+          .catch(error => {
+            console.log(error);
+          });
+
+
+
         toast.success("Statement created successfully");
         setTimeout(() => {
           window.location.href = "/mystatement";

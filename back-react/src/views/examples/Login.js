@@ -73,13 +73,28 @@ function Login() {
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
-            
+           
             //TODO : ROUTES ROLES 
             const Role=getCookie('role');
             if(Role==="Client")
-            window.location.href = "/";
+            {
+ 
+              if(email===password)
+              window.location.href = "/";
+              else
+              window.location.href = "/changepassword";
+            }
+           
             else
-            window.location.href = "/admin/index";
+            {
+              if(email===password)
+              window.location.href = "/main/changepassword";
+              else
+              window.location.href = "/admin/index";
+              
+
+            }
+            
             
           },
           (err) => {
