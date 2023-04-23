@@ -94,7 +94,7 @@ function DetailsStatement() {
     doc.text("Hits A: " + hits_a, 20, 100);
     doc.text("Circumstances A: " + circumstances_a, 20, 110);
     doc.text("Signature A: " + signature_a, 20, 120);
-
+    
     doc.text("Driver B: " + driverIdentityB, 100, 80);
     doc.setFont("times", "italic");
     doc.setTextColor("#767676");
@@ -104,15 +104,16 @@ function DetailsStatement() {
     doc.text("Hits B: " + hits_b, 100, 100);
     doc.text("Circumstances B: " + circumstances_b, 100, 110);
     doc.text("Signature B: " + signature_b, 100, 120);
-
+    
     doc.setFont("times", "bold");
     doc.text("Location: " + location, 20, 140);
-
+    
     doc.setFont("times", "italic");
     doc.text("Date Of Accident: " + date, 20, 170);
-
+    doc.text("Expert Commentary : " + commentaire , 40, 180);
+    
     //Add additional text
-    doc.setFontSize(12);
+    doc.setFontSize(8);
     doc.setTextColor("#2D3752");
     doc.text(
       `The specifications for experts and actuaries is a
