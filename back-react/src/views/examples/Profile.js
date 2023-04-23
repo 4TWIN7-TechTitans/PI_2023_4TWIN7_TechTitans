@@ -121,7 +121,7 @@ const Profile = () => {
 
   return (
     <>
-      {window.location.pathname != "/modifyprofile" && <UserHeader />}
+      {window.location.pathname !== "/modifyprofile" && <UserHeader />}
 
       {/* Page content */}
       <Container className="mt--12" fluid>
