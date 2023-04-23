@@ -44,7 +44,7 @@ var routesAgence = [
   },
   {
     path: "/odmagence",
-    name: "Ordre de mission Agence",
+    name: "List Of Statements",
     icon: "ni ni-bullet-list-67 text-blue",
     component: OdmAgence,
     layout: "/agence",
