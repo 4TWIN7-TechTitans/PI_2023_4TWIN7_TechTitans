@@ -3,15 +3,13 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 require("dotenv").config();
-const cloudinary = require('cloudinary').v2;
-
+const cloudinary = require("cloudinary").v2;
 
 // configure cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-
 });
 
 const client = require("twilio")(
@@ -306,7 +304,7 @@ const sendVerifMail = async (mail, code) => {
 //avatar
 const selectRandomAvatar = async () => {
   const { resources } = await cloudinary.search
-    .expression('folder:avatars')
+    .expression("folder:avatars")
     .execute();
   const randomIndex = Math.floor(Math.random() * resources.length);
   const avatar = resources[randomIndex];
@@ -344,7 +342,7 @@ module.exports.post_signup = async (req, res) => {
       two_factor_auth_code: "",
       banned: "false",
       statements_number: 0,
-      expert_status: "true"
+      expert_status: "true",
     });
 
     const verificationToken = createToken(user._id);
@@ -388,7 +386,7 @@ module.exports.add_post = async (req, res) => {
       verified: "true",
       image: avatar,
       statements_number: 0,
-      expert_status: "true"
+      expert_status: "true",
     });
     if (user) {
       const transporter = nodemailer.createTransport({
@@ -1081,7 +1079,6 @@ module.exports.forgot_password_post = async (req, res) => {
       ],
     };
 
-
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
@@ -1208,6 +1205,45 @@ module.exports.show_users_get = async (req, res) => {
     });
   }
 };
+//
+module.exports.filtre_users = async (req, res) => {
+  try {
+    const { role } = req.params;
+    let users;
+
+    if (role) {
+      switch (role.toLowerCase()) {
+        case "admin":
+        case "expert":
+        case "agence":
+        case "client":
+          users = await userModel.find({ role });
+          break;
+        default:
+          res.status(400).json({
+            message: "Invalid role parameter",
+            status: "error",
+          });
+          return;
+      }
+    } else {
+      users = await userModel.find({});
+    }
+
+    res.status(200).json({
+      users,
+      message: "Users retrieved successfully",
+      status: "success",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to retrieve users",
+      status: "error",
+    });
+  }
+};
+
 // Show Expert
 module.exports.show_experts_get = async (req, res) => {
   try {
@@ -1953,7 +1989,9 @@ module.exports.get_all_agences = async (req, res) => {
 // Get All Experts & Client
 module.exports.get_all_ExpCli = async (req, res) => {
   try {
-    const users = await userModel.find({ $or: [{ role: "Expert" }, { role: "Client" }] });
+    const users = await userModel.find({
+      $or: [{ role: "Expert" }, { role: "Client" }],
+    });
 
     // remove sensitive information from the response
     const sanitizedUsers = users.map((user) => {
@@ -1966,7 +2004,7 @@ module.exports.get_all_ExpCli = async (req, res) => {
         phone_number,
         id_agence,
         role,
-        expert_status
+        expert_status,
       } = user;
       return {
         _id,
@@ -1977,7 +2015,7 @@ module.exports.get_all_ExpCli = async (req, res) => {
         phone_number,
         id_agence,
         role,
-        expert_status
+        expert_status,
       };
     });
 
@@ -1999,7 +2037,6 @@ module.exports.get_all_ExpCli = async (req, res) => {
     });
   }
 };
-
 
 // Function to set availability of expert
 module.exports.expert_status_on = async (req, res) => {
@@ -2254,8 +2291,7 @@ module.exports.expert_status_on = async (req, res) => {
   }
 };
 
-
-//Offline Expert 
+//Offline Expert
 module.exports.expert_status_off = async (req, res) => {
   const { email } = req.params;
   const is_available = req.body.is_available;
@@ -2535,7 +2571,7 @@ module.exports.get_all_experts_status = async (req, res) => {
 
 
 module.exports.get_userbyiduser = async (req, res) => {
-  const { id } = req.body;
+  const  id  = req.body;
   try {
     const user = await userModel.find({ _id: id });
     if (user)
@@ -2545,5 +2581,58 @@ module.exports.get_userbyiduser = async (req, res) => {
 
 
     res.status(400).json({ err, status: "error" });
+  }
+};
+
+module.exports.post_change_password = async (req, res) => {
+  try {
+    //get user by jwt
+    const { password, oldpassword, token } = req.body;
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    // find user by id and verificationToken
+    const user = await userModel.findOne({
+      _id: decodedToken.id,
+    });
+
+    if (!user) {
+      //invalid
+      res.redirect("http://localhost:3000/auth/error");
+    }
+
+    const auth = await userModel.login(user.email, oldpassword);
+
+    user.password = password;
+
+    //change password & save
+    // await userModel.findByIdAndUpdate(decodedToken.id, password);
+    await user.save();
+    //return new user obj
+
+    return res.status(200).json({
+      user: user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      status: "error",
+    });
+  }
+};
+module.exports.update_id_ag = async (req, res) => {
+  const { _id } = req.user; 
+  
+  try {
+    const update = await userModel.findByIdAndUpdate(
+      _id,
+      { id_agence: _id },
+      { new: true }
+    );
+    
+    res.status(200).json(update);
+  } catch (err) {
+    const errorp=err.message;
+    res.status(400).json({ errorp, status: "error" });
   }
 };

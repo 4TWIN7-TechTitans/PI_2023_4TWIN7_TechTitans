@@ -230,18 +230,21 @@ for removal from the register.`,
     console.log(result);
   };
 
- 
-
   const handleStatusChange = async (event) => {
     const search = window.location.search;
     const id_statement = new URLSearchParams(search).get("id");
-    console.log("http://localhost:5000/statements_status/" + id_statement + "/status")
-  
+    console.log(
+      "http://localhost:5000/statements_status/" + id_statement + "/status"
+    );
+
     const newStatus = event.target.value;
     try {
-      await axios.post("http://localhost:5000/statements_status/" + id_statement + "/status", {
-        case_state: newStatus,
-      });
+      await axios.post(
+        "http://localhost:5000/statements_status/" + id_statement + "/status",
+        {
+          case_state: newStatus,
+        }
+      );
       setStatus(newStatus);
       toast.success("Status updated successfully!");
     } catch (error) {
@@ -249,7 +252,7 @@ for removal from the register.`,
       toast.error("An error occurred while updating the status.");
     }
   };
-  
+
   const handleNotificationClose = () => {
     setShowNotification(false);
   };
@@ -265,42 +268,159 @@ for removal from the register.`,
                 <h3 className="mb-0">Examine claim </h3>
                 <CardBody className="pt-0 pt-md-4">
                   <div className="text-center">
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Driver A: {driverIdentityA} || Driver B:{" "}
-                        {driverIdentityB}
-                      </span>
+                  <div>
+  <h2>Details About {driverIdentityA}</h2>
+  <hr />
+                    <table className="mx-auto">
+                      <thead>
+                        <tr>
+                        <Row>
+                              <Col lg="2">
+                            <th>Driver A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>License A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Place of Damage for A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Circumstances A</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Location of the Accident</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Signature</th>
+                            </Col>
+
+                            </Row>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                        <Row>
+                          <Col lg="2">
+
+                            <td>{driverIdentityA}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{driver_license_a}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{hits_a}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{circumstances_a}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{location}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>
+                           <img src={signature_a} alt="a"/>
+                            </td>
+                            </Col>
+
+                            </Row>
+                        </tr>
+                        <tr>
+                          <td colspan="6">
+                            <hr />
+                          </td>{" "}
+                        </tr>
+                      </tbody>
+                    </table>
                     </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        License A: {driver_license_a} || License B:{" "}
-                        {driver_license_b}
-                      </span>
+                    <div>
+                      <div></div></div>
+                      <div>
+  <h2>Details About {driverIdentityB}</h2>
+  <hr />
+                    <table className="mx-auto">
+                      <thead>
+                        <tr>
+                        <Row>
+                              <Col lg="2">
+                            <th>Driver B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>License B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Place of Damage for B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Circumstances B</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Location of the Accident</th>
+                            </Col>
+                            <Col lg="2">
+
+                            <th>Signature</th>
+                            </Col>
+
+                            </Row>
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                        <Row>
+                          <Col lg="2">
+
+                            <td>{driverIdentityB}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{driver_license_b}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{hits_b}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{circumstances_b}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>{location}</td>
+                            </Col>
+                            <Col lg="2">
+
+                            <td>
+                            <img src={signature_b} alt="b"/>
+                            </td>
+                            </Col>
+
+                            </Row>
+                        </tr>
+                        <tr>
+                          <td colspan="6">
+                            <hr />
+                          </td>{" "}
+                        </tr>
+                      </tbody>
+                    </table>
                     </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Place Of Damage For A: {hits_a} || Place Of Damage For
-                        B: {hits_b}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Circumstances A: {circumstances_a} || Circumstances B:{" "}
-                        {circumstances_b}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        Location of The Accident: {location}
-                      </span>
-                    </div>
-                    <div className="h5 font-weight-300">
-                      <span className="font-weight-light">
-                        <h4>Signature</h4>
-                        {signature_a} || {signature_b}
-                      </span>
-                    </div>
-                    <select
+
+                    <Input type="select" 
                       className="status-dropdown"
                       value={status}
                       onChange={handleStatusChange}
@@ -309,7 +429,7 @@ for removal from the register.`,
                       <option value="treated">Treated</option>
                       <option value="inProgress">In Progress</option>
                       <option value="closed">Closed</option>
-                    </select>
+                    </Input>
 
                     {showNotification && (
                       <div
@@ -344,7 +464,6 @@ for removal from the register.`,
                       for removal from the register."
                     </div>
                   </div>
-                  
 
                   {comments.map((comment) => (
                     <div key={comment.date}></div>
