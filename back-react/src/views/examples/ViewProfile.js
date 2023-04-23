@@ -31,11 +31,15 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Redirect, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 function getCookie(key) {
   var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
   return b ? b.pop() : "";
 }
+
+
+
 
 const ViewProfile = () => {
   const [lastName, setLastName] = useState("");
@@ -48,6 +52,55 @@ const ViewProfile = () => {
   const [date, setDate] = useState("");
   const [image, setImage] = useState("");
   const [fastate, setFastate] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
+
+
+
+
+
+
+  const handleOnline = async () => {
+
+    const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+  
+    const email = (
+      await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
+    ).data.email;
+  
+    try {
+      await axios.post("http://localhost:5000/status/" + email, {
+        expert_status: true,
+      });
+      setIsAvailable(true);
+      toast.success('You are now online!');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  
+  const handleOffline = async () => {
+    const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+  
+    const email = (
+      await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
+    ).data.email;
+  
+    try {
+      await axios.post("http://localhost:5000/statusoffline/" + email, {
+        expert_status: false,
+      });
+      setIsAvailable(false);
+      toast.warning('You are now offline.');
+      console.log("Offline status updated successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   useEffect(() => {
     //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
   }, []);
@@ -94,6 +147,7 @@ const ViewProfile = () => {
       {window.location.pathname != "/profile" && <UserHeader />}
       {/* Page content */}
       <Container className="mt--7" fluid>
+      <ToastContainer />
         <Row>
           <p></p>
         </Row>
@@ -171,6 +225,29 @@ const ViewProfile = () => {
                     <i className="ni education_hat mr-2" />
                     {address}
                   </div>
+
+                  <hr className="my-4" />
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+               
+                <Button
+                  color="danger"
+                  onClick={(e) => handleOffline()}
+                  disabled={!isAvailable} 
+                >
+                  Go Offline
+                </Button>
+                <Button
+                  color="primary"
+                  className="mr-4"
+                  onClick={(e) => handleOnline()}
+                  disabled={isAvailable} 
+                >
+                  Go Online
+                </Button>
+                </div>
+
+              
+
                   <hr className="my-4" />
                   {(tfa==="sms" || tfa==="SMS" ) ? (""):
                   (  <div>

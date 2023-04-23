@@ -159,7 +159,15 @@ const Tickets = () => {
       3,
       getCookie("userid").length - 1
     );
-   
+   console.log( {
+    objet: objet,
+    description: description,
+    log: log,
+    date_demande: date_demande,
+    etat: etat,
+    id_agence: id_agence,
+    id_demandeur: id_demandeur,
+  })
     try {
       const addticket = await axios.post(
         "http://localhost:5000/ticket",
@@ -177,7 +185,7 @@ const Tickets = () => {
         }
       );
       if (addticket.status === 201) {
-        
+        fetchData();
         setTicketadded("OK");
         setIsShownadd_ticket("list");
         const postData = {
