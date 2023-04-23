@@ -98,6 +98,7 @@ const userSchema = new mongoose.Schema({
   id_agence: {
     type: String,
     required: false,
+    default:null
   },
   decision: {
     type: Boolean,

@@ -152,6 +152,7 @@ const AdminNavbar = (props) => {
     }
   }
   useEffect(() => {
+    fetchnotifs();
     fetchData();
     if(role.length>0)
     {
@@ -198,8 +199,9 @@ const AdminNavbar = (props) => {
                     </Media>
                   </DropdownToggle>
 
-                  <DropdownMenu className="dropdown-menu-arrow" right>
-                  <div className="dropdown-menu-xl dropdown-menu-right py-0 overflow-hidden show">
+                  <DropdownMenu className="dropdown-menu-arrow" right style={{overflow: 'auto',
+  height: '25rem'}}>
+                  <div className="dropdown-menu-xl dropdown-menu-right py-0 overflow-hidden show" >
 
 <div className="px-3 py-3">
 <h6 className="text-sm text-muted m-0">You have <strong className="text-primary">{notifcount}</strong> new notifications.</h6>
@@ -220,7 +222,8 @@ const AdminNavbar = (props) => {
 <h4 className="mb-0 text-sm">{notif.titre}</h4>
 </div>
 <div className="text-right text-muted">
-<small>2 hrs ago</small>
+ 
+<small>{notif.date_notif.substring(0,10)}</small>
 </div>
 </div>
 <p className="text-sm mb-0">{notif.descrip}</p>
@@ -270,10 +273,7 @@ const AdminNavbar = (props) => {
                 </DropdownItem>
              
               
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
+             
                 <DropdownItem divider />
 
               

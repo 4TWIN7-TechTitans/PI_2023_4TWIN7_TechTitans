@@ -153,6 +153,10 @@ console.log(userid)
 
   useEffect(() => {
    fetchData();
+   if(role.length>0)
+   {
+   fetchnotifs();
+   }
   
   } , [] );
 
@@ -259,8 +263,9 @@ console.log(userid)
                     </Media>
                   </DropdownToggle>
 
-                  <DropdownMenu className="dropdown-menu-arrow" right>
-                  <div className="dropdown-menu-xl dropdown-menu-right py-0 overflow-hidden show">
+                  <DropdownMenu className="dropdown-menu-arrow" right style={{overflow: 'auto',
+  height: '25rem'}}>
+                  <div className="dropdown-menu-xl dropdown-menu-right py-0 overflow-hidden show" >
 
 <div className="px-3 py-3">
 <h6 className="text-sm text-muted m-0">You have <strong className="text-primary">{notifcount}</strong> new notifications.</h6>
@@ -281,7 +286,7 @@ console.log(userid)
 <h4 className="mb-0 text-sm">{notif.titre}</h4>
 </div>
 <div className="text-right text-muted">
-  
+<small>{notif.date_notif.substring(0,10)}</small>
 
 </div>
 </div>
@@ -323,7 +328,7 @@ console.log(userid)
                     <DropdownItem className="noti-title" header tag="div">
                       <h6 className="text-overflow m-0">Welcome!</h6>
                     </DropdownItem>
-                    <DropdownItem to="/admin/user-profile" tag={Link}>
+                    <DropdownItem to="/profile" tag={Link}>
                       <i className="ni ni-single-02" />
                       <span>My profile</span>
                     </DropdownItem>

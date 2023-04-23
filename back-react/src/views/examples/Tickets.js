@@ -40,6 +40,7 @@ const Tickets = () => {
   const [etat, setEtat] = useState("");
   const [ticket_id, setTicket_id] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [etat_ticket, setEtat_ticket] = useState("");
 
 
 
@@ -49,6 +50,16 @@ const Tickets = () => {
     3,
     getCookie("userid").length - 1
   );
+
+
+  const handleInputChange = (event) => {
+    setLog(event.target.value);
+  };
+
+  const handleetatChange = (event) => {
+    setEtat(event.target.value);
+  };
+
 
   const fetchData = async () => {
     try {
@@ -60,7 +71,7 @@ const Tickets = () => {
         setTickets(filteredData);
       } else if (role === "Agence") {
         const filteredData = response.data.tickets.filter(
-          (obj) => obj.id_agence === "2"
+          (obj) => obj.id_agence === userid
         );
         setTickets(filteredData);
       } else if (role === "Admin") {
@@ -133,11 +144,22 @@ const Tickets = () => {
     const log = "";
     const date_demande = new Date();
     const etat = "a traiter";
-    const id_agence = "6427472224822a758e38d57d";
+    const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+    if (jwt) {
+      const agence = (
+        await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+      ).data.id_agence;
+     
+      setId_agence(agence);
+    }
+  
+  
     const id_demandeur = getCookie("userid").substring(
       3,
       getCookie("userid").length - 1
     );
+   
     try {
       const addticket = await axios.post(
         "http://localhost:5000/ticket",
@@ -155,14 +177,36 @@ const Tickets = () => {
         }
       );
       if (addticket.status === 201) {
+        
         setTicketadded("OK");
         setIsShownadd_ticket("list");
+        const postData = {
+          titre: "A New ticket was added #"+addticket.data.ticket.number,
+          id_user:id_agence,
+          date_notif:date_demande,
+          descrip:objet
+
+         
+        };
+        
+        axios.post('http://localhost:5000/notif/', postData)
+          .then(response => {
+           console.log("ticket add notif added")
+          })
+          .catch(error => {
+            console.log(error);
+          });
+
       } else {
         setTicketadded("KO");
       }
     } catch (error) {
       console.log(error);
     }
+
+
+
+
   };
 
 
@@ -171,9 +215,10 @@ const Tickets = () => {
     e.preventDefault();
     const form = e.target;
     
-   
     const log = form.log.value;
-    const etat=etat;
+   
+    console.log(etat)
+ 
     const id=ticket_id;
   
    
@@ -181,17 +226,17 @@ const Tickets = () => {
       const updateticket = await axios.post(
         "http://localhost:5000/ticket/update",
         {
-         
+         _id:id,
           log: log,
-          
-          etat: etat,
+          etat:etat
          
         },
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-      if (updateticket.status === 201) {
+      if (updateticket.status === 200) {
+        fetchData();
         setTicketadded("OK");
         setIsShownadd_ticket("list");
       } else {
@@ -457,6 +502,7 @@ const Tickets = () => {
                                 name="apparent_damages_a"
                                 type="select"
                                 value={etat}
+                                onChange={handleetatChange}
                                          >
                                 <option value="a traiter">a traiter</option>
                                 <option value="en cours de traitement">en cours de traitement</option>
@@ -468,6 +514,13 @@ const Tickets = () => {
 
                    
                   </div>
+                  <hr className="my-4"/>
+                  <span class="heading ni ni-bold-right"></span>
+                    <span class="heading"> Titre</span>
+                      
+                      <br/>
+                      <span class="description">{objet}</span>
+                      <hr className="my-4"/>
                   <hr className="my-4"/>
                   <span class="heading ni ni-ruler-pencil"></span>
                     <span class="heading"> Description</span>
@@ -492,6 +545,7 @@ const Tickets = () => {
                             rows="10"
                             id="log"
                             value={log}
+                            onChange={handleInputChange} 
                           />
                         </FormGroup>
                       </Col>

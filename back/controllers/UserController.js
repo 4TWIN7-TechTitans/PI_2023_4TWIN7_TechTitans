@@ -2636,3 +2636,28 @@ module.exports.update_id_ag = async (req, res) => {
     res.status(400).json({ errorp, status: "error" });
   }
 };
+
+
+
+module.exports.update_agence = async (req, res) => {
+  const data=req.body;
+ 
+ try {
+     
+  const updateagence = await userModel.findByIdAndUpdate(
+    data._id,
+    { id_agence: data.id_agence
+    },
+    { new: true } // Returns the updated document
+  );
+  res.status(200).json({ });
+  
+    
+  } catch (err) {
+   
+    const errorp=err.message;
+    res.status(400).json({ errorp, status: "error" });
+  }
+
+ 
+};
