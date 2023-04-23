@@ -646,7 +646,7 @@ const AddStatement = () => {
         setShowNotification(true);
         setErrors({});
         setShowError(false);
-
+        // add user affect here
         toast.success("Statement created successfully");
         setTimeout(() => {
           window.location.href = "/mystatement";
