@@ -26,7 +26,7 @@ var routesExpert = [
     icon: "ni ni-tv-2 text-primary",
     component: "",
     layout: "/expert",
-    showInSidebar: true,
+    showInSidebar: false,
   },
   {
     path: "/OrdreMissionExpert",
