@@ -54,12 +54,21 @@ function OdmAgence() {
       const expertsResponse = await axios.get(
         "http://127.0.0.1:5000/all-experts"
       );
-      const filteredExperts = expertsResponse.data.experts.filter((elem) => {
+      const filteredExpertstemp = expertsResponse.data.experts.filter((elem) => {
         console.log(elem.expert_status)
         if (!elem.expert_status) {
           return false;
         } else {
           return true;
+        }
+      });
+
+      const filteredExperts = filteredExpertstemp.filter((elem) => {
+        
+        if (elem.id_agence == idagence) {
+          return true;
+        } else {
+          return false;
         }
       });
       
