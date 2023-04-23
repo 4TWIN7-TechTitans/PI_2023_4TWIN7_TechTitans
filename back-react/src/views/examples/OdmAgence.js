@@ -29,7 +29,7 @@ function OdmAgence() {
   const [errors, setErrors] = useState({});
   const [showError, setShowError] = useState(false);
   const [assignedStatementId, setAssignedStatementId] = useState("");
-
+  const [expert_id, setExpert_id] = useState();
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
     return b ? b.pop() : "";
@@ -126,6 +126,34 @@ function OdmAgence() {
         setAssignedStatementId(statement._id);
         localStorage.setItem("assignedStatementId", statement._id); // save to local storage or cookies
         fetchData();
+        const jwt = getCookie("jwt");
+        if(jwt == "") return ;
+        if (jwt) {
+          const id = (
+            await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+          ).data._id;
+         
+          setExpert_id(id);
+        }
+         //start add notif
+        const date_demande = new Date();
+        const postData = {
+          titre: "A New Statement was affected to you ",
+          id_user:expert_id,
+          date_notif:date_demande,
+          descrip:""
+
+         
+        };
+        
+        axios.post('http://localhost:5000/notif/', postData)
+          .then(response => {
+          
+          })
+          .catch(error => {
+            console.log(error);
+          });
+//end add notif
       } else {
         throw new Error(assignResponse.data.message);
       }

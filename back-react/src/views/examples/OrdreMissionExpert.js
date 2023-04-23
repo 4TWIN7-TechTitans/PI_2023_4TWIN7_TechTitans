@@ -175,24 +175,7 @@ function OrdreMissionExpert() {
                 <h3 className="mb-0">My Missions</h3>
               </CardHeader>
 
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Button
-                  color="primary"
-                  className="mr-4"
-                  onClick={(e) => handleOnline()}
-                  disabled={isAvailable} 
-                >
-                  Go Online
-                </Button>
-
-                <Button
-                  color="danger"
-                  onClick={(e) => handleOffline()}
-                  disabled={!isAvailable} 
-                >
-                  Go Offline
-                </Button>
-              </div>
+            
 
               <div className="p-4">
                 <Input
