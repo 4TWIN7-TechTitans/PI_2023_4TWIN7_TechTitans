@@ -192,6 +192,7 @@ const AddStatement = () => {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("");
+  const [idUser, setIdUser] = useState("");
 
   useEffect(() => {
     setNom(decodeURI(getCookie("lastname")));
@@ -205,10 +206,14 @@ const AddStatement = () => {
   const fetchData = async () => {
     const jwt = getCookie("jwt");
     if(jwt == "") return ;
-    const phone_numberUser = (
+    const response = (
       await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
-    ).data.phone_number;
-    setPhone_number(phone_numberUser);
+    );
+      const idusertemp =  response.data._id;
+      setIdUser(idusertemp)
+      const phonetemp = response.data.phone_number
+    setPhone_number(phonetemp);
+    setPhonenumber_a(phonetemp);
   };
   useEffect(() => {
     fetchData();
@@ -642,6 +647,14 @@ const AddStatement = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
+
+      const assign = await axios.post("http://localhost:5000/updateagence",
+      {
+        _id : idUser,
+        id_agence : agency_a
+      }
+      )
+      
       if (add.status === 201) {
         setShowNotification(true);
         setErrors({});
