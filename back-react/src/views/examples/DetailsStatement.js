@@ -15,6 +15,7 @@ import {
   FormGroup,
   Label,
   Input,
+  Form
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -44,7 +45,7 @@ function DetailsStatement() {
   const [isDisabled, setIsDisabled] = useState(false);
   const [showPDF, setShowPDF] = useState(false);
   const [commentaire, setCommentaire] = useState("");
-  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState([]);
   const [status, setStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
 
@@ -258,6 +259,25 @@ for removal from the register.`,
   const handleNotificationClose = () => {
     setShowNotification(false);
   };
+///
+const handleCommentSubmit = async (event) => {
+  event.preventDefault();
+  const id_statement = new URLSearchParams(window.location.search).get("id");
+
+  try {
+    await axios.post(
+      "http://localhost:5000/comment/" + id_statement,
+      { commentaire: comment }
+    );
+    // handle successful response
+    setComment("");
+    toast.success("Comment added successfully!");
+  } catch (error) {
+    // handle error
+    toast.error("An error occurred while adding the comment.");
+  }
+};
+
   return (
     <>
       <Header />
@@ -466,16 +486,24 @@ for removal from the register.`,
                       for removal from the register."
                     </div>
                   </div>
+                  
 
-                  {comments.map((comment) => (
-                    <div key={comment.date}></div>
-                  ))}
-                  {comments.map((comment, index) => (
-                    <div key={index}>
-                      <p>{comment.text}</p>
-                      <p>{comment.date}</p>
-                    </div>
-                  ))}
+                <div>
+                  <h3>Write A Rapport :</h3>
+                </div>
+                  <Form onSubmit={handleCommentSubmit}>
+                    <FormGroup>
+                      <Input
+                        placeholder="Write a comment"
+                        type="text"
+                        value={comment}
+                      />
+                    </FormGroup>
+                    <Button color="primary" type="submit">
+                      Add Comment
+                    </Button>
+                  </Form>
+
                   <Button
                     type="Button"
                     onClick={(e) => handleStatement("a", e)}
