@@ -292,7 +292,7 @@ for removal from the register.`,
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="12">
             <Card className="card-profile shadow">
               <Row className="justify-content-center">
-                <h3 className="mb-0">Examine claim </h3>
+                <h1 className="mb-0">Mission Order</h1>
                 <CardBody className="pt-0 pt-md-4">
                   <div className="text-center">
                     <div>

@@ -154,7 +154,7 @@ function OdmAgence() {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">Mission Order</h3>
+                <h3 className="mb-0">List Of Statement To Assign</h3>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
