@@ -152,9 +152,9 @@ console.log(userid)
   });
 
   useEffect(() => {
-   // fetchData();
+   fetchData();
   
-  } );
+  } , [] );
 
   return (
     <>
