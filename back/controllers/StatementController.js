@@ -223,3 +223,25 @@ module.exports.filtre_statements = async (req, res) => {
   }
 };
 
+module.exports.add_comment_to_statement = async (req, res) => {
+  try {
+    const statementId = req.params.id;
+    const { commentaire } = req.body; 
+
+    const statement = await StatementModel.findByIdAndUpdate(statementId ,{commentaire},{new : true}); 
+            
+    if (!statement) { 
+      res.status(404).json({ message: "Statement not found" });
+      return;
+    }
+
+    
+
+    res.status(200).json({
+      message: "Comment added to statement successfully",
+      statement,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error adding comment to statement", error });
+  }
+};

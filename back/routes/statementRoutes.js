@@ -18,4 +18,6 @@ router.post('/setdecision/', statementController.post_decision);
 router.post('/statements_status/:id/status', statementController.update_statement_status);
 router.get("/getstatements/:case_state", statementController.filtre_statements);
 
+router.post("/comment/:id", statementController.add_comment_to_statement);
+
 module.exports = router;
