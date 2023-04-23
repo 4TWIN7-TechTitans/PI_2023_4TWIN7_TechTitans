@@ -188,6 +188,8 @@ const Tickets = () => {
         fetchData();
         setTicketadded("OK");
         setIsShownadd_ticket("list");
+        //start add notif
+        //const date_demande = new Date();
         const postData = {
           titre: "A New ticket was added #"+addticket.data.ticket.number,
           id_user:id_agence,
@@ -199,12 +201,12 @@ const Tickets = () => {
         
         axios.post('http://localhost:5000/notif/', postData)
           .then(response => {
-           console.log("ticket add notif added")
+          
           })
           .catch(error => {
             console.log(error);
           });
-
+//end add notif
       } else {
         setTicketadded("KO");
       }
