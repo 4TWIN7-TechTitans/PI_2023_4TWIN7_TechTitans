@@ -205,13 +205,13 @@ const AddStatement = () => {
   const [phone_number, setPhone_number] = useState("");
   const fetchData = async () => {
     const jwt = getCookie("jwt");
-    if(jwt == "") return ;
+    if (jwt == "") return;
     const response = (
       await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
     );
-      const idusertemp =  response.data._id;
-      setIdUser(idusertemp)
-      const phonetemp = response.data.phone_number
+    const idusertemp = response.data._id;
+    setIdUser(idusertemp)
+    const phonetemp = response.data.phone_number
     setPhone_number(phonetemp);
     setPhonenumber_a(phonetemp);
   };
@@ -649,32 +649,32 @@ const AddStatement = () => {
       );
 
       const assign = await axios.post("http://localhost:5000/updateagence",
-      {
-        _id : idUser,
-        id_agence : agency_a
-      }
+        {
+          _id: idUser,
+          id_agence: agency_a
+        }
       )
-      
+
       if (add.status === 201) {
         setShowNotification(true);
         setErrors({});
         setShowError(false);
         // add user affect here
-       
+
         var date_dem = new Date();
         setDate_demande(date_dem);
         const postData = {
-          titre: "A New statement is added ",
-          id_user:add.data.agency_a,
-          date_notif:date_demande,
-          descrip:""
+          titre: "A New statement is added",
+          id_user: agency_a,
+          date_notif: date_demande,
+          descrip: ""
 
-         
+
         };
-        
+
         axios.post('http://localhost:5000/notif/', postData)
           .then(response => {
-           console.log("ticket add notif added")
+            console.log("ticket add notif added")
           })
           .catch(error => {
             console.log(error);
@@ -741,6 +741,7 @@ const AddStatement = () => {
   };
 
   const handlePrev = (e) => {
+      canvasRef.current.clear(); // Clear the canvas
     e.preventDefault();
     setSection(section - 1);
   };
@@ -756,6 +757,8 @@ const AddStatement = () => {
   };
   // Handle step All change
   const handleStepChange = (step) => {
+    canvasRef.current.clear(); // Clear the canvas
+
     setSection(step);
   };
 
@@ -1106,7 +1109,7 @@ const AddStatement = () => {
                   <Col>
                     <div>
                       <span>Microphone: {listening ? 'on' : 'off'}</span><br></br>
-                      
+
                       <Button onClick={SpeechRecognition.startListening}>Start</Button>
                       <Button onClick={SpeechRecognition.stopListening}>Stop</Button>
                       <Button onClick={resetTranscript}>Reset</Button><br></br>
@@ -2850,16 +2853,17 @@ const AddStatement = () => {
                               </label>
                               <InputGroup className="input-group-alternative" >
                                 <CanvasDraw
-                                  enctype="multipart/form-data"
-
+                                  
                                   name="accident_croquis"
-
                                   brushRadius={2}
                                   canvasWidth={12000}
                                   canvasHeight={400}
+                                  width={1200}
+                                  height={400}
                                   brushColor={"#000000"}
                                   ref={canvasRef}
-                                  value={accident_croquis}
+                                  value={accident_croquis || null} // Make sure accident_croquis contains valid image data
+                                  onChange={() => { }}
                                 />
 
                                 <Button className="btn btn-warning" onClick={handleUndo}>Undo</Button>
@@ -2933,6 +2937,10 @@ const AddStatement = () => {
                                     height: 200,
                                     className: "sigCanvas",
                                   }}
+                                  canvasHeight={500}
+                                  canvasWidth={200}
+                                  width="500"
+                                  height="200"
                                   ref={canvasRef_a}
                                   value={signature_a}
                                 />
@@ -2963,6 +2971,10 @@ const AddStatement = () => {
                                     height: 200,
                                     className: "sigCanvas",
                                   }}
+                                  width="500"
+                                  height="200"
+                                  canvasHeight={500}
+                                  canvasWidth={200}
                                   ref={canvasRef_b}
                                   value={signature_b}
                                 />
