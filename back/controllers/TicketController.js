@@ -137,3 +137,20 @@ module.exports.get_tickets = async (req, res) => {
    
   };
  
+  module.exports.get_ticket_by_obj = async (req, res) => {
+    const { objet } = req.body;
+  
+    try {
+      const ticket = await ticketModel.findOne({ objet });
+      if (ticket) {
+        console.log(ticket);
+        res.status(200).json({ ticket });
+      } else {
+        res.status(404).json({ message: "Ticket not found" });
+      }
+    } catch (err) {
+      const errorp = err.message;
+      res.status(400).json({ errorp, status: "error" });
+    }
+  };
+  
