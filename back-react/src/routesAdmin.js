@@ -82,7 +82,7 @@ var routesAdmin = [
     icon: "ni ni-bullet-list-67 text-blue",
     component: Tickets,
     layout: "/admin",
-    showInSidebar: true,
+    showInSidebar: false,
   },
 
   {

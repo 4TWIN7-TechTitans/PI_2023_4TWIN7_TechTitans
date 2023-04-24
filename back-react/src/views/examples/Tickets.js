@@ -411,6 +411,7 @@ const Tickets = () => {
                   <h3 className="mb-0">New Ticket</h3>
                 )}
                
+               
                 <Button
                   color="info float-right"
                   onClick={handleShownadd_ticket}
@@ -439,7 +440,7 @@ const Tickets = () => {
                         <tr key={ticket._id}>
                           <td>{ticket.number}</td>
                           <td>{ticket.objet}</td>
-                          <td>{ticket.date_demande}</td>
+                          <td>{ticket.date_demande.substring(0,10)}</td>
                           <td>{ticket.etat}</td>
                           <td>
                             {" "}
