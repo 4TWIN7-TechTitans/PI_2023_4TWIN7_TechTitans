@@ -173,10 +173,7 @@ const Tickets = () => {
         const filteredData = response.data.tickets;
         setTickets(filteredData);
       }
-      toast.success('Welcome Dear Agency, you are in Our List Tickets !', {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 30000, 
-      });
+    
 
     } catch (error) {
       console.log(error);
