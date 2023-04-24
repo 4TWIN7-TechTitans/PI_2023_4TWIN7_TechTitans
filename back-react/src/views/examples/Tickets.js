@@ -47,7 +47,7 @@ const Tickets = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [etat_ticket, setEtat_ticket] = useState("");
   const [showPDF, setShowPDF] = useState(false);
-  
+  const [searchvalue, setSearchvalue] = useState("");
   const generatePDF = (ticket) => {
     const doc = new jsPDF();
   
@@ -150,6 +150,17 @@ const Tickets = () => {
   const handleInputChange = (event) => {
     setLog(event.target.value);
   };
+  const handlesearch = () => {
+    
+    fetchData();
+  };
+  const handlesearchinput = (event) => {
+    if(event.target.value.length===0)
+    fetchData();
+    console.log(event.target.value.length)
+    setSearchvalue(event.target.value);
+  };
+
 
   const handleetatChange = (event) => {
     setEtat(event.target.value);
@@ -158,30 +169,56 @@ const Tickets = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/ticket");
+      if(searchvalue.length===0)
+      {
+        const response = await axios.get("http://localhost:5000/ticket");
+        if (role === "Client") {
+          const filteredData = response.data.tickets.filter(
+            (obj) => (obj.id_demandeur === userid )
+          );
+          setTickets(filteredData);
+        } else if (role === "Agence") {
+          const filteredData = response.data.tickets.filter(
+            (obj) => (obj.id_agence === userid )
+          );
+          setTickets(filteredData);
+        } else if (role === "Admin") {
+          const filteredData = response.data.tickets;
+          setTickets(filteredData);
+        }
+      }
+      else
+      {   const response = await axios.get("http://localhost:5000/ticket");
       if (role === "Client") {
         const filteredData = response.data.tickets.filter(
-          (obj) => obj.id_demandeur === userid
+          (obj) => (obj.id_demandeur === userid  && obj.objet.indexOf(searchvalue)!==-1)
         );
         setTickets(filteredData);
       } else if (role === "Agence") {
         const filteredData = response.data.tickets.filter(
-          (obj) => obj.id_agence === userid
+          (obj) => (obj.id_agence === userid &&  obj.objet.indexOf(searchvalue)!==-1)
         );
         setTickets(filteredData);
       } else if (role === "Admin") {
-        const filteredData = response.data.tickets;
+        const filteredData = response.data.tickets.filter(
+          (obj) => ( obj.objet.indexOf(searchvalue)!==-1)
+        );;
         setTickets(filteredData);
       }
-      toast.success('Welcome Dear Agency, you are in Our List Tickets !', {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 30000, 
-      });
+    }
+      
+   
+     
 
     } catch (error) {
       console.log(error);
     }
   };
+
+
+  
+
+
 
   useEffect(() => {
     fetchData();
@@ -285,6 +322,11 @@ const Tickets = () => {
         }
       );
       if (addticket.status === 201) {
+        toast.success("ticket created successfully!", {
+          position: toast.POSITION.BOTTOM_CENTER,
+          autoClose: 3000,
+          });
+        
         fetchData();
         setTicketadded("OK");
         setIsShownadd_ticket("list");
@@ -346,9 +388,15 @@ const Tickets = () => {
         }
       );
       if (updateticket.status === 200) {
+        toast.success("Ticket updated!", {
+          position: toast.POSITION.BOTTOM_CENTER,
+          autoClose: 3000,
+          });
+        
         fetchData();
         setTicketadded("OK");
         setIsShownadd_ticket("list");
+        
       } else {
         setTicketadded("KO");
       }
@@ -428,6 +476,18 @@ const Tickets = () => {
                
               </CardHeader>
               {isShownadd_ticket === "list" && (
+                <>
+               
+               <div className="input-group" >
+  <div className="form-outline" >
+    <input type="search" id="search" value={searchvalue} onChange={handlesearchinput}  className="form-control" placeholder="Search by ticket title" />
+    
+  </div>
+  <button type="button" class="btn btn-primary" onClick={handlesearch}>
+    <i class="fas fa-search"></i>
+  </button>
+
+</div>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
@@ -470,6 +530,7 @@ const Tickets = () => {
                     </tbody>
                   )}
                 </Table>
+                </>
               )}
               
               {isShownadd_ticket === "list" && (
@@ -633,7 +694,7 @@ const Tickets = () => {
                   >
                     {showPDF
                       ? "Hide Downaload Pdf"
-                      : "The Pdf Will Be Created Once You Press That Button"}
+                      : "Download PDF"}
                   </Button>
                   {showPDF && (
                     <Button color="primary" onClick={generatePDF}>
@@ -645,18 +706,18 @@ const Tickets = () => {
                    
                   </div>
                   <hr className="my-4"/>
-                  <span class="heading ni ni-bold-right"></span>
-                    <span class="heading"> Titre</span>
+                  <span className="heading ni ni-bold-right"></span>
+                    <span className="heading"> Titre</span>
                       
                       <br/>
-                      <span class="description">{objet}</span>
+                      <span className="description">{objet}</span>
                       <hr className="my-4"/>
                   <hr className="my-4"/>
-                  <span class="heading ni ni-ruler-pencil"></span>
-                    <span class="heading"> Description</span>
+                  <span className="heading ni ni-ruler-pencil"></span>
+                    <span className="heading"> Description</span>
                       
                       <br/>
-                      <span class="description">{description}</span>
+                      <span className="description">{description}</span>
                       <hr className="my-4"/>
                   <Form onSubmit={handleupdateticket} noValidate>
                     <Row>
@@ -666,8 +727,8 @@ const Tickets = () => {
                      
                       <Col md="12">
                         <FormGroup>
-                        <span class="heading ni ni-single-copy-04"></span>
-                        <span class="heading">Suivi</span>
+                        <span className="heading ni ni-single-copy-04"></span>
+                        <span className="heading">Suivi</span>
 
                           <Input
                             type="textarea"
