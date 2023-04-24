@@ -336,20 +336,28 @@ function MyStatements() {
                 <center><h2>Statement Details</h2></center>
                 <hr />
                 <div style={{ marginBottom: "20px" }}>
-                  <h5 style={{ color: "#666", marginBottom: "10px" }}>Accident Information</h5>
+                  <h4 class="font-weight-bold" style={{ color: "#666", marginBottom: "10px" }}>Accident Information</h4>
                   <p style={{ marginBottom: "5px" }}>Date: {selectedStatement.date}</p>
                   <p style={{ marginBottom: "5px" }}>Location: {selectedStatement.location}</p>
                   <p style={{ marginBottom: "5px" }}>Injured: {selectedStatement.injured}</p>
                   <p style={{ marginBottom: "5px" }}>Material Damage: {selectedStatement.material_damage}</p>
-                  <p style={{ marginBottom: "5px" }}>Witness A: {selectedStatement.witness_a.Array}</p>
-                  <p style={{ marginBottom: "5px" }}>Witness B: {selectedStatement.witness_b.Array}</p>
+                  <p style={{ marginBottom: "5px" }}>Witness A:{selectedStatement.witness_a.map((element, index) => (
+                      <span key={index}>
+                        First Name: {element.firstName_w}, Last Name: {element.lastName_w}, Address: {element.addressWitness}, Phone: {element.phoneWitness}
+                      </span>
+                    ))}
+                  </p>
+                  <p style={{ marginBottom: "5px" }}>Witness B: {selectedStatement.witness_b.map((element,index) => (
+                      <span key={index}>
+                      First Name: {element.firstName_w}, Last Name: {element.lastName_w}, Address: {element.addressWitness}, Phone: {element.phoneWitness}
+                    </span>
+                  ))}</p>
                 </div>
 
                 <hr />
                 <div>
-                  <h5>Driver's Identity</h5>
                   <div style={{ marginBottom: "20px" }}>
-                    <h5 style={{ color: "#666", marginBottom: "10px" }}>Driver's Identity</h5>
+                    <h4 class="font-weight-bold" style={{ color: "#666", marginBottom: "10px" }}>Driver's Identity</h4>
                     <div style={{ marginBottom: "10px" }}>
                       <h6 style={{ color: "#999", marginBottom: "5px" }}>Driver A:</h6>
                       <p style={{ marginBottom: "5px" }}>First Name: {selectedStatement.drivers_identity_a.first_name}</p>
@@ -360,7 +368,7 @@ function MyStatements() {
                     </div>
                   </div>
                   <div>
-                    <h6>Driver B:</h6>
+                    <h6 class="font-weight-bold">Driver B:</h6>
                     <p>First Name: {selectedStatement.drivers_identity_b.first_name}</p>
                     <p>Last Name: {selectedStatement.drivers_identity_b.last_name}</p>
                     <p>Address: {selectedStatement.drivers_identity_b.address}</p>
@@ -370,7 +378,7 @@ function MyStatements() {
                 </div>
                 <hr />
                 <div>
-                  <h5>Insured Information</h5>
+                  <h4 class="font-weight-bold">Insured Information</h4>
                   <div>
                     <h6>Insured A:</h6>
                     <p>First Name: {selectedStatement.insured_a.firstname}</p>
@@ -379,7 +387,7 @@ function MyStatements() {
                     <p>Address: {selectedStatement.insured_a.addr}</p>
                   </div>
                   <div>
-                    <h6>Insured B:</h6>
+                    <h6 class="font-weight-bold">Insured B:</h6>
                     <p>First Name: {selectedStatement.insured_b.firstname}</p>
                     <p>Last Name: {selectedStatement.insured_b.lastname}</p>
                     <p>Phone Number: {selectedStatement.insured_b.phonenumber}</p>
@@ -388,9 +396,9 @@ function MyStatements() {
                 </div>
                 <hr />
                 <div>
-                  <h5>Vehicle Information</h5>
+                  <h4 class="font-weight-bold">Vehicle Information</h4>
                   <div>
-                    <h6>Vehicle A:</h6>
+                    <h6 class="font-weight-bold">Vehicle A:</h6>
                     <p>Brand: {selectedStatement.vehicule_identity_a.brand}</p>
                     <p>Type: {selectedStatement.vehicule_identity_a.type}</p>
                     <p>Matriculation: {selectedStatement.vehicule_identity_a.matriculation}</p>
@@ -399,7 +407,7 @@ function MyStatements() {
                     <p>Going To: {selectedStatement.vehicule_identity_a.going_to}</p>
                   </div>
                   <div>
-                    <h6>Vehicle B:</h6>
+                    <h6 class="font-weight-bold">Vehicle B:</h6>
                     <p>Brand: {selectedStatement.vehicule_identity_b.brand}</p>
                     <p>Type: {selectedStatement.vehicule_identity_b.type}</p>
                     <p>Matriculation: {selectedStatement.vehicule_identity_b.matriculation}</p>
@@ -408,7 +416,7 @@ function MyStatements() {
                     <p>Going To: {selectedStatement.vehicule_identity_b.going_to}</p>
                   </div>
                   <div>
-                    <h6>Vehicle Owner A:</h6>
+                    <h6 class="font-weight-bold">Vehicle Owner A:</h6>
                     <p>Agency : {selectedStatement.vehicule_a.assureBy}</p>
                     <p>Contract Number: {selectedStatement.vehicule_a.contractNumber}</p>
                     <p>Agency Branche: {selectedStatement.vehicule_a.agency}</p>
@@ -416,7 +424,7 @@ function MyStatements() {
                     <p>End Date of Contract: {selectedStatement.vehicule_a.contractValidity.end_date}</p>
                   </div>
                   <div>
-                    <h6>Vehicle Owner B:</h6>
+                    <h6 class="font-weight-bold">Vehicle Owner B:</h6>
                     <p>Agency: {selectedStatement.vehicule_b.assureBy}</p>
                     <p>Contract Number: {selectedStatement.vehicule_b.contractNumber}</p>
                     <p>Agency Branche: {selectedStatement.vehicule_b.agency}</p>
@@ -426,7 +434,7 @@ function MyStatements() {
                 </div>
                 <hr />
                 <div>
-                  <h5>Additional Information</h5>
+                  <h4 class="font-weight-bold">Additional Information</h4>
                   <p>Choc Points of Client A: {selectedStatement.hits_a}</p>
                   <p>Choc Points of Client B: {selectedStatement.hits_b}</p>
                   <p>Apparent Damages A: {selectedStatement.apparent_damages_a}</p>
