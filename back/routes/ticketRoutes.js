@@ -10,4 +10,6 @@ router.get("/client", TicketController.get_ticketsbyclient);
 router.get("/agence", TicketController.get_ticketsbyagence);
 router.post("/update", TicketController.update_ticket);
 
+router.get("/ticket_serach/:objet", TicketController.get_ticket_by_obj);
+
 module.exports = router;
