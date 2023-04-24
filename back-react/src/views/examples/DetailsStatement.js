@@ -275,8 +275,8 @@ for removal from the register.`,
       // handle successful response
       setComment("");
       toast.success("Comment added successfully!");
-      
-      
+      window.location.reload(); // Reload the page
+        
     } catch (error) {
       // handle error
       toast.error("An error occurred while adding the comment.");
