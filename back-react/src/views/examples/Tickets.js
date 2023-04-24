@@ -20,6 +20,11 @@ import Header from "components/Headers/Header.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import jsPDF from "jspdf";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import 'jspdf-autotable';
 
 const Tickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -41,9 +46,99 @@ const Tickets = () => {
   const [ticket_id, setTicket_id] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [etat_ticket, setEtat_ticket] = useState("");
-
-
-
+  const [showPDF, setShowPDF] = useState(false);
+  
+  const generatePDF = (ticket) => {
+    const doc = new jsPDF();
+  
+    // Set background color
+    doc.setFillColor("#EFEFEF");
+    doc.rect(0, 0, 210, 297, "F");
+  
+    // Add background image or pattern
+    const background = new Image();
+    background.src = "/Myassets/argon-react-white.png";
+  
+    background.onload = function () {
+      const bgWidth = 210;
+      const bgHeight = 297;
+      doc.addImage(background, "PNG", 0, 0, bgWidth, bgHeight);
+    };
+  
+    // Add logo or icon
+    const logo = new Image();
+    logo.src = "/Myassets/argon-react-white.png";
+  
+    // Add logo to PDF
+    logo.onload = function () {
+      const logoWidth = 50;
+      const logoHeight = 50;
+      const logoX = 15;
+      const logoY = 15;
+      doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight);
+    };
+  
+    // Add custom font
+    doc.addFont('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap', 'Open Sans', 'normal');
+    doc.setFont('Open Sans');
+  
+    // Add title
+    doc.setTextColor("#333333");
+    doc.setFontSize(30);
+    doc.setFont("Open Sans", "bold");
+    doc.text("Assurini", 105, 70, "center");
+  
+    // Add subtitle
+    doc.setFontSize(16);
+    doc.setFont("Open Sans", "normal");
+    doc.setTextColor("#2D3752");
+    doc.text("My Tickets", 105, 85, "center");
+  
+    // Define the table columns and rows
+    const tableHeaders = ["Description", "Date Of Creation", "Status"];
+    const tableData = [[ticket.description, ticket.date_demande, ticket.etat]];
+  
+    // Add the table to the PDF with custom styles
+    doc.autoTable({
+      head: [tableHeaders],
+      body: tableData,
+      startY: 120,
+      theme: "striped",
+      styles: {
+        fillColor: "#F5F5F5",
+        textColor: "#2D3752",
+        fontStyle: "bold",
+        halign: "center",
+        cellPadding: 6,
+        overflow: "linebreak",
+        alternateRow: "#F9F9F9",
+      },
+    });
+  
+    // Add padding around the table
+    doc.setLineWidth(0.1);
+    doc.setDrawColor("#767676");
+    doc.rect(20, 110, 170, 60, "S");
+  
+    // Add footer with date
+    doc.setFontSize(10);
+   
+  doc.setTextColor("#767676");
+  doc.text(
+  "Generated on " + new Date().toLocaleDateString(),
+  105,
+  290,
+  "center"
+  );
+  
+  // Save document
+  doc.save("Ticket.pdf");
+  
+  toast.success("PDF downloaded successfully!", {
+  position: toast.POSITION.BOTTOM_CENTER,
+  autoClose: 3000,
+  });
+  };
 
   const role = getCookie("role");
   const userid = getCookie("userid").substring(
@@ -303,6 +398,8 @@ const Tickets = () => {
       {role != "Client" ? <Header /> : ""}
       {/* Page content */}
       <Container className="mt--7" fluid>
+              <ToastContainer />
+
         <Row>
           <div className="col">
             <Card className="shadow">
@@ -322,6 +419,7 @@ const Tickets = () => {
                   {isShownadd_ticket === "add" && "Liste des tickets"}
                   {isShownadd_ticket === "modif" && "Liste des tickets"}
                 </Button>
+               
               </CardHeader>
               {isShownadd_ticket === "list" && (
                 <Table className="align-items-center table-flush" responsive>
@@ -349,6 +447,7 @@ const Tickets = () => {
                               color="success"
                               onClick={(e) => DetailsTickets(e, ticket._id)}
                             >
+                              
                               <span className="ni ni-align-center"></span>
                             </Button>
                           </td>
@@ -366,6 +465,7 @@ const Tickets = () => {
                   )}
                 </Table>
               )}
+              
               {isShownadd_ticket === "list" && (
                 <CardFooter className="py-4">
                   <nav aria-label="...">
@@ -397,6 +497,7 @@ const Tickets = () => {
                           onClick={() => handlePageClick(currentPage + 1)}
                           tabIndex="-1"
                         >
+                          
                           <i className="fas fa-angle-right" />
                           <span className="sr-only">Next</span>
                         </PaginationLink>
@@ -404,8 +505,9 @@ const Tickets = () => {
                     </Pagination>
                   </nav>
                 </CardFooter>
+                
               )}
-
+                
               {isShownadd_ticket === "add" && (
                 <CardBody>
                   <Form onSubmit={handleSubmitTicket} noValidate>
@@ -519,7 +621,19 @@ const Tickets = () => {
                                 <option value="traité">traité</option>
                                 <option value="clos">clos</option>
                                 </Input>)}
-                    
+                                <Button
+                    color={showPDF ? "success" : "primary"}
+                    onClick={() => setShowPDF(!showPDF)}
+                  >
+                    {showPDF
+                      ? "Hide Downaload Pdf"
+                      : "The Pdf Will Be Created Once You Press That Button"}
+                  </Button>
+                  {showPDF && (
+                    <Button color="primary" onClick={generatePDF}>
+                      Download PDF
+                    </Button>
+                  )}
                     </div>
 
                    
