@@ -56,7 +56,7 @@ var routesAgence = [
     icon: "ni ni-bullet-list-67 text-blue",
     component: AddExpert,
     layout: "/agence",
-    showInSidebar: true,
+    showInSidebar: false,
   },
   {
     path: "/listexpert",
