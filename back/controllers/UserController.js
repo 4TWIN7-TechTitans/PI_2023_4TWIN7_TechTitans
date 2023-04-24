@@ -2446,8 +2446,8 @@ module.exports.expert_status_off = async (req, res) => {
                               <tr>
                               
                                   <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
-                                  <h2 style="font-size: 48px; font-weight: 400; margin: 2;">Dear Agence I wanted to reach out and let you know that I am currently offline and not available  to your agency ${user.first_name}
-                                  Expert ${user.email} is Offline !   Best regards</h2>  <img src="cid:logo" width="125" height="120" style="display: block; border: 0px;" />
+                                  <h2 style="font-size: 48px; font-weight: 400; margin: 2;">
+                                  Expert ${user.first_name} is Offline ! </h2>  <img src="cid:logo" width="125" height="120" style="display: block; border: 0px;" />
                               </td>
                               </tr>
                           </table>
@@ -2458,7 +2458,9 @@ module.exports.expert_status_off = async (req, res) => {
                           <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                               <tr>
                                   <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                      <p style="margin: 0;">I wanted to reach out and let you know that I am now connected to your agency as an expert in Assurini . With years of professional experience, specialized knowledge, and advanced degrees/certifications in my area of expertise.</p>
+                                      <p style="margin: 0;">Dear Agence I wanted to reach out and let you know that I am currently offline and not available  to your agency ${user.first_name}
+                                      <br> Best regards!
+                                     
                                   </td>
                               </tr>
                               <tr>
