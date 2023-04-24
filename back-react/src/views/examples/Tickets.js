@@ -55,32 +55,9 @@ const Tickets = () => {
     doc.setFillColor("#EFEFEF");
     doc.rect(0, 0, 210, 297, "F");
   
-    // Add background image or pattern
-    const background = new Image();
-    background.src = "/Myassets/argon-react-white.png";
   
-    background.onload = function () {
-      const bgWidth = 210;
-      const bgHeight = 297;
-      doc.addImage(background, "PNG", 0, 0, bgWidth, bgHeight);
-    };
   
-    // Add logo or icon
-    const logo = new Image();
-    logo.src = "/Myassets/argon-react-white.png";
   
-    // Add logo to PDF
-    logo.onload = function () {
-      const logoWidth = 50;
-      const logoHeight = 50;
-      const logoX = 15;
-      const logoY = 15;
-      doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight);
-    };
-  
-    // Add custom font
-    doc.addFont('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap', 'Open Sans', 'normal');
-    doc.setFont('Open Sans');
   
     // Add title
     doc.setTextColor("#333333");
@@ -96,7 +73,7 @@ const Tickets = () => {
   
     // Define the table columns and rows
     const tableHeaders = ["Description", "Date Of Creation", "Status"];
-    const tableData = [[ticket.description, ticket.date_demande, ticket.etat]];
+    const tableData = [[description, date_demande, etat]];
   
     // Add the table to the PDF with custom styles
     doc.autoTable({
