@@ -287,66 +287,57 @@ function Detailssag() {
                       <table className="mx-auto">
                         <thead>
                           <tr>
-                          
                             <Row>
                               <Col lg="2">
-                            <th>Driver A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Driver A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>License A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>License A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Place of Damage for A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Place of Damage for A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Circumstances A</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Circumstances A</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Location of the Accident</th>
-                            </Col>
-                            <Col lg="2">
-
-                            <th>Signature</th>
-                            </Col>
-
+                                <th>Location of the Accident</th>
+                              </Col>
+                            
                             </Row>
-                          
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <Row>
-                          <Col lg="2">
+                              <Col lg="2">
 
-                            <td>{driverIdentityA}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{driverIdentityA}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{driver_license_a}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{driver_license_a}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{hits_a}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{hits_a}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{circumstances_a}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{circumstances_a}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{location}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{location}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>
-                              <h4>Signature</h4>
-                              {signature_a}
-                            </td>
-                            </Col>
+                               
+                              </Col>
 
                             </Row>
                           </tr>
@@ -366,65 +357,56 @@ function Detailssag() {
                       <table className="mx-auto">
                         <thead>
                           <tr>
-                          <Row>
+                            <Row>
                               <Col lg="2">
-                            <th>Driver B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Driver B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>License B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>License B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Place of Damage for B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Place of Damage for B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Circumstances B</th>
-                            </Col>
-                            <Col lg="2">
+                                <th>Circumstances B</th>
+                              </Col>
+                              <Col lg="2">
 
-                            <th>Location of the Accident</th>
-                            </Col>
-                            <Col lg="2">
-
-                            <th>Signature</th>
-                            </Col>
+                                <th>Location of the Accident</th>
+                              </Col>
+                            
 
                             </Row>
-                          
+
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <Row>
-                          <Col lg="2">
+                              <Col lg="2">
 
-                            <td>{driverIdentityB}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{driverIdentityB}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{driver_license_b}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{driver_license_b}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{hits_b}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{hits_b}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{circumstances_b}</td>
-                            </Col>
-                            <Col lg="2">
+                                <td>{circumstances_b}</td>
+                              </Col>
+                              <Col lg="2">
 
-                            <td>{location}</td>
-                            </Col>
-                            <Col lg="2">
-
-                            <td>
-                              <h4>Signature</h4>
-                              {signature_b}
-                            </td>
-                            </Col>
+                                <td>{location}</td>
+                              </Col>
+                             
 
                             </Row>
                           </tr>
