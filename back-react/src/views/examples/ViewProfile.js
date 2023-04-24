@@ -53,7 +53,7 @@ const ViewProfile = () => {
   const [image, setImage] = useState("");
   const [fastate, setFastate] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
-
+  const [role, setRole] = useState("");
 
 
 
@@ -103,6 +103,7 @@ const ViewProfile = () => {
 
   useEffect(() => {
     //if (getCookie("role") !== "Client") window.location.href = "/auth/login";
+    setRole( getCookie("role"));
   }, []);
 
   useEffect(() => {
@@ -227,24 +228,25 @@ const ViewProfile = () => {
                   </div>
 
                   <hr className="my-4" />
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  {role==="Expert" && (    <div style={{ display: "flex", justifyContent: "space-between" }}>
                
-                <Button
-                  color="danger"
-                  onClick={(e) => handleOffline()}
-                  disabled={!isAvailable} 
-                >
-                  Go Offline
-                </Button>
-                <Button
-                  color="primary"
-                  className="mr-4"
-                  onClick={(e) => handleOnline()}
-                  disabled={isAvailable} 
-                >
-                  Go Online
-                </Button>
-                </div>
+               <Button
+                 color="danger"
+                 onClick={(e) => handleOffline()}
+                 disabled={!isAvailable} 
+               >
+                 Go Offline
+               </Button>
+               <Button
+                 color="primary"
+                 className="mr-4"
+                 onClick={(e) => handleOnline()}
+                 disabled={isAvailable} 
+               >
+                 Go Online
+               </Button>
+               </div>)}
+              
 
               
 
