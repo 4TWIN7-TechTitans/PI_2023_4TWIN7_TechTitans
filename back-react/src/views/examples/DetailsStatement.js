@@ -275,7 +275,8 @@ for removal from the register.`,
       // handle successful response
       setComment("");
       toast.success("Comment added successfully!");
-      window.location.reload(); // reload the page after successful submit
+      
+      
     } catch (error) {
       // handle error
       toast.error("An error occurred while adding the comment.");
@@ -298,6 +299,29 @@ for removal from the register.`,
                     <div>
                       <h2>Details About {driverIdentityA}</h2>
                       <hr />
+                      <center>
+                      <div className="row">
+                      <div className="col-md-4">
+                        </div>
+                       
+                      <div className="col-md-4">
+                      <h3>UPDATE STATUS</h3>
+                      <Input type="select"
+                      className="status-dropdown"
+                      value={status}
+                      onChange={handleStatusChange}
+                    >
+                      <option value="waiting">Waiting</option>
+                      <option value="treated">Treated</option>
+                      <option value="inProgress">In Progress</option>
+                      <option value="closed">Closed</option>
+                    </Input>
+                      </div>
+                      <div className="col-md-4">
+                        </div>
+                   </div>
+                   </center>
+                   <hr />
                       <table className="mx-auto">
                         <thead>
                           <tr>
@@ -321,11 +345,7 @@ for removal from the register.`,
 
                                 <th>Location of the Accident</th>
                               </Col>
-                              <Col lg="2">
-
-                                <th>Signature</th>
-                              </Col>
-
+                            
                             </Row>
                           </tr>
                         </thead>
@@ -354,9 +374,7 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <td>
-                                  <img src={signature_a} alt="a" />
-                                </td>
+                               
                               </Col>
 
                             </Row>
@@ -397,10 +415,7 @@ for removal from the register.`,
 
                                 <th>Location of the Accident</th>
                               </Col>
-                              <Col lg="2">
-
-                                <th>Signature</th>
-                              </Col>
+                            
 
                             </Row>
 
@@ -429,12 +444,7 @@ for removal from the register.`,
 
                                 <td>{location}</td>
                               </Col>
-                              <Col lg="2">
-
-                                <td>
-                                  <img src={signature_b} alt="b" />
-                                </td>
-                              </Col>
+                             
 
                             </Row>
                           </tr>
@@ -447,16 +457,6 @@ for removal from the register.`,
                       </table>
                     </div>
 
-                    <Input type="select"
-                      className="status-dropdown"
-                      value={status}
-                      onChange={handleStatusChange}
-                    >
-                      <option value="waiting">Waiting</option>
-                      <option value="treated">Treated</option>
-                      <option value="inProgress">In Progress</option>
-                      <option value="closed">Closed</option>
-                    </Input>
 
                     {showNotification && (
                       <div
@@ -492,9 +492,12 @@ for removal from the register.`,
                     </div>
                   </div>
 
+                        <div className="row" style={{marginTop:"70px",marginBottom:"70px"}}>
+                          <div className="col-md-2">
 
-
-                  <Button
+                          </div>
+                          <div className="col-md-10">
+                          <Button
                     type="Button"
                     onClick={(e) => handleStatement("a", e)}
                     disabled={isDisabled}
@@ -524,6 +527,13 @@ for removal from the register.`,
                     </Button>
                   )}
 
+
+</div>
+
+
+                        </div>
+
+                 
                   <div>
                     <h3>Write A Rapport :</h3>
                   </div>
@@ -536,20 +546,30 @@ for removal from the register.`,
                         onChange={(e) => setComment(e.target.value)}
                       />
                     </FormGroup>
-                    <Button color="primary" type="submit">
+                    <Button color="primary" style={{float:"right"}} type="submit">
                       Add Comment
                     </Button>
                   </Form>
-                  <div>
-                    <Card>
+
+                  <br/>
+                  <br/>
+                  <br/>
+                  <div style={{backgroundColor:"#eeeee4",borderRadius:"50px",textAlign:"center"}}> 
+                  <h2 className="mb-0">Expert Comments</h2>
+                    <Card >
+                      
                       <Row>
                         <Col lg="12" >
+                          
                           {commentaire}
                           <h2>{timestamp}</h2>
 
                         </Col>
                       </Row>
                     </Card>
+                    <br/>
+                  <br/> <br/>
+                  <br/>
                   </div>
 
                 </CardBody>

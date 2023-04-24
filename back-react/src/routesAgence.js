@@ -31,7 +31,7 @@ var routesAgence = [
     icon: "ni ni-fat-add text-black",
     component: AddNewContract,
     layout: "/agence",
-    showInSidebar: true,
+    showInSidebar: false,
   },
   
   {

@@ -71,6 +71,8 @@ const SidebarExpert = (props) => {
   // creates the links that appear in the left menu / Sidebar
   const createLinks = (routesExpert) => {
     return routesExpert.map((prop, key) => {
+      if(prop.showInSidebar)
+      {
       return (
         <NavItem key={key}>
           <NavLink
@@ -83,7 +85,7 @@ const SidebarExpert = (props) => {
             {prop.name}
           </NavLink>
         </NavItem>
-      );
+      );}
     });
   };
 
