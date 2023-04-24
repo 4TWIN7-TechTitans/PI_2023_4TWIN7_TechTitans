@@ -17,6 +17,12 @@ module.exports.add_offre = async (req, res) => {
   }
 };
 
+const cron = require('node-cron');
+
+cron.schedule('*/30 * * * *', () => {
+  scrap();
+});
+
 module.exports.scrap = async (req, res) => {
   try {
     const result = await request.get(
