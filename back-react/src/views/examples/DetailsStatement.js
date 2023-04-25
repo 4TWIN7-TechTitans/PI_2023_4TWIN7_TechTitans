@@ -94,7 +94,7 @@ function DetailsStatement() {
     doc.text("Hits A: " + hits_a, 20, 100);
     doc.text("Circumstances A: " + circumstances_a, 20, 110);
     doc.text("Signature A: " + signature_a, 20, 120);
-    
+
     doc.text("Driver B: " + driverIdentityB, 100, 80);
     doc.setFont("times", "italic");
     doc.setTextColor("#767676");
@@ -104,14 +104,14 @@ function DetailsStatement() {
     doc.text("Hits B: " + hits_b, 100, 100);
     doc.text("Circumstances B: " + circumstances_b, 100, 110);
     doc.text("Signature B: " + signature_b, 100, 120);
-    
+
     doc.setFont("times", "bold");
     doc.text("Location: " + location, 20, 140);
-    
+
     doc.setFont("times", "italic");
     doc.text("Date Of Accident: " + date, 20, 170);
-    doc.text("Expert Commentary : " + commentaire , 40, 180);
-    
+    doc.text("Expert Commentary : " + commentaire, 40, 180);
+
     //Add additional text
     doc.setFontSize(8);
     doc.setTextColor("#2D3752");
@@ -262,27 +262,36 @@ for removal from the register.`,
     setShowNotification(false);
   };
   ///
-  const handleCommentSubmit = async (event) => {
+  const handleComment = async (event, isRemove = false)  => {
     event.preventDefault();
     const id_statement = new URLSearchParams(window.location.search).get("id");
     const timestamp = new Date();
-  
+
     try {
-      await axios.post(
-        "http://localhost:5000/comment/" + id_statement,
-        { commentaire: comment, timestamp: timestamp }
-      );
+      if (isRemove) {
+        await axios.post(
+          "http://localhost:5000/remove_comment/" + id_statement,
+          { commentaire: comment }
+        );
+        toast.success("Comment removed successfully!");
+      } else {
+        await axios.post(
+          "http://localhost:5000/comment/" + id_statement,
+          { commentaire: comment, timestamp: timestamp }
+        );
+        toast.success("Comment added successfully!");
+      }
       // handle successful response
       setComment("");
-      toast.success("Comment added successfully!");
       window.location.reload(); // Reload the page
-        
+
     } catch (error) {
       // handle error
-      toast.error("An error occurred while adding the comment.");
+      const errorMessage = isRemove ? "An error occurred while removing the comment." : "An error occurred while adding the comment.";
+      toast.error(errorMessage);
     }
   };
-  
+
 
   return (
     <>
@@ -300,28 +309,28 @@ for removal from the register.`,
                       <h2>Details About {driverIdentityA}</h2>
                       <hr />
                       <center>
-                      <div className="row">
-                      <div className="col-md-4">
+                        <div className="row">
+                          <div className="col-md-4">
+                          </div>
+
+                          <div className="col-md-4">
+                            <h3>UPDATE STATUS</h3>
+                            <Input type="select"
+                              className="status-dropdown"
+                              value={status}
+                              onChange={handleStatusChange}
+                            >
+                              <option value="waiting">Waiting</option>
+                              <option value="treated">Treated</option>
+                              <option value="inProgress">In Progress</option>
+                              <option value="closed">Closed</option>
+                            </Input>
+                          </div>
+                          <div className="col-md-4">
+                          </div>
                         </div>
-                       
-                      <div className="col-md-4">
-                      <h3>UPDATE STATUS</h3>
-                      <Input type="select"
-                      className="status-dropdown"
-                      value={status}
-                      onChange={handleStatusChange}
-                    >
-                      <option value="waiting">Waiting</option>
-                      <option value="treated">Treated</option>
-                      <option value="inProgress">In Progress</option>
-                      <option value="closed">Closed</option>
-                    </Input>
-                      </div>
-                      <div className="col-md-4">
-                        </div>
-                   </div>
-                   </center>
-                   <hr />
+                      </center>
+                      <hr />
                       <table className="mx-auto">
                         <thead>
                           <tr>
@@ -345,7 +354,7 @@ for removal from the register.`,
 
                                 <th>Location of the Accident</th>
                               </Col>
-                            
+
                             </Row>
                           </tr>
                         </thead>
@@ -374,7 +383,7 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                               
+
                               </Col>
 
                             </Row>
@@ -415,7 +424,7 @@ for removal from the register.`,
 
                                 <th>Location of the Accident</th>
                               </Col>
-                            
+
 
                             </Row>
 
@@ -444,7 +453,7 @@ for removal from the register.`,
 
                                 <td>{location}</td>
                               </Col>
-                             
+
 
                             </Row>
                           </tr>
@@ -492,85 +501,83 @@ for removal from the register.`,
                     </div>
                   </div>
 
-                        <div className="row" style={{marginTop:"70px",marginBottom:"70px"}}>
-                          <div className="col-md-2">
+                  <div className="row" style={{ marginTop: "70px", marginBottom: "70px" }}>
+                    <div className="col-md-2">
 
-                          </div>
-                          <div className="col-md-10">
-                          <Button
-                    type="Button"
-                    onClick={(e) => handleStatement("a", e)}
-                    disabled={isDisabled}
-                  >
-                    Decider pour {driverIdentityA}
-                  </Button>
-                  <Button
-                    type="Button"
-                    onClick={(e) => handleStatement("b", e)}
-                    disabled={isDisabled}
-                  >
-                    Decider pour {driverIdentityB}
-                  </Button>
+                    </div>
+                    <div className="col-md-10">
+                      <Button
+                        type="Button"
+                        onClick={(e) => handleStatement("a", e)}
+                        disabled={isDisabled}
+                      >
+                        Decider pour {driverIdentityA}
+                      </Button>
+                      <Button
+                        type="Button"
+                        onClick={(e) => handleStatement("b", e)}
+                        disabled={isDisabled}
+                      >
+                        Decider pour {driverIdentityB}
+                      </Button>
 
-                  {/* <Button onClick={generatePDF}>Generate PDF</Button> */}
-                  <Button
-                    color={showPDF ? "success" : "primary"}
-                    onClick={() => setShowPDF(!showPDF)}
-                  >
-                    {showPDF
-                      ? "Hide Downaload Pdf"
-                      : "The Pdf Will Be Created Once You Press That Button"}
-                  </Button>
-                  {showPDF && (
-                    <Button color="primary" onClick={generatePDF}>
-                      Download PDF
-                    </Button>
-                  )}
-
-
-</div>
+                      {/* <Button onClick={generatePDF}>Generate PDF</Button> */}
+                      <Button
+                        color={showPDF ? "success" : "primary"}
+                        onClick={() => setShowPDF(!showPDF)}
+                      >
+                        {showPDF
+                          ? "Hide Downaload Pdf"
+                          : "The Pdf Will Be Created Once You Press That Button"}
+                      </Button>
+                      {showPDF && (
+                        <Button color="primary" onClick={generatePDF}>
+                          Download PDF
+                        </Button>
+                      )}
 
 
-                        </div>
+                    </div>
 
-                 
+
+                  </div>
+
+
                   <div>
                     <h3>Write A Rapport :</h3>
                   </div>
-                  <Form onSubmit={handleCommentSubmit}>
+                  <Form onSubmit={(event) => handleComment(event, false)}>
                     <FormGroup>
                       <Input
-                        placeholder="Write Your Notes "
+                        placeholder="Write Your Notes"
                         type="text"
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                       />
                     </FormGroup>
-                    <Button color="primary" style={{float:"right"}} type="submit">
+                    <Button color="primary" style={{ float: "right" }} type="submit">
                       Add Comment
+                    </Button>
+                    <Button color="danger" style={{ float: "right", marginRight: "10px" }} onClick={(event) => handleComment(event, true)}>
+                      Remove
                     </Button>
                   </Form>
 
-                  <br/>
-                  <br/>
-                  <br/>
-                  <div style={{backgroundColor:"#eeeee4",borderRadius:"50px",textAlign:"center"}}> 
-                  <h2 className="mb-0">Expert Comments</h2>
-                    <Card >
-                      
+                  <br /><br /><br />
+
+                  <div style={{ backgroundColor: "#eeeee4", borderRadius: "50px", textAlign: "center" }}>
+                    <h2 className="mb-0">Expert Comments</h2>
+                    <Card>
                       <Row>
-                        <Col lg="12" >
-                          
+                        <Col lg="12">
                           {commentaire}
                           <h2>{timestamp}</h2>
-
                         </Col>
                       </Row>
                     </Card>
-                    <br/>
-                  <br/> <br/>
-                  <br/>
+                    <br /><br /><br /><br />
                   </div>
+
 
                 </CardBody>
               </Row>
