@@ -19,5 +19,6 @@ router.post('/statements_status/:id/status', statementController.update_statemen
 router.get("/getstatements/:case_state", statementController.filtre_statements);
 
 router.post("/comment/:id", statementController.add_comment_to_statement);
+router.put("/remove_comment/:id", statementController.remove_comment_from_statement);
 
 module.exports = router;
