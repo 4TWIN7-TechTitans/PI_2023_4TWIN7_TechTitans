@@ -18,12 +18,7 @@ cloudinary.config({
 
 module.exports.add_statement_post = async (req, res) => {
   try {
-    // const {accident_croquis} = req.body;
 
-    // // upload image to cloudinary
-    // const result = await cloudinary.uploader.upload(accident_croquis);
-
-    // save st  atement to database
     const statement = await StatementModel.create({
       ...req.body,
     });
@@ -264,3 +259,4 @@ module.exports.remove_comment_from_statement = async (req, res) => {
     res.status(400).json({ message: "Error removing comment from statement", error });
   }
 };
+
