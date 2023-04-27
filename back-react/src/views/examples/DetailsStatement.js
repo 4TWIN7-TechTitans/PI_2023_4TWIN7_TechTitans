@@ -269,7 +269,7 @@ for removal from the register.`,
 
     try {
       if (isRemove) {
-        await axios.post(
+        await axios.put(
           "http://localhost:5000/remove_comment/" + id_statement,
           { commentaire: comment }
         );
