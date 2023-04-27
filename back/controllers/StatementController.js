@@ -260,3 +260,43 @@ module.exports.remove_comment_from_statement = async (req, res) => {
   }
 };
 
+// generate Statement
+/*
+module.exports.gen_statement_post = async (req, res) => {
+  try {
+    const statements = await StatementModel.insertMany(req.body);
+
+    res.status(201).json({
+      message: `${statements.length} statements created successfully`,
+      statements,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(400).json({ message: "Duplicate key error" });
+    } else {
+      res.status(400).json({ message: "Error creating statements", error });
+    }
+  }
+};
+*/
+module.exports.gen_statement_post = async (req, res) => {
+  try {
+    const statements = [];
+    for (let i = 0; i < 10; i++) {
+      const statement = await StatementModel.create({
+        ...req.body,
+      });
+      statements.push(statement);
+    }
+    res.status(201).json({
+      message: "Statements created successfully",
+      statements,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(400).json({ message: "Duplicate key error" });
+    } else {
+      res.status(400).json({ message: "Error creating statements", error });
+    }
+  }
+};
