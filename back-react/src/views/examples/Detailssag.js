@@ -93,8 +93,6 @@ function Detailssag() {
     doc.setFont("times", "normal");
     doc.setTextColor("#2D3752");
     doc.text("Hits A: " + hits_a, 20, 100);
-    doc.text("Circumstances A: " + circumstances_a, 20, 110);
-    doc.text("Signature A: " + signature_a, 20, 120);
 
     doc.text("Driver B: " + driverIdentityB, 100, 80);
     doc.setFont("times", "italic");
@@ -103,11 +101,8 @@ function Detailssag() {
     doc.setFont("times", "normal");
     doc.setTextColor("#2D3752");
     doc.text("Hits B: " + hits_b, 100, 100);
-    doc.text("Circumstances B: " + circumstances_b, 100, 110);
-    doc.text("Signature B: " + signature_b, 100, 120);
 
     doc.setFont("times", "bold");
-    doc.text("Location: " + location, 20, 140);
 
     doc.setFont("times", "italic");
     doc.text("Date Of Accident: " + date, 20, 170);
