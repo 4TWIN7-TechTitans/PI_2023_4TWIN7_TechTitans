@@ -271,9 +271,7 @@ function OdmAgence() {
                   );
                 })}
               </Table>
-              {notification && (
-                <div className="alert alert-success">{notification}</div>
-              )}
+              
 
               <CardFooter className="py-4">
                 <nav aria-label="...">
