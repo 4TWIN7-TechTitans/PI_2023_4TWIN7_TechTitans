@@ -736,7 +736,19 @@ const AddStatement = () => {
   //hanle statement by steps :
   const handleNext = (e) => {
     e.preventDefault();
+
+
+    canvasRef.current.clear(); // Clear the canvas
     setSection(section + 1);
+    if (section === 8) {
+      setTimeout(() => {
+        setIsShown((a) => !a);
+        setTimeout(() => {
+          setIsShown((a) => !a);
+        }, 0);
+      }, 0);
+    }
+    console.log(section)
   };
 
   const handlePrev = (e) => {
@@ -1115,8 +1127,8 @@ const AddStatement = () => {
                     <div>
                       <span>Microphone: {listening ? 'on' : 'off'}</span><br></br>
 
-                      <Button onClick={SpeechRecognition.startListening}>Start</Button>
-                      <Button onClick={SpeechRecognition.stopListening}>Stop</Button>
+                      <Button color="primary" onClick={SpeechRecognition.startListening}>Start</Button>
+                      <Button color="danger" onClick={SpeechRecognition.stopListening}>Stop</Button>
                       <Button onClick={resetTranscript}>Reset</Button><br></br>
                       <span>{transcript}</span>
 
@@ -1128,9 +1140,9 @@ const AddStatement = () => {
                     <h3 className="mb-0">Fill In Your Statement</h3>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button color="dark" onClick={handleClick}>
-                      {!isShown ? "Show" : "Hide"}
-                    </Button>
+                    <p  onClick={handleClick}>
+                      {!isShown ? "" : ""}
+                    </p>
                   </Col>
                 </Row>
 
