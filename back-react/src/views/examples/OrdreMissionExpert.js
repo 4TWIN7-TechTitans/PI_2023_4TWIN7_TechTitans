@@ -177,7 +177,48 @@ function OrdreMissionExpert() {
     setSelectedStatement(statement);
   };
 
+// Update the handleCloseModal function to clear the selected statement
+const handleCloseModal = () => {
+  setSelectedStatement(null);
+};
 
+/*
+const [selectedCaseState, setSelectedCaseState] = useState("");
+const handleCaseStateFilter = async (caseState) => {
+  setSelectedCaseState(caseState);
+};
+const fetchFilter = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/getstatements/${selectedCaseState}`
+    );
+    const jwt = getCookie("jwt");
+    const { data } = await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
+    const email = data.email;
+    console.log(expertEmail);
+
+    const filteredStatements = response.data.statements.filter(
+      (statement) => statement.vehicule_a.assureBy === sdsqd
+    );
+    
+    setStatements(filteredStatements);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+useEffect(() => {
+  fetchFilter();
+}, [selectedCaseState]);
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "short" });
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+};
+*/
   return (
     <>
       <Header />
