@@ -177,7 +177,6 @@ function OrdreMissionExpert() {
     setSelectedStatement(statement);
   };
 
-  /////Status////////////////
 
   return (
     <>
