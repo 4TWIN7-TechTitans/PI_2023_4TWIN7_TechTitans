@@ -213,15 +213,21 @@ function OdmAgence() {
       const response = await axios.get(
         `http://localhost:5000/getstatements/${selectedCaseState}`
       );
-      const idagence = response.data.statements.filter(
-        (statements) => (statements) =>
-          statements.vehicule_a.assureBy === idagence
+      const jwt = getCookie("jwt");
+      const { data } = await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
+      const idagence = data._id;
+      console.log(idagence);
+  
+      const filteredStatements = response.data.statements.filter(
+        (statement) => statement.vehicule_a.assureBy === idagence
       );
-      setStatements(idagence);
+      
+      setStatements(filteredStatements);
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   useEffect(() => {
     fetchFilter();
