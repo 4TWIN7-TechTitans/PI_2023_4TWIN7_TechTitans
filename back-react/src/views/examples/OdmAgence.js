@@ -12,8 +12,8 @@ import {
   Button,
   Col,
   Label,
-  FormGroup, 
-  Input
+  FormGroup,
+  Input,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -42,43 +42,42 @@ function OdmAgence() {
     return b ? b.pop() : "";
   }
 
-  let notificationShown = false; 
+  let notificationShown = false;
   const fetchData = async () => {
     try {
-
       const jwt = getCookie("jwt");
 
       const idagence = (
         await axios.get("http://localhost:5000/getmailfromtoken?token=" + jwt)
       ).data._id;
-      console.log(idagence)
+      console.log(idagence);
       const response = await axios.get("http://127.0.0.1:5000/getstatements");
       const filteredData = response.data.statements.filter(
         (statements) => statements.vehicule_a.assureBy == idagence
       );
 
-      
       const expertsResponse = await axios.get(
         "http://127.0.0.1:5000/all-experts"
       );
-      const filteredExpertstemp = expertsResponse.data.experts.filter((elem) => {
-        console.log(elem.expert_status)
-        if (!elem.expert_status) {
-          return false;
-        } else {
-          return true;
+      const filteredExpertstemp = expertsResponse.data.experts.filter(
+        (elem) => {
+          console.log(elem.expert_status);
+          if (!elem.expert_status) {
+            return false;
+          } else {
+            return true;
+          }
         }
-      });
+      );
 
       const filteredExperts = filteredExpertstemp.filter((elem) => {
-        
         if (elem.id_agence == idagence) {
           return true;
         } else {
           return false;
         }
       });
-      
+
       setExperts(filteredExperts);
       console.log(filteredData);
       setStatements(filteredData);
@@ -138,40 +137,36 @@ function OdmAgence() {
 
       if (assignResponse.status === 200) {
         statement.assign = true;
-        toast.success('Statement assigned To our Expert!');
+        toast.success("Statement assigned To our Expert!");
         setAssignedStatementId(statement._id);
         localStorage.setItem("assignedStatementId", statement._id); // save to local storage or cookies
         fetchData();
-       
+
         const userdata = await axios.get(
           `http://127.0.0.1:5000/userbyemail/` + selectedExpert
-          
         );
 
+        setExpert_id(userdata.data.user._id);
 
-          setExpert_id(userdata.data.user._id);
-        
-      
-         //start add notif
+        //start add notif
         const date_demande = new Date();
         const postData = {
           titre: "A New Statement was affected to you ",
-          id_user:userdata.data.user._id,
-          date_notif:date_demande,
-          descrip:""
-
-         
+          id_user: userdata.data.user._id,
+          date_notif: date_demande,
+          descrip: "",
         };
         console.log(postData);
-        
-        axios.post('http://localhost:5000/notif/', postData)
-          .then(response => {
-          console.log("noptif add")
+
+        axios
+          .post("http://localhost:5000/notif/", postData)
+          .then((response) => {
+            console.log("noptif add");
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
-//end add notif
+        //end add notif
       } else {
         throw new Error(assignResponse.data.message);
       }
@@ -188,7 +183,7 @@ function OdmAgence() {
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
-/////// date 
+  /////// date
   useEffect(() => {
     let sortedStatements = [...statements];
     if (sortOrderByDate === "asc") {
@@ -198,15 +193,50 @@ function OdmAgence() {
     }
     setStatements(sortedStatements);
   }, [sortOrderByDate]);
+
   // Update the handleStatementSelect function to set the selected statement
   const handleStatementSelect = (statement) => {
     setSelectedStatement(statement);
   };
+  //
 
- 
+  // Update the handleCloseModal function to clear the selected statement
+  const handleCloseModal = () => {
+    setSelectedStatement(null);
+  };
+  const [selectedCaseState, setSelectedCaseState] = useState("");
+  const handleCaseStateFilter = async (caseState) => {
+    setSelectedCaseState(caseState);
+  };
+  const fetchFilter = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/getstatements/${selectedCaseState}`
+      );
+      const idagence = response.data.statements.filter(
+        (statements) => (statements) =>
+          statements.vehicule_a.assureBy === idagence
+      );
+      setStatements(idagence);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFilter();
+  }, [selectedCaseState]);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "short" });
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
   return (
     <>
-        <ToastContainer />
+      <ToastContainer />
 
       <Header />
       {/* Page content */}
@@ -215,13 +245,32 @@ function OdmAgence() {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">List Of Statement To Assign</h3>
+                <div className="container text-center">
+                  <h3 className="mb-0">List Of Statement To Assign</h3>
+                </div>{" "}
               </CardHeader>
-              <Col lg="2">
-                    <Button color="dark" onClick={() => setSortOrderByDate(sortOrderByDate === "asc" ? "desc" : "asc")}>
-                      Sort By Date
-                    </Button>
-                  </Col>
+              <div className="Center">
+                <Row>
+                  <FormGroup>
+                    <Col>
+                      <Label>Filter By Case State</Label>
+                      <Input
+                        className="form-control"
+                        type="select"
+                        value={selectedCaseState}
+                        onChange={(e) => handleCaseStateFilter(e.target.value)}
+                      >
+                        <option value="">All</option>
+                        <option value="treated">Treated</option>
+                        <option value="closed">Closed</option>
+                        <option value="waiting">Waiting</option>
+                        <option value="inProgress">In Progress</option>
+                      </Input>
+                    </Col>
+                  </FormGroup>
+                </Row>
+              </div>
+
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr></tr>
@@ -233,7 +282,7 @@ function OdmAgence() {
                   <th scope="col">Assign To Expert</th>
                 </tbody>
                 {paginatedStatements.map((statement) => {
-               //   console.log(statement); // Add this line to log the statements object
+                  //   console.log(statement); // Add this line to log the statements object
                   let statusText = "";
                   let color = "orange";
                   switch (statement.case_state) {
@@ -293,13 +342,30 @@ function OdmAgence() {
                           </button>
                         </div>
                       </td>
-                      <td> <Button href={"/agence/detailssag?id=" + statement._id}   > Details</Button> </td>
+                      <td>
+                        {" "}
+                        <Button href={"/agence/detailssag?id=" + statement._id}>
+                          {" "}
+                          Details
+                        </Button>{" "}
+                      </td>
                     </tr>
                   );
                 })}
               </Table>
-              
 
+              <Col lg="2">
+                <Button
+                  color="dark"
+                  onClick={() =>
+                    setSortOrderByDate(
+                      sortOrderByDate === "asc" ? "desc" : "asc"
+                    )
+                  }
+                >
+                  Sort By Date
+                </Button>
+              </Col>
               <CardFooter className="py-4">
                 <nav aria-label="...">
                   <Pagination
