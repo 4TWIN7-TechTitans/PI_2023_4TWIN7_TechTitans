@@ -46,17 +46,20 @@ const Login = () => {
             </div>
           </footer> */}
       </section>
-      <footer >
+      <footer>
 
         <MDBFooter className='text-center text-white' style={{ backgroundColor: '#0a4275' }} >
           <MDBContainer className='p-3 pb-0' >
             <section className=''>
-              <p className='d-flex justify-content-center align-items-center 8rem'>
-                <span className='me-3' style={{ fontSize: 30 }}><b >Register for free</b>&nbsp; &nbsp; </span>
-                <MDBBtn type='button' outline color="light" rounded style={{ fontSize: 15 }}>
-                  Sign up!
+              <p className='d-flex justify-content-center align-items-center h-8'>
+                <span className='me-3' aria-setsize={8}>
+                  <b>Register for free</b>&nbsp; &nbsp;
+                </span>
+                <MDBBtn href='http://localhost:3000/auth/register' type='button' outline color='light' rounded>
+                  Sign in!
                 </MDBBtn>
               </p>
+
             </section>
           </MDBContainer>
           <MDBContainer className='p-4 pb-0'>
