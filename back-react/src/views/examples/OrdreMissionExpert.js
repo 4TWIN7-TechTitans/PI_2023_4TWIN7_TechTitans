@@ -11,6 +11,7 @@ import {
   Row,
   Button,
   Input,
+  Col
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -28,6 +29,8 @@ function OrdreMissionExpert() {
   const [id, setId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
+  const [sortOrderByDate, setSortOrderByDate] = useState("asc");
+  const [selectedStatement, setSelectedStatement] = useState(null);
 
   useEffect(() => {
     function getCookie(key) {
@@ -159,6 +162,21 @@ function OrdreMissionExpert() {
     }
   };
 
+
+  useEffect(() => {
+    let sortedStatements = [...statements];
+    if (sortOrderByDate === "asc") {
+      sortedStatements.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else {
+      sortedStatements.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+    setStatements(sortedStatements);
+  }, [sortOrderByDate]);
+  // Update the handleStatementSelect function to set the selected statement
+  const handleStatementSelect = (statement) => {
+    setSelectedStatement(statement);
+  };
+
   /////Status////////////////
 
   return (
@@ -174,7 +192,11 @@ function OrdreMissionExpert() {
               <CardHeader className="border-0">
                 <h3 className="mb-0">My Missions</h3>
               </CardHeader>
-
+              <Col lg="2">
+                    <Button color="dark" onClick={() => setSortOrderByDate(sortOrderByDate === "asc" ? "desc" : "asc")}>
+                      Sort By Date
+                    </Button>
+                  </Col>
             
 
               <div className="p-4">
