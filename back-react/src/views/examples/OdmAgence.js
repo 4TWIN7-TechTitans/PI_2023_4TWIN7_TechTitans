@@ -10,6 +10,10 @@ import {
   Container,
   Row,
   Button,
+  Col,
+  Label,
+  FormGroup, 
+  Input
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
@@ -30,6 +34,9 @@ function OdmAgence() {
   const [showError, setShowError] = useState(false);
   const [assignedStatementId, setAssignedStatementId] = useState("");
   const [expert_id, setExpert_id] = useState();
+  const [selectedStatement, setSelectedStatement] = useState(null);
+  const [sortOrderByDate, setSortOrderByDate] = useState("asc");
+
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
     return b ? b.pop() : "";
@@ -181,7 +188,22 @@ function OdmAgence() {
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+/////// date 
+  useEffect(() => {
+    let sortedStatements = [...statements];
+    if (sortOrderByDate === "asc") {
+      sortedStatements.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else {
+      sortedStatements.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+    setStatements(sortedStatements);
+  }, [sortOrderByDate]);
+  // Update the handleStatementSelect function to set the selected statement
+  const handleStatementSelect = (statement) => {
+    setSelectedStatement(statement);
+  };
 
+ 
   return (
     <>
         <ToastContainer />
@@ -195,6 +217,11 @@ function OdmAgence() {
               <CardHeader className="border-0">
                 <h3 className="mb-0">List Of Statement To Assign</h3>
               </CardHeader>
+              <Col lg="2">
+                    <Button color="dark" onClick={() => setSortOrderByDate(sortOrderByDate === "asc" ? "desc" : "asc")}>
+                      Sort By Date
+                    </Button>
+                  </Col>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr></tr>
