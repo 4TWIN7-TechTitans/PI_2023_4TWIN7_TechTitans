@@ -198,7 +198,7 @@ const ViewProfile = () => {
                     }
                     size="sm"
                   >
-                    Modifier
+                    Update
                     <br /> profile
                   </Button>
                 </div>

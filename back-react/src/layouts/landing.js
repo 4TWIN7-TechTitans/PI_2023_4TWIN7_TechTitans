@@ -69,17 +69,24 @@ const Landing = (props) => {
     <>
       <div className="main-content" ref={mainContent}>
         <AuthNavbar />
-        <div className="header container-fluid bg-gradient-info py-7 py-lg-8">
-          <Container>
-            <div className="header-body text-center mb-7">
-              <Row className="justify-content-center">
-                <Col lg="5" md="6">
-                  <h1 className="text-white">Welcome to Assurini</h1>
-                </Col>
-              </Row>
+        <div className="header bg-gradient-info ">
+          <div
+            className='p-8 text-center bg-image'
+            style={{ backgroundImage: "url(" + require("../assets/img/theme/profile-cover.jpg") + ")", height: 520 }}
+          >
+            <div className='mask' >
+              <div className='d-flex justify-content-center align-items-center h-100'>
+                <div className='text-dark'>
+                  <h1 className='mb-6'style={{ fontSize: 80 }}>Welcome To Assurini</h1>
+                  <h1 className='mb-3'>Clic here to create your statement </h1>
+                  <a className='btn btn-outline-dark btn-lg' href='/' role='button'>
+                    Statement
+                  </a>
+                </div>
+              </div>
             </div>
-            <div></div>
-          </Container>
+          </div>
+
           <div className="separator container-fluid separator-bottom separator-skew zindex-100">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -96,6 +103,12 @@ const Landing = (props) => {
             </svg>
           </div>
         </div>
+
+        <section className="my-8">
+        </section>
+        <section className="mt--8 w-75">
+        </section>
+
         {/* Page content */}
         <Container className="mt--8 w-75 container-fluid" fluid>
           {window.location.pathname == "/user_tickets" && (
@@ -109,15 +122,15 @@ const Landing = (props) => {
                 <AddStatement />
               </Row>
               {
-              <Row style={{marginTop:"100px"}}>
-            
-                <div className="col">
-                  <Card className="shadow">
-                    <MultipleRows />
-                  </Card>
-                </div>
-              </Row>
-          }
+                <Row style={{ marginTop: "100px" }}>
+
+                  <div className="col">
+                    <Card className="shadow">
+                      <MultipleRows />
+                    </Card>
+                  </div>
+                </Row>
+              }
             </>
           )}
           {/* statements */}
