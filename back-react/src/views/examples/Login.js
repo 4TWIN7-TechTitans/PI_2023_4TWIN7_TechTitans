@@ -216,7 +216,7 @@ function Login() {
               <Button
                 className="btn-neutral btn-icon"
                 color="default"
-                href=""
+                href="/"
                 onClick={googleauth}
               >
                 <span className="btn-inner--icon">
