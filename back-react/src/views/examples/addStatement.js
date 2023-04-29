@@ -1039,16 +1039,26 @@ const AddStatement = () => {
     }
 
     // Add an event listener for map click event
-    const handleMapClick = (event) => {
+    const handleMapClick = async (event) => {
       // Get clicked coordinates
       const clickedCoords = event.coordinate;
-
+    
       // Convert clicked coordinates to lon/lat
       const [longitude, latitude] = toLonLat(clickedCoords);
-
-      // Update the location input field with clicked coordinates
-      setLocation(`${latitude}, ${longitude}`);
+    
+      // Fetch the address from Nominatim API
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+      const data = await response.json();
+    
+      // Get the human-readable address from the API response
+      const address = data.display_name;
+    
+      // Update the location input field with the address
+      setLocation(address);
     };
+    
+    // Add the click event listener to the map
+    map.on('click', handleMapClick);
 
     // Add the click event listener to the map
     map.on('click', handleMapClick);
