@@ -22,20 +22,25 @@ import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 const Header = () => {
   return (
     <>
-      <div className="header bg-gradient-info pb-5 pt-5 pt-md-8">
+            <div
+        className="header pb-3 pt-2 pt-lg-3 d-flex align-items-center"
+        style={{
+          minHeight: "400px",
+          backgroundImage:
+            "url(" + require("../../assets/img/theme/profile-cover.jpg") + ")",
+          backgroundSize: "cover",
+          backgroundPosition: "center top"
+        }}> <span className="mask bg-gradient-default opacity-8" />
         <Container fluid>
           <div className="header-body">
             {/* Card stats */}
             <Row>
               <Col className="center m-3 text-uppercase " lg="12" col="1">
-                <center><h1 >Welcome To Assurini</h1></center>
+                <center><h1 className="text-light">Welcome To Assurini !</h1></center>
 
               </Col>
             </Row>
-            <section className="my-6">
 
-
-            </section>
           </div>
         </Container>
       </div>
