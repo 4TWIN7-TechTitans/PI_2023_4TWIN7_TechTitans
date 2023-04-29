@@ -432,10 +432,10 @@ const Tickets = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 {isShownadd_ticket === "list" && (
-                  <h3 className="mb-0">List Ticket</h3>
+                  <h3 className="mb-0">List Reclamation</h3>
                 )}
                 {isShownadd_ticket === "add" && (
-                  <h3 className="mb-0">New Ticket</h3>
+                  <h3 className="mb-0">New Reclamation</h3>
                 )}
                
                
@@ -719,7 +719,7 @@ const Tickets = () => {
                     <div className="text-center">
                       {ticketadded === "OK" && (
                         <div className="alert alert-success mt-3" role="alert">
-                          Ticket Added
+                          Reclamation Added
                         </div>
                       )}
                       {ticketadded === "KO" && (
