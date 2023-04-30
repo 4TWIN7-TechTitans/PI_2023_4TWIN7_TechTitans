@@ -171,13 +171,20 @@ const AdminNavbar = () => {
           <MDBNavbar light >
             <MDBContainer fluid>
               <MDBNavbarBrand href='/'>
-                <img
+                <table>
+                  <tr>
+                    <td> <img
                   src={require("../../assets/img/brand/argon-react-white.png")}
                   height='50'
                   alt='Logo Assurini'
                   loading='lazy'
-                />
-                ASSURINI
+                /></td>
+                 { // <td> <span style={{color:"white",fontSize:"32pt"}}>SSURINI</span></td>
+                 }
+                  </tr>
+                </table>
+               
+               
               </MDBNavbarBrand>
             </MDBContainer>
           </MDBNavbar>
@@ -210,8 +217,8 @@ const AdminNavbar = () => {
                     to="/admin/index"
                     tag={Link}
                   >
-                    <i className="ni ni-map-big" />
-                    <span className="nav-link-inner--text">Home</span>
+                    <i className="ni ni-map-big" style={{color:"white"}}/>
+                    <span className="nav-link-inner--text" style={{color:"white"}}>Home</span>
                   </NavLink>
                 </NavItem>
 
@@ -221,8 +228,8 @@ const AdminNavbar = () => {
                   <NavItem>
                     {" "}
                     <NavLink className="nav-link-icon" to="/" tag={Link}>
-                      <i className="ni ni-map-big" />
-                      <span className="nav-link-inner--text">Home</span>
+                      <i className="ni ni-map-big" style={{color:"white"}}/>
+                      <span className="nav-link-inner--text" style={{color:"white"}}>Home</span>
                     </NavLink>
                   </NavItem>
 
@@ -237,8 +244,8 @@ const AdminNavbar = () => {
                       to="/auth/register"
                       tag={Link}
                     >
-                      <i className="ni ni-circle-08" />
-                      <span className="nav-link-inner--text">Sign up</span>
+                      <i className="ni ni-circle-08"  style={{color:"white"}}/>
+                      <span className="nav-link-inner--text"  style={{color:"white"}}>Sign up</span>
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -247,8 +254,8 @@ const AdminNavbar = () => {
                       to="/auth/login"
                       tag={Link}
                     >
-                      <i className="ni ni-key-25" />
-                      <span className="nav-link-inner--text">Sign in</span>
+                      <i className="ni ni-key-25"  style={{color:"white"}}/>
+                      <span className="nav-link-inner--text"  style={{color:"white"}}>Sign in</span>
                     </NavLink>
                   </NavItem>
                 </>
@@ -267,22 +274,22 @@ const AdminNavbar = () => {
                       {" "}
                       <NavLink
                         className="nav-link-icon" to="/profile" tag={Link}>
-                        <i className="ni ni-circle-08" />
-                        <span className="nav-link-inner--text">My Profile</span>
+                        <i className="ni ni-circle-08" style={{color:"white"}}/>
+                        <span className="nav-link-inner--text" style={{color:"white"}}>My Profile</span>
                       </NavLink>
                     </NavItem>
                     <NavItem>
                       {" "}
                       <NavLink className="nav-link-icon" to="/user_tickets" tag={Link}>
-                        <i className="ni ni-support-16" />
-                        <span className="nav-link-inner--text">Support</span>
+                        <i className="ni ni-support-16" style={{color:"white"}}/>
+                        <span className="nav-link-inner--text" style={{color:"white"}}>Support</span>
                       </NavLink>
                     </NavItem>
                     <NavItem>
                       {" "}
                       <NavLink className="nav-link-icon" to="/mystatement" tag={Link}>
-                        <i className="ni ni-bullet-list-67" />
-                        <span className="nav-link-inner--text">My Statement</span>
+                        <i className="ni ni-bullet-list-67" style={{color:"white"}}/>
+                        <span className="nav-link-inner--text" style={{color:"white"}}>My Statements</span>
                       </NavLink>
                     </NavItem>
                   </Nav>

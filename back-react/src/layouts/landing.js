@@ -78,8 +78,8 @@ const Landing = (props) => {
               <div className='d-flex justify-content-center align-items-center h-100'>
                 <div className='text-dark'>
                   <h1 className='mb-6'style={{ fontSize: 80 }}>Welcome To Assurini</h1>
-                  <h1 className='mb-3'>Clic here to create your statement </h1>
-                  <a className='btn btn-outline-dark btn-lg' href='/' role='button'>
+                  <h1 className='mb-3' >Clic here to create your statement </h1>
+                  <a className='btn btn-primary btn-lg' href='/' role='button'>
                     Statement
                   </a>
                 </div>
