@@ -300,3 +300,28 @@ module.exports.gen_statement_post = async (req, res) => {
     }
   }
 };
+
+const fs = require("fs");
+const { PDFDocument, rgb , StandardFonts } = require("pdf-lib");
+
+module.exports.gen_pdf = async (req, res) => {
+  const { date, lieu, blesse } = req.body;
+  const existingPdfBytes = await fs.promises.readFile("constat.pdf");
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const page = pdfDoc.getPages()[0];
+  const { width, height } = page.getSize();
+  const fontSize = 8;
+  const text = "Hello, World!";
+  const textWidth = font.widthOfTextAtSize(text, fontSize);
+  page.drawText(text, { x: 36, y:  height - 90 , size: fontSize, color: rgb(0, 0, 0),}); //date
+
+  
+
+ 
+  
+
+  const pdfBytes = await pdfDoc.save();
+  await fs.promises.writeFile("new.pdf", pdfBytes);
+  res.status(200).json({ width , height});
+};
