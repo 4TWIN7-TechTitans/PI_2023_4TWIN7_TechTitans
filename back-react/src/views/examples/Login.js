@@ -28,13 +28,14 @@ function Login() {
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-  
+
     try {
-      const response = await axios.get(`http://localhost:5000/users/checkban/` +email );
+      const response = await axios.get(
+        `http://localhost:5000/users/checkban/` + email
+      );
       const isBanned = response.data.isBanned;
-      console.log(isBanned)
-      if (isBanned)
-       {
+      console.log(isBanned);
+      if (isBanned) {
         setShowBanNotification("You Are Banned.");
         return;
       }
@@ -43,10 +44,10 @@ function Login() {
       setShowError("true");
       return;
     }
-  
+
     if (form.tfa !== undefined) {
       const code = form.tfa.value;
-  
+
       await axios
         .post("http://localhost:5000/2fa", {
           email,
@@ -73,42 +74,30 @@ function Login() {
             setShowError(false);
             setShowVerifiedError(false);
             setShowNotification(true);
-           
-            //TODO : ROUTES ROLES 
-            const Role=getCookie('role');
-            if(Role==="Client")
-            {
- 
-              if(email===password)
-              window.location.href = "/changepassword";             
-              else
-              window.location.href = "/";
-            }
-           
-            else
-            {
-              if(email===password)
-              window.location.href = "/main/changepassword";
-              else
-              window.location.href = "/admin/index";
-              
 
+            //TODO : ROUTES ROLES
+            const Role = getCookie("role");
+            if (Role === "Client") {
+              if (email === password) window.location.href = "/changepassword";
+              else window.location.href = "/";
+            } else {
+              if (email === password)
+                window.location.href = "/main/changepassword";
+              else window.location.href = "/admin/index";
             }
-            
-            
           },
           (err) => {
             console.log("err then");
             console.log(err);
             console.log(err.response.data.errors.email);
             console.log(err.response.data.errors.tfa);
-  
+
             if (err.response.data.errors.tfa === "check your sms to 2FA auth") {
               setShow2FAform(true);
               setShowVerifiedError(false);
               setShowError(false);
             }
-  
+
             if (err.response.data.errors.email === "email not verified") {
               setShowVerifiedError(true);
               setShowError(false);
@@ -130,7 +119,6 @@ function Login() {
         });
     }
   };
-  
 
   const validateEmail = (email) => {
     const emailRegex = /\S+@\S+\.\S+/;
@@ -192,55 +180,64 @@ function Login() {
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
-            {window.location.pathname == "/auth/login" && <>
-            <div className="text-muted text-center mt-2 mb-3">
-              <small>Sign in with</small>
-            </div>
- <div className="btn-wrapper text-center">
- <Button
-   className="btn-neutral btn-icon"
-   color="default"
-   href=""
-   onClick={facebookauth}
- >
-   <span className="btn-inner--icon">
-     <img
-       alt="..."
-       src={
-         require("../../assets/img/icons/common/facebook.svg")
-           .default
-       }
-     />
-   </span>
-   <span className="btn-inner--text">Facebook</span>
- </Button>
- <Button
-   className="btn-neutral btn-icon"
-   color="default"
-   href="/"
-   onClick={googleauth}
- >
-   <span className="btn-inner--icon">
-     <img
-       alt="..."
-       src={
-         require("../../assets/img/icons/common/google.svg")
-           .default
-       }
-     />
-   </span>
-   <span className="btn-inner--text">Google</span>
- </Button>
-</div></>
-  }
-           
+            {window.location.pathname == "/auth/login" && (
+              <>
+                <div className="text-muted text-center mt-2 mb-3">
+                  <small>Sign in with</small>
+                </div>
+                <div className="btn-wrapper text-center">
+                  <Button
+                    className="btn-neutral btn-icon"
+                    color="default"
+                    href=""
+                    onClick={facebookauth}
+                  >
+                    <span className="btn-inner--icon">
+                      <img
+                        alt="..."
+                        src={
+                          require("../../assets/img/icons/common/facebook.svg")
+                            .default
+                        }
+                      />
+                    </span>
+                    <span className="btn-inner--text">Facebook</span>
+                  </Button>
+                  <Button
+                    className="btn-neutral btn-icon"
+                    color="default"
+                    href="/"
+                    onClick={googleauth}
+                  >
+                    <span className="btn-inner--icon">
+                      <img
+                        alt="..."
+                        src={
+                          require("../../assets/img/icons/common/google.svg")
+                            .default
+                        }
+                      />
+                    </span>
+                    <span className="btn-inner--text">Google</span>
+                  </Button>
+                </div>
+              </>
+            )}
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
-            {window.location.pathname == "/auth/loginpro" && <>  <small>Sign in with credentials</small></> }
-            {window.location.pathname == "/auth/login" && <>  <small>Or sign in with credentials</small></> }
-            
-            
+              {window.location.pathname == "/auth/loginpro" && (
+                <>
+                  {" "}
+                  <small>Sign in with credentials</small>
+                </>
+              )}
+              {window.location.pathname == "/auth/login" && (
+                <>
+                  {" "}
+                  <small>Or sign in with credentials</small>
+                </>
+              )}
             </div>
             <Form onSubmit={handleSubmit} noValidate>
               <FormGroup className="mb-3">
@@ -310,7 +307,6 @@ function Login() {
                   id=" customCheckLogin"
                   type="checkbox"
                 />
-                
               </div>
               {showNotification && (
                 <div className="col-12 my-3 alert alert-success">
@@ -340,7 +336,6 @@ function Login() {
                   Account Banned.
                 </div>
               )}
-              
 
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
@@ -369,10 +364,10 @@ function Login() {
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) == " ") {
       c = c.substring(1);
     }
     if (c.indexOf(name) == 0) {
