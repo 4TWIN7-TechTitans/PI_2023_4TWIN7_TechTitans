@@ -8,7 +8,7 @@ const endpointsFiles = ["./routes/index.js", "./routes/userRoutes.js"];
 const doc = {
   host: "127.0.0.1:5000",
 };
-swaggerAutogen(outputFile, endpointsFiles, doc);
+// swaggerAutogen(outputFile, endpointsFiles, doc);
 
 const server = http.createServer(app);
 
