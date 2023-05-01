@@ -116,6 +116,14 @@ var routes = [
     showInSidebar: false,
   },
   {
+    path: "/loginpro",
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: Login,
+    layout: "/auth",
+    showInSidebar: false,
+  },
+  {
     path: "/register",
     name: "Register",
     icon: "ni ni-circle-08 text-pink",

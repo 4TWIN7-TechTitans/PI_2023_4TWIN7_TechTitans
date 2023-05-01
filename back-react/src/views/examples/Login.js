@@ -192,49 +192,55 @@ function Login() {
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
+            {window.location.pathname == "/auth/login" && <>
             <div className="text-muted text-center mt-2 mb-3">
               <small>Sign in with</small>
             </div>
-            <div className="btn-wrapper text-center">
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href=""
-                onClick={facebookauth}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/facebook.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Facebook</span>
-              </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="/"
-                onClick={googleauth}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/google.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Google</span>
-              </Button>
-            </div>
+ <div className="btn-wrapper text-center">
+ <Button
+   className="btn-neutral btn-icon"
+   color="default"
+   href=""
+   onClick={facebookauth}
+ >
+   <span className="btn-inner--icon">
+     <img
+       alt="..."
+       src={
+         require("../../assets/img/icons/common/facebook.svg")
+           .default
+       }
+     />
+   </span>
+   <span className="btn-inner--text">Facebook</span>
+ </Button>
+ <Button
+   className="btn-neutral btn-icon"
+   color="default"
+   href="/"
+   onClick={googleauth}
+ >
+   <span className="btn-inner--icon">
+     <img
+       alt="..."
+       src={
+         require("../../assets/img/icons/common/google.svg")
+           .default
+       }
+     />
+   </span>
+   <span className="btn-inner--text">Google</span>
+ </Button>
+</div></>
+  }
+           
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
-              <small>Or sign in with credentials</small>
+            {window.location.pathname == "/auth/loginpro" && <>  <small>Sign in with credentials</small></> }
+            {window.location.pathname == "/auth/login" && <>  <small>Or sign in with credentials</small></> }
+            
+            
             </div>
             <Form onSubmit={handleSubmit} noValidate>
               <FormGroup className="mb-3">
