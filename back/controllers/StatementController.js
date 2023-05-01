@@ -315,8 +315,86 @@ module.exports.gen_pdf = async (req, res) => {
   const text = "Hello, World!";
   const textWidth = font.widthOfTextAtSize(text, fontSize);
   page.drawText(text, { x: 36, y:  height - 90 , size: fontSize, color: rgb(0, 0, 0),}); //date
+  page.drawText(text, { x: 174, y:  height - 90 , size: fontSize, color: rgb(0, 0, 0),}); //lieu
+  page.drawText("x", { x: 475, y:  height - 100 , size: fontSize, color: rgb(0, 0, 0),}); //blesse non
+  page.drawText("x", { x: 550, y:  height - 100 , size: fontSize, color: rgb(0, 0, 0),}); //blesse oui
+  page.drawText("x", { x: 70, y:  height - 131 , size: fontSize, color: rgb(0, 0, 0),}); // degat non
+  page.drawText("x", { x: 147, y:  height - 133 , size: fontSize, color: rgb(0, 0, 0),}); //degats oui
+  page.drawText(text, { x: 188, y:  height - 123 , size: fontSize, color: rgb(0, 0, 0),}); //temoins
+  page.drawText(text, { x: 118, y:  height - 183 , size: fontSize, color: rgb(0, 0, 0),}); //assuré par
+  page.drawText(text, { x: 129, y:  height - 204 , size: fontSize, color: rgb(0, 0, 0),}); //assurance
+  page.drawText(text, { x: 63, y:  height - 220 , size: fontSize, color: rgb(0, 0, 0),}); //agence
+  page.drawText(text, { x: 49, y:  height - 256 , size: fontSize, color: rgb(0, 0, 0),}); //du
+  page.drawText(text, { x: 137, y:  height - 256 , size: fontSize, color: rgb(0, 0, 0),}); //au
+  page.drawText(text, { x: 59, y:  height - 289 , size: fontSize, color: rgb(0, 0, 0),}); //nom
+  page.drawText(text, { x: 68, y:  height - 303 , size: fontSize, color: rgb(0, 0, 0),}); //prenom
+  page.drawText(text, { x: 71, y:  height - 325 , size: fontSize, color: rgb(0, 0, 0),}); //adresse
+  page.drawText(text, { x: 138, y:  height - 341 , size: fontSize, color: rgb(0, 0, 0),}); //permis
+  page.drawText(text, { x: 87, y:  height - 357 , size: fontSize, color: rgb(0, 0, 0),}); //delivre
+  page.drawText(text, { x: 59, y:  height - 389 , size: fontSize, color: rgb(0, 0, 0),}); //assuré
+  page.drawText(text, { x: 68, y:  height - 405 , size: fontSize, color: rgb(0, 0, 0),}); //prenom
+  page.drawText(text, { x: 77, y:  height - 420 , size: fontSize, color: rgb(0, 0, 0),}); //adresse
+  page.drawText(text, { x: 162, y:  height - 438 , size: fontSize, color: rgb(0, 0, 0),}); //tel
+  page.drawText(text, { x: 97, y:  height - 475 , size: fontSize, color: rgb(0, 0, 0),}); //marque
+  page.drawText(text, { x: 120, y:  height - 490 , size: fontSize, color: rgb(0, 0, 0),}); //imm
+  page.drawText(text, { x: 80, y:  height - 525 , size: fontSize, color: rgb(0, 0, 0),}); //de
+  page.drawText(text, { x: 71, y:  height - 545 , size: fontSize, color: rgb(0, 0, 0),}); //allant
+  //-------------- VEH B
+  page.drawText(text, { x: 480, y:  height - 185 , size: fontSize, color: rgb(0, 0, 0),}); //assuré
+  page.drawText(text, { x: 485, y:  height - 201 , size: fontSize, color: rgb(0, 0, 0),}); //ass
+  page.drawText(text, { x: 423, y:  height - 220 , size: fontSize, color: rgb(0, 0, 0),}); //ass
+  page.drawText(text, { x: 423, y:  height - 256 , size: fontSize, color: rgb(0, 0, 0),}); //du
+  page.drawText(text, { x: 515, y:  height - 257 , size: fontSize, color: rgb(0, 0, 0),}); //au
+  page.drawText(text, { x: 438, y:  height - 287 , size: fontSize, color: rgb(0, 0, 0),}); //nom
+  page.drawText(text, { x: 447, y:  height - 305 , size: fontSize, color: rgb(0, 0, 0),}); //prenom
+  page.drawText(text, { x: 449, y:  height - 323 , size: fontSize, color: rgb(0, 0, 0),}); //adrese
+  page.drawText(text, { x: 519, y:  height - 342 , size: fontSize, color: rgb(0, 0, 0),}); //permis
+  page.drawText(text, { x: 455, y:  height - 355 , size: fontSize, color: rgb(0, 0, 0),}); //delivere
+  page.drawText(text, { x: 439, y:  height - 392 , size: fontSize, color: rgb(0, 0, 0),}); //nom
+  page.drawText(text, { x: 449, y:  height - 407 , size: fontSize, color: rgb(0, 0, 0),}); //prenom
+  page.drawText(text, { x: 454, y:  height - 422 , size: fontSize, color: rgb(0, 0, 0),}); //addr
+  page.drawText(text, { x: 530, y:  height - 440 , size: fontSize, color: rgb(0, 0, 0),}); //tel
+  page.drawText(text, { x: 476, y:  height - 478 , size: fontSize, color: rgb(0, 0, 0),}); //marque
+  page.drawText(text, { x: 497, y:  height - 490 , size: fontSize, color: rgb(0, 0, 0),}); //imm
+  page.drawText(text, { x: 459, y:  height - 528 , size: fontSize, color: rgb(0, 0, 0),}); //vevant
+  page.drawText(text, { x: 452, y:  height - 545 , size: fontSize, color: rgb(0, 0, 0),}); //allant
 
+  page.drawText("x", { x: 220, y:  height - 200 , size: fontSize, color: rgb(0, 0, 0),}); //1A
+  page.drawText("x", { x: 220, y:  height - 222 , size: fontSize, color: rgb(0, 0, 0),}); //2A
+  page.drawText("x", { x: 220, y:  height - 241 , size: fontSize, color: rgb(0, 0, 0),}); //3A
+  page.drawText("x", { x: 220, y:  height - 260 , size: fontSize, color: rgb(0, 0, 0),}); //4A
+  page.drawText("x", { x: 220, y:  height - 285 , size: fontSize, color: rgb(0, 0, 0),}); //5A
+  page.drawText("x", { x: 220, y:  height - 305 , size: fontSize, color: rgb(0, 0, 0),}); //6A
+  page.drawText("x", { x: 220, y:  height - 325 , size: fontSize, color: rgb(0, 0, 0),}); //7A
+  page.drawText("x", { x: 220, y:  height - 345 , size: fontSize, color: rgb(0, 0, 0),}); //8A
+  page.drawText("x", { x: 220, y:  height - 365 , size: fontSize, color: rgb(0, 0, 0),}); //9A
+  page.drawText("x", { x: 220, y:  height - 385 , size: fontSize, color: rgb(0, 0, 0),}); //10A
+  page.drawText("x", { x: 220, y:  height - 405 , size: fontSize, color: rgb(0, 0, 0),}); //11A
+  page.drawText("x", { x: 220, y:  height - 425 , size: fontSize, color: rgb(0, 0, 0),}); //12A
+  page.drawText("x", { x: 220, y:  height - 445 , size: fontSize, color: rgb(0, 0, 0),}); //13A
+  page.drawText("x", { x: 220, y:  height - 465 , size: fontSize, color: rgb(0, 0, 0),}); //14A
+  page.drawText("x", { x: 220, y:  height - 485 , size: fontSize, color: rgb(0, 0, 0),}); //15A
+  page.drawText("x", { x: 220, y:  height - 505 , size: fontSize, color: rgb(0, 0, 0),}); //16A
+  page.drawText("x", { x: 220, y:  height - 525 , size: fontSize, color: rgb(0, 0, 0),}); //17A
   
+  page.drawText("x", { x: 380, y:  height - 200 , size: fontSize, color: rgb(0, 0, 0),}); //1B
+  page.drawText("x", { x: 380, y:  height - 222 , size: fontSize, color: rgb(0, 0, 0),}); //2B
+  page.drawText("x", { x: 380, y:  height - 241 , size: fontSize, color: rgb(0, 0, 0),}); //3B
+  page.drawText("x", { x: 380, y:  height - 260 , size: fontSize, color: rgb(0, 0, 0),}); //4B
+  page.drawText("x", { x: 380, y:  height - 285 , size: fontSize, color: rgb(0, 0, 0),}); //5B
+  page.drawText("x", { x: 380, y:  height - 305 , size: fontSize, color: rgb(0, 0, 0),}); //6B
+  page.drawText("x", { x: 380, y:  height - 325 , size: fontSize, color: rgb(0, 0, 0),}); //7B
+  page.drawText("x", { x: 380, y:  height - 345 , size: fontSize, color: rgb(0, 0, 0),}); //8B
+  page.drawText("x", { x: 380, y:  height - 365 , size: fontSize, color: rgb(0, 0, 0),}); //9B
+  page.drawText("x", { x: 380, y:  height - 385 , size: fontSize, color: rgb(0, 0, 0),}); //10B
+  page.drawText("x", { x: 380, y:  height - 405 , size: fontSize, color: rgb(0, 0, 0),}); //11B
+  page.drawText("x", { x: 380, y:  height - 425 , size: fontSize, color: rgb(0, 0, 0),}); //12B
+  page.drawText("x", { x: 380, y:  height - 445 , size: fontSize, color: rgb(0, 0, 0),}); //13B
+  page.drawText("x", { x: 380, y:  height - 465 , size: fontSize, color: rgb(0, 0, 0),}); //14B
+  page.drawText("x", { x: 380, y:  height - 485 , size: fontSize, color: rgb(0, 0, 0),}); //15B
+  page.drawText("x", { x: 380, y:  height - 505 , size: fontSize, color: rgb(0, 0, 0),}); //16B
+  page.drawText("x", { x: 380, y:  height - 525 , size: fontSize, color: rgb(0, 0, 0),}); //17B
+
 
  
   
