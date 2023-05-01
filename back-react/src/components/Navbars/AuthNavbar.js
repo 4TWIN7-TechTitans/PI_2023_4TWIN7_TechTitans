@@ -225,11 +225,18 @@ const AdminNavbar = () => {
 
               ) : (
                 <Nav>
-                  <NavItem>
-                    {" "}
+                  {/* <NavItem>
+                  
                     <NavLink className="nav-link-icon" to="/" tag={Link}>
                       <i className="ni ni-map-big" style={{color:"white"}}/>
                       <span className="nav-link-inner--text" style={{color:"white"}}>Home</span>
+                    </NavLink>
+                  </NavItem> */}
+                  <NavItem>
+                    
+                    <NavLink className="nav-link-icon" to="/" tag={Link}>
+                      <i className="ni ni-fat-add" style={{color:"white"}}/>
+                      <span className="nav-link-inner--text" style={{color:"white"}}>Statement</span>
                     </NavLink>
                   </NavItem>
 
