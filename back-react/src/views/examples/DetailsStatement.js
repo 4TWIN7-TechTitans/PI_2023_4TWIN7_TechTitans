@@ -598,7 +598,7 @@ for removal from the register.`,
                       >
                         {isListening ? "Stop" : "Start"} Saving Comment
                       </Button>
-                      <Button type="button" onClick={handleComment}>
+                      <Button type="submit" onClick={(event) => handleComment(event, true)}>
                         Save Comment
                       </Button>
                     </div>
