@@ -27,6 +27,9 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import jsPDF from "jspdf";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
+
 
 function DetailsStatement() {
   const [driverIdentityA, setdriverIdentityA] = useState("");
@@ -49,6 +52,10 @@ function DetailsStatement() {
   const [status, setStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const [timestamp, settimestamp] = useState("");
+  const [isListening, setIsListening] = useState(false)
+  const [savedcommentaire, setcommentaire] = useState([])
+  const { transcript, resetTranscript } = useSpeechRecognition();
+  const [savedNotes, setSavedNotes] = useState([]);
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -257,29 +264,57 @@ for removal from the register.`,
     setShowNotification(false);
   };
   ///
-  const handleComment = async (event, isRemove = false)  => {
+  useEffect(() => {
+    handleListen();
+  }, [isListening]);
+
+  const handleListen = () => {
+    if (isListening) {
+      SpeechRecognition.startListening();
+      SpeechRecognition.onend = () => {
+        console.log("continue..");
+        SpeechRecognition.startListening();
+      };
+    } else {
+      SpeechRecognition.stopListening();
+      SpeechRecognition.onend = () => {
+        console.log("Stopped Mic on Click");
+      };
+    }
+    SpeechRecognition.onstart = () => {
+      console.log("Mics on");
+    };
+
+    SpeechRecognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+      console.log(transcript);
+      setComment(transcript);
+      SpeechRecognition.onerror = (event) => {
+        console.log(event.error);
+      };
+    };
+  };
+
+  const handleComment = async (event, isRemove = false) => {
     event.preventDefault();
     const id_statement = new URLSearchParams(window.location.search).get("id");
     const timestamp = new Date();
 
     try {
       if (isRemove) {
-        await axios.put(
-          "http://localhost:5000/remove_comment/" + id_statement,
-          { commentaire: comment }
-        );
+        await axios.put("http://localhost:5000/remove_comment/" + id_statement, { commentaire: comment, savedNotes });
         toast.success("Comment removed successfully!");
       } else {
-        await axios.post(
-          "http://localhost:5000/comment/" + id_statement,
-          { commentaire: comment, timestamp: timestamp }
-        );
+        await axios.post("http://localhost:5000/comment/" + id_statement, { commentaire: comment, timestamp: timestamp, savedNotes });
         toast.success("Comment added successfully!");
       }
       // handle successful response
       setComment("");
+      setSavedNotes([]); // clear saved notes
       window.location.reload(); // Reload the page
-
     } catch (error) {
       // handle error
       const errorMessage = isRemove ? "An error occurred while removing the comment." : "An error occurred while adding the comment.";
@@ -556,6 +591,17 @@ for removal from the register.`,
                     <Button color="danger" style={{ float: "right", marginRight: "10px" }} onClick={(event) => handleComment(event, true)}>
                       Remove
                     </Button>
+                    <div>
+                      <Button
+                        type="button"
+                        onClick={() => setIsListening((prevState) => !prevState)}
+                      >
+                        {isListening ? "Stop" : "Start"} Saving Comment
+                      </Button>
+                      <Button type="button" onClick={handleComment}>
+                        Save Comment
+                      </Button>
+                    </div>
                   </Form>
 
                   <br /><br /><br />
