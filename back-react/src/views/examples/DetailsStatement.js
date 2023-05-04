@@ -268,7 +268,9 @@ for removal from the register.`,
     handleListen();
   }, [isListening]);
 
+
   const handleListen = () => {
+    console.log("Listen");
     if (isListening) {
       SpeechRecognition.startListening();
       SpeechRecognition.onend = () => {
@@ -308,7 +310,7 @@ for removal from the register.`,
         await axios.put("http://localhost:5000/remove_comment/" + id_statement, { commentaire: comment, savedNotes });
         toast.success("Comment removed successfully!");
       } else {
-        await axios.post("http://localhost:5000/comment/" + id_statement, { commentaire: comment, timestamp: timestamp, savedNotes });
+        await axios.post("http://127.0.0.1:5000/comment/" + id_statement, { commentaire: comment, timestamp: timestamp, savedNotes });
         toast.success("Comment added successfully!");
       }
       // handle successful response
@@ -598,14 +600,12 @@ for removal from the register.`,
                       >
                         {isListening ? "Stop" : "Start"} Saving Comment
                       </Button>
-                      <Button type="submit" onClick={(event) => handleComment(event, true)}>
+                      <Button type="submit" onClick={(event) => handleComment(event, false)}>
                         Save Comment
                       </Button>
                     </div>
                   </Form>
-
-                  <br /><br /><br />
-
+                
                   <div style={{ backgroundColor: "#eeeee4", borderRadius: "50px", textAlign: "center" }}>
                     <h2 className="mb-0">Expert Comments</h2>
                     <Card>
@@ -618,6 +618,7 @@ for removal from the register.`,
                     </Card>
                     <br /><br /><br /><br />
                   </div>
+
 
 
                 </CardBody>
