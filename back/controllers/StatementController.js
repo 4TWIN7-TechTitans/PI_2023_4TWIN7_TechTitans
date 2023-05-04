@@ -403,3 +403,17 @@ module.exports.gen_pdf = async (req, res) => {
   await fs.promises.writeFile("new.pdf", pdfBytes);
   res.status(200).json({ width , height});
 };
+
+module.exports.get_statement_by_location = async (req, res) => {
+  try {
+    const location = req.query.location;
+    const statement = await StatementModel.findOne({ location }); 
+    if (!statement) {
+      res.status(404).json({ message: "Statement not found" });
+    } else {
+      res.status(200).json({ statement });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving statement", error });
+  }
+};

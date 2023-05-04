@@ -25,4 +25,7 @@ router.put("/remove_comment/:id", statementController.remove_comment_from_statem
 router.post("/gen_statement", statementController.gen_statement_post);
 router.post("/genpdf", statementController.gen_pdf);
 
+
+router.get('/getstatementlocation/:location', statementController.get_statement_by_location);
+
 module.exports = router;

@@ -355,6 +355,13 @@ function OdmAgence() {
                           Details
                         </Button>{" "}
                       </td>
+                      <td>
+                        {" "}
+                        <Button href={"/?/??=" + statement._id}>
+                          {" "}
+                          Export statement
+                        </Button>{" "}
+                      </td>
                     </tr>
                   );
                 })}

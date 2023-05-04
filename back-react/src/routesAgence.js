@@ -22,6 +22,7 @@ import AddExpert from "views/examples/addExpert";
 import ListOfExperts from "views/examples/ListOfExperts";
 import OdmAgence from "views/examples/OdmAgence";
 import Detailssag from "views/examples/Detailssag";
+import accplacechart  from "views/examples/accplacechart";
 var routesAgence = [
   //TODO : change admin to user view profile
   
@@ -74,6 +75,15 @@ var routesAgence = [
     component: Detailssag,
     layout: "/agence",
     showInSidebar: false,
+  },
+
+  {
+    path: "/accplacechart",
+    name: "Most Frequent Accidents Chart",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: accplacechart,
+    layout: "/agence",
+    showInSidebar: true,
   },
 
 ];
