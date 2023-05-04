@@ -58,7 +58,7 @@ def train():
         if df[column].dtype == 'object':
             # fit the label encoder and transform the column
             df[column] = label_encoder.fit_transform(df[column])
-            print(df[column])
+         #   print(df[column])
         else:
             # otherwise, convert the column to string and encode it
             df[column] = label_encoder.fit_transform(
@@ -77,11 +77,12 @@ def train():
     clf = LogisticRegression(random_state=0).fit(X_df, y)
     
     dump(clf, 'model.joblib') 
-    print(clf)
+    #print(clf)
 
     # print the accuracy of the model on the training set
     accuracy = clf.score(X, y)
-    print(f"Accuracy: {accuracy}")
+  #  print(f"Accuracy: {accuracy}")
+    print(accuracy)
 
 
 train()

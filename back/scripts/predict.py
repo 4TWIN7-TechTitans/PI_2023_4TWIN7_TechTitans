@@ -75,7 +75,9 @@ if __name__ == '__main__':
 
     # Make predictions
     predictions = predict()
+    
+    print(predictions)
 
     # Save predictions to file
-    with open("predictions.dump", 'w') as f:
-        json.dump(predictions.tolist(), f)
+   # with open("predictions.dump", 'w') as f:
+    #    json.dump(predictions.tolist(), f)
