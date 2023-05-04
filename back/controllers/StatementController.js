@@ -406,7 +406,7 @@ module.exports.gen_pdf = async (req, res) => {
 
 module.exports.get_statement_by_location = async (req, res) => {
   try {
-    const location = req.query.location;
+    const location = req.params.location;
     const statement = await StatementModel.findOne({ location }); 
     if (!statement) {
       res.status(404).json({ message: "Statement not found" });
@@ -417,3 +417,4 @@ module.exports.get_statement_by_location = async (req, res) => {
     res.status(500).json({ message: "Error retrieving statement", error });
   }
 };
+
