@@ -459,7 +459,7 @@ const gen_pdf = async (statement) => {
 
 module.exports.get_statement_by_location = async (req, res) => {
   try {
-    const location = req.query.location;
+    const location = req.params.location;
     const statement = await StatementModel.findOne({ location }); 
     if (!statement) {
       res.status(404).json({ message: "Statement not found" });
