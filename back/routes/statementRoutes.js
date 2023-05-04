@@ -29,4 +29,8 @@ router.post("/genpdf", statementController.genPDFfromStatementId);
 router.get('/getstatementlocation/:location', statementController.get_statement_by_location);
 router.get('/dlconstat', statementController.dlPDF);
 
+//ai
+router.post("/train_offer", statementController.train_offer);
+router.post("/decision_prediction", statementController.predictDecision);
+router.get("/get_train_offer", statementController.get_train_offer);
 module.exports = router;
