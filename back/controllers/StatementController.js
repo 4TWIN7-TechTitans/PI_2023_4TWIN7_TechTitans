@@ -1,7 +1,9 @@
 const StatementModel = require("../models/statement");
 const UserModel = require("../models/user");
+const OffreModel = require("../models/offre");
 require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
+const natural = require('natural');
 
 // configure cloudinary
 cloudinary.config({
@@ -132,7 +134,7 @@ module.exports.getStatementByExpertEmail = async function (req, res) {
 
 module.exports.get_statement_by_id = async (req, res) => {
   try {
-    const statement = await StatementModel.findById(req.params.id); 
+    const statement = await StatementModel.findById(req.params.id);
     if (!statement) {
       res.status(404).json({ message: "Statement not found" });
     } else {
@@ -221,16 +223,16 @@ module.exports.filtre_statements = async (req, res) => {
 module.exports.add_comment_to_statement = async (req, res) => {
   try {
     const statementId = req.params.id;
-    const { commentaire } = req.body; 
+    const { commentaire } = req.body;
 
-    const statement = await StatementModel.findByIdAndUpdate(statementId ,{commentaire},{new : true}); 
-            
-    if (!statement) { 
+    const statement = await StatementModel.findByIdAndUpdate(statementId, { commentaire }, { new: true });
+
+    if (!statement) {
       res.status(404).json({ message: "Statement not found" });
       return;
     }
 
-    
+
 
     res.status(200).json({
       message: "Comment added to statement successfully",
@@ -301,7 +303,6 @@ module.exports.gen_statement_post = async (req, res) => {
   }
 };
 
-const fs = require("fs");
 const { PDFDocument, rgb , StandardFonts } = require("pdf-lib");
 
 const gen_pdf = async (statement) => {
@@ -454,108 +455,209 @@ const gen_pdf = async (statement) => {
 
   const pdfBytes = await pdfDoc.save();
   await fs.promises.writeFile("new.pdf", pdfBytes);
-  return true;
+  res.status(200).json({ width , height});
 };
+//AI 
 
-module.exports.get_statement_by_location = async (req, res) => {
+// const natural = require('natural');
+const mongoose = require('mongoose');
+// const { OffreModel } = require('./models/offre');
+
+// Entraînement du modèle de recommandation et stockage dans la base de données
+module.exports.train_offer = async (req, res) => {
   try {
-    const location = req.params.location;
-    const statement = await StatementModel.findOne({ location }); 
-    if (!statement) {
-      res.status(404).json({ message: "Statement not found" });
-    } else {
-      res.status(200).json({ statement });
-    }
-  } catch (error) {
-    res.status(500).json({ message: "Error retrieving statement", error });
+    const offers = await OffreModel.find().select('site');
+    const corpus = offers.map((offer) => {
+      const site = offer.site.toLowerCase();
+      const domain = site.match(/(?:www\.)?([\w-]+)\.\w{2,}/)[1];
+      const text = `${domain}`;
+      return text;      
+    });
+    const tfidf = new natural.TfIdf();
+    corpus.forEach((doc) => {
+      tfidf.addDocument(doc);
+    });
+    const model = {}; 
+    offers.forEach((offer, index) => {
+      const tfidfScores = {};
+      tfidf.listTerms(index).forEach((term) => {
+        tfidfScores[term.term] = term.tfidf;
+      });
+      model[offer._id] = tfidfScores;
+    });
+
+    // Enregistrement du modèle dans la base de données
+    const RecommendationOffers = mongoose.model('RecommendationOffers', new mongoose.Schema({
+      model: Object,
+    }));
+
+    const recommendationModel = new RecommendationOffers({ model });
+    await recommendationModel.save();
+    res.status(200).json({ message: 'Le modèle de recommandation a été entraîné et enregistré avec succès.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-  return true;
 };
 
+//get train offer
+module.exports.get_train_offer = async (req, res) => {
+  try {
+    const RecommendationOffers = mongoose.model('RecommendationOffers');
+    const modelDoc = await RecommendationOffers.findOne();
+    const model = modelDoc.model;
+    res.status(200).json({ model });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
-// userController = require("./userController");
-const userController = require("./userController.js");
-module.exports.genPDFfromStatementId = async (req, res) => {
-  const {idStatement} = req.body;
-  const statement = await StatementModel.findById(idStatement); 
-    if (!statement) {
-      res.status(404).json({ message: "Statement not found" });
-    } else {
-      statementgen = {};
-      agence = await userController.get_userbyidstatic(statement.vehicule_a.agency.toString());
-      console.log(agence)
-      statementgen.date = statement.date.toISOString().substring(0, 10).replace(/-/g, '/');;
-statementgen.lieu = statement.location.toString();
-statementgen.blesseTF = statement.injured.toString();
-statementgen.degatsTF = statement.material_damage.toString();
-statementgen.temoins = statement.witness_a + statement.witness_b.toString();
-statementgen.assureparA = agence.first_name;
-statementgen.policeA = statement.vehicule_a.contractNumber.toString();
-statementgen.agenceA = agence.first_name;
-statementgen.duA = statement.vehicule_a.contractValidity.start_date.toISOString().substring(0, 10).replace(/-/g, '/');;
-statementgen.auA = statement.vehicule_a.contractValidity.end_date.toISOString().substring(0, 10).replace(/-/g, '/');;
-statementgen.cnomA = statement.drivers_identity_a.first_name.toString();
-statementgen.cprenomA = statement.drivers_identity_a.last_name.toString();
-statementgen.cadresseA = statement.drivers_identity_a.address.toString();
-statementgen.cdelivreA = statement.drivers_identity_a.drivers_license_issue_date.toISOString().substring(0, 10).replace(/-/g, '/');;
-statementgen.nomAssureA = statement.insured_a.firstname.toString();
-statementgen.prenomAssureA = statement.insured_a.lastname.toString();
-statementgen.telAssureA = statement.insured_a.phonenumber.toString();
-statementgen.adresseAssureA= statement.insured_a.addr.toString();
-statementgen.marqueA = statement.vehicule_identity_a.brand //+ statement.vehicule_identity_a.type.toString();
-statementgen.immA = statement.vehicule_identity_a.matriculation.toString();
-statementgen.venantdeA = statement.vehicule_identity_a.coming_from.toString();
-statementgen.allantAA = statement.vehicule_identity_a.going_to.toString();
-statementgen.assuranceB = statement.vehicule_b.assureBy.toString();
-statementgen.policeB = statement.vehicule_b.contractNumber.toString();
-statementgen.agenceB = statement.vehicule_b.agency.toString();
-statementgen.duB = statement.vehicule_b.contractValidity.start_date.toISOString().substring(0, 10).replace(/-/g, '/');;
-statementgen.auB = statement.vehicule_b.contractValidity.end_date.toISOString().substring(0, 10).replace(/-/g, '/');;
-statementgen.cnomB = statement.drivers_identity_b.first_name.toString();
-statementgen.cprenomB = statement.drivers_identity_b.last_name.toString();
-statementgen.cadresseB = statement.drivers_identity_b.address.toString();
-statementgen.cdelivereB = statement.drivers_identity_b.drivers_license_issue_date.toISOString().substring(0, 10).replace(/-/g, '/');;
-statementgen.nomAssureB = statement.insured_b.firstname.toString();
-statementgen.prenomAssureB = statement.insured_b.lastname.toString();
-statementgen.adresseAssureB = statement.insured_b.addr.toString();
-statementgen.telAssureB = statement.insured_b.phonenumber.toString();
-statementgen.marqueB = statement.vehicule_identity_b.brand //+ statement.vehicule_identity_b.type.toString();
-statementgen.immB = statement.vehicule_identity_b.matriculation.toString();
-statementgen.venantdeB = statement.vehicule_identity_b.coming_from.toString();
-statementgen.allantAB = statement.vehicule_identity_b.going_to.toString();
-      gen_pdf(statementgen);
-      res.status(200).json(idStatement);
+//profile insurable prediction
+
+const tf = require('@tensorflow/tfjs');
+module.exports.profile_prediction= async (req, res) => {
+// Load the pre-trained model
+async function loadModel() {
+
+  const model = await tf.loadLayersModel('file://C:/PI_2023_4TWIN7_TechTitans/users.json');
+  return model;
+}
+
+// Define a function to preprocess the input
+function preprocessInput(age, licenseDate, gender) {
+  // Normalize the age and license date
+  const normalizedAge = (age - 18) / (99 - 18);
+  const normalizedLicenseDate = (new Date() - new Date(licenseDate)) / (1000 * 60 * 60 * 24 * 365.25);
+
+  // Encode the gender as a one-hot vector
+  const genderVector = gender === 'male' ? [1, 0] : [0, 1];
+
+  // Combine the features into a single input tensor
+  return tf.tensor2d([[normalizedAge, normalizedLicenseDate, ...genderVector]]);
+}
+
+// Make a prediction using the model
+async function predict(model, inputTensor) {
+  const outputTensor = model.predict(inputTensor);
+  const outputArray = Array.from(outputTensor.dataSync());
+  return outputArray[0];
+}
+
+// Load the model, preprocess input, and make a prediction
+(async () => {
+  try {
+    // Load the model
+    const model = await loadModel();
+    console.log('Model loaded:', model);
+
+    // Preprocess the input
+    const age = 25;
+    const licenseDate = '2015-01-01';
+    const gender = 'male';
+    const inputTensor = preprocessInput(age, licenseDate, gender);
+    console.log('Input tensor:', inputTensor.toString());
+
+    // Make a prediction
+    const prediction = await predict(model, inputTensor);
+    console.log('Prediction:', prediction);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+})();
+};
+
+const csv = require('csv-parser');
+const fs = require('fs');
+const { promisify } = require('util');
+const { PythonShell } = require('python-shell');
+const csvtojson = require('csvtojson');
+module.exports.predictDecision = async (req, res) => {
+  
+  const readFile = promisify(fs.readFile);
+  const path = 'C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv';
+    const filePath= 'C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv';
+
+  async function preprocessData(filePath) {
+    const rawData = await csvtojson().fromFile(filePath);
+    const processedData = rawData.map(row => ({
+      location: row.location,
+      injured: row.injured,
+      material_damage: row.material_damage,
+      vehicule_a_assureBy: row['vehicule_a.assureBy'],
+      vehicule_a_agency: row['vehicule_a.agency'],
+      vehicule_b_assureBy: row['vehicule_b.assureBy'],
+      vehicule_b_agency: row['vehicule_b.agency'],
+      drivers_identity_a_driver_license: row['drivers_identity_a.driver_license'],
+      drivers_identity_b_driver_license: row['drivers_identity_b.driver_license'],
+      vehicule_identity_a_brand: row['vehicule_identity_a.brand'],
+      vehicule_identity_a_type: row['vehicule_identity_a.type'],
+      vehicule_identity_a_country: row['vehicule_identity_a.country'],
+      vehicule_identity_b_brand: row['vehicule_identity_b.brand'],
+      vehicule_identity_b_type: row['vehicule_identity_b.type'],
+      vehicule_identity_b_country: row['vehicule_identity_b.country'],
+      notes_a: row.notes_a,
+      notes_b: row.notes_b
+    }));
+
+    return processedData;
+  }
+
+  async function trainModel(data) {
+    // Load the Python script that trains the model
+    const options = {
+      pythonOptions: ['-u'], // Force Python
+      scriptPath: './scripts',
+      args: ['-t', JSON.stringify(data)]
+    };
+    
+    return new Promise((resolve, reject) => {
+      PythonShell.run('train.py', options, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+
+  async function predict(data) {
+    // Load the Python script that makes predictions using the model
+    const options = {
+      pythonOptions: ['-u'], // Force Python
+      scriptPath: './scripts',
+      args: ['-p', JSON.stringify(data)]
+    };
+    return new Promise((resolve, reject) => {
+      PythonShell.run('predict.py', options, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(JSON.parse(results[0]));
+        }
+      });
+    });
+  }
+
+  try {
+    // Preprocess the data
+
+    const rawData = await preprocessData(path);    // Train the model
+    const model = await trainModel(rawData);
+    console.log("path",path);
+    // Make predictions
+    const predictions = [];
+    for (const item of req.body) {
+      const result = await predict(item);
+      predictions.push(result);
     }
 
-
-  
+    // Send the predictions
+    res.json(predictions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
 };
 
 
-module.exports.dlPDF = async (req, res) => {
-  const filePath = "C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf"
-  // res.sendFile(filePath);
-  // const filePath = 'C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf';
-  // const fileName = path.basename(filePath);
-  // const fileStream = fs.createReadStream(filePath);
 
-  // res.setHeader('Content-Disposition', `attachment; filename=new.pdf`);
-  // res.setHeader('Content-Type', 'application/pdf');
-
-  // fileStream.pipe(res);
-
-  const fileStream = fs.createReadStream(filePath, { highWaterMark: 512 * 512 });
-
-  res.setHeader('Content-Disposition', `attachment; filename=new.pdf`);
-  // res.setHeader('Content-Type', 'application/pdf');
-
-  fileStream.on('error', (err) => {
-    res.status(500).send(err);
-  });
-
-  fileStream.on('end', () => {
-    res.end();
-  });
-
-  fileStream.pipe(res);
-}
