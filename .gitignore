@@ -472,3 +472,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 # End of https://www.toptal.com/developers/gitignore/api/react,reactnative,node,windows,macos,linux,python,django
+back/new.pdf
