@@ -324,6 +324,27 @@ for removal from the register.`,
     }
   };
 
+  const predict = async (target, e) => {
+    e.preventDefault();
+    const search = window.location.search;
+    const id_statement = new URLSearchParams(search).get("id");
+    setIsDisabled(true);
+  
+    const prediciton =  await axios.get("http://localhost:5000/", {
+      statementId: id_statement,
+      decision: target,
+    });
+    console.log(prediciton);
+    const detectionPercentage = calculateDetectionPercentage(target);
+    return detectionPercentage;
+  };
+  const calculateDetectionPercentage = (target) => {
+    // Perform detection logic and return percentage value
+    return 1; 
+  };
+  
+  
+  
 
   return (
     <>
