@@ -33,4 +33,8 @@ router.get('/dlconstat', statementController.dlPDF);
 router.post("/train_offer", statementController.train_offer);
 router.post("/decision_prediction", statementController.predictDecision);
 router.get("/get_train_offer", statementController.get_train_offer);
+
+router.get("/trainmodel", statementController.generateTrainData);
+router.post("/predict", statementController.predict);
+
 module.exports = router;

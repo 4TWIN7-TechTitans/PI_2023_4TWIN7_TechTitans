@@ -413,37 +413,38 @@ async function predict(model, inputTensor) {
 })();
 };
 
-const csv = require('csv-parser');
-const fs = require('fs');
-const { promisify } = require('util');
-const { PythonShell } = require('python-shell');
-const csvtojson = require('csvtojson');
+const csv = require("csv-parser");
+const fs = require("fs");
+const { promisify } = require("util");
+const { PythonShell } = require("python-shell");
+const csvtojson = require("csvtojson");
 module.exports.predictDecision = async (req, res) => {
-  
   const readFile = promisify(fs.readFile);
-  const path = 'C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv';
-    const filePath= 'C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv';
+  const path = "C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv";
+  const filePath = "C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv";
 
   async function preprocessData(filePath) {
     const rawData = await csvtojson().fromFile(filePath);
-    const processedData = rawData.map(row => ({
+    const processedData = rawData.map((row) => ({
       location: row.location,
       injured: row.injured,
       material_damage: row.material_damage,
-      vehicule_a_assureBy: row['vehicule_a.assureBy'],
-      vehicule_a_agency: row['vehicule_a.agency'],
-      vehicule_b_assureBy: row['vehicule_b.assureBy'],
-      vehicule_b_agency: row['vehicule_b.agency'],
-      drivers_identity_a_driver_license: row['drivers_identity_a.driver_license'],
-      drivers_identity_b_driver_license: row['drivers_identity_b.driver_license'],
-      vehicule_identity_a_brand: row['vehicule_identity_a.brand'],
-      vehicule_identity_a_type: row['vehicule_identity_a.type'],
-      vehicule_identity_a_country: row['vehicule_identity_a.country'],
-      vehicule_identity_b_brand: row['vehicule_identity_b.brand'],
-      vehicule_identity_b_type: row['vehicule_identity_b.type'],
-      vehicule_identity_b_country: row['vehicule_identity_b.country'],
+      vehicule_a_assureBy: row["vehicule_a.assureBy"],
+      vehicule_a_agency: row["vehicule_a.agency"],
+      vehicule_b_assureBy: row["vehicule_b.assureBy"],
+      vehicule_b_agency: row["vehicule_b.agency"],
+      drivers_identity_a_driver_license:
+        row["drivers_identity_a.driver_license"],
+      drivers_identity_b_driver_license:
+        row["drivers_identity_b.driver_license"],
+      vehicule_identity_a_brand: row["vehicule_identity_a.brand"],
+      vehicule_identity_a_type: row["vehicule_identity_a.type"],
+      vehicule_identity_a_country: row["vehicule_identity_a.country"],
+      vehicule_identity_b_brand: row["vehicule_identity_b.brand"],
+      vehicule_identity_b_type: row["vehicule_identity_b.type"],
+      vehicule_identity_b_country: row["vehicule_identity_b.country"],
       notes_a: row.notes_a,
-      notes_b: row.notes_b
+      notes_b: row.notes_b,
     }));
 
     return processedData;
@@ -452,13 +453,13 @@ module.exports.predictDecision = async (req, res) => {
   async function trainModel(data) {
     // Load the Python script that trains the model
     const options = {
-      pythonOptions: ['-u'], // Force Python
-      scriptPath: './scripts',
-      args: ['-t', JSON.stringify(data)]
+      pythonOptions: ["-u"], // Force Python
+      scriptPath: "./scripts",
+      args: ["-t", JSON.stringify(data)],
     };
-    
+
     return new Promise((resolve, reject) => {
-      PythonShell.run('train.py', options, (error, results) => {
+      PythonShell.run("train.py", options, (error, results) => {
         if (error) {
           reject(error);
         } else {
@@ -471,12 +472,12 @@ module.exports.predictDecision = async (req, res) => {
   async function predict(data) {
     // Load the Python script that makes predictions using the model
     const options = {
-      pythonOptions: ['-u'], // Force Python
-      scriptPath: './scripts',
-      args: ['-p', JSON.stringify(data)]
+      pythonOptions: ["-u"], // Force Python
+      scriptPath: "./scripts",
+      args: ["-p", JSON.stringify(data)],
     };
     return new Promise((resolve, reject) => {
-      PythonShell.run('predict.py', options, (error, results) => {
+      PythonShell.run("predict.py", options, (error, results) => {
         if (error) {
           reject(error);
         } else {
@@ -489,9 +490,9 @@ module.exports.predictDecision = async (req, res) => {
   try {
     // Preprocess the data
 
-    const rawData = await preprocessData(path);    // Train the model
+    const rawData = await preprocessData(path); // Train the model
     const model = await trainModel(rawData);
-    console.log("path",path);
+    console.log("path", path);
     // Make predictions
     const predictions = [];
     for (const item of req.body) {
@@ -503,7 +504,7 @@ module.exports.predictDecision = async (req, res) => {
     res.json(predictions);
   } catch (error) {
     console.error(error);
-    res.status(500).send('An error occurred');
+    res.status(500).send("An error occurred");
   }
 };
 
@@ -763,4 +764,31 @@ module.exports.get_statement_by_location = async (req, res) => {
     res.status(500).json({ message: "Error retrieving statement", error });
   }
   return true;
+};
+
+
+
+module.exports.generateTrainData = async  (req, res) => {
+  try {
+    res.status(200).json("hello world");
+  } catch (e) {
+    res.status(500).json("error");
+  }
+};
+
+module.exports.predict = async (req, res) => {
+  const { statementId } = req.body;
+  try {
+    const statement = await StatementModel.findById(statementId);
+    console.log(statement)
+    if (!statement) {
+      throw new Error();
+    }
+
+    //python call arg
+
+    res.status(200).json(statement);
+  } catch (e) {
+    res.status(500).json("error");
+  }
 };
