@@ -1931,6 +1931,21 @@ module.exports.get_userbyid = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+module.exports.get_userbyidstatic = async (_id) => {
+  try {
+    const user = await userModel.findById(_id);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (err) {
+    
+    // res.status(400).json({ error: err.message });
+  }
+};
 //get Agence By Email
 module.exports.get_agence_by_email = async (req, res) => {
   const email = req.params.email;

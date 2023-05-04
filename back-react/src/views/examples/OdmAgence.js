@@ -42,6 +42,43 @@ function OdmAgence() {
     return b ? b.pop() : "";
   }
 
+  const handleExport  = async (idStatement)=> {
+    // console.log(idStatement)
+        const result = await axios.post("http://127.0.0.1:5000/genpdf" ,{idStatement : idStatement})
+        // const url = "C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf";
+        // const link = document.createElement('a');
+        // link.href = url;
+        // link.download = 'C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf';
+        // document.body.appendChild(link);
+        // link.click();
+        // document.body.removeChild(link);
+
+  //       const fileUrl = 'C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf'; // Replace with the actual URL of the file
+  // const response = await fetch(fileUrl);
+  // const blob = await response.blob();
+  // const link = document.createElement('a');
+  // link.href = URL.createObjectURL(blob);
+  // link.download = 'new.pdf';
+  // document.body.appendChild(link);
+  // link.click();
+  // document.body.removeChild(link);
+  // URL.revokeObjectURL(link.href);
+  // window.location.href = 'localhost:5000/dlconstat'; // Replace PORT with the port number your Express app is running on
+  window.open("localhost:5000/dlconstat", "_blank");
+
+  // var url = "C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf";
+// var filename = "new.pdf";
+
+// var link = document.createElement("a");
+// link.href = url;
+// link.download = filename;
+// document.body.appendChild(link);
+// link.click();
+// document.body.removeChild(link);
+
+    
+  }
+
   let notificationShown = false;
   const fetchData = async () => {
     try {
@@ -357,7 +394,7 @@ function OdmAgence() {
                       </td>
                       <td>
                         {" "}
-                        <Button href={"/?/??=" + statement._id}>
+                        <Button onClick={() => handleExport(statement._id)}>
                           {" "}
                           Export statement
                         </Button>{" "}
