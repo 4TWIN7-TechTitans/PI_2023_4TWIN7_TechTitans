@@ -38,6 +38,6 @@ router.get("/trainmodel", statementController.generateTrainData);
 router.post("/predict", statementController.predict);
 
 
-router.get("/fraud_detection/:id", statementController.fraud_detection);
+router.get("/fraud_detection/:id", statementController.fraud_detection_algorithme);
 
 module.exports = router;
