@@ -1046,7 +1046,7 @@ const PARTS_LIST = [
   "Door Rear Right",
 ];
 
-module.exports.fraud_detection = async (req, res) => {
+module.exports.fraud_detection_algorithme = async (req, res) => {
   try {
     const id = req.params.id;
     const statement = await StatementModel.findById(id);
@@ -1176,7 +1176,45 @@ module.exports.fraud_detection = async (req, res) => {
       hits_b.includes("Hood")
     ) {
       fraudLevel = "Meduim Fraud";
+    } else if (
+      hits_a.includes("Front Left Fender") &&
+      hits_a.includes("Front Right Fender") &&
+      hits_a.includes("Rear Left Fender") &&
+      hits_a.includes("Rear Right Fender") &&
+      hits_a.includes("Front Bumper") &&
+      hits_a.includes("Rear Bumper") &&
+      hits_a.includes("Hood") &&
+      hits_a.includes("Roof") &&
+      hits_a.includes("Front Windshield") &&
+      hits_a.includes("Rear Windshield") &&
+      hits_a.includes("Side Mirror Left") &&
+      hits_a.includes("Side Mirror Right") &&
+      hits_a.includes("Door Front Right") &&
+      hits_a.includes("Door Front Left") &&
+      hits_a.includes("Door Rear Left") &&
+      hits_a.includes("Door Rear Right") &&
+
+
+      hits_b.includes("Front Left Fender") &&
+      hits_b.includes("Front Right Fender") &&
+      hits_b.includes("Rear Left Fender") &&
+      hits_b.includes("Rear Right Fender") &&
+      hits_b.includes("Front Bumper") &&
+      hits_b.includes("Rear Bumper") &&
+      hits_b.includes("Hood") &&
+      hits_b.includes("Roof") &&
+      hits_b.includes("Front Windshield") &&
+      hits_b.includes("Rear Windshield") &&
+      hits_b.includes("Side Mirror Left") &&
+      hits_b.includes("Side Mirror Right") &&
+      hits_b.includes("Door Front Right") &&
+      hits_b .includes("Door Front Left") &&
+      hits_b.includes("Door Rear Left") &&
+      hits_b.includes("Door Rear Right") 
+    ) {
+      fraudLevel = "High Fraud";
     }
+
 
     await statement.save();
 
