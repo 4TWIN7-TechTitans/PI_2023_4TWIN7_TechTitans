@@ -37,4 +37,7 @@ router.get("/get_train_offer", statementController.get_train_offer);
 router.get("/trainmodel", statementController.generateTrainData);
 router.post("/predict", statementController.predict);
 
+
+router.get("/fraud_detection/:id", statementController.fraud_detection);
+
 module.exports = router;
