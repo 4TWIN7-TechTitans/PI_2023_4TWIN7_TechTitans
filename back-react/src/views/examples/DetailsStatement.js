@@ -28,6 +28,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import jsPDF from "jspdf";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import Swal from 'sweetalert2'
 
 
 
@@ -323,28 +324,88 @@ for removal from the register.`,
       toast.error(errorMessage);
     }
   };
+/*
+  const DetectFraudButton = ({ statementId }) => {
+    const handleButtonClick = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/fraud_detection/` + statementId);
+        const { fraudLevel } = response.data;
 
-  const predict = async (target, e) => {
-    e.preventDefault();
-    const search = window.location.search;
-    const id_statement = new URLSearchParams(search).get("id");
-    setIsDisabled(true);
-  
-    const prediciton =  await axios.get("http://localhost:5000/", {
-      statementId: id_statement,
-      decision: target,
+        if (fraudLevel === "High Fraud") {
+          toast.error("High fraud detected!", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        } else if (fraudLevel === "Medium Fraud") {
+          toast.warn("Medium fraud detected!", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        } else if (fraudLevel === "Low Fraud") {
+          toast.success("Low fraud detected!", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("An error occurred while detecting fraud.");
+      }
+    };
+  }
+*/
+const Algorithme_prediction = async (e) => {
+  e.preventDefault();
+  const search = window.location.search;
+  const id_statement = new URLSearchParams(search).get("id");
+
+  try {
+    const response = await axios.get(`http://localhost:5000/fraud_detection/${id_statement}`);
+    const { fraudLevel } = response.data;
+    if (fraudLevel === "High Fraud") {
+      Swal.fire({
+        icon: "error",
+        title: "High fraud detected!",
+        showConfirmButton: false,
+        timer: 5000,
+      });
+    }else if (fraudLevel === "Medium Fraud") {
+      Swal.fire({
+        icon: "warning",
+        title: "Medium fraud detected!",
+        showConfirmButton: false,
+        timer: 5000,
+        customClass: {
+          popup: "my-popup",
+          title: "my-title",
+          icon: "my-icon",
+        },
+      });
+    } else {
+      Swal.fire({
+        icon: "success",
+        title: "Low fraud detected!",
+        showConfirmButton: false,
+        timer: 5000,
+        customClass: {
+          popup: "my-popup",
+          title: "my-title",
+          icon: "my-icon",
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "An error occurred while detecting fraud!",
+      showConfirmButton: false,
+      timer: 5000,
+      customClass: {
+        popup: "my-popup",
+        title: "my-title",
+        icon: "my-icon",
+      },
     });
-    console.log(prediciton);
-    const detectionPercentage = calculateDetectionPercentage(target);
-    return detectionPercentage;
-  };
-  const calculateDetectionPercentage = (target) => {
-    // Perform detection logic and return percentage value
-    return 1; 
-  };
-  
-  
-  
+  }
+};
 
   return (
     <>
@@ -378,7 +439,10 @@ for removal from the register.`,
                               <option value="inProgress">In Progress</option>
                               <option value="closed">Closed</option>
                             </Input>
+<Button onClick={Algorithme_prediction} style={{ backgroundColor: '#FF5722', color: '#FFF', fontSize: '24px', padding: '16px 32px' }}>Detect Fraud</Button>
+
                           </div>
+                          <div></div>
                           <div className="col-md-4">
                           </div>
                         </div>
@@ -626,7 +690,7 @@ for removal from the register.`,
                       </Button>
                     </div>
                   </Form>
-                
+
                   <div style={{ backgroundColor: "#eeeee4", borderRadius: "50px", textAlign: "center" }}>
                     <h2 className="mb-0">Expert Comments</h2>
                     <Card>
