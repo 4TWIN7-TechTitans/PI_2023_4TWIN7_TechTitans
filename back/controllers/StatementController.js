@@ -244,6 +244,57 @@ module.exports.add_comment_to_statement = async (req, res) => {
       .json({ message: "Error adding comment to statement", error });
   }
 };
+module.exports.get_comments_for_statement = async (req, res) => {
+  try {
+    const statementId = req.params.id;
+
+    const statement = await StatementModel.findById(statementId);
+    
+    if (!statement) {
+      res.status(404).json({ message: "Statement not found" });
+      return;
+    }
+
+    const comments = statement.commentaire;
+
+    res.status(200).json({
+      message: "Comments retrieved successfully",
+      comments,
+    });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Error retrieving comments for statement", error });
+  }
+};
+
+module.exports.get_comment_in_statement = async (req, res) => {
+  try {
+    const statementId = req.params.id;
+
+    const statement = await StatementModel.findById(statementId);
+
+    if (!statement) {
+      res.status(404).json({ message: "Statement not found" });
+      return;
+    }
+
+    const commentaire = statement.commentaire;
+
+    if (!commentaire) {
+      res.status(404).json({ message: "Comment not found" });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Comment retrieved successfully",
+      commentaire,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error retrieving comment", error });
+  }
+};
+
 
 module.exports.remove_comment_from_statement = async (req, res) => {
   try {
