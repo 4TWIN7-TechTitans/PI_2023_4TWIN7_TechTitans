@@ -46,6 +46,7 @@ function Detailssag() {
   const [showPDF, setShowPDF] = useState(false);
   const [commentaire, setCommentaire] = useState("");
   const [comments, setComments] = useState([]);
+
   const [status, setStatus] = useState(
     localStorage.getItem("statement_status") || "waiting"
   );
@@ -202,7 +203,7 @@ function Detailssag() {
         setlocation(statement.location);
         setsignature_a(statement.signature_a);
         setsignature_b(statement.signature_b);
-
+        setCommentaire(statement.commentaire);
         setDate(statement.date);
 
         console.log(driverIdentityA);
@@ -440,6 +441,21 @@ function Detailssag() {
                       for removal from the register."
                     </div>
                   </div>
+                  {commentaire ?
+  <div style={{ backgroundColor: "#eeeee4", borderRadius: "50px", textAlign: "center" }}>
+    <h2 className="mb-0">Expert Notes</h2>
+    <Card>
+      <Row>
+        <Col lg="12">
+          {commentaire}
+        </Col>
+      </Row>
+    </Card>
+    <br /><br /><br /><br />
+  </div>
+  : null
+}
+
 
 
                   {/* <Button onClick={generatePDF}>Generate PDF</Button> */}
