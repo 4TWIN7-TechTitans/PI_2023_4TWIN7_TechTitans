@@ -47,6 +47,7 @@ import MyStatements from "views/examples/Statements";
 import Notfound from "views/examples/Notfound";
 import Profile from "views/examples/Profile";
 import ViewProfile from "views/examples/ViewProfile";
+import Ocr from "views/examples/Ocr";
 import ChangePassword from "views/examples/ChangePassword";
 
 const Landing = (props) => {
@@ -82,6 +83,12 @@ const Landing = (props) => {
                   <a className='btn btn-primary btn-lg' href='/' role='button'>
                     Statement
                   </a>
+                  <h1 className='mb-3' >or submit your statement via our OCR technologie </h1>
+                  <a className='btn btn-primary btn-lg' href='/ocr' role='button' style={{marginBottom:"50px"}}>
+                    OCR
+                  </a>
+                  
+                  <br/>
                 </div>
               </div>
             </div>
@@ -139,6 +146,14 @@ const Landing = (props) => {
               <MyStatements />
             </Row>
           )}
+
+
+{window.location.pathname == "/ocr" && (
+            <Row>
+              <Ocr />
+            </Row>
+          )}
+
 
           {window.location.pathname == "/changepassword" && (
             <Row>
