@@ -1,126 +1,173 @@
-import React from "react";
-import {
-  Card,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  TabContent,
-  TabPane,
-} from "reactstrap";
+import { Card, CardBody ,Jumbotron } from "reactstrap";
 import Header from "components/Headers/Header";
 import { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
 import axios from "axios";
-import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
-import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-
-// "Explain things like you would to a 10 year old learning how to code."
-
-
+import { Bar } from "react-chartjs-2";
+import Chart from 'chart.js';
 const Index = () => {
-  function getCookie(key) {
-    var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-    return b ? b.pop() : "";
-  }
-  const API_KEY = "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";
-  const systemMessage = { //  Explain things like you're talking to a software professional with 5 years of experience.
-    "role": "system", "content": "Explain things like you're talking to a software professional with 2 years of experience."
-  }
-  const [messages, setMessages] = useState([
-    {
-      message: "Hello, I'm Assurini! Ask me anything!",
-      sentTime: "just now",
-      sender: "Assurini Bot is Typing"
-    }
-  ]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [locationsData, setLocationsData] = useState(null);
+  const [chartData, setChartData] = useState(null);
 
-  const handleSend = async (message) => {
-    const newMessage = {
-      message,
-      direction: 'outgoing',
-      sender: "user"
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/accidentogene");
+        const data = response.data.result;
+        setLocationsData(data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-    const newMessages = [...messages, newMessage];
-    
-    setMessages(newMessages);
+    fetchData();
+  }, []);
 
-    // Initial system message to determine ChatGPT functionality
-    // How it responds, how it talks, etc.
-    setIsTyping(true);
-    await processMessageToChatGPT(newMessages);
-  };
+  useEffect(() => {
+    if (locationsData) {
+      const labels = ["High Danger Zones", "Medium Danger Zones", "Less Danger Zones"];
+      const totalAccidents = locationsData.high_danger_zones.length + locationsData.medium_danger_zones.length + locationsData.less_danger_zones.length;
+      const data = [
+        locationsData.high_danger_zones.length / totalAccidents * 100,
+        locationsData.medium_danger_zones.length / totalAccidents * 100,
+        locationsData.less_danger_zones.length / totalAccidents * 100
+      ];
 
-  async function processMessageToChatGPT(chatMessages) { // messages is an array of messages
-    // Format messages for chatGPT API
-    // API is expecting objects in format of { role: "user" or "assistant", "content": "message here"}
-    // So we need to reformat
-
-    let apiMessages = chatMessages.map((messageObject) => {
-      let role = "";
-      if (messageObject.sender === "ChatGPT") {
-        role = "assistant";
-      } else {
-        role = "user";
-      }
-      return { role: role, content: messageObject.message}
-    });
-
-
-    // Get the request body set up with the model we plan to use
-    // and the messages which we formatted above. We add a system message in the front to'
-    // determine how we want chatGPT to act. 
-    const apiRequestBody = {
-      "model": "gpt-3.5-turbo",
-      "messages": [
-        systemMessage,  // The system message DEFINES the logic of our chatGPT
-        ...apiMessages // The messages from our chat with ChatGPT
-      ]
+      setChartData({
+        labels: labels,
+        datasets: [
+          {
+            label: "Percentage of Accidents",
+            data: data,
+            backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(255, 206, 86, 0.2)"],
+            borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)"],
+            borderWidth: 1
+          }
+        ]
+      });
     }
-    await new Promise(resolve => setTimeout(resolve, 1000)); // add a delay of 1 second
-    await fetch("https://api.openai.com/v1/chat/completions", 
-    {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(apiRequestBody)
-    }).then((data) => {
-      return data.json();
-    }).then((data) => {
-      console.log(data);
-      setMessages([...chatMessages, {
-        message: data.choices[0].message.content,
-        sender: "ChatGPT"
-      }]);
-      setIsTyping(false);
-    });
-  }
+  }, [locationsData]);
+  /* train model */
+  const [bestSite, setBestSite] = useState(null); // add state for best site name
+  const [model, setModel] = useState(null);
+
+  useEffect(() => {
+    const fetchModel = async () => {
+      const response = await axios.get('http://localhost:5000/get_train_offer');
+      setModel(response.data.model);
+      setBestSite(response.data.bestSite); // set the best site name
+    };
+
+    fetchModel();
+  }, []);
+
+  useEffect(() => {
+    if (model) {
+      const chartData = {
+        labels: [],
+        datasets: [{
+          label: 'TF-IDF Scores',
+          data: [],
+          backgroundColor: '#36a2eb',
+        }],
+      };
+
+      Object.entries(model).forEach(([offerId, tfidfScores]) => {
+        const offerName = tfidfScores && Object.keys(tfidfScores)[0];
+        const score = tfidfScores && Object.values(tfidfScores)[0];
+        if (offerName && score) {
+          chartData.labels.push(offerName);
+          chartData.datasets[0].data.push(score);
+        }
+      });
+
+      const ctx = document.getElementById('chart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+              },
+            }],
+          },
+        },
+      });
+    }
+  }, [model]);
+
+  /* fin train offer */
   return (
     <>
       <Header />
-      <Card className="shadow"></Card>
-      <div style={{ position:"relative", height: "800px", width: "1672px"  }}>
-      <MainContainer>
-          <ChatContainer>       
-            <MessageList 
-              scrollBehavior="smooth" 
-              typingIndicator={isTyping ? <TypingIndicator content="Assurini is typing" /> : null}
-            >
-              {messages.map((message, i) => {
-                console.log(message)
-                return <Message key={i} model={message} />
-              })}
-            </MessageList>
-            <MessageInput placeholder="Type message here" onSend={handleSend} />        
-          </ChatContainer>
-        </MainContainer>
+      <div className="container mt--5">
+        <div className="row">
+          <div className="col">
+            <Card className="shadow">
+              <CardBody>
+              <Jumbotron><center><h1>Most Accident-Prone Locations : </h1></center></Jumbotron>
+               
+                <p>Below is a breakdown of the most dangerous locations with respect to the percentage of accidents that occurred there:</p>
+                <div style={{ height: "500px" }}>
+                  {chartData && (
+                    <Bar
+                      data={chartData}
+                      options={{
+                        responsive: true,
+                        scales: {
+                          yAxes: [{
+                            ticks: {
+                              beginAtZero: true,
+                              precision: 0,
+                              callback: (value) => `${value}%`
+                            },
+                            scaleLabel: {
+                              display: true,
+                              labelString: "Percentage of Accidents"
+                            }
+                          }],
+                          xAxes: [{
+                            scaleLabel: {
+                              display: true,
+                              labelString: "Location"
+                            }
+                          }]
+                        },
+                        legend: {
+                          display: true,
+                          position: "top"
+                        }
+                      }}
+                    />
+                  )}
+                </div>
+              </CardBody>
+            </Card>
+            {/* train offer */}
+            <div className="row mt-5">
+              <div className="col">
+                <Card className="shadow">
+                  <CardBody>
+                    <h3>Train Offer Analysis</h3>
+                    <p>Below is a bar chart of the train offer at different sites based on the TF-IDF scores:</p>
+                    <div>
+                      <h1>Trained Offers</h1>
+                      <div>
+                        <canvas id="chart" />
+                      </div>
+                    </div>
+                    {bestSite && (
+                      
+                      <Jumbotron><center><h1>Best Offer is :  {bestSite}</h1></center></Jumbotron>
+                    )}
+                  </CardBody>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
     </>
   );
 };

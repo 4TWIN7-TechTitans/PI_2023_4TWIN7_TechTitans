@@ -30,14 +30,17 @@ router.get('/getstatementlocation/:location', statementController.get_statement_
 router.get('/dlconstat', statementController.dlPDF);
 
 //ai
+//train offer
 router.post("/train_offer", statementController.train_offer);
-router.post("/decision_prediction", statementController.predictDecision);
 router.get("/get_train_offer", statementController.get_train_offer);
 
+//decision prediction
+router.post("/decision_prediction", statementController.predictDecision);
 router.get("/trainmodel", statementController.generateTrainData);
 router.post("/predict", statementController.predict);
+router.get("/accidentogene", statementController.get_most_accident_prone_locations);
 
 
-router.get("/fraud_detection/:id", statementController.fraud_detection_algorithme);
+//router.get("/fraud_detection/:id", statementController.fraud_detection_algorithme);
 
 module.exports = router;

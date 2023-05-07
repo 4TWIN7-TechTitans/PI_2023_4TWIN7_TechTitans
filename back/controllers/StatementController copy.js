@@ -354,25 +354,24 @@ module.exports.train_offer = async (req, res) => {
 module.exports.get_train_offer = async (req, res) => {
   try {
     const RecommendationOffers = mongoose.model('RecommendationOffers');
+    const Offre = mongoose.model('Offre');
     const modelDoc = await RecommendationOffers.findOne();
     const model = modelDoc.model;
-    
-    // Get the best scored offer
-    const sites = Object.keys(model);
-    let bestSite = null;
-    let bestScore = -Infinity;
-    sites.forEach((site) => {
-      const tfidfScores = model[site];
-      const score = Object.values(tfidfScores).reduce((acc, cur) => acc + cur, 0);
-      if (score > bestScore) {
-        bestSite = site;
-        bestScore = score;
-      }
-    });
-    bestSite = bestSite.replace('_', '.'); 
-    
-    console.log(bestSite);
-    res.status(200).json({ bestSite, model });
+
+
+
+
+
+
+  // Combine the features into a single input tensor
+  return tf.tensor2d([[normalizedAge, normalizedLicenseDate, ...genderVector]]);
+}
+
+    const offre = await Offre.findOne({ site: bestSite });
+    const bestSiteName = offre ? offre.societe : bestSite;
+
+    console.log("hello",bestSiteName);
+    res.status(200).json({ bestSite: bestSiteName, model });
     
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -380,6 +379,29 @@ module.exports.get_train_offer = async (req, res) => {
 };
 
 
+
+
+
+
+
+
+    const rawData = await preprocessData(path); // Train the model
+    const model = await trainModel(rawData);
+    console.log("path", path);
+    // Make predictions
+    const predictions = [];
+    for (const item of req.body) {
+      const result = await predict(item);
+      predictions.push(result);
+    }
+
+    // Send the predictions
+    res.json(predictions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred");
+  }
+};
 
 module.exports.dlPDF = async (req, res) => {
   const filePath = "C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf";
@@ -717,7 +739,41 @@ const gen_pdf = async (statement) => {
     color: rgb(0, 0, 0),
   }); //allant
 
-
+  // page.drawText("x", { x: 220, y:  height - 200 , size: fontSize, color: rgb(0, 0, 0),}); //1A
+  // page.drawText("x", { x: 220, y:  height - 222 , size: fontSize, color: rgb(0, 0, 0),}); //2A
+  // page.drawText("x", { x: 220, y:  height - 241 , size: fontSize, color: rgb(0, 0, 0),}); //3A
+  // page.drawText("x", { x: 220, y:  height - 260 , size: fontSize, color: rgb(0, 0, 0),}); //4A
+  // page.drawText("x", { x: 220, y:  height - 285 , size: fontSize, color: rgb(0, 0, 0),}); //5A
+  // page.drawText("x", { x: 220, y:  height - 305 , size: fontSize, color: rgb(0, 0, 0),}); //6A
+  // page.drawText("x", { x: 220, y:  height - 325 , size: fontSize, color: rgb(0, 0, 0),}); //7A
+  // page.drawText("x", { x: 220, y:  height - 345 , size: fontSize, color: rgb(0, 0, 0),}); //8A
+  // page.drawText("x", { x: 220, y:  height - 365 , size: fontSize, color: rgb(0, 0, 0),}); //9A
+  // page.drawText("x", { x: 220, y:  height - 385 , size: fontSize, color: rgb(0, 0, 0),}); //10A
+  // page.drawText("x", { x: 220, y:  height - 405 , size: fontSize, color: rgb(0, 0, 0),}); //11A
+  // page.drawText("x", { x: 220, y:  height - 425 , size: fontSize, color: rgb(0, 0, 0),}); //12A
+  // page.drawText("x", { x: 220, y:  height - 445 , size: fontSize, color: rgb(0, 0, 0),}); //13A
+  // page.drawText("x", { x: 220, y:  height - 465 , size: fontSize, color: rgb(0, 0, 0),}); //14A
+  // page.drawText("x", { x: 220, y:  height - 485 , size: fontSize, color: rgb(0, 0, 0),}); //15A
+  // page.drawText("x", { x: 220, y:  height - 505 , size: fontSize, color: rgb(0, 0, 0),}); //16A
+  // page.drawText("x", { x: 220, y:  height - 525 , size: fontSize, color: rgb(0, 0, 0),}); //17A
+  
+  // page.drawText("x", { x: 380, y:  height - 200 , size: fontSize, color: rgb(0, 0, 0),}); //1B
+  // page.drawText("x", { x: 380, y:  height - 222 , size: fontSize, color: rgb(0, 0, 0),}); //2B
+  // page.drawText("x", { x: 380, y:  height - 241 , size: fontSize, color: rgb(0, 0, 0),}); //3B
+  // page.drawText("x", { x: 380, y:  height - 260 , size: fontSize, color: rgb(0, 0, 0),}); //4B
+  // page.drawText("x", { x: 380, y:  height - 285 , size: fontSize, color: rgb(0, 0, 0),}); //5B
+  // page.drawText("x", { x: 380, y:  height - 305 , size: fontSize, color: rgb(0, 0, 0),}); //6B
+  // page.drawText("x", { x: 380, y:  height - 325 , size: fontSize, color: rgb(0, 0, 0),}); //7B
+  // page.drawText("x", { x: 380, y:  height - 345 , size: fontSize, color: rgb(0, 0, 0),}); //8B
+  // page.drawText("x", { x: 380, y:  height - 365 , size: fontSize, color: rgb(0, 0, 0),}); //9B
+  // page.drawText("x", { x: 380, y:  height - 385 , size: fontSize, color: rgb(0, 0, 0),}); //10B
+  // page.drawText("x", { x: 380, y:  height - 405 , size: fontSize, color: rgb(0, 0, 0),}); //11B
+  // page.drawText("x", { x: 380, y:  height - 425 , size: fontSize, color: rgb(0, 0, 0),}); //12B
+  // page.drawText("x", { x: 380, y:  height - 445 , size: fontSize, color: rgb(0, 0, 0),}); //13B
+  // page.drawText("x", { x: 380, y:  height - 465 , size: fontSize, color: rgb(0, 0, 0),}); //14B
+  // page.drawText("x", { x: 380, y:  height - 485 , size: fontSize, color: rgb(0, 0, 0),}); //15B
+  // page.drawText("x", { x: 380, y:  height - 505 , size: fontSize, color: rgb(0, 0, 0),}); //16B
+  // page.drawText("x", { x: 380, y:  height - 525 , size: fontSize, color: rgb(0, 0, 0),}); //17B
   const pdfBytes = await pdfDoc.save();
   await fs.promises.writeFile("new.pdf", pdfBytes);
   return true;
