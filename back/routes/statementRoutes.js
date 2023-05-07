@@ -20,6 +20,7 @@ router.get("/getstatements/:case_state", statementController.filtre_statements);
 
 router.post("/comment/:id", statementController.add_comment_to_statement);
 router.put("/remove_comment/:id", statementController.remove_comment_from_statement);
+router.get("/get_comments_for_statement/:id", statementController.get_comments_for_statement);
 
 //Generate Statement : 
 router.post("/gen_statement", statementController.gen_statement_post);
