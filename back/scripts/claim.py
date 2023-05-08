@@ -22,8 +22,8 @@ def claim():
     
     # Drop the columns from the DataFrame
         data = data.drop(cols_to_drop, axis=1)
-        data = data.rename(columns={'model': 'vehicule_identity_a.brand'})    
-        data = data.rename(columns={'segment': 'vehicule_identity_a.type'})    
+        # data = data.rename(columns={'model': 'vehicule_identity_a.brand'})    
+        # data = data.rename(columns={'segment': 'vehicule_identity_a.type'})    
         return data
     data = drop_columns_with_no_data(data)
     data.info()
@@ -83,34 +83,34 @@ def claim():
     def encode_categorical_data(data,categorical_data):
         for column in categorical_data:
             unique_values = data[column].nunique()
-            if unique_values == 2:
-                # Use label encoding for binary data
-                encoder = LabelEncoder()
-                data[column] = encoder.fit_transform(data[column])
-                joblib.dump(encoder, 'fenc.joblib')
+        #    if unique_values == 2:
+            # Use label encoding for binary data
+            encoder = LabelEncoder()
+            data[column] = encoder.fit_transform(data[column])
+            joblib.dump(encoder, 'fenc.joblib')
 
-            if unique_values> 2 and unique_values< 6 :
-                # Use one-hot encoding for binary data
-                encoder = OneHotEncoder()
-                encoded_values = encoder.fit_transform(data[[column]])
-                new_columns = [column + '_' + str(i) for i in range(unique_values)]
-                encoded_df = pd.DataFrame(encoded_values.toarray(), columns=new_columns)
-                data = pd.concat([data, encoded_df], axis=1)
-                # Drop the main column after encoding
-                data.drop(column, axis=1, inplace=True)
-                joblib.dump(encoder, '2enc.joblib')
+            # if unique_values> 2 and unique_values< 6 :
+            #     # Use one-hot encoding for binary data
+            #     encoder = OneHotEncoder()
+            #     encoded_values = encoder.fit_transform(data[[column]])
+            #     new_columns = [column + '_' + str(i) for i in range(unique_values)]
+            #     encoded_df = pd.DataFrame(encoded_values.toarray(), columns=new_columns)
+            #     data = pd.concat([data, encoded_df], axis=1)
+            #     # Drop the main column after encoding
+            #     data.drop(column, axis=1, inplace=True)
+            #     joblib.dump(encoder, '2enc.joblib')
 
-            else:
-                # Use count encoding for categorical data with more than 2 unique values
-                counts = data[column].value_counts()
-                data[column] = data[column].map(counts)
+            # else:
+            #     # Use count encoding for categorical data with more than 2 unique values
+            #     counts = data[column].value_counts()
+            #     data[column] = data[column].map(counts)
         return data
+    
     data = encode_categorical_data(data,categorical_data)
     data.info()
     X = data.drop('is_claim', axis=1)
     y = data['is_claim']
     X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)
-    print(data)
 
     # Create an instance of the Random Forest Classifier
     rf = RandomForestClassifier()

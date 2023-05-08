@@ -1285,3 +1285,40 @@ module.exports.fraud_detection_algorithme = async (req, res) => {
     res.status(500).json({ message: "Error retrieving statement", error });
   }
 };
+
+//ai bonus malus vehicule :
+
+module.exports.claim = async (req, res) => {
+  try {
+    const row = req.body;
+    row=[0];
+    const rowJson = JSON.stringify(row);
+
+    const pythonProcess = spawn('python', ['C:/PI_2023_4TWIN7_TechTitans/back/scripts/claimTrained.py', rowJson]);
+
+    let stdout = '';
+    let stderr = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      stdout += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      stderr += data.toString();
+    });
+    console.log(data);
+    pythonProcess.on('close', (code) => {
+      if (code !== 0) {
+        console.error(`Python process exited with code ${code}`);
+        return res.status(500).json({ error: 'Python script failed' });
+      }
+      const result = stdout.trim();
+      console.log(result);
+      res.status(200).json({ result });
+    });
+
+  } catch (e) {
+    console.error(`Error: ${e.message}`);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

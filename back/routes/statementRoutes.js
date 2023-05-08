@@ -40,6 +40,7 @@ router.post("/decision_prediction", statementController.predictDecision);
 router.get("/trainmodel", statementController.generateTrainData);
 router.post("/predict", statementController.predict);
 router.get("/accidentogene", statementController.get_most_accident_prone_locations);
+router.post("/claim", statementController.claim);
 
 
 router.get("/fraud_detection/:id", statementController.fraud_detection_algorithme);

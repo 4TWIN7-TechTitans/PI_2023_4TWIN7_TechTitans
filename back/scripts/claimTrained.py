@@ -21,17 +21,23 @@ def claimP():
     # features = X_df[["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"]]
     
 
+    def extract_datetime_components(df):
+        for column_name in df.select_dtypes(include=['datetime']).columns:
+            df[column_name + '_year'] = df[column_name].dt.year
+            df[column_name + '_month'] = df[column_name].dt.month
+            df[column_name + '_day'] = df[column_name].dt.day
+            df[column_name + '_hour'] = df[column_name].dt.hour
+            df[column_name + '_minute'] = df[column_name].dt.minute
+            df[column_name + '_second'] = df[column_name].dt.second
+            df = df.drop(column_name, axis=1)
+        return df
+    
+    
+    df = extract_datetime_components(df)
+    print(df)
+
     categorical_data = df.select_dtypes(include=['object']).columns
 
-    # df = df.rename(columns={'model': 'vehicule_identity_a.brand'})    
-    # df = df.rename(columns={'segment': 'vehicule_identity_a.type'})    
-        
-    df = df.drop(["fuel_type","is_claim","model","steering_type"], axis=1).values
-    # df = df.drop(["is_claim"], axis=1).values
-    # df = df.drop(["model"], axis=1).values
-    # df = df.drop(["segment"], axis=1).values
-    # df = df.drop(["steering_type"], axis=1).values
-    
     def encode_categorical_data(data,categorical_data):
         for column in categorical_data:
             unique_values = data[column].nunique()
@@ -51,25 +57,11 @@ def claimP():
                 data[column] = data[column].map(counts)
         return data
 
-    def extract_datetime_components(df):
-        for column_name in df.select_dtypes(include=['datetime']).columns:
-            df[column_name + '_year'] = df[column_name].dt.year
-            df[column_name + '_month'] = df[column_name].dt.month
-            df[column_name + '_day'] = df[column_name].dt.day
-            df[column_name + '_hour'] = df[column_name].dt.hour
-            df[column_name + '_minute'] = df[column_name].dt.minute
-            df[column_name + '_second'] = df[column_name].dt.second
-            df = df.drop(column_name, axis=1)
-        return df
-    
-    df = extract_datetime_components(df)
-    
+    df= encode_categorical_data(df, categorical_data)
 
-    df = encode_categorical_data(df,categorical_data)
-
-
-    # data_array = df.drop("is_claim", axis=1).values
+    df = df.drop("is_claim", axis=1).values
     # row = data_array[1998]  # Since array indexing starts from 0, row 1998 will be at index 1997
+    print(df)
     prediction = model.predict(df)    
     # prediction = model.predict([row])
     print("Prediction for row 1998:", prediction) 
