@@ -87,6 +87,8 @@ def claim():
                 # Use label encoding for binary data
                 encoder = LabelEncoder()
                 data[column] = encoder.fit_transform(data[column])
+                joblib.dump(encoder, 'fenc.joblib')
+
             if unique_values> 2 and unique_values< 6 :
                 # Use one-hot encoding for binary data
                 encoder = OneHotEncoder()
@@ -96,6 +98,8 @@ def claim():
                 data = pd.concat([data, encoded_df], axis=1)
                 # Drop the main column after encoding
                 data.drop(column, axis=1, inplace=True)
+                joblib.dump(encoder, '2enc.joblib')
+
             else:
                 # Use count encoding for categorical data with more than 2 unique values
                 counts = data[column].value_counts()
