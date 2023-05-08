@@ -54,7 +54,7 @@ function Clientavi() {
         setExperts(responseExpert);
 
         // add Toastify notification
-        toast.success("Welcome Dear Agency, you are in Our List !", {
+        toast.success("Welcome Dear Clients, Give Your Opinion !", {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 30000,
         });
@@ -170,11 +170,22 @@ function Clientavi() {
                 <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
                   {filteredUsers.map((expert) => (
                     <div key={expert._id} className="my-4" style={{ flex: "1", marginRight: "1rem" }}>
-<img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Car Picture" />
-
+<div style={{ width: "150px", height: "150px", borderRadius: "50%", overflow: "hidden", margin: "0 auto" }}>
+  <div style={{ width: "100%", height: "100%", backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')", backgroundSize: "cover", backgroundPosition: "center" }}></div>
+</div>
                       <h4>{expert.email}</h4>
                       <h4>{expert.first_name}  {expert.phone_number}</h4>
-                      {/* <p>{expert.description}</p> */}
+                       {/* <p>{expert.description}</p>  */}
+                       <div>
+                        <ul>
+                        <Input
+                  type="text"
+                  placeholder="Give Your Opinion Dear Client"
+                  // value={searchTerm}
+                  onChange={handleSearchInputChange}
+                />
+                        </ul>
+                       </div>
                       <Button color="primary" >
                       Give Your Opinion
                       </Button> 
