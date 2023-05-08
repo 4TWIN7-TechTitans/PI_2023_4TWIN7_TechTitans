@@ -1,29 +1,26 @@
 const ReviewModel = require("../models/review");
 
 
-module.exports.addReview = function (req, res) {
-    const newReview = new ReviewModel({
+module.exports.addReview = async (req, res) => {
+    try {
+      const newReview = await ReviewModel.create({
         id_expert: req.body.id_expert,
         review: req.body.review,
-    });
-
-    newReview.save(function (err, review) {
-        if (err) {
-            console.error(err);
-            res.status(500).json({ message: "Failed to add review" });
-        } else {
-            res.status(201).json({ message: "Review added successfully", review });
-        }
-    });
-};
-
-module.exports.getAllReviews = function (req, res) {
-    ReviewModel.find({}, function (err, reviews) {
-        if (err) {
-            console.error(err);
-            res.status(500).json({ message: "Failed to retrieve reviews" });
-        } else {
-            res.status(200).json({ reviews });
-        }
-    });
-};
+      });
+      res.status(201).json({ message: "Review added successfully", review: newReview });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Failed to add review" });
+    }
+  };
+  
+  module.exports.getAllReviews = async (req, res) => {
+    try {
+      const reviews = await ReviewModel.find({});
+      res.status(200).json({ reviews });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Failed to retrieve reviews" });
+    }
+  };
+  
