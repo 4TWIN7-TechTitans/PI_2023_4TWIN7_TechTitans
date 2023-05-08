@@ -23,6 +23,7 @@ import ListOfExperts from "views/examples/ListOfExperts";
 import OdmAgence from "views/examples/OdmAgence";
 import Detailssag from "views/examples/Detailssag";
 import accplacechart  from "views/examples/accplacechart";
+import Clientavi from "views/examples/Clientavi";
 var routesAgence = [
   //TODO : change admin to user view profile
   
@@ -82,6 +83,15 @@ var routesAgence = [
     name: "Most Frequent Accidents Chart",
     icon: "ni ni-bullet-list-67 text-blue",
     component: accplacechart,
+    layout: "/agence",
+    showInSidebar: true,
+  },
+
+  {
+    path: "/clientavi",
+    name: "Expert Evaluation",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: Clientavi,
     layout: "/agence",
     showInSidebar: true,
   },
