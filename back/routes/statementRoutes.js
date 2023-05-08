@@ -42,6 +42,6 @@ router.post("/predict", statementController.predict);
 router.get("/accidentogene", statementController.get_most_accident_prone_locations);
 
 
-//router.get("/fraud_detection/:id", statementController.fraud_detection_algorithme);
+router.get("/fraud_detection/:id", statementController.fraud_detection_algorithme);
 
 module.exports = router;

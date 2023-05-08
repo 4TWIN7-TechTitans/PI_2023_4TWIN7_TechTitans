@@ -595,6 +595,9 @@ for removal from the register.`,
                         <option value="inProgress">In Progress</option>
                         <option value="closed">Closed</option>
                       </Input>
+                      <br></br>
+                      <h3>FRAUD DETECTION</h3>
+
                       <Button onClick={Algorithme_prediction} style={{ backgroundColor: '#FF5722', color: '#FFF', fontSize: '24px', padding: '16px 32px' }}>Detect Fraud</Button>
 
                     </div>
@@ -627,7 +630,7 @@ for removal from the register.`,
                     <div className="col-md-2">
 
                     </div>
-                    <div className="col-md-10">
+                    <div className="text-center">
                       <Button
                         type="Button"
                         onClick={(e) => handleStatement("a", e)}

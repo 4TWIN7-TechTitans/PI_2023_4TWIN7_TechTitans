@@ -1083,3 +1083,205 @@ module.exports.get_most_accident_prone_locations = async (req, res) => {
 };
 
 
+const PARTS_LIST = [
+  "Front Left Fender",
+  "Front Right Fender",
+  "Rear Left Fender",
+  "Rear Right Fender",
+  "Front Bumper",
+  "Rear Bumper",
+  "Hood",
+  "Trunk",
+  "Roof",
+  "Front Windshield",
+  "Rear Windshield",
+  "Side Mirror Left",
+  "Side Mirror Right",
+  "Door Front Left",
+  "Door Front Right",
+  "Door Rear Left",
+  "Door Rear Right",
+];
+
+module.exports.fraud_detection_algorithme = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const statement = await StatementModel.findById(id);
+
+    if (!statement) {
+      res.status(404).json({ message: "Statement not found" });
+      return;
+    }
+
+    const hits_a = statement.hits_a || [];
+    const hits_b = statement.hits_b || [];
+
+    // Initialize hitsByPart object with 0 hits for each part
+    const hitsByPart = {};
+    PARTS_LIST.forEach((part) => {
+      hitsByPart[part] = 0;
+    });
+
+    // Count the hits for each part in hits_a
+    hits_a.forEach((hit) => {
+      const part = hit.split(" ")[0];
+      hitsByPart[part]++;
+    });
+
+    // Count the hits for each part in hits_b
+    hits_b.forEach((hit) => {
+      const part = hit.split(" ")[0];
+      hitsByPart[part]++;
+    });
+
+    // Determine if the statement is fraudulent based on the hits for each part
+    let fraudLevel = "Low Fraud";
+
+    PARTS_LIST.forEach((part) => {
+      if (hitsByPart[part] > 5) {
+        fraudLevel = "High Fraud";
+      } else if (hitsByPart[part] > 0) {
+        fraudLevel = "Medium Fraud";
+      }
+    });
+
+    // Check for specific fraud patterns
+    if (hits_a.includes("Roof") && hits_b.includes("Door Front Right")) {
+      fraudLevel = "High Fraud";
+    } else if (
+      hits_a.includes("Door Front Left") &&
+      hits_b.includes("Door Front Left")
+    ) {
+      fraudLevel = "High Fraud";
+    } else if (
+      hits_a.includes("Front Left Fender") &&
+      hits_b.includes("Front Right Fender")
+    ) {
+      fraudLevel = "Low Fraud";
+    } else if (
+      hits_a.includes("Rear Left Fender") &&
+      hits_b.includes("Rear Left Fender")
+    ) {
+      fraudLevel = "High Fraud";
+    } else if (
+      hits_a.includes("Rear Right Fender") &&
+      hits_b.includes("Rear Right Fender")
+    ) {
+      fraudLevel = "High Fraud";
+    } else if (
+      hits_a.includes("Rear Left Fender") &&
+      hits_b.includes("Rear Bumper")
+    ) {
+      fraudLevel = "High Fraud";
+    } else if (
+      hits_a.includes("Front Windshield") &&
+      hits_b.includes("Side Mirror Right")
+    ) {
+      fraudLevel = "Meduim Fraud";
+    } else if (
+      hits_a.includes("Door Rear Right") &&
+      hits_b.includes("Door Front Right")
+    ) {
+      fraudLevel = "High Fraud";
+    } else if (hits_a.includes("Trunk") && hits_b.includes("Rear Windshield")) {
+      fraudLevel = "High Fraud";
+    } else if (
+      hits_a.includes("Door Rear Right") &&
+      hits_b.includes("Rear Door Rear Right")
+    ) {
+      fraudLevel = "High Fraud";
+    } else if (hits_a.includes("Roof") && hits_b.includes("Door Front Left")) {
+      fraudLevel = "Medium Fraud";
+    } else if (
+      hits_a.includes("Roof") &&
+      hits_a.includes("Rear Windshield") &&
+      hits_b.includes("Door Front Left") &&
+      hits_b.includes("Door Front Right")
+    ) {
+      fraudLevel = "High Fraud";
+    } else if (hits_a.includes("Trunk") && hits_b.includes("Door Front Left")) {
+      fraudLevel = "High Fraud";
+    } else if (
+      hits_a.includes("Side Mirror Left") &&
+      hits_b.includes("Side Mirror Left")
+    ) {
+      fraudLevel = "Meduim Fraud";
+    } else if (
+      hits_a.includes("Side Mirror Right") &&
+      hits_b.includes("Side Mirror Right")
+    ) {
+      fraudLevel = "Meduim Fraud";
+    } else if (
+      hits_a.includes("Door Front Left") &&
+      hits_a.includes("Side Mirror Left") &&
+      hits_b.includes("Door Front Left") &&
+      hits_b.includes("Side Mirror Left")
+    ) {
+      fraudLevel = "Meduim Fraud";
+    } else if (
+      hits_a.includes("Door Front Right") &&
+      hits_a.includes("Side Mirror Right") &&
+      hits_b.includes("Door Front Right") &&
+      hits_b.includes("Side Mirror Right")
+    ) {
+      fraudLevel = "Meduim Fraud";
+    } else if (
+      hits_a.includes("Front Left Fender") &&
+      hits_a.includes("Front Right Fender") &&
+      hits_b.includes("Front Bumper") &&
+      hits_b.includes("Rear Bumper") &&
+      hits_b.includes("Hood")
+    ) {
+      fraudLevel = "Meduim Fraud";
+    } else if (
+      hits_a.includes("Front Left Fender") &&
+      hits_a.includes("Front Right Fender") &&
+      hits_a.includes("Rear Left Fender") &&
+      hits_a.includes("Rear Right Fender") &&
+      hits_a.includes("Front Bumper") &&
+      hits_a.includes("Rear Bumper") &&
+      hits_a.includes("Hood") &&
+      hits_a.includes("Roof") &&
+      hits_a.includes("Front Windshield") &&
+      hits_a.includes("Rear Windshield") &&
+      hits_a.includes("Side Mirror Left") &&
+      hits_a.includes("Side Mirror Right") &&
+      hits_a.includes("Door Front Right") &&
+      hits_a.includes("Door Front Left") &&
+      hits_a.includes("Door Rear Left") &&
+      hits_a.includes("Door Rear Right") &&
+
+
+      hits_b.includes("Front Left Fender") &&
+      hits_b.includes("Front Right Fender") &&
+      hits_b.includes("Rear Left Fender") &&
+      hits_b.includes("Rear Right Fender") &&
+      hits_b.includes("Front Bumper") &&
+      hits_b.includes("Rear Bumper") &&
+      hits_b.includes("Hood") &&
+      hits_b.includes("Roof") &&
+      hits_b.includes("Front Windshield") &&
+      hits_b.includes("Rear Windshield") &&
+      hits_b.includes("Side Mirror Left") &&
+      hits_b.includes("Side Mirror Right") &&
+      hits_b.includes("Door Front Right") &&
+      hits_b .includes("Door Front Left") &&
+      hits_b.includes("Door Rear Left") &&
+      hits_b.includes("Door Rear Right") 
+    ) {
+      fraudLevel = "High Fraud";
+    }
+
+
+    await statement.save();
+
+    // let fraudStatus = isFraudulent ? "High Fraud" : "Low Fraud";
+    res
+      .status(200)
+      .json({
+        fraudLevel: fraudLevel === "Meduim Fraud" ? "Meduim Fraud" : fraudLevel,
+      });
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving statement", error });
+  }
+};
