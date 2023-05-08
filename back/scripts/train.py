@@ -6,47 +6,11 @@ from sklearn.linear_model import LogisticRegression
 import json
 from io import StringIO
 from joblib import dump
-
+from sklearn.ensemble import RandomForestClassifier
 
 def train():
-    # Load data from JSON file
-    # with open("C:/PI_2023_4TWIN7_TechTitans/statements.json", "r") as f:
-    #    data = json.load(f)
-        # construct the argument parser and parse the arguments
-    # ap = argparse.ArgumentParser()
-    # ap.add_argument("-d", "--dataset", required=True,
-    #                 help="path to input dataset")
-    # ap.add_argument("-c", "--columns", nargs='+', required=True,
-    #                 help="list of columns to encode and use as features")
-    # ap.add_argument("-t", "--target", required=True,
-    #                 help="name of the target column to predict")
-    # args = vars(ap.parse_args())
 
-    # load the dataset and drop missing values
-    # print(args(["dataset"]))
-    # csv_buffer = StringIO()
-    # writer = csv.writer(csv_buffer)
-    # writer.writerow(data[0].keys())
-    # for row in data:
-    #     writer.writerow(row.values())
-    # csv_data = csv_buffer.getvalue()
-
-
-# Open the CSV file in read mode
-    # with open('statements.csv', newline='') as csvfile:
-    # # Create a reader object
-    #     csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
-
-    #     Loop through each row in the CSV file
-        #for row in csvreader:
-            # Do something with the row data
-       #     print(row)
-       # print(csv_data)
-
-    # df = pd.read_csv(args["dataset"])
-    # df.dropna(inplace=True)
-    
-    df = pd.read_csv('statements.csv')
+    df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv')
     myfeatures = ["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"]
     target = "decision"
     # initialize the label encoder
@@ -74,13 +38,15 @@ def train():
     X_df = pd.DataFrame(X, columns=["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"])
 
     # train a logistic regression model
-    clf = LogisticRegression(random_state=0).fit(X_df, y)
+    # clf = LogisticRegression(random_state=0).fit(X_df, y)
+    clf = RandomForestClassifier()
+    clf.fit(X_df, y)
     
     dump(clf, 'model.joblib') 
     #print(clf)
 
     # print the accuracy of the model on the training set
-    accuracy = clf.score(X, y)
+    accuracy = clf.score(X_df, y)
   #  print(f"Accuracy: {accuracy}")
     print(accuracy)
 
