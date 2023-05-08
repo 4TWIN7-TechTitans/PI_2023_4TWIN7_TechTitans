@@ -40,16 +40,12 @@ function Clientavi() {
         const jwt = getCookie("jwt");
         if (jwt == "") return;
 
-        const id_agenceJwt = (
-          await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
-        ).data._id;
+        
 
         const response = await axios.get("http://localhost:5000/getallexperts");
         console.log(response);
 
-        const responseExpert = response.data.experts.filter(
-          (elem) => elem.id_agence === id_agenceJwt
-        );
+        const responseExpert = response.data.experts;
 
         setExperts(responseExpert);
 
@@ -146,9 +142,7 @@ function Clientavi() {
 
   return (
     <>
-      <Header />
       {/* Page content */}
-      <ToastContainer />
 
       <Container className="mt--7" fluid>
         <Row>
@@ -167,34 +161,38 @@ function Clientavi() {
               </div>
 
               <CardBody>
-                <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                  }}
+                >
                   {filteredUsers.map((expert) => (
-                    <div key={expert._id} className="my-4" style={{ flex: "1", marginRight: "1rem" }}>
-<div style={{ width: "150px", height: "150px", borderRadius: "50%", overflow: "hidden", margin: "0 auto" }}>
-  <div style={{ width: "100%", height: "100%", backgroundImage: "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')", backgroundSize: "cover", backgroundPosition: "center" }}></div>
-</div>
+                    <div
+                      key={expert._id}
+                      className="my-4"
+                      style={{ flex: "1", marginRight: "1rem" }}
+                    >
+                      
+                        {/* <img src={expert.image}/> */}
+                    
                       <h4>{expert.email}</h4>
-                      <h4>{expert.first_name}  {expert.phone_number}</h4>
-                       {/* <p>{expert.description}</p>  */}
-                       <div>
+                      <h4>
+                        {expert.first_name} {expert.phone_number}
+                      </h4>
+                      Average Reviews:  
+                      {/* <p>{expert.description}</p>  */}
+                      <div>
                         <ul>
-                        <Input
-                  type="text"
-                  placeholder="Give Your Opinion Dear Client"
-                  // value={searchTerm}
-                  onChange={handleSearchInputChange}
-                />
+                        <li>test </li>
                         </ul>
-                       </div>
-                      <Button color="primary" >
-                      Give Your Opinion
-                      </Button> 
+                      </div>
+                      <Button color="primary" href="#">details</Button>
                     </div>
                   ))}
                 </div>
               </CardBody>
-
-
 
               <CardFooter className="py-4">
                 <nav aria-label="...">
