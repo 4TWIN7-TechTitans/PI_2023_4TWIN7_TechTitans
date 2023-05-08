@@ -74,23 +74,36 @@ const Landing = (props) => {
         <AuthNavbar />
         <div className="header bg-gradient-info ">
           <div
-            className='p-8 text-center bg-image'
-            style={{ backgroundImage: "url(" + require("../assets/img/theme/profile-cover.jpg") + ")", height: 520 }}
+            className="p-8 text-center bg-image"
+            style={{
+              backgroundImage:
+                "url(" + require("../assets/img/theme/profile-cover.jpg") + ")",
+              height: 520,
+            }}
           >
-            <div className='mask' >
-              <div className='d-flex justify-content-center align-items-center h-100'>
-                <div className='text-dark'>
-                  <h1 className='mb-6'style={{ fontSize: 80 }}>Welcome To Assurini</h1>
-                  <h1 className='mb-3' >Clic here to create your statement </h1>
-                  <a className='btn btn-primary btn-lg' href='/' role='button'>
+            <div className="mask">
+              <div className="d-flex justify-content-center align-items-center h-100">
+                <div className="text-dark">
+                  <h1 className="mb-6" style={{ fontSize: 80 }}>
+                    Welcome To Assurini
+                  </h1>
+                  <h1 className="mb-3">Clic here to create your statement </h1>
+                  <a className="btn btn-primary btn-lg" href="/" role="button">
                     Statement
                   </a>
-                  <h1 className='mb-3' >or submit your statement via our OCR technologie </h1>
-                  <a className='btn btn-primary btn-lg' href='/ocr' role='button' style={{marginBottom:"50px"}}>
+                  <h1 className="mb-3">
+                    or submit your statement via our OCR technologie{" "}
+                  </h1>
+                  <a
+                    className="btn btn-primary btn-lg"
+                    href="/ocr"
+                    role="button"
+                    style={{ marginBottom: "50px" }}
+                  >
                     OCR
                   </a>
-                  
-                  <br/>
+
+                  <br />
                 </div>
               </div>
             </div>
@@ -113,10 +126,8 @@ const Landing = (props) => {
           </div>
         </div>
 
-        <section className="my-8">
-        </section>
-        <section className="mt--8 w-75">
-        </section>
+        <section className="my-8"></section>
+        <section className="mt--8 w-75"></section>
 
         {/* Page content */}
         <Container className="mt--8 w-75 container-fluid" fluid>
@@ -132,7 +143,6 @@ const Landing = (props) => {
               </Row>
               {
                 <Row style={{ marginTop: "100px" }}>
-
                   <div className="col">
                     <Card className="shadow">
                       <MultipleRows />
@@ -149,13 +159,11 @@ const Landing = (props) => {
             </Row>
           )}
 
-
-{window.location.pathname == "/ocr" && (
+          {window.location.pathname == "/ocr" && (
             <Row>
               <Ocr />
             </Row>
           )}
-
 
           {window.location.pathname == "/changepassword" && (
             <Row>
@@ -192,8 +200,6 @@ const Landing = (props) => {
               <ViewProfileExpert />
             </Row>
           )}
-
-
         </Container>
       </div>
 
