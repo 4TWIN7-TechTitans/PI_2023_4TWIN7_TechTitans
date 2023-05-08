@@ -13,16 +13,8 @@ def predict():
     # Convert data to pandas DataFrame
     # df = pd.DataFrame(data, index=[0])
 
-    df = pd.read_csv('statements.csv')
+    df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv')
     X_df = pd.DataFrame(df, columns=["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"])
-
-
-    # Select relevant features
-    # features = df[['location', 'injured', 'material_damage', 'vehicule_a_assureBy', 'vehicule_a_agency', 
-    #                'vehicule_b_assureBy', 'vehicule_b_agency', 'drivers_identity_a_driver_license', 
-    #                'drivers_identity_b_driver_license', 'vehicule_identity_a_brand', 'vehicule_identity_a_type', 
-    #                'vehicule_identity_a_country', 'vehicule_identity_b_brand', 'vehicule_identity_b_type', 
-                #    'vehicule_identity_b_country', 'notes_a', 'notes_b']]
     
     features = X_df[["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"]]
     
@@ -74,10 +66,20 @@ if __name__ == '__main__':
     # args = parser.parse_args()
 
     # Make predictions
-    predictions = predict()
+    # predictions = predict()
     
-    print(predictions)
+    # print(predictions)
 
-    # Save predictions to file
-   # with open("predictions.dump", 'w') as f:
+    # # Save predictions to file
+    # with open("predictions.dump", 'w') as f:
     #    json.dump(predictions.tolist(), f)
+    predictions = predict()
+    if predictions[0] == 0:
+        result = "for a"
+    else:
+        result = "for b"
+    print(result)
+    predictions_json = json.dumps(predictions.tolist())
+    with open("predictions.dump", 'w') as f:
+       f.write(predictions_json)
+    print(predictions)
