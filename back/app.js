@@ -16,6 +16,7 @@ const OcrRoutes= require("./routes/OCR");
 const notifRoutes= require("./routes/notifRoutes");
 const passport = require("passport");
 const offreRoutes = require("./routes/offreRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 const session = require("express-session");
 const ensureGuest = require("./middleware/auth");
 
@@ -32,6 +33,7 @@ require("./models/car");
 require("./models/ticket");
 require("./models/offre");
 require("./models/notifs");
+require("./models/review");
 
 const app = express();
 mongoose.set("strictQuery", true);
@@ -74,6 +76,8 @@ app.use(statementRoutes);
 app.use(contractRoutes);
 app.use(carRoutes);
 app.use(offreRoutes);
+app.use(reviewRoutes);
+
 app.use("/ticket",ticketRoutes);
 app.use("/ocr",OcrRoutes);
 app.use("/notif",notifRoutes);

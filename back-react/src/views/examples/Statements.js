@@ -34,6 +34,8 @@ function MyStatements() {
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("");
   const [selectedStatement, setSelectedStatement] = useState(null);
+  const [commentaire, setcommentaire] = useState(null);
+
 
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -441,6 +443,10 @@ function MyStatements() {
                   <p>Notes B: {selectedStatement.notes_b}</p>
                   <p>Signature of Client A: <img src={selectedStatement.signature_a} /></p>
                   <p>Signature of Client B:<img src={selectedStatement.signature_b} /></p>
+                  {selectedStatement.commentaire && (
+    <p>Expert commentaire: {selectedStatement.commentaire}</p>
+  )}
+
                 </div>
                 <hr />
                 <center><Button color="success" onClick={handleCloseModal}>Close</Button></center>

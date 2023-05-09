@@ -23,6 +23,7 @@ import Icons from "views/examples/Icons.js";
 import AddNew from "views/examples/add";
 import Tickets from "views/examples/Tickets";
 import ListOfAgency from "views/examples/ListOfAgency";
+import DecisionPrediction from "views/DecisionPrediction";
 
 var routesAdmin = [
   //TODO : change admin to user view profile
@@ -90,6 +91,14 @@ var routesAdmin = [
     name: "ListOfAgency",
     icon: "ni ni-bullet-list-67 text-blue",
     component: ListOfAgency,
+    layout: "/admin",
+    showInSidebar: true,
+  },
+  {
+    path: "/predictdecision",
+    name: "Decision Prediction",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: DecisionPrediction,
     layout: "/admin",
     showInSidebar: true,
   },

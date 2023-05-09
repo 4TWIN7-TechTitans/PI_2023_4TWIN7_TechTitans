@@ -46,6 +46,10 @@ function Detailssag() {
   const [showPDF, setShowPDF] = useState(false);
   const [commentaire, setCommentaire] = useState("");
   const [comments, setComments] = useState([]);
+  const [phonenumber, setphonenumber] = useState([]);
+
+  const [phonenumber_b, setphonenumber_b] = useState([]);
+
   const [status, setStatus] = useState(
     localStorage.getItem("statement_status") || "waiting"
   );
@@ -202,9 +206,13 @@ function Detailssag() {
         setlocation(statement.location);
         setsignature_a(statement.signature_a);
         setsignature_b(statement.signature_b);
-
+        setCommentaire(statement.commentaire);
         setDate(statement.date);
+        setphonenumber(statement.insured_a.phonenumber);
+        setphonenumber_b(statement.insured_b.phonenumber);
 
+
+        
         console.log(driverIdentityA);
         console.log(driverIdentityB);
       } catch (err) {
@@ -288,7 +296,7 @@ function Detailssag() {
                               </Col>
                               <Col lg="2">
 
-                                <th>License A</th>
+                                <th>Phone Number of {driverIdentityA}</th>
                               </Col>
                               <Col lg="2">
 
@@ -315,7 +323,7 @@ function Detailssag() {
                               </Col>
                               <Col lg="2">
 
-                                <td>{driver_license_a}</td>
+                                <td>{phonenumber}</td>
                               </Col>
                               <Col lg="2">
 
@@ -347,7 +355,7 @@ function Detailssag() {
                     <div>
                       <div></div></div>
                     <div>
-                      <h2>Details About {driverIdentityB}</h2>
+                      <h2>Details About  {driverIdentityB}</h2>
                       <hr />
                       <table className="mx-auto">
                         <thead>
@@ -358,7 +366,7 @@ function Detailssag() {
                               </Col>
                               <Col lg="2">
 
-                                <th>License B</th>
+                                <th>Phone Number of {driverIdentityB}</th>
                               </Col>
                               <Col lg="2">
 
@@ -387,7 +395,7 @@ function Detailssag() {
                               </Col>
                               <Col lg="2">
 
-                                <td>{driver_license_b}</td>
+                                <td>{phonenumber_b}</td>
                               </Col>
                               <Col lg="2">
 
@@ -440,6 +448,21 @@ function Detailssag() {
                       for removal from the register."
                     </div>
                   </div>
+                  {commentaire ?
+  <div style={{ backgroundColor: "#eeeee4", borderRadius: "50px", textAlign: "center" }}>
+    <h2 className="mb-0">Expert Notes</h2>
+    <Card>
+      <Row>
+        <Col lg="12">
+          {commentaire}
+        </Col>
+      </Row>
+    </Card>
+    <br /><br /><br /><br />
+  </div>
+  : null
+}
+
 
 
                   {/* <Button onClick={generatePDF}>Generate PDF</Button> */}

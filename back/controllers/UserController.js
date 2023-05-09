@@ -1919,9 +1919,9 @@ module.exports.get_get_email_from_token = async (req, res) => {
 
 module.exports.get_userbyid = async (req, res) => {
   try {
-    const _id = req.params.userId;
-    const user = await userModel.findById(_id);
+    const _id = req.query.id;
 
+    const user = await userModel.findById(_id);
     if (!user) {
       throw new Error("User not found");
     }

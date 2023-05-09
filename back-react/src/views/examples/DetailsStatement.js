@@ -57,6 +57,9 @@ function DetailsStatement() {
   const [savedcommentaire, setcommentaire] = useState([])
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [savedNotes, setSavedNotes] = useState([]);
+  const [phonenumber, setphonenumber] = useState([]);
+
+  const [phonenumber_b, setphonenumber_b] = useState([]);
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -213,6 +216,10 @@ for removal from the register.`,
 
         setDate(statement.date);
         setCommentaire(statement.commentaire);
+
+        setphonenumber(statement.insured_a.phonenumber);
+        setphonenumber_b(statement.insured_b.phonenumber);
+
 
         console.log(driverIdentityA);
         console.log(driverIdentityB);
@@ -444,8 +451,8 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <th>License A</th>
-                              </Col>
+                              <th>Phone Number of {driverIdentityA}</th>    
+                                                        </Col>
                               <Col lg="2">
 
                                 <th>Hit A</th>
@@ -471,7 +478,7 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <td>{driver_license_a}</td>
+                              <td>{phonenumber}</td>
                               </Col>
                               <Col lg="2">
 
@@ -514,7 +521,7 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <th>License B</th>
+                              <th>Phone Number of {driverIdentityB}</th>
                               </Col>
                               <Col lg="2">
 
@@ -544,7 +551,7 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <td>{driver_license_b}</td>
+                              <td>{phonenumber_b}</td>
                               </Col>
                               <Col lg="2">
 
@@ -595,6 +602,9 @@ for removal from the register.`,
                         <option value="inProgress">In Progress</option>
                         <option value="closed">Closed</option>
                       </Input>
+                      <br></br>
+                      <h3>FRAUD DETECTION</h3>
+
                       <Button onClick={Algorithme_prediction} style={{ backgroundColor: '#FF5722', color: '#FFF', fontSize: '24px', padding: '16px 32px' }}>Detect Fraud</Button>
 
                     </div>
@@ -627,7 +637,7 @@ for removal from the register.`,
                     <div className="col-md-2">
 
                     </div>
-                    <div className="col-md-10">
+                    <div className="text-center">
                       <Button
                         type="Button"
                         onClick={(e) => handleStatement("a", e)}

@@ -3,7 +3,7 @@ const UserModel = require("../models/user");
 const OffreModel = require("../models/offre");
 require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
-const natural = require("natural");
+const natural = require('natural');
 
 // configure cloudinary
 cloudinary.config({
@@ -20,6 +20,7 @@ cloudinary.config({
 
 module.exports.add_statement_post = async (req, res) => {
   try {
+
     const statement = await StatementModel.create({
       ...req.body,
     });
@@ -130,6 +131,7 @@ module.exports.getStatementByExpertEmail = async function (req, res) {
   }
 };
 
+
 module.exports.get_statement_by_id = async (req, res) => {
   try {
     const statement = await StatementModel.findById(req.params.id);
@@ -181,7 +183,7 @@ module.exports.update_statement_status = async (req, res) => {
   }
 };
 
-// Filter status statement
+// Filter status statement 
 module.exports.filtre_statements = async (req, res) => {
   try {
     const { case_state } = req.params;
@@ -223,36 +225,79 @@ module.exports.add_comment_to_statement = async (req, res) => {
     const statementId = req.params.id;
     const { commentaire } = req.body;
 
-    const statement = await StatementModel.findByIdAndUpdate(
-      statementId,
-      { commentaire },
-      { new: true }
-    );
+    const statement = await StatementModel.findByIdAndUpdate(statementId, { commentaire }, { new: true });
 
     if (!statement) {
       res.status(404).json({ message: "Statement not found" });
       return;
     }
 
+
+
     res.status(200).json({
       message: "Comment added to statement successfully",
       statement,
     });
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Error adding comment to statement", error });
+    res.status(400).json({ message: "Error adding comment to statement", error });
   }
 };
+module.exports.get_comments_for_statement = async (req, res) => {
+  try {
+    const statementId = req.params.id;
+
+    const statement = await StatementModel.findById(statementId);
+    
+    if (!statement) {
+      res.status(404).json({ message: "Statement not found" });
+      return;
+    }
+
+    const comments = statement.commentaire;
+
+    res.status(200).json({
+      message: "Comments retrieved successfully",
+      comments,
+    });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Error retrieving comments for statement", error });
+  }
+};
+
+module.exports.get_comment_in_statement = async (req, res) => {
+  try {
+    const statementId = req.params.id;
+
+    const statement = await StatementModel.findById(statementId);
+
+    if (!statement) {
+      res.status(404).json({ message: "Statement not found" });
+      return;
+    }
+
+    const commentaire = statement.commentaire;
+
+    if (!commentaire) {
+      res.status(404).json({ message: "Comment not found" });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Comment retrieved successfully",
+      commentaire,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Error retrieving comment", error });
+  }
+};
+
 
 module.exports.remove_comment_from_statement = async (req, res) => {
   try {
     const statementId = req.params.id;
-    const statement = await StatementModel.findByIdAndUpdate(
-      statementId,
-      { commentaire: "" },
-      { new: true }
-    );
+    const statement = await StatementModel.findByIdAndUpdate(statementId, { commentaire: "" }, { new: true });
 
     if (!statement) {
       res.status(404).json({ message: "Statement not found" });
@@ -264,9 +309,7 @@ module.exports.remove_comment_from_statement = async (req, res) => {
       statement,
     });
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Error removing comment from statement", error });
+    res.status(400).json({ message: "Error removing comment from statement", error });
   }
 };
 
@@ -311,222 +354,83 @@ module.exports.gen_statement_post = async (req, res) => {
   }
 };
 
-const { PDFDocument, rgb, StandardFonts } = require("pdf-lib");
+const { PDFDocument, rgb , StandardFonts } = require("pdf-lib");
 
-//AI
+//AI 
 
 // const natural = require('natural');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 // const { OffreModel } = require('./models/offre');
 
 // Entraînement du modèle de recommandation et stockage dans la base de données
 module.exports.train_offer = async (req, res) => {
   try {
-    const offers = await OffreModel.find().select("site");
+    const offers = await OffreModel.find().select('site');
     const corpus = offers.map((offer) => {
       const site = offer.site.toLowerCase();
       const domain = site.match(/(?:www\.)?([\w-]+)\.\w{2,}/)[1];
       const text = `${domain}`;
-      return text;
+      return text;      
     });
     const tfidf = new natural.TfIdf();
     corpus.forEach((doc) => {
       tfidf.addDocument(doc);
     });
-    const model = {};
+    const model = {}; 
     offers.forEach((offer, index) => {
       const tfidfScores = {};
       tfidf.listTerms(index).forEach((term) => {
         tfidfScores[term.term] = term.tfidf;
       });
-      model[offer._id] = tfidfScores;
+      const site = offer.site.toLowerCase();
+      const domain = site.match(/(?:www\.)?([\w-]+)\.\w{2,}/)[1];
+      model[domain] = tfidfScores;
     });
 
     // Enregistrement du modèle dans la base de données
-    const RecommendationOffers = mongoose.model(
-      "RecommendationOffers",
-      new mongoose.Schema({
-        model: Object,
-      })
-    );
+    const RecommendationOffers = mongoose.model('RecommendationOffers', new mongoose.Schema({
+      model: Object,
+    }));
 
     const recommendationModel = new RecommendationOffers({ model });
     await recommendationModel.save();
-    res
-      .status(200)
-      .json({
-        message:
-          "Le modèle de recommandation a été entraîné et enregistré avec succès.",
-      });
+    res.status(200).json({ message: 'Le modèle de recommandation a été entraîné et enregistré avec succès.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 //get train offer
 module.exports.get_train_offer = async (req, res) => {
   try {
-    const RecommendationOffers = mongoose.model("RecommendationOffers");
+    const RecommendationOffers = mongoose.model('RecommendationOffers');
     const modelDoc = await RecommendationOffers.findOne();
     const model = modelDoc.model;
-    res.status(200).json({ model });
+    
+    // Get the best scored offer
+    const sites = Object.keys(model);
+    let bestSite = null;
+    let bestScore = -Infinity;
+    sites.forEach((site) => {
+      const tfidfScores = model[site];
+      const score = Object.values(tfidfScores).reduce((acc, cur) => acc + cur, 0);
+      if (score > bestScore) {
+        bestSite = site;
+        bestScore = score;
+      }
+    });
+    bestSite = bestSite.replace('_', '.'); 
+    
+    console.log(bestSite);
+    res.status(200).json({ bestSite, model });
+    
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-//profile insurable prediction
 
-const tf = require("@tensorflow/tfjs");
-module.exports.profile_prediction = async (req, res) => {
-  // Load the pre-trained model
-  async function loadModel() {
-    const model = await tf.loadLayersModel(
-      "file://C:/PI_2023_4TWIN7_TechTitans/users.json"
-    );
-    return model;
-  }
-
-  // Define a function to preprocess the input
-  function preprocessInput(age, licenseDate, gender) {
-    // Normalize the age and license date
-    const normalizedAge = (age - 18) / (99 - 18);
-    const normalizedLicenseDate =
-      (new Date() - new Date(licenseDate)) / (1000 * 60 * 60 * 24 * 365.25);
-
-    // Encode the gender as a one-hot vector
-    const genderVector = gender === "male" ? [1, 0] : [0, 1];
-
-    // Combine the features into a single input tensor
-    return tf.tensor2d([
-      [normalizedAge, normalizedLicenseDate, ...genderVector],
-    ]);
-  }
-
-  // Make a prediction using the model
-  async function predict(model, inputTensor) {
-    const outputTensor = model.predict(inputTensor);
-    const outputArray = Array.from(outputTensor.dataSync());
-    return outputArray[0];
-  }
-
-  // Load the model, preprocess input, and make a prediction
-  (async () => {
-    try {
-      // Load the model
-      const model = await loadModel();
-      console.log("Model loaded:", model);
-
-      // Preprocess the input
-      const age = 25;
-      const licenseDate = "2015-01-01";
-      const gender = "male";
-      const inputTensor = preprocessInput(age, licenseDate, gender);
-      console.log("Input tensor:", inputTensor.toString());
-
-      // Make a prediction
-      const prediction = await predict(model, inputTensor);
-      console.log("Prediction:", prediction);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  })();
-};
-
-const csv = require("csv-parser");
-const fs = require("fs");
-const { promisify } = require("util");
-const { PythonShell } = require("python-shell");
-const csvtojson = require("csvtojson");
-module.exports.predictDecision = async (req, res) => {
-  const readFile = promisify(fs.readFile);
-  const path = "C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv";
-  const filePath = "C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv";
-
-  async function preprocessData(filePath) {
-    const rawData = await csvtojson().fromFile(filePath);
-    const processedData = rawData.map((row) => ({
-      location: row.location,
-      injured: row.injured,
-      material_damage: row.material_damage,
-      vehicule_a_assureBy: row["vehicule_a.assureBy"],
-      vehicule_a_agency: row["vehicule_a.agency"],
-      vehicule_b_assureBy: row["vehicule_b.assureBy"],
-      vehicule_b_agency: row["vehicule_b.agency"],
-      drivers_identity_a_driver_license:
-        row["drivers_identity_a.driver_license"],
-      drivers_identity_b_driver_license:
-        row["drivers_identity_b.driver_license"],
-      vehicule_identity_a_brand: row["vehicule_identity_a.brand"],
-      vehicule_identity_a_type: row["vehicule_identity_a.type"],
-      vehicule_identity_a_country: row["vehicule_identity_a.country"],
-      vehicule_identity_b_brand: row["vehicule_identity_b.brand"],
-      vehicule_identity_b_type: row["vehicule_identity_b.type"],
-      vehicule_identity_b_country: row["vehicule_identity_b.country"],
-      notes_a: row.notes_a,
-      notes_b: row.notes_b,
-    }));
-
-    return processedData;
-  }
-
-  async function trainModel(data) {
-    // Load the Python script that trains the model
-    const options = {
-      pythonOptions: ["-u"], // Force Python
-      scriptPath: "./scripts",
-      args: ["-t", JSON.stringify(data)],
-    };
-
-    return new Promise((resolve, reject) => {
-      PythonShell.run("train.py", options, (error, results) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      });
-    });
-  }
-
-  async function predict(data) {
-    // Load the Python script that makes predictions using the model
-    const options = {
-      pythonOptions: ["-u"], // Force Python
-      scriptPath: "./scripts",
-      args: ["-p", JSON.stringify(data)],
-    };
-    return new Promise((resolve, reject) => {
-      PythonShell.run("predict.py", options, (error, results) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(JSON.parse(results[0]));
-        }
-      });
-    });
-  }
-
-  try {
-    // Preprocess the data
-
-    const rawData = await preprocessData(path); // Train the model
-    const model = await trainModel(rawData);
-    console.log("path", path);
-    // Make predictions
-    const predictions = [];
-    for (const item of req.body) {
-      const result = await predict(item);
-      predictions.push(result);
-    }
-
-    // Send the predictions
-    res.json(predictions);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred");
-  }
-};
 
 module.exports.dlPDF = async (req, res) => {
   const filePath = "C:/repos/PI_2023_4TWIN7_TechTitans/back/new.pdf";
@@ -864,132 +768,74 @@ const gen_pdf = async (statement) => {
     color: rgb(0, 0, 0),
   }); //allant
 
-  // page.drawText("x", { x: 220, y:  height - 200 , size: fontSize, color: rgb(0, 0, 0),}); //1A
-  // page.drawText("x", { x: 220, y:  height - 222 , size: fontSize, color: rgb(0, 0, 0),}); //2A
-  // page.drawText("x", { x: 220, y:  height - 241 , size: fontSize, color: rgb(0, 0, 0),}); //3A
-  // page.drawText("x", { x: 220, y:  height - 260 , size: fontSize, color: rgb(0, 0, 0),}); //4A
-  // page.drawText("x", { x: 220, y:  height - 285 , size: fontSize, color: rgb(0, 0, 0),}); //5A
-  // page.drawText("x", { x: 220, y:  height - 305 , size: fontSize, color: rgb(0, 0, 0),}); //6A
-  // page.drawText("x", { x: 220, y:  height - 325 , size: fontSize, color: rgb(0, 0, 0),}); //7A
-  // page.drawText("x", { x: 220, y:  height - 345 , size: fontSize, color: rgb(0, 0, 0),}); //8A
-  // page.drawText("x", { x: 220, y:  height - 365 , size: fontSize, color: rgb(0, 0, 0),}); //9A
-  // page.drawText("x", { x: 220, y:  height - 385 , size: fontSize, color: rgb(0, 0, 0),}); //10A
-  // page.drawText("x", { x: 220, y:  height - 405 , size: fontSize, color: rgb(0, 0, 0),}); //11A
-  // page.drawText("x", { x: 220, y:  height - 425 , size: fontSize, color: rgb(0, 0, 0),}); //12A
-  // page.drawText("x", { x: 220, y:  height - 445 , size: fontSize, color: rgb(0, 0, 0),}); //13A
-  // page.drawText("x", { x: 220, y:  height - 465 , size: fontSize, color: rgb(0, 0, 0),}); //14A
-  // page.drawText("x", { x: 220, y:  height - 485 , size: fontSize, color: rgb(0, 0, 0),}); //15A
-  // page.drawText("x", { x: 220, y:  height - 505 , size: fontSize, color: rgb(0, 0, 0),}); //16A
-  // page.drawText("x", { x: 220, y:  height - 525 , size: fontSize, color: rgb(0, 0, 0),}); //17A
-
-  // page.drawText("x", { x: 380, y:  height - 200 , size: fontSize, color: rgb(0, 0, 0),}); //1B
-  // page.drawText("x", { x: 380, y:  height - 222 , size: fontSize, color: rgb(0, 0, 0),}); //2B
-  // page.drawText("x", { x: 380, y:  height - 241 , size: fontSize, color: rgb(0, 0, 0),}); //3B
-  // page.drawText("x", { x: 380, y:  height - 260 , size: fontSize, color: rgb(0, 0, 0),}); //4B
-  // page.drawText("x", { x: 380, y:  height - 285 , size: fontSize, color: rgb(0, 0, 0),}); //5B
-  // page.drawText("x", { x: 380, y:  height - 305 , size: fontSize, color: rgb(0, 0, 0),}); //6B
-  // page.drawText("x", { x: 380, y:  height - 325 , size: fontSize, color: rgb(0, 0, 0),}); //7B
-  // page.drawText("x", { x: 380, y:  height - 345 , size: fontSize, color: rgb(0, 0, 0),}); //8B
-  // page.drawText("x", { x: 380, y:  height - 365 , size: fontSize, color: rgb(0, 0, 0),}); //9B
-  // page.drawText("x", { x: 380, y:  height - 385 , size: fontSize, color: rgb(0, 0, 0),}); //10B
-  // page.drawText("x", { x: 380, y:  height - 405 , size: fontSize, color: rgb(0, 0, 0),}); //11B
-  // page.drawText("x", { x: 380, y:  height - 425 , size: fontSize, color: rgb(0, 0, 0),}); //12B
-  // page.drawText("x", { x: 380, y:  height - 445 , size: fontSize, color: rgb(0, 0, 0),}); //13B
-  // page.drawText("x", { x: 380, y:  height - 465 , size: fontSize, color: rgb(0, 0, 0),}); //14B
-  // page.drawText("x", { x: 380, y:  height - 485 , size: fontSize, color: rgb(0, 0, 0),}); //15B
-  // page.drawText("x", { x: 380, y:  height - 505 , size: fontSize, color: rgb(0, 0, 0),}); //16B
-  // page.drawText("x", { x: 380, y:  height - 525 , size: fontSize, color: rgb(0, 0, 0),}); //17B
 
   const pdfBytes = await pdfDoc.save();
   await fs.promises.writeFile("new.pdf", pdfBytes);
   return true;
 };
 
+
 const userController = require("./userController.js");
 module.exports.genPDFfromStatementId = async (req, res) => {
-  const { idStatement } = req.body;
-  const statement = await StatementModel.findById(idStatement);
-  if (!statement) {
-    res.status(404).json({ message: "Statement not found" });
-  } else {
-    statementgen = {};
-    agence = await userController.get_userbyidstatic(
-      statement.vehicule_a.agency.toString()
-    );
-    console.log(agence);
-    statementgen.date = statement.date
-      .toISOString()
-      .substring(0, 10)
-      .replace(/-/g, "/");
-    statementgen.lieu = statement.location.toString();
-    statementgen.blesseTF = statement.injured.toString();
-    statementgen.degatsTF = statement.material_damage.toString();
-    statementgen.temoins = statement.witness_a + statement.witness_b.toString();
-    statementgen.assureparA = agence.first_name;
-    statementgen.policeA = statement.vehicule_a.contractNumber.toString();
-    statementgen.agenceA = agence.first_name;
-    statementgen.duA = statement.vehicule_a.contractValidity.start_date
-      .toISOString()
-      .substring(0, 10)
-      .replace(/-/g, "/");
-    statementgen.auA = statement.vehicule_a.contractValidity.end_date
-      .toISOString()
-      .substring(0, 10)
-      .replace(/-/g, "/");
-    statementgen.cnomA = statement.drivers_identity_a.first_name.toString();
-    statementgen.cprenomA = statement.drivers_identity_a.last_name.toString();
-    statementgen.cadresseA = statement.drivers_identity_a.address.toString();
-    statementgen.cdelivreA =
-      statement.drivers_identity_a.drivers_license_issue_date
-        .toISOString()
-        .substring(0, 10)
-        .replace(/-/g, "/");
-    statementgen.nomAssureA = statement.insured_a.firstname.toString();
-    statementgen.prenomAssureA = statement.insured_a.lastname.toString();
-    statementgen.telAssureA = statement.insured_a.phonenumber.toString();
-    statementgen.adresseAssureA = statement.insured_a.addr.toString();
-    statementgen.marqueA = statement.vehicule_identity_a.brand; //+ statement.vehicule_identity_a.type.toString();
-    statementgen.immA = statement.vehicule_identity_a.matriculation.toString();
-    statementgen.venantdeA =
-      statement.vehicule_identity_a.coming_from.toString();
-    statementgen.allantAA = statement.vehicule_identity_a.going_to.toString();
-    statementgen.assuranceB = statement.vehicule_b.assureBy.toString();
-    statementgen.policeB = statement.vehicule_b.contractNumber.toString();
-    statementgen.agenceB = statement.vehicule_b.agency.toString();
-    statementgen.duB = statement.vehicule_b.contractValidity.start_date
-      .toISOString()
-      .substring(0, 10)
-      .replace(/-/g, "/");
-    statementgen.auB = statement.vehicule_b.contractValidity.end_date
-      .toISOString()
-      .substring(0, 10)
-      .replace(/-/g, "/");
-    statementgen.cnomB = statement.drivers_identity_b.first_name.toString();
-    statementgen.cprenomB = statement.drivers_identity_b.last_name.toString();
-    statementgen.cadresseB = statement.drivers_identity_b.address.toString();
-    statementgen.cdelivereB =
-      statement.drivers_identity_b.drivers_license_issue_date
-        .toISOString()
-        .substring(0, 10)
-        .replace(/-/g, "/");
-    statementgen.nomAssureB = statement.insured_b.firstname.toString();
-    statementgen.prenomAssureB = statement.insured_b.lastname.toString();
-    statementgen.adresseAssureB = statement.insured_b.addr.toString();
-    statementgen.telAssureB = statement.insured_b.phonenumber.toString();
-    statementgen.marqueB = statement.vehicule_identity_b.brand; //+ statement.vehicule_identity_b.type.toString();
-    statementgen.immB = statement.vehicule_identity_b.matriculation.toString();
-    statementgen.venantdeB =
-      statement.vehicule_identity_b.coming_from.toString();
-    statementgen.allantAB = statement.vehicule_identity_b.going_to.toString();
-    gen_pdf(statementgen);
-    res.status(200).json(idStatement);
-  }
+  const {idStatement} = req.body;
+  const statement = await StatementModel.findById(idStatement); 
+    if (!statement) {
+      res.status(404).json({ message: "Statement not found" });
+    } else {
+      statementgen = {};
+      agence = await userController.get_userbyidstatic(statement.vehicule_a.agency.toString());
+      console.log(agence)
+      statementgen.date = statement.date.toISOString().substring(0, 10).replace(/-/g, '/');;
+      statementgen.lieu = statement.location.toString();
+      statementgen.blesseTF = statement.injured.toString();
+      statementgen.degatsTF = statement.material_damage.toString();
+      statementgen.temoins = statement.witness_a + statement.witness_b.toString();
+      statementgen.assureparA = agence.first_name;
+      statementgen.policeA = statement.vehicule_a.contractNumber.toString();
+      statementgen.agenceA = agence.first_name;
+      statementgen.duA = statement.vehicule_a.contractValidity.start_date.toISOString().substring(0, 10).replace(/-/g, '/');;
+      statementgen.auA = statement.vehicule_a.contractValidity.end_date.toISOString().substring(0, 10).replace(/-/g, '/');;
+      statementgen.cnomA = statement.drivers_identity_a.first_name.toString();
+      statementgen.cprenomA = statement.drivers_identity_a.last_name.toString();
+      statementgen.cadresseA = statement.drivers_identity_a.address.toString();
+      statementgen.cdelivreA = statement.drivers_identity_a.drivers_license_issue_date.toISOString().substring(0, 10).replace(/-/g, '/');;
+      statementgen.nomAssureA = statement.insured_a.firstname.toString();
+      statementgen.prenomAssureA = statement.insured_a.lastname.toString();
+      statementgen.telAssureA = statement.insured_a.phonenumber.toString();
+      statementgen.adresseAssureA= statement.insured_a.addr.toString();
+      statementgen.marqueA = statement.vehicule_identity_a.brand //+ statement.vehicule_identity_a.type.toString();
+      statementgen.immA = statement.vehicule_identity_a.matriculation.toString();
+      statementgen.venantdeA = statement.vehicule_identity_a.coming_from.toString();
+      statementgen.allantAA = statement.vehicule_identity_a.going_to.toString();
+      statementgen.assuranceB = statement.vehicule_b.assureBy.toString();
+      statementgen.policeB = statement.vehicule_b.contractNumber.toString();
+      statementgen.agenceB = statement.vehicule_b.agency.toString();
+      statementgen.duB = statement.vehicule_b.contractValidity.start_date.toISOString().substring(0, 10).replace(/-/g, '/');;
+      statementgen.auB = statement.vehicule_b.contractValidity.end_date.toISOString().substring(0, 10).replace(/-/g, '/');;
+      statementgen.cnomB = statement.drivers_identity_b.first_name.toString();
+      statementgen.cprenomB = statement.drivers_identity_b.last_name.toString();
+      statementgen.cadresseB = statement.drivers_identity_b.address.toString();
+      statementgen.cdelivereB = statement.drivers_identity_b.drivers_license_issue_date.toISOString().substring(0, 10).replace(/-/g, '/');;
+      statementgen.nomAssureB = statement.insured_b.firstname.toString();
+      statementgen.prenomAssureB = statement.insured_b.lastname.toString();
+      statementgen.adresseAssureB = statement.insured_b.addr.toString();
+      statementgen.telAssureB = statement.insured_b.phonenumber.toString();
+      statementgen.marqueB = statement.vehicule_identity_b.brand //+ statement.vehicule_identity_b.type.toString();
+      statementgen.immB = statement.vehicule_identity_b.matriculation.toString();
+      statementgen.venantdeB = statement.vehicule_identity_b.coming_from.toString();
+      statementgen.allantAB = statement.vehicule_identity_b.going_to.toString();
+      gen_pdf(statementgen);
+      res.status(200).json(idStatement);
+    }
+
+
+  
 };
 
 module.exports.get_statement_by_location = async (req, res) => {
   try {
     const location = req.query.location;
-    const statement = await StatementModel.findOne({ location });
+    const statement = await StatementModel.findOne({ location }); 
     if (!statement) {
       res.status(404).json({ message: "Statement not found" });
     } else {
@@ -1001,11 +847,97 @@ module.exports.get_statement_by_location = async (req, res) => {
   return true;
 };
 
+
+const csv = require("csv-parser");
+const fs = require("fs");
+const { promisify } = require("util");
+const { PythonShell } = require("python-shell");
+const csvtojson = require("csvtojson");
+module.exports.predictDecision = async (req, res) => {
+
+
+  async function trainModel(data) {
+    // Load the Python script that trains the model
+    const options = {
+      pythonOptions: ["-u"], // Force Python
+      scriptPath: "./scripts",
+      args: ["-t", JSON.stringify(data)],
+    };
+
+    return new Promise((resolve, reject) => {
+      PythonShell.run("train.py", options, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+
+  async function predict(data) {
+    // Load the Python script that makes predictions using the model
+    const options = {
+      pythonOptions: ["-u"], // Force Python
+      scriptPath: "./scripts",
+      args: ["-p", JSON.stringify(data)],
+    };
+    return new Promise((resolve, reject) => {
+      PythonShell.run("predict.py", options, (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(JSON.parse(results[0]));
+        }
+      });
+    });
+  }
+
+  try {
+    // Preprocess the data
+
+    //const rawData = await preprocessData(path); // Train the model
+    const model = await trainModel();
+    console.log("path", path);
+    // Make predictions
+    const predictions = [];
+    for (const item of req.body) {
+      const result = await predict(item);
+      predictions.push(result);
+    }
+
+    // Send the predictions
+    res.json(predictions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred");
+  }
+};
+
+const { spawn } = require('child_process');
 module.exports.generateTrainData = async (req, res) => {
   try {
-    res.status(200).json("hello world");
+    const pythonProcess = spawn('python', ['C:/PI_2023_4TWIN7_TechTitans/back/scripts/train.py']);
+
+    pythonProcess.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
+    pythonProcess.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+      if (code === 0) {
+        res.status(200).json("Training completed successfully");
+      } else {
+        res.status(500).json("Training failed");
+      }
+    });
+
   } catch (e) {
-    res.status(500).json("error");
+    res.status(500).json("Error");
   }
 };
 
@@ -1013,18 +945,143 @@ module.exports.predict = async (req, res) => {
   const { statementId } = req.body;
   try {
     const statement = await StatementModel.findById(statementId);
-    console.log(statement);
+
     if (!statement) {
+      console.log("error statement mafamech");
       throw new Error();
     }
 
-    //python call arg
+    const pythonProcess = spawn('python', ['C:/PI_2023_4TWIN7_TechTitans/back/scripts/predict.py']);
+    let dataToSend = '';
 
-    res.status(200).json(statement);
+    pythonProcess.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+      dataToSend += data.toString();
+      console.log(dataToSend);
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
+
+    pythonProcess.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
+      if (code === 0) {
+        console.log("dataToSend: ", dataToSend);
+        const prediction = dataToSend.trim(); // Remove any leading/trailing whitespace
+        const decision = prediction[0] === 'for a' ? "decision is for a" : "decision is for b";
+     
+        console.log(decision);
+        res.status(200).json(decision);
+      } else {
+        res.status(500).json("Prediction failed");
+      }
+    });
+
   } catch (e) {
-    res.status(500).json("error");
+    res.status(500).json("Error");
   }
 };
+
+
+
+//profile insurable prediction
+
+const tf = require('@tensorflow/tfjs');
+module.exports.profile_prediction= async (req, res) => {
+// Load the pre-trained model
+async function loadModel() {
+
+  const model = await tf.loadLayersModel('file://C:/PI_2023_4TWIN7_TechTitans/users.json');
+  return model;
+}
+
+// Define a function to preprocess the input
+function preprocessInput(age, licenseDate, gender) {
+  // Normalize the age and license date
+  const normalizedAge = (age - 18) / (99 - 18);
+  const normalizedLicenseDate = (new Date() - new Date(licenseDate)) / (1000 * 60 * 60 * 24 * 365.25);
+
+  // Encode the gender as a one-hot vector
+  const genderVector = gender === 'male' ? [1, 0] : [0, 1];
+
+  // Combine the features into a single input tensor
+  return tf.tensor2d([[normalizedAge, normalizedLicenseDate, ...genderVector]]);
+}
+
+// Make a prediction using the model
+async function predict(model, inputTensor) {
+  const outputTensor = model.predict(inputTensor);
+  const outputArray = Array.from(outputTensor.dataSync());
+  return outputArray[0];
+}
+
+// Load the model, preprocess input, and make a prediction
+(async () => {
+  try {
+    // Load the model
+    const model = await loadModel();
+    console.log('Model loaded:', model);
+
+    // Preprocess the input
+    const age = 25;
+    const licenseDate = '2015-01-01';
+    const gender = 'male';
+    const inputTensor = preprocessInput(age, licenseDate, gender);
+    console.log('Input tensor:', inputTensor.toString());
+
+    // Make a prediction
+    const prediction = await predict(model, inputTensor);
+    console.log('Prediction:', prediction);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+})();
+};
+
+
+
+
+module.exports.get_most_accident_prone_locations = async (req, res) => {
+  try {
+    const statements = await StatementModel.find();
+    if (statements.length === 0) {
+      res.status(404).json({ message: "No statements found" });
+    } else {
+      const locations = statements.map(statement => statement.location);
+      const frequencyMap = new Map();
+      locations.forEach(location => {
+        const count = frequencyMap.get(location) || 0;
+        frequencyMap.set(location, count + 1);
+      });
+      const sortedLocations = [...frequencyMap.entries()].sort((a, b) => b[1] - a[1]);
+      const result = {
+        high_danger_zones: [],
+        medium_danger_zones: [],
+        less_danger_zones: []
+      };
+      sortedLocations.forEach(location => {
+        const frequency = location[1];
+        const coordinates = location[0];
+        if (frequency >= 8) {
+          result.high_danger_zones.push(coordinates);
+        } else if (frequency >= 3) {
+          result.medium_danger_zones.push(coordinates);
+        } else {
+          result.less_danger_zones.push(coordinates);
+        }
+      });
+      const total = result.high_danger_zones.length + result.medium_danger_zones.length + result.less_danger_zones.length;
+      const highDangerPercent = (result.high_danger_zones.length / total) * 100;
+      const mediumDangerPercent = (result.medium_danger_zones.length / total) * 100;
+      const lessDangerPercent = (result.less_danger_zones.length / total) * 100;
+      res.status(200).json({ result, highDangerPercent, mediumDangerPercent, lessDangerPercent });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving statements", error });
+  }
+};
+
 
 const PARTS_LIST = [
   "Front Left Fender",
@@ -1226,5 +1283,42 @@ module.exports.fraud_detection_algorithme = async (req, res) => {
       });
   } catch (error) {
     res.status(500).json({ message: "Error retrieving statement", error });
+  }
+};
+
+//ai bonus malus vehicule :
+
+module.exports.claim = async (req, res) => {
+  try {
+    const row = req.body;
+    row=[0];
+    const rowJson = JSON.stringify(row);
+
+    const pythonProcess = spawn('python', ['C:/PI_2023_4TWIN7_TechTitans/back/scripts/claimTrained.py', rowJson]);
+
+    let stdout = '';
+    let stderr = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      stdout += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      stderr += data.toString();
+    });
+    console.log(data);
+    pythonProcess.on('close', (code) => {
+      if (code !== 0) {
+        console.error(`Python process exited with code ${code}`);
+        return res.status(500).json({ error: 'Python script failed' });
+      }
+      const result = stdout.trim();
+      console.log(result);
+      res.status(200).json({ result });
+    });
+
+  } catch (e) {
+    console.error(`Error: ${e.message}`);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
