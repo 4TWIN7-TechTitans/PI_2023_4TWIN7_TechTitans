@@ -7,5 +7,6 @@ const ReviewController = require("../controllers/ReviewController.js");
 router.post("/add_review", ReviewController.addReview);
 router.get("/get_all_reviews", ReviewController.getAllReviews);
 router.post("/calc", ReviewController.calc);
+router.post("/calcavg", ReviewController.calcAverage);
 
 module.exports = router;
