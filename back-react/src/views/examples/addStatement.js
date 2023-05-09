@@ -1132,7 +1132,7 @@ const AddStatement = () => {
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
-                <Row className="align-items-center">
+                {/* <Row className="align-items-center">
                   <Col>
                     <div>
                       <span>Microphone: {listening ? 'on' : 'off'}</span><br></br>
@@ -1144,7 +1144,7 @@ const AddStatement = () => {
 
                     </div>
                   </Col>
-                </Row>
+                </Row> */}
                 <Row className="align-items-center">
                   <Col xs="8">
                     <h3 className="mb-0">Fill In Your Statement</h3>
