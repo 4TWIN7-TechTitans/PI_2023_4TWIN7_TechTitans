@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Tesseract from 'tesseract.js';
-
+import axios from "axios";
 
 
 import {
@@ -25,13 +25,15 @@ const Ocr = () => {
    
     const [progress,setProgress]=useState(0);
     const [result,setResult]=useState("");
-    const recognizeImage = (imageData) => {
-       
-      };
+    const [checktext,setChecktext]=useState(true);
 
+      const [stream, setStream] = useState(null);
 
       const handlesubmit = () =>
-      {
+      {if(result.length>0)
+        {
+
+        
         if(result.indexOf("Véhicule assuré par")< 0 || result.indexOf("Police d'assurance")< 0 || result.indexOf("Agence")< 0 || result.indexOf("du")< 0 || result.indexOf("au")< 0
         || result.indexOf("Nom")< 0 || result.indexOf("Prénom")< 0 || result.indexOf("adresse")< 0 || result.indexOf("Permis de conduire N")< 0
         || result.indexOf("Délivré Le")< 0 || result.indexOf("Nom")< 0 || result.indexOf("")< 0 || result.indexOf("Adresse")< 0
@@ -262,24 +264,67 @@ const Ocr = () => {
           */
         }
       }
+      }
 
-      const handleImageUpload = (event) => {
+      const handleImageUpload = async (event) => {
         const file = event.target.files[0];
-        Tesseract.recognize(
-            file,
-            'fra',
-            { logger: (m) => {
-                console.log(m)
-                if(m.status === 'recognizing text')
-                {setProgress(m.progress)}
-            } }
-          ).then(({ data: { text } }) => {
-           /* dictionary.spellCheck(text).then((result) => {
-             
-              setResult(result.corrected);
-            });*/
-            setResult(result.corrected);
-          })
+        setChecktext(true)
+        setResult("");
+        console.log(file)
+        const croquisFormData = new FormData();
+        croquisFormData.append("file", file);
+        croquisFormData.append("upload_preset", "zgt1wota");
+    
+        const croquisRes = await axios.post(
+          "https://api.cloudinary.com/v1_1/dczz1wjxm/image/upload",
+          croquisFormData,
+        );
+        console.log(croquisRes.data.secure_url);
+          
+ 
+const data = new FormData();
+data.append('srcImg', file);
+data.append('Session', 'string');
+
+const options = {
+  method: 'POST',
+  url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
+  headers: {
+    'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
+    'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
+  },
+  data: data
+};
+
+try {
+	const response = await axios.request(options);
+	console.log(response.data);
+  setChecktext(false)
+  setResult(response.data);
+} catch (error) {
+	console.error(error);
+}
+
+
+      /*  if(file.type.indexOf("image")>-1)
+          {
+            Tesseract.recognize(
+              file,
+              'fra',
+              { logger: (m) => {
+                  console.log(m)
+                  if(m.status === 'recognizing text')
+                  {setProgress(m.progress)}
+              } }
+            ).then(({ data: { text } }) => {
+            
+              setChecktext(false)
+              setResult(text);
+            })
+          }
+        else 
+        setResult("the chosen file is not an image please try again");
+     */
        
       };
   return (
@@ -292,21 +337,22 @@ const Ocr = () => {
             <div className="App">
       <div>
         <p>Choose an Image</p>
-        <input
+       {/* <input
           type="file"
-        
+          accept="image/*"
           onChange={handleImageUpload}
         
-        />
+  />*/}
       </div>
         <progress value={progress} max={1}/>
     </div>
     <div className="display-flex">
        <p>Result : </p>
-        <p>{result}</p>
+        <p>{JSON.stringify(result)}</p>
         <Button
                   color="info float-right"
                   onClick={handlesubmit}
+                  disabled={checktext}
                 >
                   Submit
                 </Button>

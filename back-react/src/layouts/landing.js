@@ -53,6 +53,15 @@ import ChangePassword from "views/examples/ChangePassword";
 const Landing = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
+  const [chat, setChat] = React.useState("0");
+
+  const handlechat = (event) => {
+    if (chat==="1")
+    setChat("0");
+    if (chat==="0")
+    setChat("1");
+  };
+
 
   React.useEffect(() => {
     document.body.classList.add("bg-default");
@@ -125,6 +134,22 @@ const Landing = (props) => {
           )}
           {window.location.pathname == "/" && (
             <>
+            <div style={{position: "fixed",
+  right: "0",
+  bottom: "0",zIndex:"99"}}>
+  
+  {chat==="1" &&       <iframe 
+    allow="microphone;"
+    width="350"
+    height="430"
+    src="https://console.dialogflow.com/api-client/demo/embedded/bb6c8ade-39c0-498d-af8d-cb053f551ce9">
+</iframe>}
+<Button  color="info float-right"  onClick={handlechat}>
+  {chat==="0" && "Show Chat Box"}
+  {chat==="1" && "Hide Chat Box"}
+    </Button>
+            </div>
+          
               <Row>
                 <AddStatement />
               </Row>
