@@ -51,6 +51,7 @@ import Ocr from "views/examples/Ocr";
 import ChangePassword from "views/examples/ChangePassword";
 import Clientavi from "views/examples/Clientavi";
 import ViewProfileExpert from "views/examples/ViewProfileExpert";
+import DetailsExpert from "views/examples/DetailsExpert";
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -195,9 +196,15 @@ const Landing = (props) => {
             </Row>
           )}
 
-          {window.location.pathname == "/ex" && (
+{window.location.pathname == "/ex" && (
             <Row>
               <ViewProfileExpert />
+            </Row>
+          )}
+
+{window.location.pathname == "/reviews" && (
+            <Row>
+              <DetailsExpert />
             </Row>
           )}
         </Container>
