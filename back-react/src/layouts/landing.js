@@ -24,6 +24,7 @@ import { Container, Row, Col } from "reactstrap";
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 import AddStatement from "views/examples/addStatement.js";
+import 'react-image-crop/dist/ReactCrop.css';
 
 import Chat from "views/examples/chat.js";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
