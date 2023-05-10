@@ -11,11 +11,12 @@ import joblib
 import json
 
 def claimP():
-    model = joblib.load("modelclaim.joblib")
-    fenc = joblib.load("fenc.joblib")
-    tenc = joblib.load("2enc.joblib")
+    model = joblib.load("C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/modelclaim.joblib")
+    fenc = joblib.load("C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/fenc.joblib")
+    tenc = joblib.load("C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/2enc.joblib")
     # df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/ClaimData.csv')
-    df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/unseulentree.csv')
+    df = pd.read_csv('C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/unseulentree.csv')
+    # df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/unseulentree.csv')
     # X_df = pd.DataFrame(df, columns=["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"])
     
     # features = X_df[["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"]]
@@ -34,7 +35,7 @@ def claimP():
     
     
     df = extract_datetime_components(df)
-    print(df)
+    #print(df)
 
     categorical_data = df.select_dtypes(include=['object']).columns
 
@@ -61,10 +62,10 @@ def claimP():
 
     df = df.drop("is_claim", axis=1).values
     # row = data_array[1998]  # Since array indexing starts from 0, row 1998 will be at index 1997
-    print(df)
+    # print(df)
     prediction = model.predict(df)    
     # prediction = model.predict([row])
-    print("Prediction for row 1998:", prediction) 
+    # print("Prediction for row 1998:", prediction) 
     return prediction
 if __name__ == '__main__':
 
@@ -74,7 +75,7 @@ if __name__ == '__main__':
     else:
         result = "is not claim"
     print(result)
-    predictions_json = json.dumps(prediction.tolist())
-    with open("predictions.dump", 'w') as f:
-       f.write(predictions_json)
-    print(prediction)
+#    predictions_json = json.dumps(prediction.tolist())
+#    with open("predictions.dump", 'w') as f:
+#       f.write(predictions_json)
+#    print(prediction)
