@@ -1322,3 +1322,67 @@ module.exports.claim = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+module.exports.predict_statement = async (req, res) => {
+  console.log(req.body)
+  const { make, fuel , airbags, transmission, camera,sensor,cyl,gear } =
+    req.body;
+    
+
+  const csvdata =
+    "policy_id,policy_tenure,age_of_car,age_of_policyholder,area_cluster,population_density,make,segment,model,fuel_type,max_torque,max_power,engine_type,airbags,is_esc,is_adjustable_steering,is_tpms,is_parking_sensors,is_parking_camera,rear_brakes_type,displacement,cylinder,transmission_type,gear_box,steering_type,turning_radius,length,width,height,gross_weight,is_front_fog_lights,is_rear_window_wiper,is_rear_window_washer,is_rear_window_defogger,is_brake_assist,is_power_door_locks,is_central_locking,is_power_steering,is_driver_seat_height_adjustable,is_day_night_rear_view_mirror,is_ecw,is_speed_alert,ncap_rating,is_claim\nID00001,0.515873589958172,0.05,0.644230769230769,C1,4990,"+make+",A,M1,"+fuel+",60Nm@3500rpm,40.36bhp@6000rpm,F8D Petrol Engine,"+airbags+",No,No,No,"+sensor+","+camera+",Drum,796,"+cyl+","+transmission+","+gear+",Power,4.6,3445,1515,1475,1185,No,No,No,No,No,No,No,Yes,No,No,No,Yes,0,0\n"
+  try {
+    fs.writeFile(
+      "C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/unseulentree.csv",
+      csvdata,
+      function (err) {
+        if (err) {
+          console.error("Error writing CSV file:", err);
+        } else {
+          console.log("CSV file saved successfully!");
+        }
+      }
+    );
+
+    const prom = new Promise((resolve, reject) => {
+      const pythonProcess = spawn("python", [
+        "C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/claimTrained.py",
+      ]);
+
+      let newdata = "";
+      pythonProcess.stdout.on("data", (data) => {
+        newdata += data.toString();
+      });
+
+      pythonProcess.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
+      });
+
+      pythonProcess.on("close", (code) => {
+        console.log(`child process exited with code ${code}`);
+        // if (code === 0) {
+
+        if (true) {
+          const result = newdata; // Remove any leading/trailing whitespace
+          // const result = newdata.trim(); // Remove any leading/trailing whitespace
+          // console.log("sensensnesne " + sentiment)
+          resolve(result);
+        } else {
+        }
+      });
+    });
+    prom
+      .then((result) => {
+        let newStr = result.slice(0, -2);
+        console.log(newStr)
+        res.status(200).json(newStr);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  } catch (err) {
+    const errorp = err.message;
+    res.status(400).json({ errorp, status: "error" });
+  }
+};
