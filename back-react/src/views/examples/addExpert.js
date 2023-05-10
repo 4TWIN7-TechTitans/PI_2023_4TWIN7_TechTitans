@@ -50,8 +50,6 @@ function AddExpert() {
 
     const form = e.target;
     const email = form.email.value;
-    const password = form.password.value;
-    const password2 = form.password2.value;
     const last_name = form.last_name.value;
     const first_name = form.first_name.value;
     const role = "Expert";
@@ -61,8 +59,6 @@ function AddExpert() {
 
     if (
       !email ||
-      !password ||
-      !password2 ||
       !last_name ||
       !first_name ||
       !role ||
@@ -79,13 +75,6 @@ function AddExpert() {
       return;
     }
 
-    if (password !== password2) {
-      setShowNotification(false);
-      setShowVerifyEmail(false);
-      setErrors({ ...errors, password2: "Passwords do not match" });
-      setShowError(true);
-      return;
-    }
     try {
       // Check if email is already in use
       console.log(email);
@@ -104,10 +93,10 @@ function AddExpert() {
         "http://localhost:5000/add",
         {
           email,
-          password,
+          password : email,
           last_name,
           first_name,
-          role,
+          role: "Expert",
           verif1,
           phone_number,
           id_agence,
@@ -310,63 +299,7 @@ function AddExpert() {
                       </FormGroup>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col md="6">
-                      <FormGroup>
-                        <label>Password</label>
-                        <InputGroup>
-                          <Input
-                            name="password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Password"
-                            required
-                            onChange={handlePasswordChange}
-                          />
-                          <div className="password error"></div>
-                          <InputGroupAddon addonType="append">
-                            <InputGroupText
-                              onClick={() => setShowPassword(!showPassword)}
-                            >
-                              {showPassword ? (
-                                <i className="fas fa-eye-slash" />
-                              ) : (
-                                <i className="fas fa-eye" />
-                              )}
-                            </InputGroupText>
-                          </InputGroupAddon>
-                        </InputGroup>
-                      </FormGroup>
-                    </Col>
-                    <Col md="6">
-                      <FormGroup>
-                        <label>Confirm </label>
-                        <InputGroup>
-                          <Input
-                            name="password2"
-                            type={showPassword2 ? "text" : "password"} // Change input type based on showPassword2 state
-                            placeholder="Confirm Password"
-                            required
-                          />
-                          <div className="password2 error"></div>
-                          <InputGroupAddon addonType="append">
-                            <InputGroupText
-                              onClick={() => setShowPassword2(!showPassword2)}
-                            >
-                              {showPassword2 ? (
-                                <i className="fas fa-eye-slash" />
-                              ) : (
-                                <i className="fas fa-eye" />
-                              )}{" "}
-                              {/* Change icon based on showPassword2 state */}
-                            </InputGroupText>
-                          </InputGroupAddon>
-                        </InputGroup>
-                        {errors.password2 && (
-                          <p className="text-danger">{errors.password2}</p>
-                        )}
-                      </FormGroup>
-                    </Col>
-                  </Row>
+
                   <FormGroup>
                     <label className="phone_number">
                       Phone number (+216){" "}
