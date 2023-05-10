@@ -41,7 +41,7 @@ var routesAgence = [
   {
     path: "/tickets",
     name: "Claims",
-    icon: "ni ni-tv-2 text-blue",
+    icon: "ni ni-settings text-black",
     component: Tickets,
     layout: "/admin",
     showInSidebar: true,
@@ -80,20 +80,20 @@ var routesAgence = [
     showInSidebar: false,
   },
 
-  {
-    path: "/accplacechart",
-    name: "Most Frequent Accidents Chart",
-    icon: "ni ni-bullet-list-67 text-blue",
-    component: accplacechart,
-    layout: "/agence",
-    showInSidebar: true,
-  },
+  // {
+  //   path: "/accplacechart",
+  //   name: "Most Frequent Accidents Chart",
+  //   icon: "ni ni-bullet-list-67 text-blue",
+  //   component: accplacechart,
+  //   layout: "/agence",
+  //   showInSidebar: true,
+  // },
 
  
   {
     path: "/prediction",
     name: "Client accident severity prediction",
-    icon: "ni ni-bullet-list-67 text-blue",
+    icon: "ni ni-user-run text-red",
     component: Severity,
     layout: "/agence",
     showInSidebar: true,
@@ -101,7 +101,7 @@ var routesAgence = [
   {
     path: "/isclaim",
     name: "Claim car prediction",
-    icon: "ni ni-bullet-list-67 text-blue",
+    icon: "ni ni-bus-front-12 text-green",
     component: Isclaim,
     layout: "/agence",
     showInSidebar: true,

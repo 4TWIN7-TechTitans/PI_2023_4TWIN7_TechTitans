@@ -39,7 +39,7 @@ var routesAdmin = [
   {
     path: "/index",
     name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
+    icon: "ni ni-chart-bar-32 text-red",
     component: Index,
     layout: "/admin",
     showInSidebar: true,
@@ -72,7 +72,7 @@ var routesAdmin = [
   {
     path: "/listofusers",
     name: "List Of Users",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-bullet-list-67 text-green",
     component: ListOfUsers,
     layout: "/admin",
     showInSidebar: true,
@@ -94,14 +94,14 @@ var routesAdmin = [
     layout: "/admin",
     showInSidebar: true,
   },
-  {
-    path: "/predictdecision",
-    name: "Decision Prediction",
-    icon: "ni ni-bullet-list-67 text-blue",
-    component: DecisionPrediction,
-    layout: "/admin",
-    showInSidebar: true,
-  },
+  // {
+  //   path: "/predictdecision",
+  //   name: "Decision Prediction",
+  //   icon: "ni ni-bullet-list-67 text-blue",
+  //   component: DecisionPrediction,
+  //   layout: "/admin",
+  //   showInSidebar: true,
+  // },
 
 
 ];
