@@ -29,6 +29,7 @@ from sklearn.metrics import accuracy_score,classification_report,confusion_matri
 from sklearn.model_selection import KFold # import KFold
 import warnings
 import pickle
+import joblib
 warnings.filterwarnings('ignore')
 # %matplotlib inline
 
@@ -70,6 +71,8 @@ cols = df.columns
 x = enc.fit_transform(df)
 
 pickle.dump(enc,open('Oencoder.pkl','wb'))
+#JOBLIB
+dump(enc, 'Oencoder.joblib') 
 
 xd = pd.DataFrame(x,columns=cols)
 
@@ -86,6 +89,9 @@ model_pipeline=Pipeline([('MinMaxScler',MinMaxScaler()),('model',GradientBoostin
 model_fit=model_pipeline.fit(xtrain,ytrain)
 
 pickle.dump(model_fit,open('model.sav','wb'))
+
+#JOBLIB
+dump(model_fit, 'model.joblib') 
 
 ypred=model_fit.predict(xtest)
 

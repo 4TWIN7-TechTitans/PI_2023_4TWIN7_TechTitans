@@ -2679,3 +2679,116 @@ module.exports.update_agence = async (req, res) => {
 
  
 };
+
+
+module.exports.get_prediction_user = async (req, res) => {
+  const id = req.body.id;
+  const user = userModel.findById(id);
+
+  try {
+    res.status(200).json({ id });
+  } catch (err) {
+    const errorp = err.message;
+    res.status(400).json({ errorp, status: "error" });
+  }
+};
+
+const fs = require("fs");
+
+const { spawn } = require("child_process");
+
+module.exports.generate_prediction_user = async (req, res) => {
+  console.log(req.body)
+  const { time, date, age, sex, education, relation, serviceyear, experience } =
+    req.body;
+    console.log(time);
+    console.log(date);
+    console.log(age);
+    console.log(sex);
+    console.log(education);
+    console.log(relation);
+    console.log(serviceyear);
+    console.log(experience);
+
+  const csvdata =
+    "Time,Day_of_week,Age_band_of_driver,Sex_of_driver,Educational_level,Vehicle_driver_relation,Driving_experience,Type_of_vehicle,Owner_of_vehicle,Service_year_of_vehicle,Defect_of_vehicle,Area_accident_occured,Lanes_or_Medians,Road_allignment,Types_of_Junction,Road_surface_type,Road_surface_conditions,Light_conditions,Weather_conditions,Type_of_collision,Number_of_vehicles_involved,Number_of_casualties,Vehicle_movement,Casualty_class,Sex_of_casualty,Age_band_of_casualty,Casualty_severity,Work_of_casuality,Fitness_of_casuality,Pedestrian_movement,Cause_of_accident,Accident_severity\n" +
+    "17:02:00," +
+    date +
+    "," +
+    age +
+    "," +
+    sex +
+    "," +
+    education +
+    "," +
+    relation +
+    "," +
+    serviceyear +
+    ","+
+  "Automobile,Owner," +
+    experience +
+    ",No defect,Residential areas,Undivided Two way,Tangent road with flat terrain,No junction,Asphalt roads,Dry,Daylight,Normal,Collision with roadside-parked vehicles,2,2,Going straight,Driver or rider,Female,18-30,3,Driver,Norma  l,Not a Pedestrian,Moving Backward,Slight Injury\n";
+  try {
+    // "17:02:00,Monday,18-30,Male,Above high school,Employee,1-2yr,
+    fs.writeFile(
+      "C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/m/check2.csv",
+      csvdata,
+      function (err) {
+        if (err) {
+          console.error("Error writing CSV file:", err);
+        } else {
+          console.log("CSV file saved successfully!");
+        }
+      }
+    );
+
+    const prom = new Promise((resolve, reject) => {
+      const pythonProcess = spawn("python", [
+        "C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/m/predict.py",
+      ]);
+
+      let newdata = "";
+      pythonProcess.stdout.on("data", (data) => {
+        newdata += data.toString();
+      });
+
+      pythonProcess.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
+      });
+
+      pythonProcess.on("close", (code) => {
+        console.log(`child process exited with code ${code}`);
+        // if (code === 0) {
+
+        if (true) {
+          const result = newdata; // Remove any leading/trailing whitespace
+          // const result = newdata.trim(); // Remove any leading/trailing whitespace
+          // console.log("sensensnesne " + sentiment)
+          resolve(result);
+        } else {
+        }
+      });
+    });
+    prom
+      .then((result) => {
+        const num = result.substr(1, 1);
+        let inj = "";
+        if (num == 2) {
+          inj = "Slight Injury";
+        } else if (num == 1) {
+          inj = "Serious Injury";
+        } else {
+          inj = "Fatal injury";
+        }
+        console.log(inj)
+        const resultstr = inj;
+        res.status(200).json(resultstr);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  } catch (err) {
+    const errorp = err.message;
+    res.status(400).json({ errorp, status: "error" });
+  }
+};
