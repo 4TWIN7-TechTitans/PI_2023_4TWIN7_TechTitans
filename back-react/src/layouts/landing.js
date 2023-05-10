@@ -53,6 +53,7 @@ import ChangePassword from "views/examples/ChangePassword";
 import Clientavi from "views/examples/Clientavi";
 import ViewProfileExpert from "views/examples/ViewProfileExpert";
 import DetailsExpert from "views/examples/DetailsExpert";
+import BestOffer from "views/examples/bestOffer";
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -173,7 +174,11 @@ const Landing = (props) => {
                   <div className="col">
                     <Card className="shadow">
                       <MultipleRows />
+                      
                     </Card>
+                  </div>
+                  <div className="col">
+                  <BestOffer/>
                   </div>
                 </Row>
               }
