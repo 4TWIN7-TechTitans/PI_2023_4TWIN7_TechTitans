@@ -24,6 +24,7 @@ import OdmAgence from "views/examples/OdmAgence";
 import Detailssag from "views/examples/Detailssag";
 import accplacechart  from "views/examples/accplacechart";
 import Clientavi from "views/examples/Clientavi";
+import Severity from "views/examples/severity";
 var routesAgence = [
   //TODO : change admin to user view profile
   
@@ -92,6 +93,14 @@ var routesAgence = [
     name: "Expert Evaluation",
     icon: "ni ni-bullet-list-67 text-blue",
     component: Clientavi,
+    layout: "/agence",
+    showInSidebar: true,
+  },
+  {
+    path: "/prediction",
+    name: "Client accident severity prediction",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: Severity,
     layout: "/agence",
     showInSidebar: true,
   },
