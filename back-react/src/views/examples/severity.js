@@ -104,6 +104,7 @@ function Severity() {
 
   return (
     <>
+    <Header/>
       <Container className="mt--12" fluid>
         <Row>
           <Col className="order-xl-1" xl="12">
