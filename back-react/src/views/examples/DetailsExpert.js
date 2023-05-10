@@ -89,6 +89,14 @@ function DetailsExpert() {
     console.log(reviews);
   };
 
+  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [image, setImage] = useState("");
+
+
   useEffect(() => {
     const search = window.location.search;
     const expertid = new URLSearchParams(search).get("id");
@@ -100,9 +108,16 @@ function DetailsExpert() {
         const experts = (await axios.get("http://localhost:5000/getallexperts"))
           .data.experts;
         const expert = experts.find((e) => e._id == expertid);
-        console.log(experts);
-        console.log(expert);
         //filter one
+
+
+        setFirstName(expert.first_name);
+        setLastName(expert.last_name);
+        setEmail(expert.email);
+        setPhone(expert.phone_number);
+        setAddress(expert.address);
+        setImage(expert.image);
+
 
         const allreviews = (
           await axios.get("http://localhost:5000/get_all_reviews")
@@ -193,17 +208,9 @@ function DetailsExpert() {
                 <CardBody className="pt-0 pt-md-4">
                   <div className="text-center">
                     <div>
-                      <h2>Details About {driverIdentityA}</h2>
+                      <h2>Reviews of {firstName +   " " + lastName}</h2>
                       <hr />
-                      <center>
-                        <div className="row">
-                          <div className="col-md-4"></div>
-
-                          <div></div>
-                          <div className="col-md-4"></div>
-                        </div>
-                      </center>
-                      <hr />
+                      
                     </div>
                     <div>
                       <div></div>
@@ -213,9 +220,7 @@ function DetailsExpert() {
                     </div>
 
                     <div className="text-center">
-                      <h3>UPDATE STATUS</h3>
 
-                      <br></br>
                       <h3>Sentiment</h3>
 
                       <Button
@@ -229,20 +234,14 @@ function DetailsExpert() {
                       >
                         Get average sentiment
                       </Button>
-                      <h2>{avg}</h2>
+                      <h2>{avg && avg + "%"}</h2>
                     </div>
-                    <hr className="my-4" />
                   </div>
 
-                  <div
-                    className="row"
-                    style={{ marginTop: "70px", marginBottom: "70px" }}
-                  >
-                    <div className="col-md-2"></div>
-                  </div>
+                 
 
                   <div className="text-center">
-                    <h3>Write A Rapport :</h3>
+                    <h3>Write a review :</h3>
                   </div>
                   <Form onSubmit={(event) => handleComment(event, false)}>
                     <FormGroup>
@@ -284,17 +283,13 @@ function DetailsExpert() {
                               >
                                 Sentiment
                               </Button>
-                              <h1>{elem.score}</h1>
+                              <h1>{elem.score && elem.score + "%"}</h1>
                               <hr />
                             </Col>
                           </Row>
                         );
                       })}
                     </Card>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
                   </div>
                 </CardBody>
               </Row>

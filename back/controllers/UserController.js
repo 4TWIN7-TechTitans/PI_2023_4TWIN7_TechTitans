@@ -2013,6 +2013,7 @@ module.exports.get_all_ExpCli = async (req, res) => {
       const {
         _id,
         first_name,
+        last_name,
         email,
         phone,
         address,
@@ -2024,6 +2025,7 @@ module.exports.get_all_ExpCli = async (req, res) => {
       return {
         _id,
         first_name,
+        last_name,
         email,
         phone,
         address,

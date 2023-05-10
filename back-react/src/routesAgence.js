@@ -89,14 +89,7 @@ var routesAgence = [
     showInSidebar: true,
   },
 
-  {
-    path: "/clientavi",
-    name: "Expert Evaluation",
-    icon: "ni ni-bullet-list-67 text-blue",
-    component: Clientavi,
-    layout: "/agence",
-    showInSidebar: true,
-  },
+ 
   {
     path: "/prediction",
     name: "Client accident severity prediction",
