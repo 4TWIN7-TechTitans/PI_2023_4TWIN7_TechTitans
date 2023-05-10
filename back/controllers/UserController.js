@@ -2727,7 +2727,7 @@ module.exports.generate_prediction_user = async (req, res) => {
     ","+
   "Automobile,Owner," +
     experience +
-    ",No defect,Residential areas,Undivided Two way,Tangent road with flat terrain,No junction,Asphalt roads,Dry,Daylight,Normal,Collision with roadside-parked vehicles,2,2,Going straight,Driver or rider,Female,18-30,3,Driver,Norma  l,Not a Pedestrian,Moving Backward,Slight Injury\n";
+    ",No defect,Residential areas,Undivided Two way,Tangent road with flat terrain,No junction,Asphalt roads,Dry,Daylight,Normal,Collision with roadside-parked vehicles,2,2,Going straight,Driver or rider,Female,18-30,3,Driver,Normal,Not a Pedestrian,Moving Backward,Slight Injury\n";
   try {
     // "17:02:00,Monday,18-30,Male,Above high school,Employee,1-2yr,
     fs.writeFile(
