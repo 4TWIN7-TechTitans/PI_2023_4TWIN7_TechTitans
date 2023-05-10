@@ -27,7 +27,7 @@ module.exports = function (passport) {
           id:"",
           token:"",
           banned:false,
-          phone_number:"",
+          phone_number:"20202020",
           password: randomstring,
           role:"Client",
           two_factor_auth: "none",

@@ -307,7 +307,7 @@ const Tickets = () => {
         //start add notif
         //const date_demande = new Date();
         const postData = {
-          titre: "A New ticket was added #"+addticket.data.ticket.number,
+          titre: "A New claim was added #"+addticket.data.ticket.number,
           id_user:id_agence,
           date_notif:date_demande,
           descrip:objet
@@ -432,10 +432,10 @@ const Tickets = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 {isShownadd_ticket === "list" && (
-                  <h3 className="mb-0">List Reclamation</h3>
+                  <h3 className="mb-0">List claim</h3>
                 )}
                 {isShownadd_ticket === "add" && (
-                  <h3 className="mb-0">New Reclamation</h3>
+                  <h3 className="mb-0">New claim</h3>
                 )}
                
                
@@ -443,9 +443,9 @@ const Tickets = () => {
                   color="info float-right"
                   onClick={handleShownadd_ticket}
                 >
-                  {isShownadd_ticket === "list" && "New Ticket"}
-                  {isShownadd_ticket === "add" && "Liste des tickets"}
-                  {isShownadd_ticket === "modif" && "Liste des tickets"}
+                  {isShownadd_ticket === "list" && "New claim"}
+                  {isShownadd_ticket === "add" && "List of claims"}
+                  {isShownadd_ticket === "modif" && "List of claims"}
                 </Button>
                
               </CardHeader>
@@ -454,7 +454,7 @@ const Tickets = () => {
                
                <div className="input-group" >
   <div className="form-outline" >
-    <input type="search" id="search" value={searchvalue} onChange={handlesearchinput}  className="form-control" placeholder="Search by ticket title" />
+    <input type="search" id="search" value={searchvalue} onChange={handlesearchinput}  className="form-control" placeholder="Search by claim title" />
     
   </div>
   <button type="button" class="btn btn-primary" onClick={handlesearch}>
@@ -498,7 +498,7 @@ const Tickets = () => {
                     <tbody>
                       <tr>
                         <td align="center" className="">
-                          No tickets found
+                          No claims found
                         </td>
                       </tr>
                     </tbody>
@@ -618,7 +618,7 @@ const Tickets = () => {
                         type="submit"
                         disabled={formvalid}
                       >
-                        Create ticket
+                        Create claim
                       </Button>
                     </div>
                   </Form>
@@ -719,7 +719,7 @@ const Tickets = () => {
                     <div className="text-center">
                       {ticketadded === "OK" && (
                         <div className="alert alert-success mt-3" role="alert">
-                          Reclamation Added
+                          claim Added
                         </div>
                       )}
                       {ticketadded === "KO" && (
