@@ -13,7 +13,7 @@ def predict():
     # Convert data to pandas DataFrame
     # df = pd.DataFrame(data, index=[0])
 
-    df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv')
+    df = pd.read_csv('C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv')
     X_df = pd.DataFrame(df, columns=["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"])
     
     features = X_df[["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"]]

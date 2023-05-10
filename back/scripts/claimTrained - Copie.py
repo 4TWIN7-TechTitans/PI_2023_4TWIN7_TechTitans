@@ -15,7 +15,7 @@ def claimP():
     fenc = joblib.load("fenc.joblib")
     tenc = joblib.load("2enc.joblib")
     # df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/ClaimData.csv')
-    df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/unseulentree.csv')
+    df = pd.read_csv('C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/unseulentree.csv')
     # X_df = pd.DataFrame(df, columns=["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"])
     
     # features = X_df[["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"]]

@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 def train():
 
-    df = pd.read_csv('C:/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv')
+    df = pd.read_csv('C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/statements.csv')
     myfeatures = ["injured" , "circumstances_a" , "circumstances_b", "material_damage", "hits_a" , "hits_b" , "apparent_damages_a" , "apparent_damages_b"]
     target = "decision"
     # initialize the label encoder

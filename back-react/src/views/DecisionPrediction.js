@@ -6,6 +6,8 @@ import {
   Nav,
   TabContent,
   TabPane,
+  Label,
+  Button,
 } from "reactstrap";
 import Header from "components/Headers/Header";
 import { useEffect, useState } from "react";
@@ -30,7 +32,7 @@ const DecisionPrediction = () => {
     try {
       const response = await axios.get('http://localhost:5000/trainmodel');
       //console.log(response.data);
-    } catch (error) {
+        } catch (error) {
       console.error(error);
     }
   };
@@ -48,16 +50,17 @@ const DecisionPrediction = () => {
       <Header />
       <div>
         <h1>Train and Predict</h1>
-        <button onClick={handleTrainClick}>Train Model</button>
+        <Button onClick={handleTrainClick}>Train Model</Button>
         <br />
         <br />
-        <label>
+        <Label>
           Statement ID:
           <input type="text" value={statementId} onChange={(event) => setStatementId(event.target.value)} />
-        </label>
+          
+        </Label>
         <br />
         <br />
-        <button onClick={handlePredictClick}>Predict</button>
+        <Button onClick={handlePredictClick}>Predict</Button>
         <br />
         <br />
         {prediction && <p>Prediction: {prediction}</p>}

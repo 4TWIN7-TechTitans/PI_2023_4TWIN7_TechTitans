@@ -917,7 +917,7 @@ module.exports.predictDecision = async (req, res) => {
 const { spawn } = require('child_process');
 module.exports.generateTrainData = async (req, res) => {
   try {
-    const pythonProcess = spawn('python', ['C:/PI_2023_4TWIN7_TechTitans/back/scripts/train.py']);
+    const pythonProcess = spawn('python', ['C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/train.py']);
 
     pythonProcess.stdout.on('data', (data) => {
       console.log(`stdout: ${data}`);
@@ -951,7 +951,7 @@ module.exports.predict = async (req, res) => {
       throw new Error();
     }
 
-    const pythonProcess = spawn('python', ['C:/PI_2023_4TWIN7_TechTitans/back/scripts/predict.py']);
+    const pythonProcess = spawn('python', ['C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/predict.py']);
     let dataToSend = '';
 
     pythonProcess.stdout.on('data', (data) => {
@@ -992,7 +992,7 @@ module.exports.profile_prediction= async (req, res) => {
 // Load the pre-trained model
 async function loadModel() {
 
-  const model = await tf.loadLayersModel('file://C:/PI_2023_4TWIN7_TechTitans/users.json');
+  const model = await tf.loadLayersModel('file://C:/repos/PI_2023_4TWIN7_TechTitans/users.json');
   return model;
 }
 
@@ -1294,7 +1294,7 @@ module.exports.claim = async (req, res) => {
     row=[0];
     const rowJson = JSON.stringify(row);
 
-    const pythonProcess = spawn('python', ['C:/PI_2023_4TWIN7_TechTitans/back/scripts/claimTrained.py', rowJson]);
+    const pythonProcess = spawn('python', ['C:/repos/PI_2023_4TWIN7_TechTitans/back/scripts/claimTrained.py', rowJson]);
 
     let stdout = '';
     let stderr = '';
