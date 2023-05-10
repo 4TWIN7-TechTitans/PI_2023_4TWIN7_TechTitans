@@ -25,6 +25,7 @@ import Detailssag from "views/examples/Detailssag";
 import accplacechart  from "views/examples/accplacechart";
 import Clientavi from "views/examples/Clientavi";
 import Severity from "views/examples/severity";
+import Isclaim from "views/examples/isclaim";
 var routesAgence = [
   //TODO : change admin to user view profile
   
@@ -101,6 +102,14 @@ var routesAgence = [
     name: "Client accident severity prediction",
     icon: "ni ni-bullet-list-67 text-blue",
     component: Severity,
+    layout: "/agence",
+    showInSidebar: true,
+  },
+  {
+    path: "/isclaim",
+    name: "Claim car prediction",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: Isclaim,
     layout: "/agence",
     showInSidebar: true,
   },
