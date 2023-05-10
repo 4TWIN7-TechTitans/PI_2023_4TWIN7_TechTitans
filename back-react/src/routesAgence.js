@@ -38,7 +38,7 @@ var routesAgence = [
   
   {
     path: "/tickets",
-    name: "Reclamation",
+    name: "Claims",
     icon: "ni ni-tv-2 text-blue",
     component: Tickets,
     layout: "/admin",

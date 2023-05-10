@@ -47,6 +47,7 @@ const Tickets = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [etat_ticket, setEtat_ticket] = useState("");
   const [showPDF, setShowPDF] = useState(false);
+  const [agency_exist, setAgency_exist] = useState(false);
   const [searchvalue, setSearchvalue] = useState("");
   const generatePDF = (ticket) => {
     const doc = new jsPDF();
@@ -145,6 +146,7 @@ const Tickets = () => {
 
 
   const fetchData = async () => {
+
     try {
       if(searchvalue.length===0)
       {
@@ -187,6 +189,23 @@ const Tickets = () => {
     } catch (error) {
       console.log(error);
     }
+
+    const jwt = getCookie("jwt");
+    if(jwt == "") return ;
+    if (jwt) {
+      const agence = (
+        await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+      ).data.id_agence;
+    
+      setId_agence(agence);
+      setAgency_exist(true)
+    
+  
+    }
+
+
+
+
   };
 
 
@@ -196,6 +215,7 @@ const Tickets = () => {
 
   useEffect(() => {
     fetchData();
+    
   }, []);
 
   const [isShownadd_ticket, setIsShownadd_ticket] = useState("list");
@@ -255,30 +275,14 @@ const Tickets = () => {
     const log = "";
     const date_demande = new Date();
     const etat = "a traiter";
-    const jwt = getCookie("jwt");
-    if(jwt == "") return ;
-    if (jwt) {
-      const agence = (
-        await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
-      ).data.id_agence;
-     
-      setId_agence(agence);
-    }
-  
-  
+    
     const id_demandeur = getCookie("userid").substring(
       3,
       getCookie("userid").length - 1
     );
-   console.log( {
-    objet: objet,
-    description: description,
-    log: log,
-    date_demande: date_demande,
-    etat: etat,
-    id_agence: id_agence,
-    id_demandeur: id_demandeur,
-  })
+   
+
+
     try {
       const addticket = await axios.post(
         "http://localhost:5000/ticket",
@@ -329,6 +333,10 @@ const Tickets = () => {
     } catch (error) {
       console.log(error);
     }
+  console.log(id_agence)
+  
+   
+
 
 
 
@@ -480,7 +488,21 @@ const Tickets = () => {
                           <td>{ticket.number}</td>
                           <td>{ticket.objet}</td>
                           <td>{ticket.date_demande.substring(0,10)}</td>
-                          <td>{ticket.etat}</td>
+                          <td>
+                            {ticket.etat==="traité" && ( <Button color="success" disabled>
+                            {ticket.etat}
+                          </Button>)}
+                          {ticket.etat==="a traiter" && ( <Button color="info" disabled>
+                            {ticket.etat}
+                          </Button>)}
+                          {ticket.etat==="encours de traitement" && ( <Button color="warning" disabled>
+                            {ticket.etat}
+                          </Button>)}
+                          {ticket.etat==="clos" && ( <Button color="danger" disabled>
+                            {ticket.etat}
+                          </Button>)}
+                          </td>
+                          
                           <td>
                             {" "}
                             <Button
@@ -554,6 +576,7 @@ const Tickets = () => {
                   <Form onSubmit={handleSubmitTicket} noValidate>
                     <Row>
                       <Col md="12">
+                       
                         <FormGroup>
                           <label>Objet</label>
                           <Input
@@ -611,15 +634,20 @@ const Tickets = () => {
                           Something went wrong
                         </div>
                       )}
-
-                      <Button
+                            {agency_exist===false && (
+                        <div className="alert alert-danger mt-3" role="alert">
+                          you have not created a statement yet, therefore you can cannot forward claims to your agency
+                        </div>
+                      )}
+                       {agency_exist && ( <Button
                         className="my-4"
                         color="primary"
                         type="submit"
                         disabled={formvalid}
                       >
                         Create claim
-                      </Button>
+                      </Button>)}
+                     
                     </div>
                   </Form>
                 </CardBody>
@@ -630,7 +658,7 @@ const Tickets = () => {
                   <div className="card-profile-stats d-flex justify-content-center ">
                   
                   <div>
-                      <span className="heading ">Ticket </span>
+                      <span className="heading ">Claim </span>
                       <span className="heading ni ni-support-16"></span>
                       <span className="description ">N° {num_ticket}</span>
                     </div>
