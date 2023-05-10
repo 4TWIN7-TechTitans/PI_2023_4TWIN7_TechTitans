@@ -2,18 +2,24 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsFillReplyAllFill } from "react-icons/bs";
 import { AiOutlineSend } from "react-icons/ai";
+import { BsThreeDots } from "react-icons/bs";
 import "./forum.scss";
 const Forum = () => {
   const [msgs, setMsgs] = useState();
   const [reply, setReply] = useState();
   const [forumId, setForumId] = useState();
-  const [active, setActive] = useState(false);
+  const [index, setIndex] = useState();
+  const [active, setActive] = useState({
+    status: false,
+    role: "",
+    id: "",
+  });
+  const [activeParams, setActiveParams] = useState(false);
   const getMsgs = async () => {
     return await axios.get("http://127.0.0.1:5000/forum");
   };
-  
-  console.log(msgs?.msgReply);
-  console.log(reply)
+
+  console.log(active.id);
   useEffect(() => {
     getMsgs().then((res) => setMsgs(res.data));
     return () => {
@@ -45,34 +51,71 @@ const Forum = () => {
           {msgs?.msgReply?.map((item, idx) => (
             <div className="msg-container" key={idx}>
               <div className="msg">
-               
                 <span>{item.msg.contenu}</span>
 
                 <div>
                   {!item?.reply && (
                     <BsFillReplyAllFill
                       onClick={() => {
-                        setActive(true)
+                        setActive({ status: true, role: "add" });
                         setForumId(item?.msg._id);
                       }}
                       size={22}
-                    />
+                    /> 
                   )}
-
                   <span>{item.msg.clientId.first_name}</span>
                 </div>
               </div>
               {item.reply ? (
                 <div className="reply">
-                 
-                
                   <span>{item.reply.contenu}</span>
+                  <div>
+                    <span>
+                      <BsThreeDots
+                        size={16}
+                        onClick={() => {
+                          setActiveParams(!activeParams)
+                          setIndex(idx)
+                        } }
+                      />
+                    </span>
+                    {activeParams && idx === index && (
+                      <div className="params">
+                        <span
+                          onClick={() =>
+                            setActive({
+                              role: "update",
+                              status: true,
+                              id: item.reply._id,
+                            })
+                          }
+                        >
+                          update
+                        </span>
+                        <span
+                          onClick={async () => {
+                            await axios
+                              .delete(
+                                `http://127.0.0.1:5000/forum/del_reply/${item.reply._id}`,
+                                {
+                                  contenu: reply,
+                                  forumId: forumId,
+                                }
+                              )
+                              .then((res) => window.location.reload());
+                          }}
+                        >
+                          delete
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : null}
             </div>
           ))}
         </div>
-        {active && (
+        {active.status && (
           <>
             <input
               className="reply-input"
@@ -91,10 +134,23 @@ const Forum = () => {
                 cursor: "pointer",
               }}
               onClick={async () => {
-                await axios.post('http://127.0.0.1:5000/forum/add_reply',{contenu:reply,forumId:forumId,})
-                .then(res=> window.location.reload()
-                  
-                )
+                if (active.role === "add") {
+                  await axios
+                    .post("http://127.0.0.1:5000/forum/add_reply", {
+                      contenu: reply,
+                      forumId: forumId,
+                    })
+                    .then((res) => window.location.reload());
+                } else if (active.role === "update") {
+                  await axios
+                    .put(
+                      `http://127.0.0.1:5000/forum/update_reply/${active.id}`,
+                      {
+                        contenu: reply,
+                      } 
+                    )
+                    .then((res) => window.location.reload());
+                }
               }}
             />
           </>

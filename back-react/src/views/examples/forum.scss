@@ -7,6 +7,7 @@
 .msg{
     display: flex;
     gap:10px;
+    width:60%;
   
    &>:last-child{
     display:none;
@@ -29,18 +30,35 @@
 
 .reply{
     align-self: flex-end;
-    position:relative;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    align-items: center;
+    width:100%;
     &>:first-child{
-        background-color: rgba(0,0,0,0.11);
-        color:"white";
-        position:absolute;
-        bottom:8px;
-        right:0px;
-        padding:10px 10px 15px 10px; 
-        width: 120px;
-        border-radius: 13px;
-        font-size: 15px;
+        background-color: #ebebeb;
+        padding: 10px 15px;
+        border-radius: 8px;
+        max-width: 60%;
+        line-break:anywhere;
     }
+    &>:nth-child(2){
+        position: relative;
+        display: none;
+        border-radius: 25px;
+        background-color: #ebebeb;
+        width:27px;
+        height:27px;
+    }
+    &:hover{
+        &>:nth-child(2){
+            display: flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
 }
 .reply-input{
     width: 100%;
@@ -51,4 +69,24 @@
     border:1px solid grey;
     padding: 4px 0px 4px 8px;
     z-index: 10;
+}
+.params{
+    background-color:  #f9f7f7;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 12;
+    top: -165%;
+    left:-175%;
+    padding: 5px;
+    border-radius: 4px;
+    span{
+        color: grey;
+        font-size: 14px;
+
+        &:hover{
+            background-color: #ebebeb;
+        }
+    }
+    
 }

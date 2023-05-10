@@ -48,6 +48,8 @@ import Notfound from "views/examples/Notfound";
 import Profile from "views/examples/Profile";
 import ViewProfile from "views/examples/ViewProfile";
 import ChangePassword from "views/examples/ChangePassword";
+import ClientForum from "views/examples/ClientForum";
+
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -139,22 +141,24 @@ const Landing = (props) => {
               <MyStatements />
             </Row>
           )}
-
           {window.location.pathname == "/changepassword" && (
             <Row>
               <ChangePassword />
             </Row>
           )}
-
           {window.location.pathname == "/profile" && (
             <Row>
               <ViewProfile />
             </Row>
           )}
-
           {window.location.pathname == "/modifyprofile" && (
             <Row>
               <Profile />
+            </Row>
+          )}
+          {window.location.pathname == "/userForum" && (
+            <Row>
+              <ClientForum />
             </Row>
           )}
           {/* statements */}
@@ -165,7 +169,6 @@ const Landing = (props) => {
           )}
         </Container>
       </div>
-
       <AuthFooter />
     </>
   );
