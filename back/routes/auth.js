@@ -60,7 +60,7 @@ router.get(
 
 
 
-    res.redirect('http://localhost:3000/admin/index');
+    res.redirect('http://localhost:3000/');
     
   }
 );
