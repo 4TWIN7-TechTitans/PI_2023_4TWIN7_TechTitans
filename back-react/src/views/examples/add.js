@@ -163,8 +163,8 @@ function AddNew() {
   };
 
   const validateLastName = (last_name) => {
-    const last_nameRegex = /^[a-zA-Z\s\-'\u00C0-\u024F"]+$/;
-    return last_nameRegex.test(last_name);
+    const lastNameRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F"]{3,20}$/;
+    return lastNameRegex.test(last_name);
   };
   const validateAddress = (address) => {
     const addressRegex = /^[a-zA-Z0-9\s\-'\u00C0-\u024F"]+$/;
@@ -208,7 +208,7 @@ function AddNew() {
     const first_name = e.target.value;
     const first_nameError = document.querySelector(".first_name.error");
     if (!validateFirstName(first_name)) {
-      first_nameError.textContent = "Please enter a valid first name .";
+      first_nameError.textContent = "Please enter the name of the agency .";
     } else {
       first_nameError.textContent = "";
     }
@@ -218,11 +218,12 @@ function AddNew() {
     const last_name = e.target.value;
     const last_nameError = document.querySelector(".last_name.error");
     if (!validateLastName(last_name)) {
-      last_nameError.textContent = "Please enter a valid last name .";
+      last_nameError.textContent =
+        "Please enter the Branche Of The Agency.";
     } else {
       last_nameError.textContent = "";
     }
-  };  
+  };
   const handleAddressChange = (e) => {
     const address = e.target.value;
     const addressError = document.querySelector(".address.error");
