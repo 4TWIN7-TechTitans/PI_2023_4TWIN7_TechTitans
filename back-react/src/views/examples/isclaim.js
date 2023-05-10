@@ -102,14 +102,14 @@ function Isclaim() {
   return (
     <>
     <Header/>
-      <Container className="mt--12" fluid>
+      <Container className="mt--8" fluid>
         <Row>
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">My account</h3>
+                    <h3 className="mb-0">Claim Car Prediction</h3>
                   </Col>
                   <Col className="text-right" xs="4"></Col>
                 </Row>
@@ -125,7 +125,7 @@ function Isclaim() {
                       <Col md="12"></Col>
                     </Row>
                     <Row>
-                      <Col lg="6">
+                      <Col lg="12">
                         <h6 className="heading-small text-muted mb-4"></h6>
 
                         <FormGroup>
@@ -289,7 +289,7 @@ function Isclaim() {
                       <Col md="12"></Col>
                       <Col lg="12">
                         <Button color="info" type="submit">
-                          Edit Profile
+                          Pass Prediction
                         </Button>
                       </Col>
                     </Row>
