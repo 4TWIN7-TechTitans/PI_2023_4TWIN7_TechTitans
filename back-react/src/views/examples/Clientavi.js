@@ -28,7 +28,6 @@ function Clientavi() {
   const [Experts, setExperts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-
   function getCookie(key) {
     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
     return b ? b.pop() : "";
@@ -40,14 +39,24 @@ function Clientavi() {
         const jwt = getCookie("jwt");
         if (jwt == "") return;
 
-        
+        const idagenceuser = (
+          await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+        ).data.id_agence;
 
+        console.log(idagenceuser);
         const response = await axios.get("http://localhost:5000/getallexperts");
         console.log(response);
 
         const responseExpert = response.data.experts;
 
-        setExperts(responseExpert);
+        console.log(responseExpert)
+        const expertsagence = responseExpert.filter(
+          (ex) => ex.id_agence == idagenceuser
+        );
+        
+        console.log(expertsagence);
+
+        setExperts(expertsagence);
 
         // add Toastify notification
         toast.success("Welcome Dear Clients, Give Your Opinion !", {
@@ -70,13 +79,14 @@ function Clientavi() {
     setCurrentPage(page);
   };
 
+  const handleredirect  = (id) => {
+    window.location.replace("/reviews?id="+ id)
+  }
+
   const paginatedUsers = Experts.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
-
-
- 
 
   const handleSearchInputChange = async (event) => {
     setSearchTerm(event.target.value);
@@ -85,12 +95,10 @@ function Clientavi() {
         `http://localhost:5000/searchexpert?email=${searchTerm}`
       );
       setExperts(response.data);
-
     } catch (err) {
       console.log(err);
     }
   };
-
 
   const filteredUsers = Experts.filter((user) => {
     return user.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -130,21 +138,17 @@ function Clientavi() {
                       className="my-4"
                       style={{ flex: "1", marginRight: "1rem" }}
                     >
-                      
-                        {/* <img src={expert.image}/> */}
-                    
+                      {/* <img src={expert.image}/> */}
                       <h4>{expert.email}</h4>
                       <h4>
-                        {expert.first_name} {expert.phone_number}
+                        {expert.first_name} {expert.last_name}
                       </h4>
-                      Average Reviews:  
-                      {/* <p>{expert.description}</p>  */}
-                      <div>
-                        <ul>
-                        <li>test </li>
-                        </ul>
-                      </div>
-                      <Button color="primary" href="#">details</Button>
+                      
+                     
+                     
+                      <Button color="primary" onClick={e => handleredirect(expert._id)}>
+                        details
+                      </Button>
                     </div>
                   ))}
                 </div>
@@ -190,7 +194,6 @@ function Clientavi() {
       </Container>
     </>
   );
-
 }
 
 export default Clientavi;

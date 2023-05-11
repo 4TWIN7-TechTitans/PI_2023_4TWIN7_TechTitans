@@ -299,6 +299,13 @@ const AdminNavbar = () => {
                         <span className="nav-link-inner--text" style={{color:"white"}}>My Statements</span>
                       </NavLink>
                     </NavItem>
+                    <NavItem>
+                      {" "}
+                      <NavLink className="nav-link-icon" to="/experts" tag={Link}>
+                        <i className="ni ni-bullet-list-67" style={{color:"white"}}/>
+                        <span className="nav-link-inner--text" style={{color:"white"}}>Experts</span>
+                      </NavLink>
+                    </NavItem>
                   </Nav>
                   <UncontrolledDropdown nav>
                     <DropdownToggle className="pr-0" nav>

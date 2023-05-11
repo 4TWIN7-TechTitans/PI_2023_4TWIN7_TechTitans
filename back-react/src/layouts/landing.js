@@ -54,6 +54,8 @@ import Clientavi from "views/examples/Clientavi";
 import ViewProfileExpert from "views/examples/ViewProfileExpert";
 import DetailsExpert from "views/examples/DetailsExpert";
 import Crop from "views/examples/Crop";
+import BestOffer from "views/examples/bestOffer";
+
 const Landing = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -175,7 +177,11 @@ const Landing = (props) => {
                   <div className="col">
                     <Card className="shadow">
                       <MultipleRows />
+                      
                     </Card>
+                  </div>
+                  <div className="col">
+                  <BestOffer/>
                   </div>
                 </Row>
               }

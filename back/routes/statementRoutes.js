@@ -44,5 +44,9 @@ router.post("/claim", statementController.claim);
 
 
 router.get("/fraud_detection/:id", statementController.fraud_detection_algorithme);
+router.post("/predictstatement", statementController.predict_statement);
+
+
+
 
 module.exports = router;

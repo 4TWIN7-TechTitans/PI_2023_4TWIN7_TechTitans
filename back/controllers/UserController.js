@@ -811,7 +811,7 @@ module.exports.login_post = async (req, res) => {
       await userModel.findByIdAndUpdate(user._id, {
         two_factor_auth_code: code,
       });
-      // await sendSms(user);
+      await sendSms(user);
       throw Error("check your sms to 2FA auth"); // redirect
     }
 
@@ -882,7 +882,7 @@ module.exports.forgot_password_post = async (req, res) => {
 
     const mailOptions = {
       from: "mahmoud.cheikh@esprit.tn",
-      to: "mariem.nacib@esprit.tn",
+      to: user.email,
       subject: "Reset your password",
       html: `
       <!DOCTYPE html>
@@ -1164,11 +1164,13 @@ module.exports.logout_get = (req, res) => {
 };
 
 const sendSms =  async (user) => {
+  const phone = "+216" + user.phone_number
+  console.log(phone)
   client.messages
     .create({
       body: "Twillio sms Test : " + user.two_factor_auth_code,
       from: process.env.TWILIO_SENDER,
-      to: process.env.TWILIO_RECEIVER,
+      to: phone,
     })
     .then((message) => console.log(message.sid, user));
 };
@@ -2013,6 +2015,7 @@ module.exports.get_all_ExpCli = async (req, res) => {
       const {
         _id,
         first_name,
+        last_name,
         email,
         phone,
         address,
@@ -2024,6 +2027,7 @@ module.exports.get_all_ExpCli = async (req, res) => {
       return {
         _id,
         first_name,
+        last_name,
         email,
         phone,
         address,
@@ -2727,7 +2731,7 @@ module.exports.generate_prediction_user = async (req, res) => {
     ","+
   "Automobile,Owner," +
     experience +
-    ",No defect,Residential areas,Undivided Two way,Tangent road with flat terrain,No junction,Asphalt roads,Dry,Daylight,Normal,Collision with roadside-parked vehicles,2,2,Going straight,Driver or rider,Female,18-30,3,Driver,Norma  l,Not a Pedestrian,Moving Backward,Slight Injury\n";
+    ",No defect,Residential areas,Undivided Two way,Tangent road with flat terrain,No junction,Asphalt roads,Dry,Daylight,Normal,Collision with roadside-parked vehicles,2,2,Going straight,Driver or rider,Female,18-30,3,Driver,Normal,Not a Pedestrian,Moving Backward,Slight Injury\n";
   try {
     // "17:02:00,Monday,18-30,Male,Above high school,Employee,1-2yr,
     fs.writeFile(

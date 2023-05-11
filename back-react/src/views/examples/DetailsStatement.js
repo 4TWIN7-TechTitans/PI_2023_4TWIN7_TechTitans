@@ -59,6 +59,21 @@ function DetailsStatement() {
   const [savedNotes, setSavedNotes] = useState([]);
   const [phonenumber, setphonenumber] = useState([]);
 
+  const [predi ,setPredi]  = useState("");
+
+  const handlePrediction = async () => {
+    try {
+      const search = window.location.search;
+      const id_statement = new URLSearchParams(search).get("id");
+
+        const statementId  = id_statement
+      const response = await axios.post('http://localhost:5000/predict', { statementId });
+      setPredi(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const [phonenumber_b, setphonenumber_b] = useState([]);
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -606,7 +621,11 @@ for removal from the register.`,
                       <h3>FRAUD DETECTION</h3>
 
                       <Button onClick={Algorithme_prediction} style={{ backgroundColor: '#FF5722', color: '#FFF', fontSize: '24px', padding: '16px 32px' }}>Detect Fraud</Button>
-
+                      <div>
+                        <hr/>
+                          <Button onClick={e => handlePrediction()}>predict decision</Button>
+                        <Label>{predi}</Label>
+                      </div>
                     </div>
                     <hr className="my-4" />
                     <div>
