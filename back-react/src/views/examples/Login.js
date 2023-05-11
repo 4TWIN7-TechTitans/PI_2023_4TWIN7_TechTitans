@@ -186,7 +186,7 @@ function Login() {
                   <small>Sign in with</small>
                 </div>
                 <div className="btn-wrapper text-center">
-                  <Button
+                  {/* <Button
                     className="btn-neutral btn-icon"
                     color="default"
                     href=""
@@ -202,11 +202,11 @@ function Login() {
                       />
                     </span>
                     <span className="btn-inner--text">Facebook</span>
-                  </Button>
+                  </Button> */}
                   <Button
                     className="btn-neutral btn-icon"
                     color="default"
-                    href="/"
+                    href=""
                     onClick={googleauth}
                   >
                     <span className="btn-inner--icon">

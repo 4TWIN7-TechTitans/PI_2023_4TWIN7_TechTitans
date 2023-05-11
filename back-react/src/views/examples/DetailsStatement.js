@@ -28,6 +28,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import jsPDF from "jspdf";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import Swal from 'sweetalert2'
 
 
 
@@ -56,6 +57,24 @@ function DetailsStatement() {
   const [savedcommentaire, setcommentaire] = useState([])
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [savedNotes, setSavedNotes] = useState([]);
+  const [phonenumber, setphonenumber] = useState([]);
+
+  const [predi ,setPredi]  = useState("");
+
+  const handlePrediction = async () => {
+    try {
+      const search = window.location.search;
+      const id_statement = new URLSearchParams(search).get("id");
+
+        const statementId  = id_statement
+      const response = await axios.post('http://localhost:5000/predict', { statementId });
+      setPredi(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [phonenumber_b, setphonenumber_b] = useState([]);
   const generatePDF = () => {
     const doc = new jsPDF();
 
@@ -213,6 +232,10 @@ for removal from the register.`,
         setDate(statement.date);
         setCommentaire(statement.commentaire);
 
+        setphonenumber(statement.insured_a.phonenumber);
+        setphonenumber_b(statement.insured_b.phonenumber);
+
+
         console.log(driverIdentityA);
         console.log(driverIdentityB);
       } catch (err) {
@@ -268,7 +291,9 @@ for removal from the register.`,
     handleListen();
   }, [isListening]);
 
+
   const handleListen = () => {
+    console.log("Listen");
     if (isListening) {
       SpeechRecognition.startListening();
       SpeechRecognition.onend = () => {
@@ -308,7 +333,7 @@ for removal from the register.`,
         await axios.put("http://localhost:5000/remove_comment/" + id_statement, { commentaire: comment, savedNotes });
         toast.success("Comment removed successfully!");
       } else {
-        await axios.post("http://localhost:5000/comment/" + id_statement, { commentaire: comment, timestamp: timestamp, savedNotes });
+        await axios.post("http://127.0.0.1:5000/comment/" + id_statement, { commentaire: comment, timestamp: timestamp, savedNotes });
         toast.success("Comment added successfully!");
       }
       // handle successful response
@@ -321,7 +346,88 @@ for removal from the register.`,
       toast.error(errorMessage);
     }
   };
+  /*
+    const DetectFraudButton = ({ statementId }) => {
+      const handleButtonClick = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5000/fraud_detection/` + statementId);
+          const { fraudLevel } = response.data;
+  
+          if (fraudLevel === "High Fraud") {
+            toast.error("High fraud detected!", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          } else if (fraudLevel === "Medium Fraud") {
+            toast.warn("Medium fraud detected!", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          } else if (fraudLevel === "Low Fraud") {
+            toast.success("Low fraud detected!", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          toast.error("An error occurred while detecting fraud.");
+        }
+      };
+    }
+  */
+  const Algorithme_prediction = async (e) => {
+    e.preventDefault();
+    const search = window.location.search;
+    const id_statement = new URLSearchParams(search).get("id");
 
+    try {
+      const response = await axios.get(`http://localhost:5000/fraud_detection/${id_statement}`);
+      const { fraudLevel } = response.data;
+      if (fraudLevel === "High Fraud") {
+        Swal.fire({
+          icon: "error",
+          title: "High fraud detected!",
+          showConfirmButton: false,
+          timer: 5000,
+        });
+      } else if (fraudLevel === "Medium Fraud") {
+        Swal.fire({
+          icon: "warning",
+          title: "Medium fraud detected!",
+          showConfirmButton: false,
+          timer: 5000,
+          customClass: {
+            popup: "my-popup",
+            title: "my-title",
+            icon: "my-icon",
+          },
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Low fraud detected!",
+          showConfirmButton: false,
+          timer: 5000,
+          customClass: {
+            popup: "my-popup",
+            title: "my-title",
+            icon: "my-icon",
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred while detecting fraud!",
+        showConfirmButton: false,
+        timer: 5000,
+        customClass: {
+          popup: "my-popup",
+          title: "my-title",
+          icon: "my-icon",
+        },
+      });
+    }
+  };
 
   return (
     <>
@@ -335,6 +441,7 @@ for removal from the register.`,
                 <h1 className="mb-0">Mission Order</h1>
                 <CardBody className="pt-0 pt-md-4">
                   <div className="text-center">
+
                     <div>
                       <h2>Details About {driverIdentityA}</h2>
                       <hr />
@@ -343,19 +450,8 @@ for removal from the register.`,
                           <div className="col-md-4">
                           </div>
 
-                          <div className="col-md-4">
-                            <h3>UPDATE STATUS</h3>
-                            <Input type="select"
-                              className="status-dropdown"
-                              value={status}
-                              onChange={handleStatusChange}
-                            >
-                              <option value="waiting">Waiting</option>
-                              <option value="treated">Treated</option>
-                              <option value="inProgress">In Progress</option>
-                              <option value="closed">Closed</option>
-                            </Input>
-                          </div>
+
+                          <div></div>
                           <div className="col-md-4">
                           </div>
                         </div>
@@ -370,15 +466,15 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <th>License A</th>
+                              <th>Phone Number of {driverIdentityA}</th>    
+                                                        </Col>
+                              <Col lg="2">
+
+                                <th>Hit A</th>
                               </Col>
                               <Col lg="2">
 
                                 <th>Place of Damage for A</th>
-                              </Col>
-                              <Col lg="2">
-
-                                <th>Circumstances A</th>
                               </Col>
                               <Col lg="2">
 
@@ -397,7 +493,7 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <td>{driver_license_a}</td>
+                              <td>{phonenumber}</td>
                               </Col>
                               <Col lg="2">
 
@@ -440,16 +536,17 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <th>License B</th>
+                              <th>Phone Number of {driverIdentityB}</th>
                               </Col>
                               <Col lg="2">
 
-                                <th>Place of Damage for B</th>
+                                <th>Hit B</th>
                               </Col>
                               <Col lg="2">
 
-                                <th>Circumstances B</th>
+                                <th>Place of Damage for A</th>
                               </Col>
+
                               <Col lg="2">
 
                                 <th>Location of the Accident</th>
@@ -469,7 +566,7 @@ for removal from the register.`,
                               </Col>
                               <Col lg="2">
 
-                                <td>{driver_license_b}</td>
+                              <td>{phonenumber_b}</td>
                               </Col>
                               <Col lg="2">
 
@@ -483,7 +580,10 @@ for removal from the register.`,
 
                                 <td>{location}</td>
                               </Col>
+                              <Col lg="2">
 
+
+                              </Col>
 
                             </Row>
                           </tr>
@@ -505,7 +605,28 @@ for removal from the register.`,
                         Status has been changed.
                       </div>
                     )}
+                    <div className="text-center">
+                      <h3>UPDATE STATUS</h3>
+                      <Input type="select"
+                        className="status-dropdown"
+                        value={status}
+                        onChange={handleStatusChange}
+                      >
+                        <option value="waiting">Waiting</option>
+                        <option value="treated">Treated</option>
+                        <option value="inProgress">In Progress</option>
+                        <option value="closed">Closed</option>
+                      </Input>
+                      <br></br>
+                      <h3>FRAUD DETECTION</h3>
 
+                      <Button onClick={Algorithme_prediction} style={{ backgroundColor: '#FF5722', color: '#FFF', fontSize: '24px', padding: '16px 32px' }}>Detect Fraud</Button>
+                      <div>
+                        <hr/>
+                          <Button onClick={e => handlePrediction()}>predict decision</Button>
+                        <Label>{predi}</Label>
+                      </div>
+                    </div>
                     <hr className="my-4" />
                     <div>
                       Date of The Accident: {date}
@@ -535,7 +656,7 @@ for removal from the register.`,
                     <div className="col-md-2">
 
                     </div>
-                    <div className="col-md-10">
+                    <div className="text-center">
                       <Button
                         type="Button"
                         onClick={(e) => handleStatement("a", e)}
@@ -573,7 +694,7 @@ for removal from the register.`,
                   </div>
 
 
-                  <div>
+                  <div className="text-center">
                     <h3>Write A Rapport :</h3>
                   </div>
                   <Form onSubmit={(event) => handleComment(event, false)}>
@@ -592,20 +713,11 @@ for removal from the register.`,
                       Remove
                     </Button>
                     <div>
-                      <Button
-                        type="button"
-                        onClick={() => setIsListening((prevState) => !prevState)}
-                      >
-                        {isListening ? "Stop" : "Start"} Saving Comment
-                      </Button>
-                      <Button type="submit" onClick={(event) => handleComment(event, true)}>
-                        Save Comment
-                      </Button>
+                     
+                     
                     </div>
                   </Form>
-
-                  <br /><br /><br />
-
+<br></br><br></br>
                   <div style={{ backgroundColor: "#eeeee4", borderRadius: "50px", textAlign: "center" }}>
                     <h2 className="mb-0">Expert Comments</h2>
                     <Card>
@@ -618,6 +730,7 @@ for removal from the register.`,
                     </Card>
                     <br /><br /><br /><br />
                   </div>
+
 
 
                 </CardBody>

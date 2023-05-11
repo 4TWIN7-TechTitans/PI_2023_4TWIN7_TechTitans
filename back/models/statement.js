@@ -692,7 +692,10 @@ const statementSchema = new mongoose.Schema({
   commentaire: {
     type: String,
   },
-  
+  fraudStatus :{
+    required : false, 
+    type: String,
+  }  
 });
 
 const Statement = mongoose.model("Statement", statementSchema);

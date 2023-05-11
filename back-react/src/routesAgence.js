@@ -22,6 +22,10 @@ import AddExpert from "views/examples/addExpert";
 import ListOfExperts from "views/examples/ListOfExperts";
 import OdmAgence from "views/examples/OdmAgence";
 import Detailssag from "views/examples/Detailssag";
+import accplacechart  from "views/examples/accplacechart";
+import Clientavi from "views/examples/Clientavi";
+import Severity from "views/examples/severity";
+import Isclaim from "views/examples/isclaim";
 var routesAgence = [
   //TODO : change admin to user view profile
   
@@ -36,8 +40,8 @@ var routesAgence = [
   
   {
     path: "/tickets",
-    name: "Reclamation",
-    icon: "ni ni-tv-2 text-blue",
+    name: "Claims",
+    icon: "ni ni-settings text-black",
     component: Tickets,
     layout: "/admin",
     showInSidebar: true,
@@ -74,6 +78,33 @@ var routesAgence = [
     component: Detailssag,
     layout: "/agence",
     showInSidebar: false,
+  },
+
+  // {
+  //   path: "/accplacechart",
+  //   name: "Most Frequent Accidents Chart",
+  //   icon: "ni ni-bullet-list-67 text-blue",
+  //   component: accplacechart,
+  //   layout: "/agence",
+  //   showInSidebar: true,
+  // },
+
+ 
+  {
+    path: "/prediction",
+    name: "Client accident severity prediction",
+    icon: "ni ni-user-run text-red",
+    component: Severity,
+    layout: "/agence",
+    showInSidebar: true,
+  },
+  {
+    path: "/isclaim",
+    name: "Claim car prediction",
+    icon: "ni ni-bus-front-12 text-green",
+    component: Isclaim,
+    layout: "/agence",
+    showInSidebar: true,
   },
 
 ];

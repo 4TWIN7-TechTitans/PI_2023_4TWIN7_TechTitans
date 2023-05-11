@@ -20,6 +20,7 @@ import addcar from "views/examples/addCar";
 import AddStatement from "views/examples/addStatement";
 import ViewProfile from "views/examples/ViewProfile";
 import ChangePassword from "views/examples/ChangePassword";
+import BestOffer from "views/examples/bestOffer";
 
 var routesMain = [
   //TODO : change admin to user view profile
@@ -62,6 +63,14 @@ var routesMain = [
       name: "Add a Statement",
       icon: "ni ni-collection text-red",
       component: AddStatement,
+      layout: "/main",
+      showInSidebar: false,
+    },
+    {
+      path: "/addstatement",
+      name: "Best Offer",
+      icon: "ni ni-collection text-red",
+      component: BestOffer,
       layout: "/main",
       showInSidebar: false,
     },

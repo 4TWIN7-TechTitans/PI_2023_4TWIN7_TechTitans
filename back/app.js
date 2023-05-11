@@ -12,9 +12,11 @@ const contractRoutes = require("./routes/contractRoutes");
 const carRoutes = require("./routes/carRoutes");
 const authRouter = require("./routes/auth");
 const ticketRoutes= require("./routes/ticketRoutes");
+const OcrRoutes= require("./routes/OCR");
 const notifRoutes= require("./routes/notifRoutes");
 const passport = require("passport");
 const offreRoutes = require("./routes/offreRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 const session = require("express-session");
 const ensureGuest = require("./middleware/auth");
 const forumRoutes = require("./routes/forumRoutes")
@@ -31,6 +33,7 @@ require("./models/car");
 require("./models/ticket");
 require("./models/offre");
 require("./models/notifs");
+require("./models/review");
 
 const app = express();
 mongoose.set("strictQuery", true);
@@ -73,7 +76,10 @@ app.use(statementRoutes);
 app.use(contractRoutes);
 app.use(carRoutes);
 app.use(offreRoutes);
+app.use(reviewRoutes);
+
 app.use("/ticket",ticketRoutes);
+app.use("/ocr",OcrRoutes);
 app.use("/notif",notifRoutes);
 app.use("/", indexRouter);
 app.use("/auth", authRouter);

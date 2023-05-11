@@ -1,0 +1,121 @@
+[
+  {
+    "_id": {
+      "$oid": "6445bce8f7bdc269f58a4e2e"
+    },
+    "date": {
+      "$date": "1682380800000"
+      
+    },
+    "location": "36.8541696, 10.3284736",
+    "injured": "No",
+    "material_damage": "Yes",
+    "witness_a": [],
+    "witness_b": [],
+    "vehicule_a": {
+      "assureBy": "64459c3ddec9a51817778856",
+      "contractNumber": "1111",
+      "agency": "64459c3ddec9a51817778856",
+      "contractValidity": {
+        "start_date": {
+          "$date":  "1681776000000"
+    
+        },
+        "end_date": {
+          "$date": "1683072000000"
+        
+        }
+      }
+    },
+    "vehicule_b": {
+      "assureBy": "aaa",
+      "contractNumber": "1111111",
+      "agency": "uuuuuuuuuuu",
+      "contractValidity": {
+        "start_date": {
+          "$date":  "1681171200000"
+         
+        },
+        "end_date": {
+          "$date":  "1682380800000"
+          
+        }
+      }
+    },
+    "drivers_identity_a": {
+      "first_name": "uuuuuuuu",
+      "last_name": "uuuuuuuuuuuuu",
+      "address": "uuuuuuuu",
+      "drivers_license_issue_date": {
+        "$date": "1681776000000"
+        
+      },
+      "driver_license": "44444444"
+    },
+    "drivers_identity_b": {
+      "first_name": "uuuuuuuu",
+      "last_name": "uuuuuuu",
+      "address": "aaaaaaaaaaaaa",
+      "drivers_license_issue_date": {
+        "$date":  "1680825600000"
+    
+      }
+    },
+    "insured_a": {
+      "firstname": "client1",
+      "lastname": "client1",
+      "phonenumber": "20202020",
+      "addr": "ggg"
+    },
+    "insured_b": {
+      "firstname": "ggggggggg",
+      "lastname": "gggggggg",
+      "phonenumber": "40404040",
+      "addr": "gggggggggg"
+    },
+    "vehicule_identity_a": {
+      "brand": "aaa",
+      "type": "Truck",
+      "matriculation": "1414",
+      "country": "Albania",
+      "coming_from": "jjjjjjj",
+      "going_to": "oooooooo"
+    },
+    "vehicule_identity_b": {
+      "brand": "aaa",
+      "type": "Truck",
+      "matriculation": "414142",
+      "country": "Afghanistan",
+      "coming_from": "jjjjjjj",
+      "going_to": "ooooooo"
+    },
+    "hits_a": [
+      "Trunk",
+      "Front Left Fender"
+    ],
+    "hits_b": [
+      "Front Windshield",
+      "Side Mirror Right"
+    ],
+    "apparent_damages_a": [
+      "Missing Parts"
+    ],
+    "apparent_damages_b": [
+      "Missing Parts"
+    ],
+    "circumstances_a": [
+      "Distracted driving"
+    ],
+    "circumstances_b": [
+      "Distracted driving"
+    ],
+    "accident_croquis": "https://res.cloudinary.com/dczz1wjxm/image/upload/v1682291942/accident-croquis/yd3zquhqjez2493dfawd.png",
+    "notes_a": "n'as pas respecter le feu",
+    "notes_b": "respect de feu",
+    "signature_a": "https://res.cloudinary.com/dczz1wjxm/image/upload/v1682291943/signatures_a/xqu8lufrlfetqnneqqmb.png",
+    "signature_b": "https://res.cloudinary.com/dczz1wjxm/image/upload/v1682291944/signatures_b/kcofdkogofahswz5buud.png",
+    "case_state": "waiting",
+    "dacision":"b",
+    "__v": 0
+  }
+]

@@ -33,6 +33,9 @@ import {
   InputGroupText,
 } from "reactstrap";
 import { Link, Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -55,6 +58,15 @@ const ChangePassword = () => {
   const handleEdit = async (e) => {
     e.preventDefault();
     const jwt = getCookie("jwt");
+    let role ="";
+    if (jwt == "") return;
+    if (jwt) {
+      const response = (
+        await axios.get("http://127.0.0.1:5000/getmailfromtoken?token=" + jwt)
+      ).data;
+        role = response.role
+    }
+
 
     const user = {
       oldpassword: oldPassword,
@@ -74,9 +86,19 @@ const ChangePassword = () => {
     if (response.data.changed === true) {
       //TODO : redirect profile ? /dmin/user-profile/?mail
 
-      console.log(true);
-     if ( window.location.pathname == "/main/changepassword/") window.location.href = "/main/view-user-profile/";
+      console.log(window.location.pathname);
+     if ( window.location.pathname == "/main/changepassword") {
+      
+        if(role == "Agence"){
+          window.location.href = "/agence/odmagence";
+        }else if(role == "Expert"){
+          window.location.href = "/expert/OrdreMissionExpert";
+        }
+      
+      }
      if ( window.location.pathname == "/changepassword") window.location.href = "/profile";
+     toast.success("Password Changed successfully!");
+
     } else {
       console.log("change password failed")
 
@@ -108,6 +130,8 @@ const ChangePassword = () => {
 
       {/* Page content */}
       <Container className="mt--12" fluid>
+      <ToastContainer />
+
         <Row>
           <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">

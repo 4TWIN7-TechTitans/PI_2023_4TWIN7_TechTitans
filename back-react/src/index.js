@@ -31,6 +31,7 @@ import AuthLayout from "layouts/Auth.js";
 import AgenceLayout from "layouts/Agence.js";
 import ExpertLayout from "layouts/Expert.js";
 import LandingLayout from "layouts/landing.js";
+import 'react-image-crop/dist/ReactCrop.css';
 
 import ViewsLayout from "layouts/views";
 

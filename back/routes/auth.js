@@ -54,13 +54,13 @@ router.get(
       expiresIn:maxAge, // same as above
     })
 
-    res.cookie("userid", user.id, {
+    res.cookie("userid", user._id, {
       expiresIn:maxAge, // same as above
     })
 
 
 
-    res.redirect('http://localhost:3000/admin/index');
+    res.redirect('http://localhost:3000/');
     
   }
 );

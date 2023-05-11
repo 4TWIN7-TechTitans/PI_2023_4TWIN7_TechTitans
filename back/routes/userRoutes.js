@@ -21,7 +21,7 @@ router.post("/reset-password", userController.reset_password_post);
 router.get("/all-users", userController.show_users_get);
 router.get("/userbyemail/:email", userController.get_user_by_email);
 router.get("/users/:email", userController.get_user_by_email);
-router.get("/usersid/:id", userController.get_userbyid);
+router.get("/usersid", userController.get_userbyid);
 
 //added by oz
 router.get("/userid", userController.get_userbyiduser);
@@ -49,6 +49,8 @@ router.post("/resetpassword", userController.post_change_password);
 
 router.post("/update", userController.update_id_ag);
 router.post("/updateagence", userController.update_agence);
+router.post("/predictionuser", userController.get_prediction_user);
+router.post("/genpredict", userController.generate_prediction_user);
 
 
 module.exports = router;

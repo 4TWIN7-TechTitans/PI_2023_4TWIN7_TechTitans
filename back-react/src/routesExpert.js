@@ -32,7 +32,7 @@ var routesExpert = [
   {
     path: "/OrdreMissionExpert",
     name: "Ordre de mission",
-    icon: "ni ni-bullet-list-67 text-blue",
+    icon: "ni ni-briefcase-24 text-blue",
     component: OrdreMissionExpert,
     layout: "/expert",
     showInSidebar: true,
