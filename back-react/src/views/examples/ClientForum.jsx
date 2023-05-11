@@ -32,7 +32,8 @@ const ClientForum = () => {
 
   // get messages by clientId
   const getMsg = async () => {
-    return await axios.get(`http://localhost:5000/forum/${userId}`);
+    console.log('gjhgj',userid)
+    return await axios.get(`http://localhost:5000/forum/${userid}`);
   };
   useEffect(() => {
     setUserId(userid);
@@ -47,17 +48,17 @@ const ClientForum = () => {
         <h1>Ask us !</h1>
         <div className="clientForum-msg-container">
           {data?.msgReply
-            ? data.msgReply.map((item, idx) => (
+            ? data.msgReply?.map((item, idx) => (
                 <>
                   <div key={idx} className="client-forum">
                     <div className="clientForum-msg">
                       <div>
-                        <p>{item.msg.contenu}</p>
+                        <p>{item?.msg?.contenu}</p>
                         <FaTrashAlt
                           onClick={async () => {
                             await axios
                               .delete(
-                                `http://localhost:5000/forum/del_msg/${item.msg._id}`
+                                `http://localhost:5000/forum/del_msg/${item?.msg?._id}`
                               )
                               .then((res) => window.location.reload());
                           }}
@@ -65,8 +66,8 @@ const ClientForum = () => {
                       </div>
                     </div>
                     <div className="clientForum-reply">
-                      {item.reply && (
-                        <p className="box-span">{item.reply.contenu}</p>
+                      {item?.reply && (
+                        <p className="box-span">{item?.reply?.contenu}</p>
                       )}
                     </div>
                   </div>

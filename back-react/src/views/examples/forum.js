@@ -51,24 +51,24 @@ const Forum = () => {
           {msgs?.msgReply?.map((item, idx) => (
             <div className="msg-container" key={idx}>
               <div className="msg">
-                <span>{item.msg.contenu}</span>
+                <span>{item?.msg?.contenu}</span>
 
                 <div>
                   {!item?.reply && (
                     <BsFillReplyAllFill
                       onClick={() => {
                         setActive({ status: true, role: "add" });
-                        setForumId(item?.msg._id);
+                        setForumId(item?.msg?._id);
                       }}
                       size={22}
                     /> 
                   )}
-                  <span>{item.msg.clientId.first_name}</span>
+                  <span>{item?.msg?.clientId?.first_name}</span>
                 </div>
               </div>
-              {item.reply ? (
+              {item?.reply ? (
                 <div className="reply">
-                  <span>{item.reply.contenu}</span>
+                  <span>{item?.reply?.contenu}</span>
                   <div>
                     <span>
                       <BsThreeDots
@@ -86,7 +86,7 @@ const Forum = () => {
                             setActive({
                               role: "update",
                               status: true,
-                              id: item.reply._id,
+                              id: item?.reply?._id,
                             })
                           }
                         >
@@ -96,7 +96,7 @@ const Forum = () => {
                           onClick={async () => {
                             await axios
                               .delete(
-                                `http://127.0.0.1:5000/forum/del_reply/${item.reply._id}`,
+                                `http://127.0.0.1:5000/forum/del_reply/${item?.reply?._id}`,
                                 {
                                   contenu: reply,
                                   forumId: forumId,
@@ -115,7 +115,7 @@ const Forum = () => {
             </div>
           ))}
         </div>
-        {active.status && (
+        {active?.status && (
           <>
             <input
               className="reply-input"
