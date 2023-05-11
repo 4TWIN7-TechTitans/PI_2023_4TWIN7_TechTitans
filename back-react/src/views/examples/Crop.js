@@ -135,8 +135,8 @@ const Crop = () => {
                   method: 'POST',
                   url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
                   headers: {
-                    'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
-                    'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
+                    'X-RapidAPI-Key': '3bb3edc946msha84304f99ef1f5bp184a5bjsn54f9dfba7790',
+    'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com',
                   },
                   data: data
                 };
