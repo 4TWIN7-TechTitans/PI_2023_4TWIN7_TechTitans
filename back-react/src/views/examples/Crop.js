@@ -43,6 +43,7 @@ const Crop = () => {
   const [file3, setFile3] = useState(null);
   const [file4, setFile4] = useState(null);
   const [file5, setFile5] = useState(null);
+  const [visible, setvisible] = useState(false);
   
   useEffect(() => {
     if (imgRef.current && !cropperRef.current) {
@@ -76,8 +77,12 @@ const Crop = () => {
 
   const handlestep6 = async (e) => {
     const files = e.target.files;
-
-    
+    setCrop1("")
+    setCrop2("")
+    setCrop3("")
+    setCrop4("")
+    setCrop5("")
+    setvisible(true)
 
     for (let i = 0; i < files.length; i++) {
  
@@ -111,29 +116,6 @@ const Crop = () => {
         if(file1.type.indexOf("image")>-1)
         {
           
-            const data = new FormData();
-            data.append('srcImg', file1);
-            data.append('Session', 'string');
-            
-            const options = {
-              method: 'POST',
-              url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
-              headers: {
-                'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
-                'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
-              },
-              data: data
-            };
-                        
-                        
-                        try {
-                            const response = await axios.request(options);
-                            
-                           
-                            setCrop1(response.data.value)
-                          } catch (error) {
-                            console.error(error);
-                          }
           Tesseract.recognize(
               file1,
               'fra',
@@ -145,6 +127,29 @@ const Crop = () => {
             ).then(async ({ data: { text } }) => {
             
             
+                const data = new FormData();
+                data.append('srcImg', file1);
+                data.append('Session', 'string');
+                
+                const options = {
+                  method: 'POST',
+                  url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
+                  headers: {
+                    'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
+                    'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
+                  },
+                  data: data
+                };
+                            
+                            
+                            try {
+                                const response = await axios.request(options);
+                                
+                               
+                                setCrop1(response.data.value)
+                              } catch (error) {
+                                console.error(error);
+                              }
              
 
               
@@ -165,30 +170,7 @@ const Crop = () => {
       {
          if(file2.type.indexOf("image")>-1)
          {
-            const data = new FormData();
-            data.append('srcImg', file2);
-            data.append('Session', 'string');
-            
-            const options = {
-              method: 'POST',
-              url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
-              headers: {
-                'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
-                'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
-              },
-              data: data
-            };
-                        
-                        
-                        try {
-                            const response = await axios.request(options);
-                            
-                           
-                            setCrop2(response.data.value)
-                          } catch (error) {
-                            console.error(error);
-                          }
- 
+           
            Tesseract.recognize(
                file2,
                'fra',
@@ -201,7 +183,30 @@ const Crop = () => {
              
              
               
- 
+                const data = new FormData();
+                data.append('srcImg', file2);
+                data.append('Session', 'string');
+                
+                const options = {
+                  method: 'POST',
+                  url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
+                  headers: {
+                    'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
+                    'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
+                  },
+                  data: data
+                };
+                            
+                            
+                            try {
+                                const response = await axios.request(options);
+                                
+                               
+                                setCrop2(response.data.value)
+                              } catch (error) {
+                                console.error(error);
+                              }
+     
                
              })
  
@@ -223,7 +228,19 @@ const Crop = () => {
           if(file3.type.indexOf("image")>-1)
           {
             
-            const data = new FormData();
+           
+            Tesseract.recognize(
+                file3,
+                'fra',
+                { logger: (m) => {
+                    console.log(m)
+                    if(m.status === 'recognizing text')
+                    {setProgress3(m.progress)}
+                } }
+              ).then(async ({ data: { text } }) => {
+              
+              
+                const data = new FormData();
             data.append('srcImg', file3);
             data.append('Session', 'string');
             
@@ -246,18 +263,6 @@ const Crop = () => {
                           } catch (error) {
                             console.error(error);
                           }
-            Tesseract.recognize(
-                file3,
-                'fra',
-                { logger: (m) => {
-                    console.log(m)
-                    if(m.status === 'recognizing text')
-                    {setProgress3(m.progress)}
-                } }
-              ).then(async ({ data: { text } }) => {
-              
-              
-               
   
                 
               })
@@ -278,30 +283,7 @@ const Crop = () => {
         {
            if(file4.type.indexOf("image")>-1)
            {
-            const data = new FormData();
-            data.append('srcImg', file4);
-            data.append('Session', 'string');
             
-            const options = {
-              method: 'POST',
-              url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
-              headers: {
-                'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
-                'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
-              },
-              data: data
-            };
-                        
-                        
-                        try {
-                            const response = await axios.request(options);
-                            
-                           
-                            setCrop4(response.data.value)
-                          } catch (error) {
-                            console.error(error);
-                          }
-   
              Tesseract.recognize(
                  file4,
                  'fra',
@@ -312,7 +294,30 @@ const Crop = () => {
                  } }
                ).then(async ({ data: { text } }) => {
                
-              
+                const data = new FormData();
+                data.append('srcImg', file4);
+                data.append('Session', 'string');
+                
+                const options = {
+                  method: 'POST',
+                  url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
+                  headers: {
+                    'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
+                    'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
+                  },
+                  data: data
+                };
+                            
+                            
+                            try {
+                                const response = await axios.request(options);
+                                
+                               
+                                setCrop4(response.data.value)
+                              } catch (error) {
+                                console.error(error);
+                              }
+       
    
                  
                })
@@ -333,29 +338,7 @@ const Crop = () => {
          {
             if(file5.type.indexOf("image")>-1)
             {
-                const data = new FormData();
-            data.append('srcImg', file5);
-            data.append('Session', 'string');
-            
-            const options = {
-              method: 'POST',
-              url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
-              headers: {
-                'X-RapidAPI-Key': '0feb89ea83msh625d3109c3556cdp1b7b5bjsnd74e67060745',
-                'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com'
-              },
-              data: data
-            };
-                        
-                        
-                        try {
-                            const response = await axios.request(options);
-                            
-                           
-                            setCrop5(response.data.value)
-                          } catch (error) {
-                            console.error(error);
-                          }
+               
     
               Tesseract.recognize(
                   file5,
@@ -367,7 +350,29 @@ const Crop = () => {
                   } }
                 ).then(async ({ data: { text } }) => {
                 
-                 
+                    const data = new FormData();
+                    data.append('srcImg', file5);
+                    data.append('Session', 'string');
+                    
+                    const options = {
+                      method: 'POST',
+                      url: 'https://pen-to-print-handwriting-ocr.p.rapidapi.com/recognize/',
+                      headers: {
+                        'X-RapidAPI-Key': '3bb3edc946msha84304f99ef1f5bp184a5bjsn54f9dfba7790',
+                        'X-RapidAPI-Host': 'pen-to-print-handwriting-ocr.p.rapidapi.com',
+                      },
+                      data: data
+                    };
+                                
+                                
+                                try {
+                                    const response = await axios.request(options);
+                                    
+                                   
+                                    setCrop5(response.data.value)
+                                  } catch (error) {
+                                    console.error(error);
+                                  }
                  
     
                   
@@ -534,6 +539,8 @@ setCroppedImage(null)
      <input type="file"  multiple color={"info"} onChange={handlestep6}  />
      <hr/>
      <hr/>
+     {visible && (
+     <div>
     <h3>Part 1 :</h3>
     <progress value={progress1} max={1}/>
     <p>{crop1}</p>
@@ -554,6 +561,8 @@ setCroppedImage(null)
     <p>{crop5}</p>
     <progress value={progress5} max={1}/>
     <hr/>
+    </div>
+    )}
      </>
 
 )}
