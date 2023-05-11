@@ -48,12 +48,12 @@ import MyStatements from "views/examples/Statements";
 import Notfound from "views/examples/Notfound";
 import Profile from "views/examples/Profile";
 import ViewProfile from "views/examples/ViewProfile";
-import Ocr from "views/examples/Ocr";
+
 import ChangePassword from "views/examples/ChangePassword";
 import Clientavi from "views/examples/Clientavi";
 import ViewProfileExpert from "views/examples/ViewProfileExpert";
 import DetailsExpert from "views/examples/DetailsExpert";
-
+import Crop from "views/examples/Crop";
 const Landing = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
@@ -107,7 +107,7 @@ const Landing = (props) => {
                   </h1>
                   <a
                     className="btn btn-primary btn-lg"
-                    href="/ocr"
+                    href="/crop"
                     role="button"
                     style={{ marginBottom: "50px" }}
                   >
@@ -147,6 +147,8 @@ const Landing = (props) => {
               <Tickets />
             </Row>
           )}
+
+
           {window.location.pathname == "/" && (
             <>
             <div style={{position: "fixed",
@@ -186,9 +188,9 @@ const Landing = (props) => {
             </Row>
           )}
 
-          {window.location.pathname == "/ocr" && (
+          {window.location.pathname == "/crop" && (
             <Row>
-              <Ocr />
+              <Crop />
             </Row>
           )}
 

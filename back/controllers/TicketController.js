@@ -31,7 +31,7 @@ module.exports.add_ticket = async (req, res) => {
 //get all tickets
 module.exports.get_tickets = async (req, res) => {
     try {
-      const tickets = await ticketModel.find({});
+      const tickets = await ticketModel.find({}).sort({ _id: -1 }).exec();
       res.status(200).json({
         tickets,
         message: "All tickets retrieved successfully",
@@ -51,7 +51,7 @@ module.exports.get_tickets = async (req, res) => {
   module.exports.get_ticketsbyagence = async (req, res) => {
     const { id } = req.body;
     try {
-      const ticket = await ticketModel.find( {id_agence : id}   );
+      const ticket = await ticketModel.find( {id_agence : id}   ).sort({ _id: -1 }).exec();
       if (ticket) 
       res.status(200).json({ ticket: ticket});
       
@@ -67,7 +67,7 @@ module.exports.get_tickets = async (req, res) => {
   module.exports.get_ticketsbyclient = async (req, res) => {
     const { id } = req.body;
     try {
-      const ticket = await  ticketModel.find( {id_demandeur : id}   );
+      const ticket = await  ticketModel.find( {id_demandeur : id}   ).sort({ _id: -1 }).exec();
       if (ticket) 
       res.status(200).json({ ticket: ticket});
       
@@ -86,7 +86,7 @@ module.exports.get_tickets = async (req, res) => {
     const { id } = req.body;
    
     try {
-      const ticket = await ticketModel.find( {number : id}   );
+      const ticket = await ticketModel.find( {number : id}   ).sort({ _id: -1 }).exec();
       if (ticket) 
       {
         console.log(ticket)

@@ -30,6 +30,17 @@ const Ocr = () => {
     const [crop, setCrop] = useState({ aspect: 1 / 1 });
     const [image, setImage] = useState(null);
     const [croppedImage, setCroppedImage] = useState(null);
+    const myvalue="constat amiable d'accident automobile\nJual Alamigill detall relevé conducteurs\nNan Tun des Sites of Armen, mais un\nNe constitue pas une reconnaissance de responsabilité\ndes identités et des faits, servant à l'accélération du réglement. à signer obligatoirement par les DEUX\n1. date de l'accident heure 2. lieu légers\n4. dégâts matériels autres 5. témoins noms, adresses et tel (à souligner s'il s'agit d'un passager de A ou B)\n3. blessés même Oui\nqu'aux véhicules A et B\nnon B\nnon\noui\nVEHICULE A VEHICULE\n12. circonstances\n6. Société d'Assurances chacune des cases utiles 6. Société d'Assurances\nMettre une croix (x) dans\nVéhicule assuré par ........... STAR A pour préciser le croquis par\nPolice d'Assurance N ° A325 74\nVéhicule assuré\n1 en stationnement 1 Nº.\nAgence Star Ariana. 2 quittait un stationnement 2\nPolice d'Assurance\nAttestation valable. Agence\ndu 3414212020 au 3414212034.\n3 prenait un stationnement 3 Attestation valable\nau\n7. Identité du Conducteur privé, d'un chemin de terre 7. Identité du Conducteur\ndu\n4 sortait d'un parking, d'un lieu\nNom Mzaughi lieu privé, un chemin de terre\ns'engageait dans un parking, un 5\nNom\nPrénom Superna 6 arrêt de circulation 6 Prénom\nAdresse adrene de file 7\nAdresse\nPermis de conduire N ° 1 9 8 7 6 Permis de conduire No\n7 frottement sans changement\nDélivré le 2 juin 2020. attest. d'assur.)\n8 heurtait à l'arrière, en roulant dans 8\nle même sens et sur une même file\nDélivré le\n8. Assuré (voir attest. d'assur.) même sens et 9\n9 roulait dans le\nsur une file différente 8. Assuré (voir\nNom Nom ayuré\n10 changeait de file 10\nNom\nPrénom Prénom apsuré 11 doublait 11 Prénom\nAdresse: adhepe Arianu Adresse:\n12 virait à droite 12\nTél. So 76.\nTal.\n13 virait à gauche 13\n9. Identité du Véhicule 9. Identité du Véhicule\nMarque, Type polo 3 sur la partie de chaussée Marque, Type\n14\nreculait 14\nempiétait\nN ° d'immatriculation 16 In 30.10. 15 réservée à la circulation en sens 15 N ° d'immatriculation\ninverse\nSens suivi L\n16 venait de droite (dans un 16 Sens suivi\nVenant de mo carrefour)\nAllant à tunis de priorité ☐☐ Allant à\n17 n'avait pas observé le signal 17\nVenant de\nlindiquer le nombre de\ncases marquées d'une croix\n10. Indiquer par une flèche\nle point de choc initial 10. Indiquer par une flèche\n13 croquis de l'accident le point de choc initial\n11. dégâts apparents\n11. dégâts apparents\n14. observations\n14. observations\nA signature des conducteurs\nB\n15.\n13 (edith all og dimi: (1)"
+    const [inputValue, setInputValue] = useState("");
+    const [outputValue, setOutputValue] = useState([]);
+    const [keywords, setKeywords] = useState(["\n", "banana", "orange"]);
+
+
+    function splitStringByKeywords(str, keywords) {
+      let regex = new RegExp(keywords.join("|"), "gi");
+      let substrings = str.split(regex);
+      return substrings.filter(substring => substring.trim().length > 0);
+    }
 
 
 
@@ -335,7 +346,7 @@ const Ocr = () => {
 
 
         if(file.type.indexOf("image")>-1)
-          {
+          {/*
             
             Tesseract.recognize(
               file,
@@ -347,9 +358,20 @@ const Ocr = () => {
               } }
             ).then(async ({ data: { text } }) => {
             
-            /*  
              
-const data = new FormData();
+             
+
+              //setResult(myvalue);
+            })
+
+
+           */
+          }
+        else 
+        setResult("the chosen file is not an image please try again");
+     
+
+        const data = new FormData();
 data.append('srcImg', file);
 data.append('Session', 'string');
 
@@ -365,23 +387,13 @@ const options = {
             
             
             try {
-                const response = await axios.request(options);
+              //  const response = await axios.request(options);
                 
-                setChecktext(false)
-                setResult(response.data);
+               
+                //console.log(response.data)
               } catch (error) {
                 console.error(error);
-              }*/
-              const myvalue="constat amiable d'accident automobile\nJual Alamigill detall relevé conducteurs\nNan Tun des Sites of Armen, mais un\nNe constitue pas une reconnaissance de responsabilité\ndes identités et des faits, servant à l'accélération du réglement. à signer obligatoirement par les DEUX\n1. date de l'accident heure 2. lieu légers\n4. dégâts matériels autres 5. témoins noms, adresses et tel (à souligner s'il s'agit d'un passager de A ou B)\n3. blessés même Oui\nqu'aux véhicules A et B\nnon B\nnon\noui\nVEHICULE A VEHICULE\n12. circonstances\n6. Société d'Assurances chacune des cases utiles 6. Société d'Assurances\nMettre une croix (x) dans\nVéhicule assuré par ........... STAR A pour préciser le croquis par\nPolice d'Assurance N ° A325 74\nVéhicule assuré\n1 en stationnement 1 Nº.\nAgence Star Ariana. 2 quittait un stationnement 2\nPolice d'Assurance\nAttestation valable. Agence\ndu 3414212020 au 3414212034.\n3 prenait un stationnement 3 Attestation valable\nau\n7. Identité du Conducteur privé, d'un chemin de terre 7. Identité du Conducteur\ndu\n4 sortait d'un parking, d'un lieu\nNom Mzaughi lieu privé, un chemin de terre\ns'engageait dans un parking, un 5\nNom\nPrénom Superna 6 arrêt de circulation 6 Prénom\nAdresse adrene de file 7\nAdresse\nPermis de conduire N ° 1 9 8 7 6 Permis de conduire No\n7 frottement sans changement\nDélivré le 2 juin 2020. attest. d'assur.)\n8 heurtait à l'arrière, en roulant dans 8\nle même sens et sur une même file\nDélivré le\n8. Assuré (voir attest. d'assur.) même sens et 9\n9 roulait dans le\nsur une file différente 8. Assuré (voir\nNom Nom ayuré\n10 changeait de file 10\nNom\nPrénom Prénom apsuré 11 doublait 11 Prénom\nAdresse: adhepe Arianu Adresse:\n12 virait à droite 12\nTél. So 76.\nTal.\n13 virait à gauche 13\n9. Identité du Véhicule 9. Identité du Véhicule\nMarque, Type polo 3 sur la partie de chaussée Marque, Type\n14\nreculait 14\nempiétait\nN ° d'immatriculation 16 In 30.10. 15 réservée à la circulation en sens 15 N ° d'immatriculation\ninverse\nSens suivi L\n16 venait de droite (dans un 16 Sens suivi\nVenant de mo carrefour)\nAllant à tunis de priorité ☐☐ Allant à\n17 n'avait pas observé le signal 17\nVenant de\nlindiquer le nombre de\ncases marquées d'une croix\n10. Indiquer par une flèche\nle point de choc initial 10. Indiquer par une flèche\n13 croquis de l'accident le point de choc initial\n11. dégâts apparents\n11. dégâts apparents\n14. observations\n14. observations\nA signature des conducteurs\nB\n15.\n13 (edith all og dimi: (1)"
-              setResult(myvalue);
-            })
-
-
-           
-          }
-        else 
-        setResult("the chosen file is not an image please try again");
-     
+              }
        
       };
   return (
