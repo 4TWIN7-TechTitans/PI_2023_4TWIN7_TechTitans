@@ -11,6 +11,7 @@ import routesExpert from "routesExpert.js";
 import SidebarExpert from "components/Sidebar/SidebarExpert";
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert"; 
 import DetailsStatement from "views/examples/DetailsStatement";
+import Forum from "views/examples/forum";
 import Header from "components/Headers/Header.js";
 const Expert = (props) => {
   const mainContent = React.useRef(null);
@@ -90,6 +91,7 @@ const Expert = (props) => {
         </Switch>
         
         {window.location.pathname === "/expert/OrdreMissionExpert" && (<OrdreMissionExpert/>)}
+        {window.location.pathname === "/expert/Forum" && (<Forum/>)}
 
         {statementId && <DetailsStatement id={statementId} />}
         

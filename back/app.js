@@ -19,7 +19,7 @@ const offreRoutes = require("./routes/offreRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const session = require("express-session");
 const ensureGuest = require("./middleware/auth");
-
+const forumRoutes = require("./routes/forumRoutes")
 
 const FacebookStrategy = require("passport-facebook").Strategy;
 require("dotenv").config();
@@ -83,6 +83,8 @@ app.use("/ocr",OcrRoutes);
 app.use("/notif",notifRoutes);
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+app.use('/forum',forumRoutes)
+
 app.get("/verify-email/:token", function (req, res) {
   res.render("verification");
 });

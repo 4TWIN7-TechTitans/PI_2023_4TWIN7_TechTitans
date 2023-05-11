@@ -138,29 +138,19 @@ const AdminNavbar = () => {
       .catch(error => {
         console.log(error);
       });
-
-
-
   };
 
   useEffect(() => {
     if (role.length > 0) {
-      const timer = setInterval(() => {
         fetchnotifs();
-      }, 5000);
-      return () => clearInterval(timer);
     }
-    console.log(role)
-
-
-  });
+  },[]);
 
   useEffect(() => {
     fetchData();
     if (role.length > 0) {
       fetchnotifs();
     }
-
   }, []);
 
   return (
@@ -290,6 +280,13 @@ const AdminNavbar = () => {
                       <NavLink className="nav-link-icon" to="/user_tickets" tag={Link}>
                         <i className="ni ni-support-16" style={{color:"white"}}/>
                         <span className="nav-link-inner--text" style={{color:"white"}}>Support</span>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      {" "}
+                      <NavLink className="nav-link-icon" to="/userForum" tag={Link}>
+                        <i className="ni ni-support-16" style={{color:"white"}}/>
+                        <span className="nav-link-inner--text" style={{color:"white"}}>Forum</span>
                       </NavLink>
                     </NavItem>
                     <NavItem>

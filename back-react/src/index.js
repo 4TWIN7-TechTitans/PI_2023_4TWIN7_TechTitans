@@ -42,7 +42,6 @@ root.render(
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-
       <Route path="/agence" render={(props) => <AgenceLayout {...props} />} />
       <Route path="/main" render={(props) => <MainLayout {...props} />} />
       <Route path="/expert" render={(props) => <ExpertLayout {...props} />} />

@@ -88,7 +88,6 @@ const Main = (props) => {
         
         <Container fluid>
           <AdminFooter />
-          
         </Container>
       </div>
     </>

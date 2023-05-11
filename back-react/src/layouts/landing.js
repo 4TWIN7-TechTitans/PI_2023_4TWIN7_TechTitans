@@ -50,11 +50,7 @@ import Profile from "views/examples/Profile";
 import ViewProfile from "views/examples/ViewProfile";
 
 import ChangePassword from "views/examples/ChangePassword";
-import Clientavi from "views/examples/Clientavi";
-import ViewProfileExpert from "views/examples/ViewProfileExpert";
-import DetailsExpert from "views/examples/DetailsExpert";
-import Crop from "views/examples/Crop";
-import BestOffer from "views/examples/bestOffer";
+
 
 const Landing = (props) => {
   const mainContent = React.useRef(null);
@@ -194,27 +190,24 @@ const Landing = (props) => {
             </Row>
           )}
 
-          {window.location.pathname == "/crop" && (
-            <Row>
-              <Crop />
-            </Row>
-          )}
-
           {window.location.pathname == "/changepassword" && (
             <Row>
               <ChangePassword />
             </Row>
           )}
-
           {window.location.pathname == "/profile" && (
             <Row>
               <ViewProfile />
             </Row>
           )}
-
           {window.location.pathname == "/modifyprofile" && (
             <Row>
               <Profile />
+            </Row>
+          )}
+          {window.location.pathname == "/userForum" && (
+            <Row>
+              <ClientForum />
             </Row>
           )}
           {/* statements */}
@@ -243,7 +236,6 @@ const Landing = (props) => {
           )}
         </Container>
       </div>
-
       <AuthFooter />
     </>
   );

@@ -18,6 +18,7 @@
 
 import OrdreMissionExpert from "views/examples/OrdreMissionExpert";
 import DetailsStatement from "views/examples/DetailsStatement";
+import Forum from "views/examples/forum";
 var routesExpert = [
   //TODO : change admin to user view profile
   {
@@ -33,6 +34,14 @@ var routesExpert = [
     name: "Ordre de mission",
     icon: "ni ni-briefcase-24 text-blue",
     component: OrdreMissionExpert,
+    layout: "/expert",
+    showInSidebar: true,
+  },
+  {
+    path: "/Forum",
+    name: "Forum",
+    icon: "ni ni-bullet-list-67 text-blue",
+    component: Forum,
     layout: "/expert",
     showInSidebar: true,
   },
